@@ -39,7 +39,9 @@ namespace ACFrameworkCore
         {
             fatherObj = new GameObject(obj.name);
             fatherObj.transform.SetParent(poolObj.transform, false);
+
             poolList = new List<GameObject>() { };
+
             PushObj(obj);
         }
 

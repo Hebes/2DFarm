@@ -18,6 +18,19 @@ namespace ACFrameworkCore
 {
     public class AduioComponent : ICoreComponent
     {
-        Dictionary<string, AudioClip> AudioClipDic = new Dictionary<string, AudioClip>();
+        Dictionary<string, AudioClip> AudioClipDic { get; set; }
+
+        public void OnCroeComponentInit()
+        {
+            AudioClipDic = new Dictionary<string, AudioClip>();
+        }
+        
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        public void OnAudioClipDicInit()
+        {
+
+        }
     }
 }

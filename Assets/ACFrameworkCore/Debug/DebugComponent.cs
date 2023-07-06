@@ -20,8 +20,14 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class DebugComponent : MonoBehaviour
+    public class DebugComponent : ICoreComponent
     {
+        public void OnCroeComponentInit()
+        {
+            InitModule();
+            //InitModule1();
+        }
+
         private string path { get; set; }
 
         //主动消息
@@ -41,7 +47,7 @@ namespace ACFrameworkCore
                 saveName = "Debug主动输出日志.txt",
             });
         }
-
+        //被动消息
         public void InitModule1()
         {
             if (PlayerPrefs.GetInt("设置日志开启") == 0)
@@ -52,6 +58,8 @@ namespace ACFrameworkCore
                 Application.logMessageReceived += Handler;
             }
         }
+
+       
 
 
         /// <summary>
@@ -81,9 +89,9 @@ namespace ACFrameworkCore
             }
         }
 
-        private void OnDestroy()
-        {
-            Application.logMessageReceived -= Handler;
-        }
+        //private void OnDestroy()
+        //{
+        //    Application.logMessageReceived -= Handler;
+        //}
     }
 }

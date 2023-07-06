@@ -22,10 +22,15 @@ using UnityEngine;
 namespace ACFrameworkCore
 {
 
-    public class PoolComponent
+    public class PoolComponent:ICoreComponent
     {
         public Dictionary<string, PoolData> poolDic { get; private set; }
         private GameObject poolObj { get; set; }
+
+        public void OnCroeComponentInit()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// 往外拿东西
@@ -71,5 +76,7 @@ namespace ACFrameworkCore
             poolDic.Clear();
             poolObj = null;
         }
+
+       
     }
 }

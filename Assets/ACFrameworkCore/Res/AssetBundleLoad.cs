@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ACFrameworkCore
+﻿namespace ACFrameworkCore
 {
     public class AssetBundleLoad : Iload
     {
@@ -13,6 +7,14 @@ namespace ACFrameworkCore
         }
 
         public void LoadAll(string path)
+        {
+        }
+
+        public void LoadAsync(string path)
+        {
+        }
+
+        public void LoadAsync<T>(string path) where T : UnityEngine.Object
         {
         }
     }

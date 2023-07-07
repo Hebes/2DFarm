@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ACFrameworkCore
 {
@@ -15,9 +9,19 @@ namespace ACFrameworkCore
             Resources.Load(path);
         }
 
+        public void Load<T>(string path) where T : Object
+        {
+            Resources.Load<T>(path);
+        }
+
         public void LoadAll(string path)
         {
             Resources.LoadAll(path);
+        }
+
+        public void LoadAsync(string path)
+        {
+            Resources.LoadAsync(path);
         }
     }
 }

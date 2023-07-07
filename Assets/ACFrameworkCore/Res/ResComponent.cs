@@ -20,6 +20,7 @@ namespace ACFrameworkCore
     public class ResComponent : ICoreComponent
     {
         public static ResComponent Insatance { get; set; }
+
         private Iload iload;
 
         public void OnCroeComponentInit()

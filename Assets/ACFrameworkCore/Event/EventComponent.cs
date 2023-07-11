@@ -1,14 +1,28 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using UnityEngine.Events;
+
+/*--------脚本描述-----------
+				
+电子邮箱：
+	1607388033@qq.com
+作者:
+	暗沉
+描述:
+    事件中心模块
+
+-----------------------*/
 
 namespace ACFrameworkCore
 {
     public class EventComponent : ICoreComponent
     {
+        public static EventComponent Instance { get; private set; }
         private Dictionary<string, IEventInfo> eventDic { get; set; }
 
         public void OnCroeComponentInit()
         {
+            Instance = this;
             eventDic = new Dictionary<string, IEventInfo>();
         }
 

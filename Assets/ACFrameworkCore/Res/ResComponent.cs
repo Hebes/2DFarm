@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/*--------脚本描述-----------
+﻿/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -14,6 +8,8 @@ using System.Threading.Tasks;
     资源加载
 
 -----------------------*/
+
+using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
@@ -33,10 +29,27 @@ namespace ACFrameworkCore
         {
             iload.Load(path);
         }
-
+        public void OnLoad<T>(string path) where T : UnityEngine.Object
+        {
+            iload.Load<T>(path);
+        }
         public void OnLoadAll(string path)
         {
             iload.LoadAll(path);
         }
+
+        public void OnLoadAsync(string path)
+        {
+            iload.LoadAsync(path);
+        }
+        public void OnLoadAsync<T>(string path) where T : UnityEngine.Object
+        {
+            iload.LoadAsync<T>(path);
+        }
+        public void OnLoadAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
+        {
+            iload.LoadAsync<T>(path, callback);
+        }
+
     }
 }

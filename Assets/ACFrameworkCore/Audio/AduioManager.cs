@@ -18,13 +18,16 @@ namespace ACFrameworkCore
 {
     public class AduioComponent : ICoreComponent
     {
+        public static AduioComponent Instance { get; private set; }
         Dictionary<string, AudioClip> AudioClipDic { get; set; }
 
         public void OnCroeComponentInit()
         {
+
+            Instance = this;
             AudioClipDic = new Dictionary<string, AudioClip>();
         }
-        
+
         /// <summary>
         /// 初始化数据
         /// </summary>

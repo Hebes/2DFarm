@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.Events;
 
 /*--------脚本描述-----------
 				
@@ -22,14 +18,16 @@ using UnityEngine;
 namespace ACFrameworkCore
 {
 
-    public class PoolComponent:ICoreComponent
+    public class PoolComponent : ICoreComponent
     {
+        public static PoolComponent Instance { get; private set; }
         public Dictionary<string, PoolData> poolDic { get; private set; }
         private GameObject poolObj { get; set; }
 
         public void OnCroeComponentInit()
         {
-            throw new NotImplementedException();
+            Instance = this;
+            poolDic = new Dictionary<string, PoolData>();
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace ACFrameworkCore
                 callBack(poolDic[name].GetObj());
             else
             {
-                ResComponent.Insatance.OnLoad<GameObject>(name, (o) =>
+                ResComponent.Insatance.OnLoadAsync<GameObject>(name, (o) =>
                 {
                     o.name = name;
                     callBack(o);
@@ -58,7 +56,6 @@ namespace ACFrameworkCore
         public void PushObj(string name, GameObject obj)
         {
             if (poolObj == null) poolObj = new GameObject("Pool");
-            Debug.Log("Push To Pool ");
             if (poolDic.ContainsKey(name))//里面有抽屉
                 poolDic[name].PushObj(obj);
             else//里面没有抽屉
@@ -77,6 +74,6 @@ namespace ACFrameworkCore
             poolObj = null;
         }
 
-       
+
     }
 }

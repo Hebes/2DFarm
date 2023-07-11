@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -26,6 +22,7 @@ namespace ACFrameworkCore
         {
             InitModule();
             //InitModule1();
+            DLog.Log("初始化完毕");
         }
 
         private string path { get; set; }

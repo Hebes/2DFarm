@@ -148,7 +148,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343839790}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &343839792
 Camera:
   m_ObjectHideFlags: 0
@@ -217,7 +217,6 @@ GameObject:
   m_Component:
   - component: {fileID: 398197089}
   - component: {fileID: 398197088}
-  - component: {fileID: 398197087}
   - component: {fileID: 398197086}
   m_Layer: 5
   m_Name: Canvas
@@ -243,29 +242,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &398197087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398197085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &398197088
 Canvas:
   m_ObjectHideFlags: 0
@@ -353,7 +329,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1195837353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 597a280d89aac42479cf9cada5733502, type: 3}
+  m_Script: {fileID: 11500000, guid: d30df0fd395f2844bb710b033bb60c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1216415463

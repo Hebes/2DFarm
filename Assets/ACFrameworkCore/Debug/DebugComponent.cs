@@ -23,6 +23,7 @@ namespace ACFrameworkCore
             InitModule();
             //InitModule1();
             DLog.Log("初始化完毕");
+            DLog.Log(string.Format("ttt{0},{1}",1,2));
         }
 
         private string path { get; set; }

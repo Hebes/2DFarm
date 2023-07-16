@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class BaseUI : MonoBehaviour
+    public class BaseUI
     {
-        Dictionary<string, BaseUI> UIComponentDic = new Dictionary<string, BaseUI>();
+        public GameObject UIGo { get; set; }
 
         /// <summary>
         /// 等价于Start
         /// </summary>
         public virtual void StartUI()
         {
-            
+
         }
         /// <summary>
         /// 等价Awake
@@ -23,7 +23,7 @@ namespace ACFrameworkCore
         }
         public virtual void HideUI()
         {
-            
+
         }
         public virtual void RemoveUI()
         {

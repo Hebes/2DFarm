@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -9,9 +7,11 @@ namespace ACFrameworkCore
 {
     public class InitGame : MonoBehaviour
     {
+
         private async void Awake()
         {
             await InitRsv();
+            GameObject.DontDestroyOnLoad(this.gameObject);
         }
 
 
@@ -21,7 +21,7 @@ namespace ACFrameworkCore
             {
                 new DebugComponent(),
                 new AduioComponent(),
-
+                new UIComponent(),
             };
 
             foreach (var init in _initHs)

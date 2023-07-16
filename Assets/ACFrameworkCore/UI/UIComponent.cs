@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /*--------脚本描述-----------
 				
@@ -30,16 +29,16 @@ namespace ACFrameworkCore
     {
         public static UIComponent Instance { get; private set; }
         private Dictionary<string, BaseUI> panelDic { get; set; }
-        private Transform canvas;
+        private GameObject canvas;
 
 
-        public Transform CanvasTf
+        public GameObject CanvasTf
         {
             get 
             {
                 if (canvas == null)
                 {
-                    canvas = GameObject.FindObjectOfType<Canvas>().transform;
+                    canvas = GameObject.FindObjectOfType<Canvas>().gameObject;
                     if (canvas == null)
                         Debug.LogError($"当前场景中不存在Canvas");
                 }
@@ -50,22 +49,28 @@ namespace ACFrameworkCore
         public void OnCroeComponentInit()
         {
             Instance = this;
-
             panelDic = new Dictionary<string, BaseUI>();
+            //GameObject.DontDestroyOnLoad(CanvasTf);
+            OnCreatLayer();
+        }
 
-            GameObject.DontDestroyOnLoad(canvas);
+        /// <summary>
+        /// 创建层级
+        /// </summary>
+        private void OnCreatLayer()
+        {
             foreach (EUILayer layer in Enum.GetValues(typeof(EUILayer)))
             {
                 var layerGo = new GameObject(layer.ToString(), typeof(RectTransform));
                 var rect = layerGo.GetComponent<RectTransform>();
-                rect.SetParent(canvas);
+                rect.SetParent(CanvasTf.transform);
                 rect.anchoredPosition = Vector3.zero;
             }
         }
 
         public Transform GetLayerFather(EUILayer layer)
         {
-           return CanvasTf.Find(layer.ToString());
+           return CanvasTf.transform.Find(layer.ToString());
         }
 
         public void OnOpenUI<T>(string panelName, EUILayer layer) where T : BaseUI
@@ -99,16 +104,16 @@ namespace ACFrameworkCore
         {
             if (!panelDic.ContainsKey(panelName)) return;
             panelDic[panelName].HideUI();//关闭面板
-            panelDic[panelName].gameObject.SetActive(false);
+            panelDic[panelName].UIGo.SetActive(false);
         }
 
         public void OnRemoveUI(string panelName)
         {
             if (!panelDic.ContainsKey(panelName)) return;
             panelDic[panelName].HideUI();//关闭面板
-            panelDic[panelName].gameObject.SetActive(false);
+            panelDic[panelName].UIGo.SetActive(false);
             panelDic[panelName].RemoveUI();//移除面板
-            GameObject.Destroy(panelDic[panelName].gameObject);
+            GameObject.Destroy(panelDic[panelName].UIGo);
             panelDic.Remove(panelName);
         }
     }

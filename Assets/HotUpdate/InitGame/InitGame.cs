@@ -1,17 +1,23 @@
-﻿using System;
+﻿using ACFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ACFrameworkCore
-{
-    public class InitGame : MonoBehaviour
+//namespace ACFrameworkCore
+//{
+    public class InitGame 
     {
+
+        public static void Init()
+        {
+            Debug.Log("热更新代码444");
+        }
 
         private async void Awake()
         {
             await InitRsv();
-            GameObject.DontDestroyOnLoad(this.gameObject);
+            //GameObject.DontDestroyOnLoad(this.gameObject);
         }
 
 
@@ -33,4 +39,4 @@ namespace ACFrameworkCore
         }
 
     }
-}
+//}

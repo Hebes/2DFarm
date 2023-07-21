@@ -6,3 +6,6 @@ Temp
 .vsconfig
 .vs
 HybridCLRData
+Release-Win64
+obj
+Bundles

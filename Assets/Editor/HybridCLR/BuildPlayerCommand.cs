@@ -59,7 +59,7 @@ namespace HybridCLR.Editor
             Debug.Log("====> Build App");
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions()
             {
-                scenes = new string[] { "Assets/Scenes/main.unity" },
+                scenes = new string[] { "Assets/AssetsPackage/Scenes/Init.unity" },
                 locationPathName = location,
                 options = buildOptions,
                 target = target,
@@ -80,6 +80,7 @@ namespace HybridCLR.Editor
             Debug.Log("====> 复制热更新资源和代码");
             BuildAssetsCommand.BuildAndCopyABAOTHotUpdateDlls();
             BashUtil.CopyDir(Application.streamingAssetsPath, $"{outputPath}/HybridCLRTrial_Data/StreamingAssets", true);
+            EditorUtility.RevealInFinder(outputPath);//打开路径
         }
     }
 }

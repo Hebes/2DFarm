@@ -15,6 +15,7 @@ public class ConsoleToScreen : MonoBehaviour
 
     void OnEnable() { Application.logMessageReceived += Log; }
     void OnDisable() { Application.logMessageReceived -= Log; }
+    void Update() { }
 
     public void Log(string logString, string stackTrace, LogType type)
     {
@@ -22,7 +23,7 @@ public class ConsoleToScreen : MonoBehaviour
         {
             if (line.Length <= maxLineLength)
             {
-                _lines.Add(line); 
+                _lines.Add(line);
                 continue;
             }
             var lineCount = line.Length / maxLineLength + 1;
@@ -52,4 +53,3 @@ public class ConsoleToScreen : MonoBehaviour
         GUI.Label(new Rect(10, 10, 800, 370), _logStr, new GUIStyle() { fontSize = Math.Max(10, fontSize) });
     }
 }
-

@@ -22,8 +22,7 @@ namespace ACFrameworkCore
         {
             InitModule();
             //InitModule1();
-            DLog.Log("初始化完毕");
-            DLog.Log(string.Format("ttt{0},{1}",1,2));
+            DLog.Log("日志模块初始化完毕!");
         }
 
         private string path { get; set; }

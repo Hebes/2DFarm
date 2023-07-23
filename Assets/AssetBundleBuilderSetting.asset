@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuildPipeline: 0
   BuildMode: 0
-  BuildPackage: Hotdll
+  BuildPackage: PC
   CompressOption: 2
   OutputNameStyle: 4
   CopyBuildinFileOption: 0

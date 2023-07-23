@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
-  ShowPackageView: 1
-  EnableAddressable: 0
-  LocationToLower: 1
+  ShowPackageView: 0
+  EnableAddressable: 1
+  LocationToLower: 0
   IncludeAssetGUID: 0
   UniqueBundleName: 0
   ShowEditorAlias: 0
   Packages:
-  - PackageName: Hotdll
-    PackageDesc: "\u70ED\u66F4\u65B0\u4EE3\u7801"
+  - PackageName: PC
+    PackageDesc: "\u7535\u8111\u5305"
     Groups:
-    - GroupName: Hotdll
+    - GroupName: HotUpdataDll
       GroupDesc: "\u70ED\u66F4\u65B0\u4EE3\u7801"
       AssetTags: 
       ActiveRuleName: EnableGroup
@@ -31,20 +31,17 @@ MonoBehaviour:
         CollectorGUID: 614029d323809184cb2ad4b555180d07
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackRawFile
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-  - PackageName: Scenes
-    PackageDesc: "\u573A\u666F"
-    Groups:
-    - GroupName: Scenes
-      GroupDesc: "\u573A\u666F"
+    - GroupName: Prefabs
+      GroupDesc: "\u9884\u5236\u4F53"
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/Scenes
-        CollectorGUID: 55524d030f09623438b3faa413bdabdd
+      - CollectPath: Assets/AssetsPackage/Prefab
+        CollectorGUID: 22873ace4c3e0d141aa1492e7f5954c1
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

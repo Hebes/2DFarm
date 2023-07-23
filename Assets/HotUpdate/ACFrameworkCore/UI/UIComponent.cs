@@ -52,6 +52,7 @@ namespace ACFrameworkCore
             panelDic = new Dictionary<string, BaseUI>();
             //GameObject.DontDestroyOnLoad(CanvasTf);
             OnCreatLayer();
+            DLog.Log("UI管理类初始化成功!");
         }
 
         /// <summary>

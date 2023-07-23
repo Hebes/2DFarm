@@ -13,8 +13,8 @@ namespace ACFrameworkCore
         public void OnCroeComponentInit()
         {
             Instance = this;
-
             monoController = new GameObject("Mono").AddComponent<MonoController>();
+            DLog.Log("初始化Mono完毕!");
         }
 
 

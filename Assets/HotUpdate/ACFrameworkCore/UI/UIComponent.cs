@@ -82,23 +82,23 @@ namespace ACFrameworkCore
                 return;
             }
 
-            ResComponent.Insatance.OnLoadAsync<GameObject>("UI/" + panelName, obj =>
-            {
+            //ResComponent.Insatance.OnLoadAsync<GameObject>("UI/" + panelName, obj =>
+            //{
 
-                Transform father = GetLayerFather(layer);
+            //    Transform father = GetLayerFather(layer);
 
-                obj.transform.SetParent(father,false);
+            //    obj.transform.SetParent(father,false);
 
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localScale = Vector3.one;
+            //    obj.transform.localPosition = Vector3.zero;
+            //    obj.transform.localScale = Vector3.one;
 
-                (obj.transform as RectTransform).offsetMax = Vector2.zero;
-                (obj.transform as RectTransform).offsetMin = Vector2.zero;
+            //    (obj.transform as RectTransform).offsetMax = Vector2.zero;
+            //    (obj.transform as RectTransform).offsetMin = Vector2.zero;
 
-                T panel = obj.GetComponent<T>();
-                panel.OpenUI();
-                panelDic.Add(panelName, panel);
-            });
+            //    T panel = obj.GetComponent<T>();
+            //    panel.OpenUI();
+            //    panelDic.Add(panelName, panel);
+            //});
         }
 
         public void OnHideUI(string panelName)

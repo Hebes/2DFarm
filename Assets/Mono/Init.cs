@@ -312,7 +312,7 @@ public class Init : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.5f);
 
-        var package = YooAsset.YooAssets.GetPackage(packageName);
+        var package = YooAssets.GetPackage(packageName);
 
         //var assets = new List<string>
         //{

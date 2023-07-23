@@ -42,11 +42,11 @@ namespace ACFrameworkCore
                 callBack(poolDic[name].GetObj());
             else
             {
-                ResComponent.Insatance.OnLoadAsync<GameObject>(name, (o) =>
-                {
-                    o.name = name;
-                    callBack(o);
-                });
+                //ResComponent.Insatance.OnLoadAsync<GameObject>(name, (o) =>
+                //{
+                //    o.name = name;
+                //    callBack(o);
+                //});
             }
         }
 

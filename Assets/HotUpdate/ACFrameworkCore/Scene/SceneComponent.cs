@@ -7,30 +7,32 @@ namespace ACFrameworkCore
 {
     public class SceneComponent : ICoreComponent
     {
-        public static SceneComponent Instance { get; private set; } 
+        public static SceneComponent Instance { get; private set; }
+
+        private ISceneLoad sceneLoad;
+
         public void OnCroeComponentInit()
         {
-            Instance=this;
+            Instance = this;
+            sceneLoad = new YooAssetLoadScene();
         }
 
-        public void LoadScene(string name)
+        /// <summary>
+        /// 同步加载场景
+        /// </summary>
+        /// <param name="SceneName"></param>
+        public void LoadScene(string SceneName)
         {
-            SceneManager.LoadScene(name);
+            sceneLoad.LoadScene(SceneName);
         }
-        public void LoadSceneAsyn(string name, UnityAction fun)
+        /// <summary>
+        /// 异步加载场景
+        /// </summary>
+        /// <param name="SceneName">场景名称</param>
+        /// <param name="fun">加载完毕后的回调</param>
+        public void LoadSceneAsyn(string SceneName, UnityAction unityAction)
         {
-            MonoComponent.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneAsyn(name, fun));
+            sceneLoad.LoadSceneAsync(SceneName, unityAction);
         }
-        private IEnumerator ReallyLoadSceneAsyn(string name, UnityAction fun)
-        {
-            AsyncOperation ao = SceneManager.LoadSceneAsync(name);
-            while (!ao.isDone)
-            {
-                EventComponent.Instance.EventTrigger("进度条更新", ao.progress);
-                yield return ao.progress;
-            }
-            fun();
-        }
-
     }
 }

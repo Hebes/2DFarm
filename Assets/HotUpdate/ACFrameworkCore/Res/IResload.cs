@@ -5,7 +5,7 @@
 作者:
 	暗沉
 描述:
-    资源加载
+    资源加载接口
 
 -----------------------*/
 
@@ -14,28 +14,15 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class ResComponent : ICoreComponent
+    public interface IResload
     {
-        public static ResComponent Insatance { get; set; }
-
-        private IResload iload;
-
-        public void OnCroeComponentInit()
-        {
-            Insatance = this;
-            iload = new YooAssetResLoad();
-        }
-
         /// <summary>
         /// 同步加载资源对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
-        {
-           return iload.LoadAsset<T>(ResName);
-        }
+        public T LoadAsset<T>(string ResName) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载资源对象
@@ -43,10 +30,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAssetAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-            iload.LoadAssetAsync<T>(ResName, callback);
-        }
+        public void LoadAssetAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步加载子资源对象
@@ -55,10 +39,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public T LoadSubAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-            return null;
-        }
+        public T LoadSubAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载子资源对象
@@ -67,10 +48,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadSubAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
+        public void LoadSubAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步加载资源包内所有资源对象
@@ -78,10 +56,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAllAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
+        public void LoadAllAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载资源包内所有资源对象
@@ -89,10 +64,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAllAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
+        public void LoadAllAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步获取原生文件
@@ -100,10 +72,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadRawFile<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
+        public void LoadRawFile<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步获取原生文件
@@ -111,9 +80,20 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadRawFileAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
+        public void LoadRawFileAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
-        }
+
+        /// <summary>
+        /// 加载全部
+        /// </summary>
+        public void LoadAll(string ResName);
+
+        /// <summary>
+        /// 异步加载
+        /// </summary>
+        public void LoadAsync(string paResNameth);
+
+        public void LoadAsync<T>(string ResName) where T : UnityEngine.Object;
+
     }
 }

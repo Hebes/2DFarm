@@ -330,7 +330,7 @@ public class Init : MonoBehaviour
         //LoadMetadataForAOTAssemblies();
 
 #if !UNITY_EDITOR
-        System.Reflection.Assembly.Load(GetAssetData("Assembly-CSharp.dll"));
+        //System.Reflection.Assembly.Load(GetAssetData("Assembly-CSharp.dll"));
 #endif
         //补充元数据
         foreach (var asset in AOTMetaAssemblyNames)
@@ -391,7 +391,7 @@ public class Init : MonoBehaviour
 		else if (Application.platform == RuntimePlatform.WebGLPlayer)
 			return $"{hostServerIP}/CDN/WebGL/{appVersion}";
 		else
-			return $"{hostServerIP}/CDN/PC/{appVersion}";
+			return $"{hostServerIP}/StandaloneWindows64/PC/{appVersion}";
 #endif
     }
 

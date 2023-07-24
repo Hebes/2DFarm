@@ -59,7 +59,7 @@ public class Init : MonoBehaviour
         Application.targetFrameRate = 60;//限定帧数
         Application.runInBackground = true;//是否后台开启
     }
-    void Start()
+    private void Start()
     {
         // 初始化资源系统
         YooAssets.Initialize();

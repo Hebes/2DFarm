@@ -31,6 +31,6 @@ namespace ACFrameworkCore
         /// <summary>
         /// 协程异步加载场景
         /// </summary>
-        // abstract void LoadSceneIEnumerator(string SceneName, UnityAction fun);
+        // abstract void LoadSceneIEnumerator(string SceneName, UnityAction unityAction);
     }
 }

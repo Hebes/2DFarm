@@ -29,7 +29,7 @@ namespace ACFrameworkCore
         /// 异步加载场景
         /// </summary>
         /// <param name="SceneName">场景名称</param>
-        /// <param name="fun">加载完毕后的回调</param>
+        /// <param name="unityAction">加载完毕后的回调</param>
         public void LoadSceneAsyn(string SceneName, UnityAction unityAction)
         {
             sceneLoad.LoadSceneAsync(SceneName, unityAction);

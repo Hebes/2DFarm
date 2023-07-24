@@ -13,18 +13,29 @@ namespace ACFrameworkCore
         public void OnCroeComponentInit()
         {
             Instance = this;
-            monoController = new GameObject("Mono").AddComponent<MonoController>();
+            GameObject monoTemp = new GameObject("Mono");
+            GameObject.DontDestroyOnLoad(monoTemp);
+            monoController = monoTemp.AddComponent<MonoController>();
             DLog.Log("初始化Mono完毕!");
         }
 
 
-        public void OnAddAwake(UnityAction fun)
+        public void OnAddAwakeEvent(UnityAction unityAction)
         {
-            monoController.OnAddAwake(fun);
+            monoController.OnAddAwakeEvent(unityAction);
         }
-        public void OnRemoveAwake(UnityAction fun)
+        public void OnRemoveAwakeEvent(UnityAction unityAction)
         {
-            monoController.OnRemoveAwake(fun);
+            monoController.OnRemoveAwakeEvent(unityAction);
+        }
+
+        public void OnAddUpdateEvent(UnityAction unityAction)
+        {
+            monoController.OnAddUpdateEvent(unityAction);
+        }
+        public void OnRemoveUpdateEvent(UnityAction unityAction)
+        {
+            monoController.OnRemoveUpdateEvent(unityAction);
         }
 
 

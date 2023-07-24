@@ -39,7 +39,7 @@ namespace ACFrameworkCore
             //    EventComponent.Instance.EventTrigger("进度条更新", ao.progress);
             //    yield return ao.progress;
             //}
-            //fun();
+            //unityAction();
 
             var package = YooAssets.GetPackage(packageName);
             var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;

@@ -23,6 +23,7 @@ public class InitGame
         //});
         DLog.Log("开始创建物体");
 
+
         //var package = YooAssets.GetPackage("PC");
         //AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>("Cube");
         //handle1.Completed += Handle_Completed;
@@ -39,6 +40,8 @@ public class InitGame
         //GameObject.Instantiate(go);
         //DLog.Log(go.name);
         //ResComponent.Insatance.LoadAssetAsync<GameObject>("Cube",null);
+
+        EnterGame();
     }
 
     private static void Handle_Completed(AssetOperationHandle obj)
@@ -68,10 +71,10 @@ public class InitGame
         HashSet<ICoreComponent> _initHs = new HashSet<ICoreComponent>()
             {
                 new DebugComponent(),
+                new MonoComponent(),
+                new ResComponent(),
                 new AduioComponent(),
                 new UIComponent(),
-                new ResComponent(),
-                new MonoComponent(),
             };
 
         foreach (var init in _initHs)
@@ -80,5 +83,14 @@ public class InitGame
             await Task.Delay(TimeSpan.FromSeconds(0.5f));
         }
         return "核心框架模块已经全都初始化完毕1!";
+    }
+
+    /// <summary>
+    /// 进入游戏
+    /// </summary>
+    private static void EnterGame()
+    {
+        DLog.Log("开始打开界面");
+        UIComponent.Instance.OnCreatUI<PanelComponent>("Panel",EUILayer.System);
     }
 }

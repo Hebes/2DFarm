@@ -108,14 +108,14 @@ namespace ACFrameworkCore
 
         #region 资源卸载
 
-        //public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        //{
+        public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        {
 
-        //    assetOperationHandles.TryGetValue()
+            //assetOperationHandles.TryGetValue()
 
-        //    AssetOperationHandle handle = assetOperationHandles
-        //    handle.Release();
-        //}
+            //AssetOperationHandle handle = assetOperationHandles
+            //handle.Release();
+        }
 
         //IEnumerator UnloadAssets<T>(string ResName, UnityAction<T> callback)
         //{
@@ -124,7 +124,7 @@ namespace ACFrameworkCore
         //    handle.na
         //    yield return handle;
         //    callback?.Invoke(handle as T);
-            
+
         //}
 
         #endregion

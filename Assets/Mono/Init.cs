@@ -2,39 +2,43 @@ using HybridCLR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web.Services.Description;
-using Unity.VisualScripting;
 using UnityEngine;
 using YooAsset;
 
 /// <summary>
-/// 热更模式
+/// YooAsset流程状态
 /// </summary>
-public enum EHotUpdateMode
+public enum EHotUpdateProcess
 {
+    /// <summary> 流程准备工作 </summary>
     FsmPatchPrepare,
+    /// <summary> 初始化资源包 </summary>
     FsmInitialize,
+    /// <summary> 更新资源版本号 </summary>
     FsmUpdateVersion,
+    /// <summary> 更新资源清单 </summary>
     FsmUpdateManifest,
+    /// <summary> 创建文件下载器 </summary>
     FsmCreateDownloader,
+    /// <summary> 下载更新文件 </summary>
     FsmDownloadFiles,
+    /// <summary> 下载完毕 </summary>
     FsmDownloadOver,
+    /// <summary> 清理未使用的缓存文件 </summary>
     FsmClearCache,
+    /// <summary> 流程更新完毕 </summary>
     FsmPatchDone,
-    FsmHotDll,
+    /// <summary> HybridCLR热更代码 </summary>
+    FsmLoadHotDll,
 }
 
 public class Init : MonoBehaviour
 {
-    /// <summary>
-	/// 资源系统运行模式
-	/// </summary>
+    /// <summary> 资源系统运行模式 </summary>
 	public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;
+    private EHotUpdateProcess HotUpdateProcess;
 
-    private EHotUpdateMode HotUpdateMode;
-    //private string packageName = "DefaultPackage";
     private readonly string packageName = "PC";
     private ResourceDownloaderOperation downloader;//下载器
     public UpdatePackageVersionOperation operation;//更新包
@@ -47,51 +51,45 @@ public class Init : MonoBehaviour
         "System.dll",
         "System.Core.dll",
     };
-
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();//资源数据
 
     private void Awake()
     {
         Debug.Log($"资源系统运行模式：{PlayMode}");
-        Application.targetFrameRate = 60;
-        Application.runInBackground = true;
+        Application.targetFrameRate = 60;//限定帧数
+        Application.runInBackground = true;//是否后台开启
     }
-
     void Start()
     {
         // 初始化资源系统
         YooAssets.Initialize();
-        YooAssets.SetOperationSystemMaxTimeSlice(30);
-        HotUpdateModeChange(EHotUpdateMode.FsmPatchPrepare);
+        YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
+        FsmProcessChange(EHotUpdateProcess.FsmPatchPrepare);
     }
 
-    private void InitGame()
+    /// <summary>
+    /// 状态机流程切换
+    /// </summary>
+    /// <param name="HotUpdateProcess">流程模式</param>
+    private void FsmProcessChange(EHotUpdateProcess HotUpdateProcess)
     {
-        switch (HotUpdateMode)
+        this.HotUpdateProcess = HotUpdateProcess;
+        switch (HotUpdateProcess)
         {
-            case EHotUpdateMode.FsmPatchPrepare: StartCoroutine(FsmPatchPrepare()); break;
-            case EHotUpdateMode.FsmInitialize: StartCoroutine(FsmInitialize()); break;
-            case EHotUpdateMode.FsmUpdateVersion: StartCoroutine(FsmUpdateVersion()); break;
-            case EHotUpdateMode.FsmUpdateManifest: StartCoroutine(FsmUpdateManifest()); break;
-            case EHotUpdateMode.FsmCreateDownloader: StartCoroutine(FsmCreateDownloader()); break;
-            case EHotUpdateMode.FsmDownloadFiles: StartCoroutine(FsmDownloadFiles()); break;
-            case EHotUpdateMode.FsmDownloadOver: StartCoroutine(FsmDownloadOver()); break;
-            case EHotUpdateMode.FsmClearCache: StartCoroutine(FsmClearCache()); break;
-            case EHotUpdateMode.FsmPatchDone: StartCoroutine(FsmPatchDone()); break;
-            case EHotUpdateMode.FsmHotDll: StartCoroutine(FsmHotDll()); break;
+            case EHotUpdateProcess.FsmPatchPrepare: StartCoroutine(FsmPatchPrepare()); break;
+            case EHotUpdateProcess.FsmInitialize: StartCoroutine(FsmInitialize()); break;
+            case EHotUpdateProcess.FsmUpdateVersion: StartCoroutine(FsmUpdateVersion()); break;
+            case EHotUpdateProcess.FsmUpdateManifest: StartCoroutine(FsmUpdateManifest()); break;
+            case EHotUpdateProcess.FsmCreateDownloader: StartCoroutine(FsmCreateDownloader()); break;
+            case EHotUpdateProcess.FsmDownloadFiles: StartCoroutine(FsmDownloadFiles()); break;
+            case EHotUpdateProcess.FsmDownloadOver: StartCoroutine(FsmDownloadOver()); break;
+            case EHotUpdateProcess.FsmClearCache: StartCoroutine(FsmClearCache()); break;
+            case EHotUpdateProcess.FsmPatchDone: StartCoroutine(FsmPatchDone()); break;
+            case EHotUpdateProcess.FsmLoadHotDll: StartCoroutine(FsmLoadHotDll()); break;
         }
     }
 
-    private void HotUpdateModeBreak()
-    {
-        Debug.Log($"结束中断,中断点:{HotUpdateMode.ToString()}");
-    }
-    private void HotUpdateModeChange(EHotUpdateMode HotUpdateMode)
-    {
-        //Debug.Log($"将进入{HotUpdateMode.ToString()}");
-        this.HotUpdateMode = HotUpdateMode;
-        InitGame();
-    }
+    #region YooAsset流程
 
     /// <summary>
     /// 流程准备工作
@@ -102,9 +100,8 @@ public class Init : MonoBehaviour
         Debug.Log("流程准备工作");
         yield return new WaitForSeconds(1f);
         //TODO 加载更新面板
-        HotUpdateModeChange(EHotUpdateMode.FsmInitialize);
+        FsmProcessChange(EHotUpdateProcess.FsmInitialize);
     }
-
 
     /// <summary>
     /// 初始化资源包
@@ -154,11 +151,11 @@ public class Init : MonoBehaviour
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogError($"资源包初始化失败：{initializationOperation.Error}");
-            HotUpdateModeBreak();
+            ProcessBreak();
             yield break;
         }
         Debug.Log("资源包初始化成功！");
-        HotUpdateModeChange(EHotUpdateMode.FsmUpdateVersion);
+        FsmProcessChange(EHotUpdateProcess.FsmUpdateVersion);
     }
 
     /// <summary>
@@ -175,11 +172,11 @@ public class Init : MonoBehaviour
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"更新资源版本号失败: {operation.Error}");
-            HotUpdateModeBreak();
+            ProcessBreak();
             yield break;
         }
         Debug.Log($"更新补丁清单成功,远端或本地最新版本为: {operation.PackageVersion}");
-        HotUpdateModeChange(EHotUpdateMode.FsmUpdateManifest);
+        FsmProcessChange(EHotUpdateProcess.FsmUpdateManifest);
     }
 
     /// <summary>
@@ -198,11 +195,11 @@ public class Init : MonoBehaviour
         if (operationResource.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"更新资源清单失败: {operationResource.Error}");
-            HotUpdateModeBreak();
+            ProcessBreak();
             yield break;
         }
         Debug.Log($"更新资源清单成功: {operationResource.Status}!");
-        HotUpdateModeChange(EHotUpdateMode.FsmCreateDownloader);
+        FsmProcessChange(EHotUpdateProcess.FsmCreateDownloader);
     }
 
     /// <summary>
@@ -225,7 +222,7 @@ public class Init : MonoBehaviour
         if (downloader.TotalDownloadCount == 0)
         {
             Debug.Log("没有找到需要下载的文件! Not found any download files !");
-            HotUpdateModeChange(EHotUpdateMode.FsmDownloadOver);
+            FsmProcessChange(EHotUpdateProcess.FsmDownloadOver);
             yield break;
         }
         Debug.Log($"找到需要下载{downloader.TotalDownloadCount}的文件! Found total {downloader.TotalDownloadCount} files that need download ！");
@@ -235,7 +232,7 @@ public class Init : MonoBehaviour
         int totalDownloadCount = downloader.TotalDownloadCount;
         long totalDownloadBytes = downloader.TotalDownloadBytes;
         //TODO 开发者需要在下载前检测磁盘空间不足
-        HotUpdateModeChange(EHotUpdateMode.FsmDownloadFiles);
+        FsmProcessChange(EHotUpdateProcess.FsmDownloadFiles);
     }
 
     /// <summary>
@@ -260,11 +257,11 @@ public class Init : MonoBehaviour
         if (downloader.Status != EOperationStatus.Succeed)
         {
             Debug.LogError($"更新失败！{downloader.Error}");
-            HotUpdateModeBreak();
+            ProcessBreak();
             yield break;
         }
         Debug.Log("更新完成!");
-        HotUpdateModeChange(EHotUpdateMode.FsmPatchDone);
+        FsmProcessChange(EHotUpdateProcess.FsmPatchDone);
     }
 
     /// <summary>
@@ -274,7 +271,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmDownloadOver()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        HotUpdateModeChange(EHotUpdateMode.FsmClearCache);
+        FsmProcessChange(EHotUpdateProcess.FsmClearCache);
     }
 
     /// <summary>
@@ -287,7 +284,7 @@ public class Init : MonoBehaviour
         var package = YooAssets.GetPackage(packageName);
         var operation = package.ClearUnusedCacheFilesAsync();
         operation.Completed += OnClearCacheFunction;
-        HotUpdateModeChange(EHotUpdateMode.FsmPatchDone);
+        FsmProcessChange(EHotUpdateProcess.FsmPatchDone);
     }
 
     /// <summary>
@@ -297,18 +294,14 @@ public class Init : MonoBehaviour
     IEnumerator FsmPatchDone()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        HotUpdateModeChange(EHotUpdateMode.FsmHotDll);
-        //委托加载方式，加载prefab
-        //var package = YooAssets.GetPackage(packageName);
-        //AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>("Cube");
-        //handle1.Completed += Handle_Completed;
+        FsmProcessChange(EHotUpdateProcess.FsmLoadHotDll);
     }
 
     /// <summary>
-    /// 热更代码
+    /// HybridCLR热更代码
     /// </summary>
     /// <returns></returns>
-    IEnumerator FsmHotDll()
+    IEnumerator FsmLoadHotDll()
     {
         yield return new WaitForSecondsRealtime(0.5f);
 
@@ -330,7 +323,8 @@ public class Init : MonoBehaviour
         //LoadMetadataForAOTAssemblies();
 
 #if !UNITY_EDITOR
-        //System.Reflection.Assembly.Load(GetAssetData("Assembly-CSharp.dll"));
+        //System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
+        System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
 #endif
         //补充元数据
         foreach (var asset in AOTMetaAssemblyNames)
@@ -352,21 +346,16 @@ public class Init : MonoBehaviour
         Assembly _hotUpdateAss = Assembly.Load(fileDataHotUpdate);
         Type entryType = _hotUpdateAss.GetType("InitGame");
         entryType.GetMethod("Init").Invoke(null, null);
-
-
-        //#if !UNITY_EDITOR
-        //        System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
-        //#endif
-
-        //委托加载方式，加载prefab
-        //AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>("Cube");
-        //handle1.Completed += Handle_Completed;
     }
 
+    #endregion
+
+    #region 辅助功能
+
     /// <summary>
-	/// 获取资源服务器地址
-	/// </summary>
-	private string GetHostServerURL()
+    /// 获取资源服务器地址
+    /// </summary>
+    private string GetHostServerURL()
     {
         //TODO 后续会改成XML读取配置
         //string hostServerIP = "http://10.0.2.2"; //安卓模拟器地址
@@ -393,6 +382,14 @@ public class Init : MonoBehaviour
 		else
 			return $"{hostServerIP}/StandaloneWindows64/PC/{appVersion}";
 #endif
+    }
+
+    /// <summary>
+    /// 流程跳出
+    /// </summary>
+    private void ProcessBreak()
+    {
+        Debug.Log($"结束中断,中断点:{HotUpdateProcess}");
     }
 
     /// <summary>
@@ -446,7 +443,6 @@ public class Init : MonoBehaviour
     private void OnClearCacheFunction(AsyncOperationBase asyncOperationBase)
     {
         Debug.Log("清理缓存完毕,流程更新完毕");
-
     }
 
     /// <summary>
@@ -468,18 +464,15 @@ public class Init : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 获取byte字节数组
+    /// </summary>
+    /// <param name="dllName"></param>
+    /// <returns></returns>
     private static byte[] GetAssetData(string dllName)
     {
         return s_assetDatas[dllName];
     }
 
-    /// <summary>
-    /// 测试
-    /// </summary>
-    /// <param name="obj"></param>
-    private void Handle_Completed(AssetOperationHandle obj)
-    {
-        GameObject go = obj.InstantiateSync();
-        Debug.Log($"Prefab name is {go.name}");
-    }
+    #endregion
 }

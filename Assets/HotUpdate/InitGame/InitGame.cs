@@ -23,18 +23,18 @@ public class InitGame
         //});
         DLog.Log("开始创建物体");
 
-        var package = YooAssets.GetPackage("PC");
-        AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>("Cube");
-        handle1.Completed += Handle_Completed;
+        //var package = YooAssets.GetPackage("PC");
+        //AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>("Cube");
+        //handle1.Completed += Handle_Completed;
 
-        AssetOperationHandle handle2 = package.LoadAssetAsync<GameObject>("Cube");
-        handle2.Completed += Handle_Completed1;
+        //AssetOperationHandle handle2 = package.LoadAssetAsync<GameObject>("Cube");
+        //handle2.Completed += Handle_Completed1;
 
 
-        AssetOperationHandle handle3 = package.LoadAssetAsync<GameObject>("Cube");
-        handle3.Completed += Handle_Completed2;
+        //AssetOperationHandle handle3 = package.LoadAssetAsync<GameObject>("Cube");
+        //handle3.Completed += Handle_Completed2;
 
-        DLog.Log("创建物体结束");
+        //DLog.Log("创建物体结束");
         //GameObject go = ResComponent.Insatance.LoadAsset<GameObject>("Cube");
         //GameObject.Instantiate(go);
         //DLog.Log(go.name);

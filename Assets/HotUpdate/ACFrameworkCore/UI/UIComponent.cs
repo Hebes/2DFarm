@@ -49,7 +49,7 @@ namespace ACFrameworkCore
             }
         }
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
             panelDic = new Dictionary<string, IUIState>();
@@ -143,10 +143,12 @@ namespace ACFrameworkCore
         /// 关闭面板
         /// </summary>
         /// <param name="panelName"></param>
-        public void OnHideUI(string panelName)
+        public void OnCloseUI(string panelName)
         {
             panelDic.TryGetValue(panelName, out IUIState t);
-            t?.UIOnDisable();//关闭面板
+            if (t == null) return;
+            t.UIOnDisable();//关闭面板
+            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
             t.UIGO.SetActive(false);
         }
 
@@ -157,7 +159,9 @@ namespace ACFrameworkCore
         public void OnRemoveUI(string panelName)
         {
             panelDic.TryGetValue(panelName, out IUIState t);
-            t?.UIOnDestroy();//关闭面板
+            if (t == null) return;
+            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
+            t.UIOnDestroy();//关闭面板
             GameObject.Destroy(panelDic[panelName].UIGO);//删除面板
             panelDic.Remove(panelName);//字典移除
         }

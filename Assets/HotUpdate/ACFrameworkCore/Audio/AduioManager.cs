@@ -30,7 +30,7 @@ namespace ACFrameworkCore
         private float soundValue = 1;//音效大小
         private List<AudioSource> soundList { get; set; } //音效列表
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
             AudioClipDic = new Dictionary<string, AudioClip>();

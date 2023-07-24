@@ -11,7 +11,7 @@ namespace ACFrameworkCore
 
         private ISceneLoad sceneLoad;
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
             sceneLoad = new YooAssetLoadScene();

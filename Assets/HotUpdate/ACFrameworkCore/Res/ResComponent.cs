@@ -20,7 +20,7 @@ namespace ACFrameworkCore
 
         private IResload iload;
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Insatance = this;
             iload = new YooAssetResLoad();

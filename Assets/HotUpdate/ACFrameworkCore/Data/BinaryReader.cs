@@ -2,7 +2,7 @@
 {
     public class BinaryReader : IRead,ICoreComponent
     {
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
         }
 

@@ -329,6 +329,8 @@ public class Init : MonoBehaviour
         //}
         //LoadMetadataForAOTAssemblies();
 
+        
+
 #if !UNITY_EDITOR
         //System.Reflection.Assembly.Load(GetAssetData("Assembly-CSharp.dll"));
 #endif

@@ -1,7 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using YooAsset;
+using static Codice.Client.BaseCommands.Import.Commit;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 
 /*--------脚本描述-----------
@@ -20,32 +25,60 @@ namespace ACFrameworkCore
 {
     public class YooAssetResLoad : IResload
     {
-#if UNITY_EDITOR
-        //public readonly string packageName = "PC";
-#endif
-        public readonly string packageName = "PC";
+        public HashSet<AssetOperationHandle> assetOperationHandles = new HashSet<AssetOperationHandle>();
 
+        public ResourcePackage GetPakckage()
+        {
+#if UNITY_EDITOR
+            //return YooAssets.GetPackage(packageName);
+#endif
+            return YooAssets.GetPackage("PC");
+        }
+
+        #region 资源加载
 
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
         {
-            var package = YooAssets.GetPackage(packageName);
+            var package = GetPakckage();
             AssetOperationHandle handle = package.LoadAssetSync<T>(ResName);
             return handle.AssetObject as T;
         }
-
-        public void LoadAssetAsync<T>(string SceneName, UnityAction<T> callback) where T : UnityEngine.Object
+        public void LoadAssetAsyncIEnumerator<T>(string SceneName, UnityAction<T> callback) where T : UnityEngine.Object
         {
             MonoComponent.Instance.MonoStartCoroutine(ResLoadAsync(SceneName, callback));
         }
+        public void LoadAssetAsyncDelegate<T>(string ResName, System.Action<T> callback) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
+            handle.Completed += action => { callback?.Invoke(action.AssetObject as T); };
+        }
+        public async void LoadAssetAsyncTask<T>(string ResName, Action<T> callback) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
+            await handle.Task;
+            callback?.Invoke(handle.AssetObject as T);
+        }
+        IEnumerator ResLoadAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
+            yield return handle;
+            callback?.Invoke(handle.AssetObject as T);
+
+            GameObject go = handle.InstantiateSync();
+            Debug.Log($"Prefab name is {go.name}");
+        }
+        #endregion
+
 
         public void LoadAll(string path)
         {
         }
-
         public void LoadAllAssets<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
         {
         }
-
         public void LoadAllAssetsAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
         {
         }
@@ -53,7 +86,6 @@ namespace ACFrameworkCore
         public void LoadAsync(string path)
         {
         }
-
         public void LoadAsync<T>(string path) where T : UnityEngine.Object
         {
         }
@@ -61,7 +93,6 @@ namespace ACFrameworkCore
         public void LoadRawFile<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
         {
         }
-
         public void LoadRawFileAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
         {
         }
@@ -70,21 +101,33 @@ namespace ACFrameworkCore
         {
             return null;
         }
-
         public void LoadSubAssetsAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
         {
 
         }
 
-        IEnumerator ResLoadAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-            var package = YooAssets.GetPackage(packageName);
-            AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
-            yield return handle;
-            callback?.Invoke(handle.AssetObject as T);
+        #region 资源卸载
 
-            GameObject go = handle.InstantiateSync();
-            Debug.Log($"Prefab name is {go.name}");
-        }
+        //public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        //{
+
+        //    assetOperationHandles.TryGetValue()
+
+        //    AssetOperationHandle handle = assetOperationHandles
+        //    handle.Release();
+        //}
+
+        //IEnumerator UnloadAssets<T>(string ResName, UnityAction<T> callback)
+        //{
+        //    var package = GetPakckage();
+        //    AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
+        //    handle.na
+        //    yield return handle;
+        //    callback?.Invoke(handle as T);
+            
+        //}
+
+        #endregion
+
     }
 }

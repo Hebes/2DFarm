@@ -9,6 +9,7 @@
 
 -----------------------*/
 
+using System;
 using UnityEngine.Events;
 using YooAsset;
 
@@ -38,14 +39,25 @@ namespace ACFrameworkCore
         }
 
         /// <summary>
-        /// 异步加载资源对象
+        /// 异步加载资源对象(委托加载)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAssetAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        public void LoadAssetAsyncIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
         {
-            iload.LoadAssetAsync<T>(ResName, callback);
+            iload.LoadAssetAsyncIEnumerator<T>(ResName, callback);
+        }
+
+        /// <summary>
+        /// 异步加载资源对象(协程加载)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ResName"></param>
+        /// <param name="callback"></param>
+        public void LoadAssetAsyncDelegate<T>(string ResName, Action<T> callback) where T : UnityEngine.Object
+        {
+            iload.LoadAssetAsyncDelegate<T>(ResName, callback);
         }
 
         /// <summary>

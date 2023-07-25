@@ -50,7 +50,7 @@ namespace ACFrameworkCore
             if (PlayerPrefs.GetInt("设置日志开启") == 0)
             {
                 //path = $"{Application.dataPath}/LogOut/PassiveLog/";
-                path = "Assets/LogOut/PassiveLog";
+                path = $"{Application.dataPath}/LogOut/PassiveLog/";// "Assets/LogOut/PassiveLog";
                 DLog.Log($"被动日志输出路径：{path}");
                 Application.logMessageReceived += Handler;
             }

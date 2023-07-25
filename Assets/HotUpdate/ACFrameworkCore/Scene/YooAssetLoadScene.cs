@@ -20,7 +20,6 @@ namespace ACFrameworkCore
         {
             MonoComponent.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
         }
-
         public void LoadSceneAsync(string SceneName, UnityAction unityAction)
         {
             MonoComponent.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
@@ -31,7 +30,7 @@ namespace ACFrameworkCore
             MonoComponent.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
 
-        private IEnumerator ReallyLoadSceneAsynUnityAction(string SceneName, UnityAction unityAction)
+        IEnumerator ReallyLoadSceneAsynUnityAction(string SceneName, UnityAction unityAction)
         {
             //AsyncOperation ao = SceneManager.LoadSceneAsync(SceneName);
             //while (!ao.isDone)
@@ -44,7 +43,6 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(packageName);
             var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
             bool suspendLoad = false;
-            //SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
             SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
 
             while (!handle.IsDone)
@@ -62,7 +60,6 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(packageName);
             var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
             bool suspendLoad = false;
-            //SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
             SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
 
             while (!handle.IsDone)

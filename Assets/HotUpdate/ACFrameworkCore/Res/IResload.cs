@@ -57,16 +57,17 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public T LoadSubAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public T LoadSubAssets<T>(string location, string ResName) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载子资源对象
         /// 例如：通过TexturePacker创建的图集，如果需要访问图集的精灵对象，可以通过子对象加载接口。
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
+        /// <param name="location">加载资源的地址</param>
+        /// <param name="ResName">资源的名称</param>
         /// <param name="callback"></param>
-        public void LoadSubAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public void LoadSubAssetsAsyncIEnumerator<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步加载资源包内所有资源对象
@@ -74,7 +75,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAllAssets<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public T[] LoadAllAssets<T>(string ResName, UnityAction<T[]> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载资源包内所有资源对象
@@ -82,7 +83,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAllAssetsAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public void LoadAllAssetsAsyncIEnumerator<T>(string ResName, UnityAction<T[]> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步获取原生文件
@@ -90,7 +91,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadRawFile<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public RawFileOperationHandle LoadRawFile<T>(string ResName) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步获取原生文件
@@ -98,7 +99,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadRawFileAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public void LoadRawFileAsync<T>(string ResName, UnityAction<RawFileOperationHandle> callback) where T : UnityEngine.Object;
 
 
         /// <summary>
@@ -107,19 +108,22 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="ResName">资源的名称</param>
         /// <param name="callback">资源卸载后执行的方法</param>
-        public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
+        public void ReleaseAssetIEnumerator<T>(string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
 
         /// <summary>
-        /// 加载全部
+        /// 资源释放
+        /// 可以在切换场景之后调用资源释放方法或者写定时器间隔时间去释放。
+        /// 注意：只有调用资源释放方法，资源对象才会在内存里被移除。
         /// </summary>
-        public void LoadAll(string ResName);
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ResName"></param>
+        /// <param name="callback"></param>
+        public void UnloadAssets();
 
         /// <summary>
-        /// 异步加载
+        /// 通过资源标签来获取资源信息列表
         /// </summary>
-        public void LoadAsync(string paResNameth);
-
-        public void LoadAsync<T>(string ResName) where T : UnityEngine.Object;
-
+        /// <param name="tag"></param>
+        public AssetInfo[] GetAssetInfosByTag(string tag);
     }
 }

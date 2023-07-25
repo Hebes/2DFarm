@@ -77,11 +77,14 @@ namespace HybridCLR.Editor
 
         public static void CopyABAOTHotUpdateDlls(BuildTarget target)
         {
-            CopyAssetBundlesToStreamingAssets(target);
+            //CopyAssetBundlesToStreamingAssets(target);
+
             CopyAOTAssembliesToStreamingAssets();
             CopyAOTAssembliesToHotdll();
+
             CopyHotUpdateAssembliesToStreamingAssets();
             CopyHotUpdateAssembliesToHotdll();
+
             AssetDatabase.Refresh();
         }
 

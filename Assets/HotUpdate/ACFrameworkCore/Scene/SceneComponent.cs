@@ -25,6 +25,7 @@ namespace ACFrameworkCore
         {
             sceneLoad.LoadScene(SceneName);
         }
+
         /// <summary>
         /// 异步加载场景
         /// </summary>

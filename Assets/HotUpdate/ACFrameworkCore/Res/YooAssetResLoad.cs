@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using UnityEngine.Events;
 using YooAsset;
 using static Codice.Client.BaseCommands.Import.Commit;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
-
+using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				
@@ -25,7 +25,8 @@ namespace ACFrameworkCore
 {
     public class YooAssetResLoad : IResload
     {
-        public HashSet<AssetOperationHandle> assetOperationHandles = new HashSet<AssetOperationHandle>();
+        public HashSet<AssetOperationHandle> assetHashSet = new HashSet<AssetOperationHandle>();
+
 
         public ResourcePackage GetPakckage()
         {
@@ -35,8 +36,8 @@ namespace ACFrameworkCore
             return YooAssets.GetPackage("PC");
         }
 
-        #region 资源加载
 
+        #region 资源加载
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
         {
             var package = GetPakckage();
@@ -73,61 +74,117 @@ namespace ACFrameworkCore
         #endregion
 
 
-        public void LoadAll(string path)
+        #region 资源包内所有对象加载
+        public T[] LoadAllAssets<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
+            var package = GetPakckage();
+            AllAssetsOperationHandle handle = package.LoadAllAssetsAsync<T>(location);
+            return handle.AllAssetObjects as T[];
         }
-        public void LoadAllAssets<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
+        public void LoadAllAssetsAsyncIEnumerator<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
+            MonoComponent.Instance.MonoStartCoroutine(AllAssetsAsync(location, callback));
         }
-        public void LoadAllAssetsAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
+        IEnumerator AllAssetsAsync<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
+            var package = GetPakckage();
+            AllAssetsOperationHandle handle = package.LoadAllAssetsAsync<T>(location);
+            yield return handle;
+            callback?.Invoke(handle.AllAssetObjects as T[]);
         }
-
-        public void LoadAsync(string path)
-        {
-        }
-        public void LoadAsync<T>(string path) where T : UnityEngine.Object
-        {
-        }
-
-        public void LoadRawFile<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-        }
-        public void LoadRawFileAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-        }
-
-        public T LoadSubAssets<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-            return null;
-        }
-        public void LoadSubAssetsAsync<T>(string path, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
-
-        #region 资源卸载
-
-        public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-            //assetOperationHandles.TryGetValue()
-
-            //AssetOperationHandle handle = assetOperationHandles
-            //handle.Release();
-        }
-
-        //IEnumerator UnloadAssets<T>(string ResName, UnityAction<T> callback)
-        //{
-        //    var package = GetPakckage();
-        //    AssetOperationHandle handle = package.LoadAssetAsync<T>(ResName);
-        //    handle.na
-        //    yield return handle;
-        //    callback?.Invoke(handle as T);
-
-        //}
-
         #endregion
 
+        #region 原生文件加载
+        public RawFileOperationHandle LoadRawFile<T>(string location) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            RawFileOperationHandle handle = package.LoadRawFileAsync(location);
+            return handle;
+            //byte[] fileData = handle.GetRawFileData();
+            //string fileText = handle.GetRawFileText();
+            //string filePath = handle.GetRawFilePath();
+        }
+        public void LoadRawFileAsync<T>(string location, UnityAction<RawFileOperationHandle> callback) where T : UnityEngine.Object
+        {
+            MonoComponent.Instance.MonoStartCoroutine(RawFileAsync(location, callback));
+        }
+        IEnumerator RawFileAsync(string location, UnityAction<RawFileOperationHandle> callback)
+        {
+            var package = GetPakckage();
+            RawFileOperationHandle handle = package.LoadRawFileAsync(location);
+            yield return handle;
+            callback?.Invoke(handle);
+            //byte[] fileData = handle.GetRawFileData();
+            //string fileText = handle.GetRawFileText();
+            //string filePath = handle.GetRawFilePath();
+        }
+        #endregion
+
+
+        #region 子对象加载
+        public T LoadSubAssets<T>(string location, string ResName) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            SubAssetsOperationHandle handle = package.LoadSubAssetsSync<T>(location);
+            var sprite = handle.GetSubAssetObject<T>(ResName);
+            return sprite;
+        }
+        public void LoadSubAssetsAsyncIEnumerator<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object
+        {
+            MonoComponent.Instance.MonoStartCoroutine(SubAssetsAsync(location, ResName, callback));
+        }
+        IEnumerator SubAssetsAsync<T>(string location, string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        {
+            var package = GetPakckage();
+            SubAssetsOperationHandle handle = package.LoadSubAssetsAsync<T>(location);
+            yield return handle;
+            var sprite = handle.GetSubAssetObject<T>(ResName);
+            callback?.Invoke(sprite);
+        }
+        #endregion
+
+
+        #region 资源卸载和释放
+        public void ReleaseAssetIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        {
+            AssetOperationHandle assetTemp = assetHashSet.First((go) => { return go.AssetObject.name == ResName; });
+            if (assetTemp != null) { DLog.Error($"没有找到{ResName}的资源!"); }
+            assetTemp.Release();
+        }
+        public void UnloadAssets()
+        {
+            var package = GetPakckage();
+            package.UnloadUnusedAssets();
+        }
+        #endregion
+
+        #region 获取资源信息列表
+        public AssetInfo[] GetAssetInfosByTag(string tag)
+        {
+            var package = GetPakckage();
+            AssetInfo[] assetInfos = package.GetAssetInfos(tag);
+            return assetInfos;
+            //foreach (var assetInfo in assetInfos)
+            //{
+            //    Debug.Log(assetInfo.AssetPath);
+            //}
+        }
+        #endregion
+
+        #region 配置文件加载范例
+        // 自定义的配置文件
+//        public class MyGameConfig : ScriptableObject
+//        {
+//           ...
+//        }
+
+//        IEnumerator Start()
+//        {
+//            string location = "Assets/GameRes/config/gameConfig.asset";
+//            AssetOperationHandle handle = package.LoadAssetFileAsync(location);
+//            yield return handle;
+//            MyGameConfig gameCOnfig = handle.AssetObject as MyGameConfig;
+//        }
+        #endregion
     }
 }

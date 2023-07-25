@@ -11,7 +11,6 @@
 
 using System;
 using UnityEngine.Events;
-using YooAsset;
 
 namespace ACFrameworkCore
 {

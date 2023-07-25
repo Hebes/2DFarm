@@ -51,6 +51,11 @@ public class Init : MonoBehaviour
         "System.dll",
         "System.Core.dll",
     };
+
+    // 更新成功后自动保存版本号，作为下次初始化的版本。
+    // 也可以通过operation.SavePackageVersion()方法保存。
+    private string packageVersion;
+
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();//资源数据
 
     private void Awake()
@@ -175,6 +180,7 @@ public class Init : MonoBehaviour
             ProcessBreak();
             yield break;
         }
+        packageVersion = operation.PackageVersion;
         Debug.Log($"更新补丁清单成功,远端或本地最新版本为: {operation.PackageVersion}");
         FsmProcessChange(EHotUpdateProcess.FsmUpdateManifest);
     }
@@ -187,9 +193,11 @@ public class Init : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.5f);
         var package = YooAssets.GetPackage(packageName);//获取包
+        // 更新成功后自动保存版本号，作为下次初始化的版本。
+        // 也可以通过operation.SavePackageVersion()方法保存。
         bool savePackageVersion = true;
 
-        var operationResource = package.UpdatePackageManifestAsync(operation.PackageVersion, savePackageVersion);
+        var operationResource = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);//operation.PackageVersion
         yield return operationResource;
 
         if (operationResource.Status != EOperationStatus.Succeed)

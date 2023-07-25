@@ -14,11 +14,6 @@ namespace ACFrameworkCore
         {
             m_Text = GetComponent<Text>();
             m_MeshText = GetComponent<TMP_Text>();
-
-            //if (m_Text != null && !string.IsNullOrEmpty(m_Text.text))
-            //    key = m_Text.text;
-            //if (m_MeshText != null && !string.IsNullOrEmpty(m_MeshText.text))
-            //    key = m_MeshText.text;
         }
 
         private void OnEnable()

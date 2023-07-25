@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YooAsset;
 
 /*--------脚本描述-----------
 				
@@ -28,17 +29,19 @@ namespace ACFrameworkCore
     public class UIComponent : ICoreComponent
     {
         public static UIComponent Instance { get; private set; }
-        private Dictionary<string, BaseUI> panelDic { get; set; }
-        private GameObject canvas;
 
+        private Dictionary<string, IUIState> panelDic { get; set; }
 
-        public GameObject CanvasTf
+        private GameObject Global { get; set; }
+        private GameObject canvas { get; set; }
+
+        public GameObject CanvasGO
         {
-            get 
+            get
             {
                 if (canvas == null)
                 {
-                    canvas = GameObject.FindObjectOfType<Canvas>().gameObject;
+                    canvas = Global.transform.Find("Canvas").gameObject;
                     if (canvas == null)
                         Debug.LogError($"当前场景中不存在Canvas");
                 }
@@ -46,12 +49,15 @@ namespace ACFrameworkCore
             }
         }
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
-            panelDic = new Dictionary<string, BaseUI>();
-            //GameObject.DontDestroyOnLoad(CanvasTf);
-            OnCreatLayer();
+            panelDic = new Dictionary<string, IUIState>();
+
+            //DLog.Log("创建出来的物体名称是: " + (handle1.AssetObject as GameObject).name);
+            GameObject GlobalTemp = YooAssetLoadExpsion.YooaddetLoadSync("Global");//加载全局组件
+            Global = GameObject.Instantiate(GlobalTemp);
+            GameObject.DontDestroyOnLoad(Global);
             DLog.Log("UI管理类初始化成功!");
         }
 
@@ -64,58 +70,100 @@ namespace ACFrameworkCore
             {
                 var layerGo = new GameObject(layer.ToString(), typeof(RectTransform));
                 var rect = layerGo.GetComponent<RectTransform>();
-                rect.SetParent(CanvasTf.transform);
+                rect.SetParent(CanvasGO.transform, false);
                 rect.anchoredPosition = Vector3.zero;
             }
         }
 
+        /// <summary>
+        /// 获取层级
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <returns></returns>
         public Transform GetLayerFather(EUILayer layer)
         {
-           return CanvasTf.transform.Find(layer.ToString());
+            return CanvasGO.transform.Find(layer.ToString());
         }
 
-        public void OnOpenUI<T>(string panelName, EUILayer layer) where T : BaseUI
+        /// <summary>
+        /// 创建UI
+        /// </summary>
+        /// <param name="panelName"></param>
+        /// <param name="layer"></param>
+        public void OnCreatUI<T>(string panelName, EUILayer layer) where T : IUIState, new()
         {
-            if (panelDic.ContainsKey(panelName))
+            //不存在的话就加载开启
+            YooAssetLoadExpsion.YooaddetLoadAsync(panelName, obj =>
             {
-                panelDic[panelName].StartUI();
-                return;
-            }
+                GameObject UIGO = obj.InstantiateSync();
+                //GameObject UIGO = GameObject.Instantiate(UIGOTemp);
+                UIGO.transform.SetParent(GetLayerFather(layer), false);
+                UIGO.transform.localPosition = Vector3.zero;
+                UIGO.transform.localScale = Vector3.one;
+                (UIGO.transform as RectTransform).offsetMax = Vector2.zero;
+                (UIGO.transform as RectTransform).offsetMin = Vector2.zero;
 
-            //ResComponent.Insatance.OnLoadAsync<GameObject>("UI/" + panelName, obj =>
-            //{
-
-            //    Transform father = GetLayerFather(layer);
-
-            //    obj.transform.SetParent(father,false);
-
-            //    obj.transform.localPosition = Vector3.zero;
-            //    obj.transform.localScale = Vector3.one;
-
-            //    (obj.transform as RectTransform).offsetMax = Vector2.zero;
-            //    (obj.transform as RectTransform).offsetMin = Vector2.zero;
-
-            //    T panel = obj.GetComponent<T>();
-            //    panel.OpenUI();
-            //    panelDic.Add(panelName, panel);
-            //});
+                T t = new T();
+                t.UIGO = UIGO;
+                t.UIAwake();
+                MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+                panelDic.Add(panelName, t);
+            });
         }
 
-        public void OnHideUI(string panelName)
+        /// <summary>
+        /// 打开UI场景
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="panelName"></param>
+        /// <param name="layer"></param>
+        public void OnOpenUI<T>(string panelName, EUILayer layer) where T : IUIState, new()
         {
-            if (!panelDic.ContainsKey(panelName)) return;
-            panelDic[panelName].HideUI();//关闭面板
-            panelDic[panelName].UIGo.SetActive(false);
+            //存在的话就开启
+            if (panelDic.ContainsKey(panelName))
+                panelDic[panelName].UIOnEnable();
+            else
+                OnCreatUI<T>(panelName, layer);
         }
 
+        /// <summary>
+        /// 获取面板
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="panelName"></param>
+        /// <returns></returns>
+        public T OnGetUI<T>(string panelName) where T : class
+        {
+            panelDic.TryGetValue(panelName, out IUIState t);
+            if (t == null) return default(T);
+            return t as T;
+        }
+
+        /// <summary>
+        /// 关闭面板
+        /// </summary>
+        /// <param name="panelName"></param>
+        public void OnCloseUI(string panelName)
+        {
+            panelDic.TryGetValue(panelName, out IUIState t);
+            if (t == null) return;
+            t.UIOnDisable();//关闭面板
+            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
+            t.UIGO.SetActive(false);
+        }
+
+        /// <summary>
+        /// 删除面板
+        /// </summary>
+        /// <param name="panelName"></param>
         public void OnRemoveUI(string panelName)
         {
-            if (!panelDic.ContainsKey(panelName)) return;
-            panelDic[panelName].HideUI();//关闭面板
-            panelDic[panelName].UIGo.SetActive(false);
-            panelDic[panelName].RemoveUI();//移除面板
-            GameObject.Destroy(panelDic[panelName].UIGo);
-            panelDic.Remove(panelName);
+            panelDic.TryGetValue(panelName, out IUIState t);
+            if (t == null) return;
+            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
+            t.UIOnDestroy();//关闭面板
+            GameObject.Destroy(panelDic[panelName].UIGO);//删除面板
+            panelDic.Remove(panelName);//字典移除
         }
     }
 }

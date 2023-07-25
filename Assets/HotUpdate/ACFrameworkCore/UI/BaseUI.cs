@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ACFrameworkCore
 {
@@ -14,6 +13,7 @@ namespace ACFrameworkCore
         {
 
         }
+
         /// <summary>
         /// 等价Awake
         /// </summary>
@@ -25,6 +25,7 @@ namespace ACFrameworkCore
         {
 
         }
+
         public virtual void RemoveUI()
         {
         }

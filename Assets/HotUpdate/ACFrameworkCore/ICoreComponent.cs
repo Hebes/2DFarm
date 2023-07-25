@@ -16,6 +16,6 @@ namespace ACFrameworkCore
         /// <summary>
         /// 核心初始化
         /// </summary>
-        public void OnCroeComponentInit();
+        public void CroeComponentInit();
     }
 }

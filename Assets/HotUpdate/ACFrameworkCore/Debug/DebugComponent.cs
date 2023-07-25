@@ -18,7 +18,7 @@ namespace ACFrameworkCore
 {
     public class DebugComponent : ICoreComponent
     {
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             InitModule();
             //InitModule1();

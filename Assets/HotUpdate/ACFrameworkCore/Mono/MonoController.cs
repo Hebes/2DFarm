@@ -8,6 +8,8 @@ namespace ACFrameworkCore
     public class MonoController : MonoBehaviour
     {
         private event UnityAction AwakeEvent;
+        private event UnityAction UpdateEvent;
+        private event UnityAction FixedUpdateEvent;
 
         private void Awake()
         {
@@ -15,20 +17,38 @@ namespace ACFrameworkCore
         }
         private void Update()
         {
-
+            UpdateEvent?.Invoke();
         }
         private void FixedUpdate()
         {
-
+            FixedUpdateEvent?.Invoke();
         }
 
-        public void OnAddAwake(UnityAction fun)
+        public void OnAddAwakeEvent(UnityAction  unityAction)
         {
-            AwakeEvent += fun;
+            AwakeEvent += unityAction;
         }
-        public void OnRemoveAwake(UnityAction fun)
+        public void OnRemoveAwakeEvent(UnityAction unityAction)
         {
-            AwakeEvent -= fun;
+            AwakeEvent -= unityAction;
+        }
+
+        public void OnAddUpdateEvent(UnityAction unityAction)
+        {
+            UpdateEvent += unityAction;
+        }
+        public void OnRemoveUpdateEvent(UnityAction unityAction)
+        {
+            UpdateEvent -= unityAction;
+        }
+
+        public void OnAddFixedUpdateEvent(UnityAction unityAction)
+        {
+            FixedUpdateEvent += unityAction;
+        }
+        public void OnRemoveFixedUpdateEvent(UnityAction unityAction)
+        {
+            FixedUpdateEvent -= unityAction;
         }
 
 

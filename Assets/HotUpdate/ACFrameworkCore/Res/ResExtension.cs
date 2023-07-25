@@ -14,10 +14,11 @@ namespace ACFrameworkCore
     public static  class ResExtension
     {
 
-        //public static void OnLoad<T>(string path) where T : UnityEngine.Object
-        //{
-        //    ResComponent.Insatance.OnLoad<T>(path);
-        //}
+        public static void OnLoad<T>(this string path) where T : UnityEngine.Object
+        {
+            //ResComponent.Insatance.OnLoad<T>(path);
+
+        }
 
         //public static void OnLoadAll(string path)
         //{

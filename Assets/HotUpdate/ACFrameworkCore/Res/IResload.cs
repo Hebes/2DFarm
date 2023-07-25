@@ -9,6 +9,8 @@
 
 -----------------------*/
 
+using System;
+using UnityEngine;
 using UnityEngine.Events;
 using YooAsset;
 
@@ -25,12 +27,28 @@ namespace ACFrameworkCore
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object;
 
         /// <summary>
-        /// 异步加载资源对象
+        /// 异步加载资源对象(协程加载)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadAssetAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+        public void LoadAssetAsyncIEnumerator<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
+
+        /// <summary>
+        /// 异步加载资源对象(委托加载)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ResName"></param>
+        /// <param name="callback"></param>
+        public void LoadAssetAsyncDelegate<T>(string ResName, Action<T> callback) where T : UnityEngine.Object;
+
+        /// <summary>
+        /// 异步加载资源对象(Task加载)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ResName"></param>
+        /// <param name="callback"></param>
+        public void LoadAssetAsyncTask<T>(string ResName, Action<T> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步加载子资源对象
@@ -82,6 +100,14 @@ namespace ACFrameworkCore
         /// <param name="callback"></param>
         public void LoadRawFileAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object;
 
+
+        /// <summary>
+        /// 资源卸载
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ResName">资源的名称</param>
+        /// <param name="callback">资源卸载后执行的方法</param>
+        public void UnloadAssetsIEnumerator<T>(string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
 
         /// <summary>
         /// 加载全部

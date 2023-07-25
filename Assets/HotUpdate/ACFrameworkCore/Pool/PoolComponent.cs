@@ -24,7 +24,7 @@ namespace ACFrameworkCore
         public Dictionary<string, PoolData> poolDic { get; private set; }
         private GameObject poolObj { get; set; }
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
             poolDic = new Dictionary<string, PoolData>();

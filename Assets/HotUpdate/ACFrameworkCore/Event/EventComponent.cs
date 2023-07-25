@@ -20,7 +20,7 @@ namespace ACFrameworkCore
         public static EventComponent Instance { get; private set; }
         private Dictionary<string, IEventInfo> eventDic { get; set; }
 
-        public void OnCroeComponentInit()
+        public void CroeComponentInit()
         {
             Instance = this;
             eventDic = new Dictionary<string, IEventInfo>();

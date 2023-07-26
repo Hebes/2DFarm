@@ -79,10 +79,10 @@ namespace HybridCLR.Editor
         {
             //CopyAssetBundlesToStreamingAssets(target);
 
-            //CopyAOTAssembliesToStreamingAssets();
+            CopyAOTAssembliesToStreamingAssets();
             CopyAOTAssembliesToHotdll();
 
-            //CopyHotUpdateAssembliesToStreamingAssets();
+            CopyHotUpdateAssembliesToStreamingAssets();
             CopyHotUpdateAssembliesToHotdll();
 
             AssetDatabase.Refresh();

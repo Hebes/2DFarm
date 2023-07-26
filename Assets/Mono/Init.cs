@@ -11,8 +11,12 @@ using YooAsset;
 /// </summary>
 public enum EHotUpdateProcess
 {
+    /// <summary> 流程错误跳出 </summary>
+    FsmErrorPrepare,
     /// <summary> 流程准备工作 </summary>
     FsmPatchPrepare,
+    /// <summary> 检查版本XML配置文件 </summary>
+    FsmVersionXMLPrepare,
     /// <summary> 初始化资源包 </summary>
     FsmInitialize,
     /// <summary> 更新资源版本号 </summary>
@@ -66,9 +70,7 @@ public class Init : MonoBehaviour
     }
     private void Start()
     {
-        // 初始化资源系统
-        YooAssets.Initialize();
-        YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
+       
         FsmProcessChange(EHotUpdateProcess.FsmPatchPrepare);
     }
 
@@ -78,10 +80,10 @@ public class Init : MonoBehaviour
     /// <param name="HotUpdateProcess">流程模式</param>
     private void FsmProcessChange(EHotUpdateProcess HotUpdateProcess)
     {
-        this.HotUpdateProcess = HotUpdateProcess;
         switch (HotUpdateProcess)
         {
             case EHotUpdateProcess.FsmPatchPrepare: StartCoroutine(FsmPatchPrepare()); break;
+            case EHotUpdateProcess.FsmVersionXMLPrepare: StartCoroutine(FsmVersionXMLPrepare()); break;
             case EHotUpdateProcess.FsmInitialize: StartCoroutine(FsmInitialize()); break;
             case EHotUpdateProcess.FsmUpdateVersion: StartCoroutine(FsmUpdateVersion()); break;
             case EHotUpdateProcess.FsmUpdateManifest: StartCoroutine(FsmUpdateManifest()); break;
@@ -91,10 +93,23 @@ public class Init : MonoBehaviour
             case EHotUpdateProcess.FsmClearCache: StartCoroutine(FsmClearCache()); break;
             case EHotUpdateProcess.FsmPatchDone: StartCoroutine(FsmPatchDone()); break;
             case EHotUpdateProcess.FsmLoadHotDll: StartCoroutine(FsmLoadHotDll()); break;
+            case EHotUpdateProcess.FsmErrorPrepare: StartCoroutine(FsmErrorPrepare()); break;
         }
+        this.HotUpdateProcess = HotUpdateProcess;
     }
 
     #region YooAsset流程
+
+    /// <summary>
+    /// 流程错误跳出
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator FsmErrorPrepare()
+    {
+        Debug.Log($"结束中断,中断点:{HotUpdateProcess}");
+        Debug.Log($"流程错误跳出");
+        yield break;
+    }
 
     /// <summary>
     /// 流程准备工作
@@ -103,7 +118,25 @@ public class Init : MonoBehaviour
     IEnumerator FsmPatchPrepare()
     {
         Debug.Log("流程准备工作");
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
+        // 初始化资源系统
+        YooAssets.Initialize();
+        YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
+        //TODO 加载更新面板
+        FsmProcessChange(EHotUpdateProcess.FsmVersionXMLPrepare);
+    }
+    
+    /// <summary>
+    /// 检查版本XML配置文件
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator FsmVersionXMLPrepare()
+    {
+        Debug.Log("流程准备工作");
+        yield return new WaitForSeconds(0.5f);
+        // 初始化资源系统
+        YooAssets.Initialize();
+        YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
         //TODO 加载更新面板
         FsmProcessChange(EHotUpdateProcess.FsmInitialize);
     }
@@ -156,7 +189,7 @@ public class Init : MonoBehaviour
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogError($"资源包初始化失败：{initializationOperation.Error}");
-            ProcessBreak();
+            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
             yield break;
         }
         Debug.Log("资源包初始化成功！");
@@ -177,7 +210,7 @@ public class Init : MonoBehaviour
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"更新资源版本号失败: {operation.Error}");
-            ProcessBreak();
+            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
             yield break;
         }
         packageVersion = operation.PackageVersion;
@@ -203,7 +236,7 @@ public class Init : MonoBehaviour
         if (operationResource.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"更新资源清单失败: {operationResource.Error}");
-            ProcessBreak();
+            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
             yield break;
         }
         Debug.Log($"更新资源清单成功: {operationResource.Status}!");
@@ -265,7 +298,7 @@ public class Init : MonoBehaviour
         if (downloader.Status != EOperationStatus.Succeed)
         {
             Debug.LogError($"更新失败！{downloader.Error}");
-            ProcessBreak();
+            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
             yield break;
         }
         Debug.Log("更新完成!");
@@ -330,9 +363,11 @@ public class Init : MonoBehaviour
         //}
         //LoadMetadataForAOTAssemblies();
 
+        
+
 #if !UNITY_EDITOR
         //System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
-        System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
+        //System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
 #endif
         //补充元数据
         foreach (var asset in AOTMetaAssemblyNames)
@@ -368,7 +403,7 @@ public class Init : MonoBehaviour
         //TODO 后续会改成XML读取配置
         //string hostServerIP = "http://10.0.2.2"; //安卓模拟器地址
         string hostServerIP = "http://127.0.0.1:8000";
-        string appVersion = "1";
+        string appVersion = "2";
 
 #if UNITY_EDITOR
         if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)
@@ -390,14 +425,6 @@ public class Init : MonoBehaviour
 		else
 			return $"{hostServerIP}/StandaloneWindows64/PC/{appVersion}";
 #endif
-    }
-
-    /// <summary>
-    /// 流程跳出
-    /// </summary>
-    private void ProcessBreak()
-    {
-        Debug.Log($"结束中断,中断点:{HotUpdateProcess}");
     }
 
     /// <summary>

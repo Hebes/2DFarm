@@ -12,9 +12,9 @@ namespace ACFrameworkCore
             DLog.Log($"UI界面的名称是{UIGO.name}");
         }
 
-        public void UIUpdate()
-        {
-            DLog.Log("每帧更新UIUpdate");
-        }
+        //public void UIUpdate()
+        //{
+        //    DLog.Log("每帧更新UIUpdate");
+        //}
     }
 }

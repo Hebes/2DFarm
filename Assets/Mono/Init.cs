@@ -2,8 +2,12 @@ using HybridCLR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Security.Policy;
+using System.Xml;
 using UnityEngine;
+using UnityEngine.Networking;
 using YooAsset;
 
 /// <summary>
@@ -62,6 +66,9 @@ public class Init : MonoBehaviour
 
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();//资源数据
 
+    private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";
+    private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";
+
     private void Awake()
     {
         Debug.Log($"资源系统运行模式：{PlayMode}");
@@ -70,7 +77,7 @@ public class Init : MonoBehaviour
     }
     private void Start()
     {
-       
+
         FsmProcessChange(EHotUpdateProcess.FsmPatchPrepare);
     }
 
@@ -125,19 +132,88 @@ public class Init : MonoBehaviour
         //TODO 加载更新面板
         FsmProcessChange(EHotUpdateProcess.FsmVersionXMLPrepare);
     }
-    
+
     /// <summary>
     /// 检查版本XML配置文件
     /// </summary>
     /// <returns></returns>
     IEnumerator FsmVersionXMLPrepare()
     {
-        Debug.Log("流程准备工作");
-        yield return new WaitForSeconds(0.5f);
-        // 初始化资源系统
-        YooAssets.Initialize();
-        YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
-        //TODO 加载更新面板
+        if (PlayMode == EPlayMode.HostPlayMode)
+        {
+
+            yield return new WaitForSeconds(0.5f);
+            //下载文件
+            UnityWebRequest huwr = UnityWebRequest.Head(XMLVersionUrl);
+            yield return huwr.SendWebRequest();
+            if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.Log($"请求的链接错误{huwr.error}"); //出现错误 输出错误信息
+                yield break;
+            }
+
+            long totalLength = long.Parse(huwr.GetResponseHeader("Content-Length")); //首先拿到文件的全部长度
+            string dirPath = Path.GetDirectoryName(SaveXMLVersion);//获取文件的上一级目录
+
+            Directory.Delete(dirPath, true);
+            if (!Directory.Exists(dirPath)) //判断路径是否存在
+                Directory.CreateDirectory(dirPath);//不存在创建
+
+            /*作用：创建一个文件流，指定路径为filePath,模式为打开或创建，访问为写入
+            * 使用using(){}方法原因： 当同一个cs引用了不同的命名空间，但这些命名控件都包括了一个相同名字的类型的时候,可以使用using关键字来创建别名，这样会使代码更简洁。注意：并不是说两名字重复，给其中一个用了别名，另外一个就不需要用别名了，如果两个都要使用，则两个都需要用using来定义别名的
+            * using(类){} 括号中的类必须是继承了IDisposable接口才能使用否则报错
+            * 这里没有出现不同命名空间出现相同名字的类属性可以不用using(){}
+            */
+            using (FileStream fs = new FileStream(SaveXMLVersion, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                long nowFileLength = fs.Length; //当前文件长度,断点前已经下载的文件长度。
+                Debug.Log(fs.Length);
+                //判断当前文件是否小于要下载文件的长度，即文件是否下载完成
+                if (nowFileLength < totalLength)
+                {
+                    Debug.Log("还没下载完成");
+                    /*使用Seek方法 可以随机读写文件
+                    * Seek()  ----------有两个参数 第一参数规定文件指针以字节为单位移动的距离。第二个参数规定开始计算的位置
+                    * 第二个参数SeekOrigin 有三个值：Begin  Current   End
+                    * fs.Seek(8,SeekOrigin.Begin);表示 将文件指针从开头位置移动到文件的第8个字节
+                    * fs.Seek(8,SeekOrigin.Current);表示 将文件指针从当前位置移动到文件的第8个字节
+                    * fs.Seek(8,SeekOrigin.End);表示 将文件指针从最后位置移动到文件的第8个字节
+                    */
+                    fs.Seek(nowFileLength, SeekOrigin.Begin);  //从开头位置，移动到当前已下载的子节位置
+                    UnityWebRequest uwr = UnityWebRequest.Get(XMLVersionUrl); //创建UnityWebRequest对象，将Url传入
+                    uwr.SetRequestHeader("Range", "bytes=" + nowFileLength + "-" + totalLength);//修改请求头从n-m之间
+                    uwr.SendWebRequest();                      //开始请求
+                    if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError) //如果出错
+                    {
+                        Debug.Log(uwr.error); //输出 错误信息
+                        yield break;
+                    }
+
+                    long index = 0;     //从该索引处继续下载
+                    while (nowFileLength < totalLength) //只要下载没有完成，一直执行此循环
+                    {
+                        yield return null;
+                        byte[] data = uwr.downloadHandler.data;
+                        if (data != null)
+                        {
+                            long length = data.Length - index;
+                            fs.Write(data, (int)index, (int)length); //写入文件
+                            index += length;
+                            nowFileLength += length;
+                            Debug.Log($"当前进度是:{Math.Floor((float)nowFileLength / totalLength * 100)}%");
+                            if (nowFileLength >= totalLength) //如果下载完成了
+                            {
+                                Debug.Log("下载完成");
+                                break;
+                            }
+                        }
+                    }
+                    huwr.Dispose();
+                    uwr.Dispose();
+                }
+            }
+        }
+        //进入初始资源流程
         FsmProcessChange(EHotUpdateProcess.FsmInitialize);
     }
 
@@ -210,7 +286,9 @@ public class Init : MonoBehaviour
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"更新资源版本号失败: {operation.Error}");
-            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
+            //FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
+            Debug.Log($"将会使用旧版版本");
+            FsmProcessChange(EHotUpdateProcess.FsmPatchDone);
             yield break;
         }
         packageVersion = operation.PackageVersion;
@@ -363,7 +441,7 @@ public class Init : MonoBehaviour
         //}
         //LoadMetadataForAOTAssemblies();
 
-        
+
 
 #if !UNITY_EDITOR
         //System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
@@ -400,10 +478,20 @@ public class Init : MonoBehaviour
     /// </summary>
     private string GetHostServerURL()
     {
+        //加载XML文件信息
+        XmlDocument xml = new XmlDocument();
+        //加载
+        xml.Load(SaveXMLVersion);
+        //读取数据
+        XmlNode root = xml.SelectSingleNode("PackageInfo");
+        XmlNode nodeItem = root.SelectSingleNode("URL");
+        Debug.Log(nodeItem.Attributes["PackageURL"].Value);
+        Debug.Log(nodeItem.Attributes["Verson"].Value);
+
         //TODO 后续会改成XML读取配置
         //string hostServerIP = "http://10.0.2.2"; //安卓模拟器地址
-        string hostServerIP = "http://127.0.0.1:8000";
-        string appVersion = "2";
+        string hostServerIP = nodeItem.Attributes["PackageURL"].Value;
+        string appVersion = nodeItem.Attributes["Verson"].Value;
 
 #if UNITY_EDITOR
         if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)

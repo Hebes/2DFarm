@@ -1,6 +1,12 @@
-﻿using Excel;
-using System.Data;
+﻿using Codice.Client.BaseCommands.BranchExplorer;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,13 +17,23 @@ using UnityEngine;
 作者:
 	暗沉
 描述:
-    Excel转换
+    Excel转换工具
 
 -----------------------*/
 
 
 namespace ACFrameworkCore
 {
+    /// <summary>
+    /// 每行类型
+    /// </summary>
+    public enum RowType : byte
+    {
+        FIELD_NAME = 0,//名称
+        FIELD_TYPE = 1,//类型
+        BEGIN_INDEX = 3//开始行数
+    }
+
     public class ExcelChange : EditorWindow
     {
         /// <summary>
@@ -25,65 +41,143 @@ namespace ACFrameworkCore
         /// </summary>
         public static string EXCEL_PATH = Application.dataPath + "/Editor/Excels/";
 
+        [MenuItem("Tool/字节测试")]
+        public static void TestByte()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("有符号");
+            sb.AppendLine("sbyte" + sizeof(sbyte) + "字节");
+            sb.AppendLine("int" + sizeof(int) + "字节");
+            sb.AppendLine("short" + sizeof(short) + "字节");
+            sb.AppendLine("long" + sizeof(long) + "字节");
+            sb.AppendLine("无符号");
+            sb.AppendLine("byte" + sizeof(byte) + "字节");
+            sb.AppendLine("uint" + sizeof(uint) + "字节");
+            sb.AppendLine("ushort" + sizeof(ushort) + "字节");
+            sb.AppendLine("ulong" + sizeof(ulong) + "字节");
+            sb.AppendLine("浮点");
+            sb.AppendLine("float" + sizeof(float) + "字节");
+            sb.AppendLine("double" + sizeof(double) + "字节");
+            sb.AppendLine("decimal" + sizeof(decimal) + "字节");
+            sb.AppendLine("特殊");
+            sb.AppendLine("bool" + sizeof(bool) + "字节");
+            sb.AppendLine("char" + sizeof(char) + "字节");
+            Debug.Log(sb.ToString());
+        }
+
         [MenuItem("Tool/Excel转换")]//#E
         public static void GenerateExcelInfo()
         {
-            //GetWindow(typeof(ExcelChange));
-            //记在指定路径中的所有Excel文件 用于生成对应的3个文件
-            DirectoryInfo dInfo = Directory.CreateDirectory(EXCEL_PATH);
-            //得到指定路径中的所有文件信息 相当于就是得到所有的Excel表
-            FileInfo[] files = dInfo.GetFiles();
-            //数据表容器
-            DataTableCollection tableConllection;
-            for (int i = 0; i < files.Length; i++)
+            IEnumerable<string> paths = Directory.EnumerateFiles(EXCEL_PATH, "*.xlsx");
+            foreach (string filePath in paths)
             {
-                //如果不是excel文件就不要处理了
-                if (files[i].Extension != ".xlsx" &&
-                    files[i].Extension != ".xls")
-                    continue;
-
-                //打开一个Excel文件得到其中的所有表的数据
-                using (FileStream fs = files[i].Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fs);
-                    tableConllection = excelReader.AsDataSet().Tables;
-                    //Debug.Log(excelReader.AsDataSet().Tables[0].TableName);
-                    tableConllection = excelReader.AsDataSet().Tables;
-                    fs.Close();
-                }
-
-                //遍历文件中的所有表的信息
-                foreach (DataTable table in tableConllection)
-                {
-                    //生成数据结构类
-                    //DataClass.GenerateExcelDataClass(table);
-                    //生成容器类
-                    //Container.GenerateExcelContainer(table);
-                    //生成2进制数据
-                    BinaryData.GenerateExcelBinary(table);
-                }
+                //读取Excel数据
+                string[][] data = filePath.LoadExcel();
+                //生成C#文件
+                ClassData.CreateScript(filePath, data);
+                //生成二进制文件
+                BinaryData.CreateByte(filePath, data);
             }
+            //刷新Project窗口
+            AssetDatabase.Refresh();
+        }
 
-            //BinaryData.CreatBinaryData();
-            //return;
-            //string filePath = "F:\\Project\\ACFramework\\Assets\\Editor\\Excels\\TowerInfo.xlsx";
-            ////打开文件
-            //FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            ////判断加载的文件类型 解析
-            //string[] fileType = filePath.Split('.');
-            //IExcelDataReader excelReader = null;
-            //switch (fileType[1])//报错异常处理 https://blog.csdn.net/qq_39221436/article/details/120951176
-            //{
-            //    case "xls": excelReader = ExcelReaderFactory.CreateBinaryReader(stream); break;
-            //    case "xlsx": excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream); break;
-            //}
 
-            //DataTableCollection tableConllection;
-            //tableConllection = excelReader.AsDataSet().Tables;
-            //foreach (DataTable table in tableConllection)
-            //{
-            //    Debug.Log(table.TableName);
-            //}
+        private static string DATA_BINARY_PATH = $"{Application.dataPath}/Excel2Script/Byte/TowerInfo.bytes";
+        [MenuItem("Tool/Bytes数据读取")]//#E
+        public static void ReaDData()
+        {
+            using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
+            {
+                //读取全都的字节
+                byte[] bytes = new byte[fs.Length];
+                fs.Read(bytes, 0, bytes.Length);
+                fs.Close();
+                List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
+            }
+        }
+
+        /// <summary>
+        /// 循环获取数据
+        /// </summary>
+        public static List<T> LoopGetData<T>(byte[] bytes)
+        {
+            List<T> data = new List<T>();
+            //指针下标
+            int pointer = 0;
+            //得到数据结构类的Type
+            Type classType = typeof(T);
+            //通过反射 得到数据结构类 所有字段的信息
+            FieldInfo[] infos = classType.GetFields();
+            //循环读取数据
+            while (bytes.Length != pointer)
+            {
+                //创建新的类
+                object dataObj = Activator.CreateInstance(classType);
+                foreach (FieldInfo fi in infos)
+                {
+                    if (fi.FieldType == typeof(int))
+                    {
+                        fi.SetValue(dataObj, BitConverter.ToInt32(bytes, pointer));
+                        pointer += 4;
+                    }
+                    else if (fi.FieldType == typeof(string))
+                    {
+                        //读取字符串字节数组的长度
+                        int length = BitConverter.ToInt32(bytes, pointer);
+                        pointer += 4;
+                        fi.SetValue(dataObj, Encoding.UTF8.GetString(bytes, pointer, length));
+                        pointer += length;
+                    }
+                    else if (fi.FieldType == typeof(float))
+                    {
+                        fi.SetValue(dataObj, BitConverter.ToInt32(bytes, pointer));
+                        pointer += 4;
+                    }
+                    else if (fi.FieldType == typeof(List<int>))
+                    {
+                        //读取字符串字节数组的长度
+                        int length = BitConverter.ToInt32(bytes, pointer);
+                        pointer += 4;
+                        string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        pointer += length;
+                        string[] dataArray = str.Split('|');
+                        List<int> intList = new List<int>();
+                        foreach (var item in dataArray)
+                            intList.Add(int.Parse(item));
+                        fi.SetValue(dataObj, intList);
+                    }
+                    else if (fi.FieldType == typeof(List<string>))
+                    {
+                        //读取字符串字节数组的长度
+                        int length = BitConverter.ToInt32(bytes, pointer);
+                        pointer += 4;
+                        string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        pointer += length;
+                        string[] dataArray = str.Split('|');
+                        List<string> stringList = new List<string>();
+                        foreach (var item in dataArray)
+                            stringList.Add(item);
+                        fi.SetValue(dataObj, stringList);
+                    }
+                    else if (fi.FieldType == typeof(List<float>))
+                    {
+                        //读取字符串字节数组的长度
+                        int length = BitConverter.ToInt32(bytes, pointer);
+                        pointer += 4;
+                        string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        pointer += length;
+                        string[] dataArray = str.Split('|');
+                        List<float> floatList = new List<float>();
+                        foreach (var item in dataArray)
+                            floatList.Add(float.Parse(item));
+                        fi.SetValue(dataObj, floatList);
+                    }
+                }
+                data.Add((T)dataObj);
+
+            }
+            return data;
         }
     }
 }

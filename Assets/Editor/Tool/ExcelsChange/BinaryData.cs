@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -26,63 +23,88 @@ namespace ACFrameworkCore
         private static string DATA_BINARY_PATH = $"{Application.dataPath}/HotUpdate/GameMain/ExcelData/Binary/";
 
         /// <summary>
-        /// 生成excel2进制数据
+        /// 放置要生成的二进制文件的路径
         /// </summary>
-        /// <param name="table"></param>
-        public static void GenerateExcelBinary(this DataTable table)
-        {
-            //没有路径创建路径
-            DATA_BINARY_PATH.GenerateDirectory();
-            //创建一个2进制文件进行写入
-            using (FileStream fs = new FileStream(DATA_BINARY_PATH + table.TableName + ".Bytes", FileMode.OpenOrCreate, FileAccess.Write))
-            {
-                //存储具体的excel对应的2进制信息
-                //1.先要存储我们需要写多少行的数据 方便我们读取
-                //-4的原因是因为 前面4行是配置规则 并不是我们需要记录的数据内容
-                fs.Write(BitConverter.GetBytes(table.Rows.Count - 4), 0, 4);
-                //2.存储主键的变量名
-                string keyName = table.GetVariableNameRow(0)[table.GetKeyIndex()].ToString();
-                byte[] bytes = Encoding.UTF8.GetBytes(keyName);
-                //存储字符串字节数组的长度
-                fs.Write(BitConverter.GetBytes(bytes.Length), 0, 4);
-                //存储字符串字节数组
-                fs.Write(bytes, 0, bytes.Length);
+        private static readonly string BytePath = $"{Application.dataPath}/Excel2Script/Byte";
 
-                //遍历所有内容的行 进行2进制的写入
-                DataRow row;
-                //得到类型行 根据类型来决定应该如何写入数据
-                DataRow rowType = table.GetVariableTypeRow(1);
-                for (int i = ExcelConfig.BEGIN_INDEX; i < table.Rows.Count; i++)
+        /// <summary>
+        /// 创建二进制文件
+        /// </summary>
+        public static void CreateByte(string filePath, string[][] data)
+        {
+            //创建文件
+            string className = new FileInfo(filePath).Name.Split('.')[0];
+            BytePath.GenerateDirectory();
+            string path = $"{BytePath}/{className}.bytes";
+            //写入文件
+            using (FileStream fileStream = new FileStream(path, FileMode.Create))
+            {
+                //创建类型
+                List<Type> types = GetTypeByFieldType(data);
+                //去Byte文件写入数据
+                using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
-                    //得到一行的数据
-                    row = table.Rows[i];
-                    for (int j = 0; j < table.Columns.Count; j++)
+                    for (int i = (int)RowType.BEGIN_INDEX; i < data.Length; ++i)//开始读取真实数据
                     {
-                        switch (rowType[j].ToString())
+                        for (int j = 0; j < types.Count; ++j)
                         {
-                            case "int":
-                                fs.Write(BitConverter.GetBytes(int.Parse(row[j].ToString())), 0, 4);
-                                break;
-                            case "float":
-                                fs.Write(BitConverter.GetBytes(float.Parse(row[j].ToString())), 0, 4);
-                                break;
-                            case "bool":
-                                fs.Write(BitConverter.GetBytes(bool.Parse(row[j].ToString())), 0, 1);
-                                break;
-                            case "string":
-                                bytes = Encoding.UTF8.GetBytes(row[j].ToString());
-                                //写入字符串字节数组的长度
-                                fs.Write(BitConverter.GetBytes(bytes.Length), 0, 4);
-                                //写入字符串字节数组
-                                fs.Write(bytes, 0, bytes.Length);
-                                break;
+                            //获取数据的bytes
+                            Type typeTemp = types[j];
+                            string dataTemp = data[i][j];
+                            byte[] bytes = GetBasicField(typeTemp, dataTemp);
+                            //写入数据
+                            binaryWriter.Write(bytes);
                         }
                     }
                 }
-                fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">例如List<Int>的数据在表格也当成string类型看</param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static byte[] GetBasicField(Type type, string data)
+        {
+            byte[] bytes = null;
+            if (type == typeof(int))
+                bytes = BitConverter.GetBytes(int.Parse(data));
+            else if (type == typeof(float))
+                bytes = BitConverter.GetBytes(float.Parse(data));
+            else if (type == typeof(string)|| 
+                type == typeof(List<string>)||
+                type == typeof(List<int>)||
+                type == typeof(List<float>)
+                //TODO自己定义的类型
+                )
+            {
+                byte[] dataBytes = Encoding.Default.GetBytes(data);
+                List<byte> lengthBytes = BitConverter.GetBytes(dataBytes.Length).ToList();
+                lengthBytes.AddRange(dataBytes);
+                bytes = lengthBytes.ToArray();
             }
 
-            AssetDatabase.Refresh();
+            if (bytes == null) throw new Exception($"{nameof(UnityEngine.Object.name)}.GetBasicField: 其类型未配置或不是基础类型 Type:{type} Data:{data}");
+            return bytes;
+        }
+
+        private static List<Type> GetTypeByFieldType(string[][] data)
+        {
+            List<Type> types = new List<Type>();
+            string[] temp = data[(int)RowType.FIELD_TYPE];//获取类型
+            for (int i = 0; i < temp.Length; ++i)
+            {
+                if (temp[i] == "int") types.Add(typeof(int));
+                else if (temp[i] == "float") types.Add(typeof(float));
+                else if (temp[i] == "string") types.Add(typeof(string));
+                else if (temp[i] == "List<int>") types.Add(typeof(List<int>));
+                else if (temp[i] == "List<string>") types.Add(typeof(List<string>));
+                else if (temp[i] == "List<float>") types.Add(typeof(List<float>));
+            }
+            return types;
         }
     }
 }

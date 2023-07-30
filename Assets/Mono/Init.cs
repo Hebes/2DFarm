@@ -1,13 +1,14 @@
+using ACFrameworkCore;
 using HybridCLR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Security.Policy;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 using YooAsset;
 
 /// <summary>
@@ -59,6 +60,8 @@ public class Init : MonoBehaviour
         "System.dll",
         "System.Core.dll",
     };
+    public ACUIComponent aCUIComponent { get; private set; }
+    public Text LoadingText { get; private set; }
 
     // 更新成功后自动保存版本号，作为下次初始化的版本。
     // 也可以通过operation.SavePackageVersion()方法保存。
@@ -125,13 +128,94 @@ public class Init : MonoBehaviour
     IEnumerator FsmPatchPrepare()
     {
         Debug.Log("流程准备工作");
+        //TODO 暂时试用Resources
+        GameObject go = Resources.Load<GameObject>("UILoading");
+        aCUIComponent =  GameObject.Instantiate(go).GetComponent<ACUIComponent>();
+        LoadingText = aCUIComponent.Get<GameObject>("T_Text").GetComponent<Text>();
         yield return new WaitForSeconds(0.5f);
+        LoadingText.text = "流程准备工作";
         // 初始化资源系统
         YooAssets.Initialize();
         YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
         //TODO 加载更新面板
         FsmProcessChange(EHotUpdateProcess.FsmVersionXMLPrepare);
     }
+
+
+    IEnumerator LoadAsset(string LoadAssetPath, string SaveAssetPath)
+    {
+        yield return null;
+
+        //下载文件
+        UnityWebRequest huwr = UnityWebRequest.Head(LoadAssetPath);
+        yield return huwr.SendWebRequest();
+        if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.Log($"请求的链接错误{huwr.error}"); //出现错误 输出错误信息
+            yield break;
+        }
+        long totalLength = long.Parse(huwr.GetResponseHeader("Content-Length")); //首先拿到文件的全部长度
+        string dirPath = Path.GetDirectoryName(SaveAssetPath);//获取文件的上一级目录
+
+        Directory.Delete(dirPath, true);
+        if (!Directory.Exists(dirPath)) //判断路径是否存在
+            Directory.CreateDirectory(dirPath);//不存在创建
+
+        /*作用：创建一个文件流，指定路径为filePath,模式为打开或创建，访问为写入
+            * 使用using(){}方法原因： 当同一个cs引用了不同的命名空间，但这些命名控件都包括了一个相同名字的类型的时候,可以使用using关键字来创建别名，这样会使代码更简洁。注意：并不是说两名字重复，给其中一个用了别名，另外一个就不需要用别名了，如果两个都要使用，则两个都需要用using来定义别名的
+            * using(类){} 括号中的类必须是继承了IDisposable接口才能使用否则报错
+            * 这里没有出现不同命名空间出现相同名字的类属性可以不用using(){}
+            */
+        using (FileStream fs = new FileStream(SaveAssetPath, FileMode.OpenOrCreate, FileAccess.Write))
+        {
+            long nowFileLength = fs.Length; //当前文件长度,断点前已经下载的文件长度。
+            Debug.Log(fs.Length);
+            //判断当前文件是否小于要下载文件的长度，即文件是否下载完成
+            if (nowFileLength < totalLength)
+            {
+                Debug.Log("还没下载完成");
+                /*使用Seek方法 可以随机读写文件
+                * Seek()  ----------有两个参数 第一参数规定文件指针以字节为单位移动的距离。第二个参数规定开始计算的位置
+                * 第二个参数SeekOrigin 有三个值：Begin  Current   End
+                * fs.Seek(8,SeekOrigin.Begin);表示 将文件指针从开头位置移动到文件的第8个字节
+                * fs.Seek(8,SeekOrigin.Current);表示 将文件指针从当前位置移动到文件的第8个字节
+                * fs.Seek(8,SeekOrigin.End);表示 将文件指针从最后位置移动到文件的第8个字节
+                */
+                fs.Seek(nowFileLength, SeekOrigin.Begin);  //从开头位置，移动到当前已下载的子节位置
+                UnityWebRequest uwr = UnityWebRequest.Get(LoadAssetPath); //创建UnityWebRequest对象，将Url传入
+                uwr.SetRequestHeader("Range", "bytes=" + nowFileLength + "-" + totalLength);//修改请求头从n-m之间
+                uwr.SendWebRequest();                      //开始请求
+                if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError) //如果出错
+                {
+                    Debug.Log(uwr.error); //输出 错误信息
+                    yield break;
+                }
+
+                long index = 0;     //从该索引处继续下载
+                while (nowFileLength < totalLength) //只要下载没有完成，一直执行此循环
+                {
+                    yield return null;
+                    byte[] data = uwr.downloadHandler.data;
+                    if (data != null)
+                    {
+                        long length = data.Length - index;
+                        fs.Write(data, (int)index, (int)length); //写入文件
+                        index += length;
+                        nowFileLength += length;
+                        Debug.Log($"当前进度是:{Math.Floor((float)nowFileLength / totalLength * 100)}%");
+                        if (nowFileLength >= totalLength) //如果下载完成了
+                        {
+                            Debug.Log("下载完成");
+                            break;
+                        }
+                    }
+                }
+                huwr.Dispose();
+                uwr.Dispose();
+            }
+        }
+    }
+
 
     /// <summary>
     /// 检查版本XML配置文件
@@ -141,7 +225,6 @@ public class Init : MonoBehaviour
     {
         if (PlayMode == EPlayMode.HostPlayMode)
         {
-
             yield return new WaitForSeconds(0.5f);
             //下载文件
             UnityWebRequest huwr = UnityWebRequest.Head(XMLVersionUrl);
@@ -226,7 +309,7 @@ public class Init : MonoBehaviour
         Debug.Log("初始化资源包");
         yield return new WaitForSeconds(0.5f);
         // 创建默认的资源包
-
+        LoadingText.text = "初始化资源包";
         var package = YooAssets.TryGetPackage(packageName);
         if (package == null)
         {
@@ -280,6 +363,7 @@ public class Init : MonoBehaviour
     {
         Debug.Log("更新资源版本号");
         yield return new WaitForSecondsRealtime(0.5f);
+        LoadingText.text = "更新资源版本号";
         var package = YooAssets.GetPackage(packageName);//获取包
         operation = package.UpdatePackageVersionAsync();
         yield return operation;
@@ -303,6 +387,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmUpdateManifest()
     {
         yield return new WaitForSecondsRealtime(0.5f);
+        LoadingText.text = "更新资源清单";
         var package = YooAssets.GetPackage(packageName);//获取包
         // 更新成功后自动保存版本号，作为下次初始化的版本。
         // 也可以通过operation.SavePackageVersion()方法保存。
@@ -328,6 +413,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmCreateDownloader()
     {
         yield return new WaitForSecondsRealtime(0.5f);
+        LoadingText.text = "创建文件下载器";
         var package = YooAssets.GetPackage(packageName);//获取包
 
         yield return new WaitForSecondsRealtime(0.5f);
@@ -361,7 +447,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmDownloadFiles()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-
+        LoadingText.text = "下载更新文件";
         //注册回调方法
         downloader.OnDownloadErrorCallback = OnDownloadErrorFunction;
         downloader.OnDownloadProgressCallback = OnDownloadProgressUpdateFunction;
@@ -423,9 +509,8 @@ public class Init : MonoBehaviour
     IEnumerator FsmLoadHotDll()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-
+        LoadingText.text = "HybridCLR热更代码进入";
         var package = YooAssets.GetPackage(packageName);
-
         //var assets = new List<string>
         //{
         //    "HotUpdate.dll",
@@ -467,6 +552,8 @@ public class Init : MonoBehaviour
         Assembly _hotUpdateAss = Assembly.Load(fileDataHotUpdate);
         Type entryType = _hotUpdateAss.GetType("InitGame");
         entryType.GetMethod("Init").Invoke(null, null);
+
+        GameObject.Destroy(aCUIComponent.gameObject);
     }
 
     #endregion
@@ -537,6 +624,7 @@ public class Init : MonoBehaviour
     private void OnDownloadProgressUpdateFunction(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
     {
         Debug.Log(string.Format("文件总数：{0}, 已下载文件数：{1}, 下载总大小：{2}, 已下载大小：{3}", totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes));
+        LoadingText.text = string.Format("文件总数：{0}, 已下载文件数：{1}, 下载总大小：{2}, 已下载大小：{3}", totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes);
     }
 
     /// <summary>
@@ -548,6 +636,7 @@ public class Init : MonoBehaviour
     private void OnStartDownloadFileFunction(string fileName, long sizeBytes)
     {
         Debug.Log(string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes));
+        LoadingText.text = string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes);
     }
 
     /// <summary>
@@ -558,6 +647,7 @@ public class Init : MonoBehaviour
     private void OnDownloadOverFunction(bool isSucceed)
     {
         Debug.Log("下载" + (isSucceed ? "成功" : "失败"));
+        LoadingText.text = "下载" + (isSucceed ? "成功" : "失败");
     }
 
     /// <summary>
@@ -566,6 +656,7 @@ public class Init : MonoBehaviour
     private void OnClearCacheFunction(AsyncOperationBase asyncOperationBase)
     {
         Debug.Log("清理缓存完毕,流程更新完毕");
+        LoadingText.text = "清理缓存完毕,流程更新完毕";
     }
 
     /// <summary>

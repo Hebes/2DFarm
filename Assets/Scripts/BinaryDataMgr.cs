@@ -71,6 +71,9 @@ public class BinaryDataMgr
             object contaninerObj = Activator.CreateInstance(contaninerType);
             //得到数据结构类的Type
             Type classType = typeof(K);
+
+
+
             //通过反射 得到数据结构类 所有字段的信息
             FieldInfo[] infos = classType.GetFields();
 

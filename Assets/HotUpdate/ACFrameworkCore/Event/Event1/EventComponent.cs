@@ -15,12 +15,12 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class EventComponent : ICoreComponent
+    public class EventComponent : ICore
     {
         public static EventComponent Instance { get; private set; }
         private Dictionary<string, IEventInfo> eventDic { get; set; }
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             eventDic = new Dictionary<string, IEventInfo>();

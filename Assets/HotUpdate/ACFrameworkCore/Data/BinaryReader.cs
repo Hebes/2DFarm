@@ -1,8 +1,8 @@
 ﻿namespace ACFrameworkCore
 {
-    public class BinaryReader : IRead,ICoreComponent
+    public class BinaryReader : IRead,ICore
     {
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
         }
 

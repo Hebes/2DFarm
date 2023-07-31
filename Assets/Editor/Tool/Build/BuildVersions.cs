@@ -8,7 +8,7 @@ namespace ACFrameworkCore
     public class BuildVersions : EditorWindow
     {
         private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";
-        private string ServerHost = "127.0.0.1:8000";
+        private string ServerHost = "http://127.0.0.1:8000";
         private int PackageVersion;
 
         [MenuItem("Tool/生成版本号")]//#E
@@ -34,7 +34,7 @@ namespace ACFrameworkCore
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine($"<?xml version=\"1.0\" encoding=\"UTF-8\"?><!-- 更新包版本 -->");
                     sb.AppendLine($"<PackageInfo>");
-                    sb.AppendLine($"\t<URL PackageURL=\"{ServerHost}\" Verson=\"{PackageVersion}\" /><!-- 资源包下载地址 -->");
+                    sb.AppendLine($"\t<URL PackageURL =\"{ServerHost}\" Verson =\"{PackageVersion}\" /><!-- 资源包下载地址 -->");
                     sb.AppendLine($"</PackageInfo>");
                     StreamWriter sw = new StreamWriter(fs);
                     sw.WriteLine(sb);

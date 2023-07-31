@@ -11,11 +11,11 @@
 
 namespace ACFrameworkCore
 {
-    public interface ICoreComponent
+    public interface ICore
     {
         /// <summary>
         /// 核心初始化
         /// </summary>
-        public void CroeComponentInit();
+        public void ICroeInit();
     }
 }

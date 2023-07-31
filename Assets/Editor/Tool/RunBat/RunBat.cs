@@ -7,7 +7,7 @@ namespace ACFrameworkCore
 {
     internal class RunBat
     {
-        [MenuItem("Tools/执行bat")]
+        [MenuItem("Tool/执行bat")]
         private static void Run()
         {
             string path = Application.dataPath.Replace("Assets","");

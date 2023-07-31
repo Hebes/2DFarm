@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 namespace ACFrameworkCore
 {
-    public class SceneComponent : ICoreComponent
+    public class SceneComponent : ICore
     {
         public static SceneComponent Instance { get; private set; }
 
         private ISceneLoad sceneLoad;
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             sceneLoad = new YooAssetLoadScene();

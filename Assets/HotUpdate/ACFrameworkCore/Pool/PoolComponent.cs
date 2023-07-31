@@ -18,13 +18,13 @@ using UnityEngine.Events;
 namespace ACFrameworkCore
 {
 
-    public class PoolComponent : ICoreComponent
+    public class PoolComponent : ICore
     {
         public static PoolComponent Instance { get; private set; }
         public Dictionary<string, PoolData> poolDic { get; private set; }
         private GameObject poolObj { get; set; }
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             poolDic = new Dictionary<string, PoolData>();

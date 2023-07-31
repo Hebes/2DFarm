@@ -14,13 +14,13 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class ResComponent : ICoreComponent
+    public class ResComponent : ICore
     {
         public static ResComponent Insatance { get; set; }
 
         private IResload iload;
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Insatance = this;
             iload = new YooAssetResLoad();

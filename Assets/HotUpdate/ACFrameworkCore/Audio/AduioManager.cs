@@ -17,7 +17,7 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class AduioComponent : ICoreComponent
+    public class AduioComponent : ICore
     {
         public static AduioComponent Instance { get; private set; }
 
@@ -30,7 +30,7 @@ namespace ACFrameworkCore
         private float soundValue = 1;//音效大小
         private List<AudioSource> soundList { get; set; } //音效列表
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             AudioClipDic = new Dictionary<string, AudioClip>();

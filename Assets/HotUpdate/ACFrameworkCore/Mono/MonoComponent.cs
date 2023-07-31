@@ -6,14 +6,14 @@ using Time = UnityEngine.Time;
 
 namespace ACFrameworkCore
 {
-    public class MonoComponent : ICoreComponent
+    public class MonoComponent : ICore
     {
         public static MonoComponent Instance { get; private set; }
         public MonoController monoController { get; set; }
 
         private float m_Time = 0f;
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             GameObject monoTemp = new GameObject("Mono");

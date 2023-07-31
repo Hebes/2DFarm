@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ACFrameworkCore
+﻿namespace ACFrameworkCore
 {
     public class Config
     {
+#if UNITY_ANDROID
+		public const string YooAseetPackage = "Android";
+#elif UNITY_IOS
+		public const string YooAseetPackage = "IOS";
+#elif UNITY_STANDALONE_WIN
         public const string YooAseetPackage = "PC";
+#elif UNITY_STANDALONE_OSX
+		public const string YooAseetPackage = "PC";
+#else
+		public const string YooAseetPackage = "PC";
+#endif
     }
 }

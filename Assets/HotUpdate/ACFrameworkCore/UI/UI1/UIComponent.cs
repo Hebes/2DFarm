@@ -26,7 +26,7 @@ namespace ACFrameworkCore
         System = 4,
     }
 
-    public class UIComponent : ICoreComponent
+    public class UIComponent : ICore
     {
         public static UIComponent Instance { get; private set; }
 
@@ -49,7 +49,7 @@ namespace ACFrameworkCore
             }
         }
 
-        public void CroeComponentInit()
+        public void ICroeInit()
         {
             Instance = this;
             panelDic = new Dictionary<string, IUIState>();

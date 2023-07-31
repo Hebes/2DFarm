@@ -19,31 +19,32 @@ namespace ACFrameworkCore
         private void OnEnable()
         {
             OnSwitchLanguage();
-            LanaguageBridge.Instance.OnLanguageChangeEvt += OnSwitchLanguage;
+            LanaguageManager.Instance.OnLanguageChangeEvt += OnSwitchLanguage;
         }
 
         private void OnDisable()
         {
-            LanaguageBridge.Instance.OnLanguageChangeEvt -= OnSwitchLanguage;
+            LanaguageManager.Instance.OnLanguageChangeEvt -= OnSwitchLanguage;
         }
 
         private void OnSwitchLanguage()
         {
             if (m_Text != null)
             {
-                m_Text.font = LanaguageBridge.Instance.font;
-                m_Text.text = LanaguageBridge.Instance.GetText(key);
+                m_Text.font = LanaguageManager.Instance.font;
+                m_Text.text = LanaguageManager.Instance.GetText(key);
             }
 
             if (m_MeshText != null)
             {
-                m_MeshText.text = LanaguageBridge.Instance.GetText(key);
+                m_MeshText.text = LanaguageManager.Instance.GetText(key);
             }
         }
 
         /// <summary>
         /// 设置Key和切换语言
         /// </summary>
+        /// <param name="key">关键词</param>
         public void OnSetKeyAndChange(string key)
         {
             this.key = key;

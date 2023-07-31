@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -83,19 +84,33 @@ namespace ACFrameworkCore
         [MenuItem("Tool/Bytes数据读取")]//#E
         public static void ReaDData()
         {
-            using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
-            {
-                //读取全都的字节
-                byte[] bytes = new byte[fs.Length];
-                fs.Read(bytes, 0, bytes.Length);
-                fs.Close();
-                List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
-                foreach (TowerInfo info in towerInfos)
-                {
-                    Debug.Log(info.name);
-                }
-            }
+            //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
+            //{
+            //    //读取全都的字节
+            //    byte[] bytes = new byte[fs.Length];
+            //    fs.Read(bytes, 0, bytes.Length);
+            //    fs.Close();
+            //    List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
+            //    foreach (TowerInfo info in towerInfos)
+            //    {
+            //        Debug.Log(info.name);
+            //    }
+            //}
+            //TowerInfo towerInfo = Load<TowerInfo>();
+            //TowerInfo towerInfo = new TowerInfo()
+            //{
+            //    atk = 30,
+            //    atkRange = 30,
+            //    atkType = 30,
+            //    eff = "测试1",
+            //    id = 30,
+            //    imgRes= "测试1",
+            //};
         }
+
+      
+
+        
 
         /// <summary>
         /// 循环获取数据

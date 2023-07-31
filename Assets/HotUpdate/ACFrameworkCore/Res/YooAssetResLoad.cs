@@ -151,16 +151,17 @@ namespace ACFrameworkCore
         }
         #endregion
 
-        #region 获取资源信息列表
+        #region 通过资源标签来获取资源信息列表
+        /// <summary>
+        /// 通过资源标签来获取资源信息列表
+        /// </summary>
+        /// <param name="tag">资源标签</param>
+        /// <returns></returns>
         public AssetInfo[] GetAssetInfosByTag(string tag)
         {
             var package = GetPakckage();
             AssetInfo[] assetInfos = package.GetAssetInfos(tag);
             return assetInfos;
-            //foreach (var assetInfo in assetInfos)
-            //{
-            //    Debug.Log(assetInfo.AssetPath);
-            //}
         }
         #endregion
 

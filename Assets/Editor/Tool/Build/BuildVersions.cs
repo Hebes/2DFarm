@@ -42,6 +42,7 @@ namespace ACFrameworkCore
                     sw.Dispose();
                 }
                 Debug.Log("生成成功");
+                AssetDatabase.Refresh();
             }
         }
     }

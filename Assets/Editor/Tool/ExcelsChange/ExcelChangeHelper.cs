@@ -37,10 +37,7 @@ namespace ACFrameworkCore
                 int columnCount = rows[i].ItemArray.Length;
                 string[] columnArray = new string[columnCount];
                 for (int j = 0; j < columnArray.Length; ++j)
-                {
                     columnArray[j] = rows[i].ItemArray[j].ToString();
-                }
-
                 data[i] = columnArray;
             }
 
@@ -57,54 +54,6 @@ namespace ACFrameworkCore
                 Directory.Delete(path, true);
             Directory.CreateDirectory(path);
             AssetDatabase.Refresh();
-        }
-
-        /// <summary>
-        /// 获取变量名所在行
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="rowsNumber">变量名所在行</param>
-        /// <returns></returns>
-        public static DataRow GetVariableNameRow(this DataTable table, int nameRowNumber)
-        {
-            return table.Rows[nameRowNumber];
-        }
-
-        /// <summary>
-        /// 获取行值
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="nameRowNumber"></param>
-        /// <returns></returns>
-        public static DataRow GetRowValue(this DataTable table, int RowNumber)
-        {
-            return table.Rows[RowNumber];
-        }
-
-        /// <summary>
-        /// 获取变量类型所在行
-        /// </summary>
-        /// <param name="table"></param>
-        /// <returns></returns>
-        public static DataRow GetVariableTypeRow(this DataTable table, int typeRowNumber)
-        {
-            return table.Rows[typeRowNumber];
-        }
-
-        /// <summary>
-        /// 获取主键索引
-        /// </summary>
-        /// <param name="table"></param>
-        /// <returns></returns>
-        public static int GetKeyIndex(this DataTable table)
-        {
-            DataRow row = table.Rows[2];
-            for (int i = 0; i < table.Columns.Count; i++)
-            {
-                if (row[i].ToString() == "key")
-                    return i;
-            }
-            return 0;
         }
     }
 }

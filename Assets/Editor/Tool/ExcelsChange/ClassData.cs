@@ -1,7 +1,5 @@
-﻿using System.Data;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using UnityEditor;
 using UnityEngine;
 
 /*--------脚本描述-----------

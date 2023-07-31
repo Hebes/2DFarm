@@ -11,6 +11,8 @@
 
 namespace ACFrameworkCore
 {
+    
+
     public class LanguageComponent
     {
         private static LanguageComponent instance;
@@ -20,23 +22,27 @@ namespace ACFrameworkCore
             get
             {
                 if (instance == null)
-                {
                     instance = new LanguageComponent();
-                    return instance;
-                }
-                else
-                    return instance;
+                return instance;
             }
+        }
+
+        /// <summary>
+        /// 设置语言字典
+        /// </summary>
+        public void InitKeyDic()
+        {
+
         }
 
         public void OnChangeLanguage()
         {
-            LanaguageBridge.Instance.OnLanguageChange();
+            LanaguageManager.Instance.OnLanguageChange();
         }
 
         public void OnSetLanguageDic()
         {
-            
+
         }
     }
 }

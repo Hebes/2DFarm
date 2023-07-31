@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ACFrameworkCore
 {
@@ -19,7 +20,7 @@ namespace ACFrameworkCore
         private Dictionary<string, string> LanguageTextKeyDic { get; set; }//语言字典
         public event Action OnLanguageChangeEvt;//回调事件
 
-        public UnityEngine.Font font { get; set; }//字体
+        public Font font { get; set; }//字体
 
         public static LanaguageManager Instance
         {

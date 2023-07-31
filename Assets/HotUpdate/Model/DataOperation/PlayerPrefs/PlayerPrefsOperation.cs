@@ -393,9 +393,7 @@ namespace ACFrameworkCore
             {
                 return LoadData(fieldType, keyName);
             }
-
-
-            return null;
+            //return null;
         }
     }
 }

@@ -24,15 +24,7 @@ namespace ACFrameworkCore
         public static void YooaddetLoadAsync(this string GOName, Action<AssetOperationHandle> action = null)
         {
             //TODO 后续要从配置中读取 或者直接配置
-#if UNITY_ANDROID
-            var package = YooAssets.GetPackage("Android");
-#elif UNITY_IOS
-            var package = YooAssets.GetPackage("IOS");
-//#elif UNITY_STANDALONE_WIN
-//            var package = YooAssets.GetPackage("PC");
-#endif
-            var package = YooAssets.GetPackage("PC");
-
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
             AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>(GOName);
             handle1.Completed += obj => { action?.Invoke(obj); };
         }
@@ -45,15 +37,7 @@ namespace ACFrameworkCore
         public static GameObject YooaddetLoadSync(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
-#if UNITY_ANDROID
-            var package = YooAssets.GetPackage("Android");
-#elif UNITY_IOS
-            var package = YooAssets.GetPackage("IOS");
-//#elif UNITY_STANDALONE_WIN
-//            var package = YooAssets.GetPackage("PC");
-#endif
             var package = YooAssets.GetPackage("PC");
-
             AssetOperationHandle handle1 = package.LoadAssetSync<GameObject>(GOName);
             return (GameObject)handle1.AssetObject;
             //handle1.Completed += obj => { obj.InstantiateSync(); };

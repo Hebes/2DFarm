@@ -42,7 +42,7 @@ public class InitGame
     private static void EnterGame()
     {
         DLog.Log("开始打开界面");
-        UIComponent.Instance.OnCreatUI<PanelComponent>("Panel", EUILayer.System);
+        UIComponent.Instance.OnOpenUIAsync<PanelComponent>("Panel", EUILayer.System);
         //MonoComponent.Instance.MonoStartCoroutine(HideUI());
         //MonoComponent.Instance.Pause();
     }

@@ -17,8 +17,8 @@ namespace ACFrameworkCore
         {
             Instance = this;
             GameObject monoTemp = new GameObject("Mono");
-            GameObject.DontDestroyOnLoad(monoTemp);
             monoController = monoTemp.AddComponent<MonoController>();
+            GameObject.DontDestroyOnLoad(monoTemp);
             DLog.Log("初始化Mono完毕!");
         }
 

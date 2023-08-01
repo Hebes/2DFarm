@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UniFramework.Window;
 using UnityEngine;
 using YooAsset;
 
@@ -93,6 +94,13 @@ namespace ACFrameworkCore
                 t.UIGO = UIGO;
                 t.UIAwake();
                 MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+
+                //设置窗口层级
+                WindowAttribute attribute = Attribute.GetCustomAttribute(typeof(T), typeof(WindowAttribute)) as WindowAttribute;
+                if (attribute == null)
+                    throw new Exception($"Window {typeof(T).FullName} not found {nameof(WindowAttribute)} attribute.");
+                UIGO.GetComponent<Canvas>().sortingOrder = attribute.WindowLayer;
+
                 panelDic.Add(panelName, t);
             });
         }

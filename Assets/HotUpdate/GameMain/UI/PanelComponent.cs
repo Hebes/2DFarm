@@ -1,13 +1,11 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System.Management.Instrumentation;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class PanelComponent : IUIState, IACSinglent<PanelComponent>
+    public class PanelComponent : IUIState
     {
         public GameObject UIGO { get; set; }
-
+        
         public void UIAwake()
         {
             DLog.Log("打开了界面");
@@ -18,6 +16,8 @@ namespace ACFrameworkCore
         {
             Debug.Log("通过单例取出的");
         }
+
+
 
         //public void UIUpdate()
         //{

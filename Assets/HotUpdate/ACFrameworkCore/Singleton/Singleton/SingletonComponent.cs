@@ -2,7 +2,7 @@
 
 namespace ACFrameworkCore
 {
-    public class BaseManager<T> where T : new()
+    public class Singleton<T> where T : new()
     {
         private static T instance;
         public static T Instance
@@ -16,7 +16,7 @@ namespace ACFrameworkCore
         }
     }
 
-    public class SingletonAutoMono<T> : MonoBehaviour where T : MonoBehaviour
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T instance;
         public static T Instance
@@ -35,9 +35,9 @@ namespace ACFrameworkCore
             }
         }
        
-        protected virtual void Awake()
-        {
-            instance = this as T;
-        }
+        //protected virtual void Awake()
+        //{
+        //    instance = this as T;
+        //}
     }
 }

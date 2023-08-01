@@ -38,7 +38,7 @@ namespace ACFrameworkCore
             //打包:HybridCLR/Build/Win64
         }
 
-        [MenuItem("Tool/快速打包热更DLl")]//#E
+        [MenuItem("Tool/快速打包热更DLl _F5")]
         public static void BuildDLL()
         {
             CompileDllCommand.CompileDllActiveBuildTarget();

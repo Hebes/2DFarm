@@ -12,7 +12,9 @@ using YooAsset;
 	暗沉
 描述:
     UI管理类
-    需要参考:https://blog.csdn.net/qq_31480839/article/details/106023788
+    需要参考:
+    https://blog.csdn.net/qq_31480839/article/details/106023788
+    https://blog.csdn.net/qq_35030499/article/details/83241388
 
 -----------------------*/
 

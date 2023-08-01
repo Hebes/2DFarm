@@ -3,6 +3,17 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
+/*--------脚本描述-----------
+				
+电子邮箱：
+	1607388033@qq.com
+作者:
+	暗沉
+描述:
+    生成版本
+
+-----------------------*/
+
 namespace ACFrameworkCore
 {
     public class BuildVersions : EditorWindow
@@ -42,6 +53,13 @@ namespace ACFrameworkCore
                     sw.Dispose();
                 }
                 Debug.Log("生成成功");
+                AssetDatabase.Refresh();
+            }
+
+            if (GUILayout.Button("转移版本号到测试服务器目录"))
+            {
+                string movePath = $"{Application.dataPath.Replace("Assets", "")}Bundles/ACPackageVersion.xml";
+                File.Move(SaveXMLVersion, movePath);
                 AssetDatabase.Refresh();
             }
         }

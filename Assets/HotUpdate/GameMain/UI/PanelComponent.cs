@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using UniFramework.Window;
+using UnityEngine;
 
 namespace ACFrameworkCore
 {
+    [WindowAttribute(100,true)]
     public class PanelComponent : IUIState
     {
         public GameObject UIGO { get; set; }

@@ -19,8 +19,6 @@ namespace ACFrameworkCore
             Debug.Log("通过单例取出的");
         }
 
-        
-
         //public void UIUpdate()
         //{
         //    DLog.Log("每帧更新UIUpdate");

@@ -12,6 +12,7 @@ using YooAsset;
 	暗沉
 描述:
     UI管理类
+    需要参考:https://blog.csdn.net/qq_31480839/article/details/106023788
 
 -----------------------*/
 
@@ -91,6 +92,12 @@ namespace ACFrameworkCore
                 panelDic[panelName].UIOnEnable();
             else
                 OnUICreatAsync<T>(panelName, layer, action);
+        }
+
+        public void OnOpenUI(string panelName)
+        {
+            //if (!panelDic.ContainsKey(panelName)) return;
+            //panelDic[panelName]
         }
         public T OnUIGet<T>(string panelName) where T : class
         {

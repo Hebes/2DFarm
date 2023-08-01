@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System.Management.Instrumentation;
+using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class PanelComponent : IUIState
+    public class PanelComponent : IUIState, IACSinglent<PanelComponent>
     {
         public GameObject UIGO { get; set; }
 
@@ -10,6 +12,11 @@ namespace ACFrameworkCore
         {
             DLog.Log("打开了界面");
             DLog.Log($"UI界面的名称是{UIGO.name}");
+        }
+
+        public void test()
+        {
+            Debug.Log("通过单例取出的");
         }
 
         //public void UIUpdate()

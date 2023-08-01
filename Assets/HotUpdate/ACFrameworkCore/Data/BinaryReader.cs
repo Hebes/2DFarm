@@ -4,6 +4,7 @@
     {
         public void ICroeInit()
         {
+
         }
 
         public T LoadData<T>(string fileName) where T : class, new()

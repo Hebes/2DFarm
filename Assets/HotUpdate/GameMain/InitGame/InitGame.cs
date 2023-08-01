@@ -8,18 +8,12 @@ using YooAsset;
 
 public class InitGame
 {
-    public static List<GameObject> gos;
     public static async void Init()
     {
         string value = await InitRsv();
         DLog.Log(value);
         DLog.Log("开始创建物体");
         EnterGame();
-
-        foreach (var game in gos)
-        {
-            game.gameObject.SetActive(false);
-        }
     }
 
 

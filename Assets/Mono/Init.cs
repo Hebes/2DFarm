@@ -130,7 +130,7 @@ public class Init : MonoBehaviour
         Debug.Log("流程准备工作");
         //TODO 暂时试用Resources
         GameObject go = Resources.Load<GameObject>("UILoading");
-        aCUIComponent =  GameObject.Instantiate(go).GetComponent<ACUIComponent>();
+        aCUIComponent = GameObject.Instantiate(go).GetComponent<ACUIComponent>();
         LoadingText = aCUIComponent.Get<GameObject>("T_Text").GetComponent<Text>();
         yield return new WaitForSeconds(0.5f);
         LoadingText.text = "流程准备工作";
@@ -397,7 +397,8 @@ public class Init : MonoBehaviour
         // 也可以通过operation.SavePackageVersion()方法保存。
         bool savePackageVersion = true;
 
-        var operationResource = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);//operation.PackageVersion
+        Debug.Log("当前的版本号是:" + packageVersion);
+        var operationResource = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);//operation.PackageVersion //
         yield return operationResource;
 
         if (operationResource.Status != EOperationStatus.Succeed)

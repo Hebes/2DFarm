@@ -52,25 +52,22 @@ public class Init : MonoBehaviour
     private ResourceDownloaderOperation downloader;//下载器
     public UpdatePackageVersionOperation operation;//更新包
 
+    private string packageVersion;// 更新成功后自动保存版本号，作为下次初始化的版本。也可以通过operation.SavePackageVersion()方法保存。
+    private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";
+    private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";
+
+    private ACUIComponent aCUIComponent;
+    private Text LoadingText;
+
     //补充元数据dll的列表，
     //通过RuntimeApi.LoadMetadataForAOTAssembly()函数来补充AOT泛型的原始元数据
-    public static List<string> AOTMetaAssemblyNames { get; } = new List<string>()
+    public static List<string> AOTMetaAssemblyNames = new List<string>()
     {
         "mscorlib.dll",
         "System.dll",
         "System.Core.dll",
     };
-    public ACUIComponent aCUIComponent { get; private set; }
-    public Text LoadingText { get; private set; }
-
-    // 更新成功后自动保存版本号，作为下次初始化的版本。
-    // 也可以通过operation.SavePackageVersion()方法保存。
-    private string packageVersion;
-
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();//资源数据
-
-    private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";
-    private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";
 
     private void Awake()
     {
@@ -132,91 +129,16 @@ public class Init : MonoBehaviour
         GameObject go = Resources.Load<GameObject>("UILoading");
         aCUIComponent = GameObject.Instantiate(go).GetComponent<ACUIComponent>();
         LoadingText = aCUIComponent.Get<GameObject>("T_Text").GetComponent<Text>();
+
         yield return new WaitForSeconds(0.5f);
         LoadingText.text = "流程准备工作";
+
         // 初始化资源系统
         YooAssets.Initialize();
         YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
         //TODO 加载更新面板
         FsmProcessChange(EHotUpdateProcess.FsmVersionXMLPrepare);
     }
-
-
-    IEnumerator LoadAsset(string LoadAssetPath, string SaveAssetPath)
-    {
-        yield return null;
-
-        //下载文件
-        UnityWebRequest huwr = UnityWebRequest.Head(LoadAssetPath);
-        yield return huwr.SendWebRequest();
-        if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError($"请求的链接错误{huwr.error}"); //出现错误 输出错误信息
-            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
-            yield break;
-        }
-        long totalLength = long.Parse(huwr.GetResponseHeader("Content-Length")); //首先拿到文件的全部长度
-        string dirPath = Path.GetDirectoryName(SaveAssetPath);//获取文件的上一级目录
-
-        Directory.Delete(dirPath, true);
-        if (!Directory.Exists(dirPath)) //判断路径是否存在
-            Directory.CreateDirectory(dirPath);//不存在创建
-
-        /*作用：创建一个文件流，指定路径为filePath,模式为打开或创建，访问为写入
-            * 使用using(){}方法原因： 当同一个cs引用了不同的命名空间，但这些命名控件都包括了一个相同名字的类型的时候,可以使用using关键字来创建别名，这样会使代码更简洁。注意：并不是说两名字重复，给其中一个用了别名，另外一个就不需要用别名了，如果两个都要使用，则两个都需要用using来定义别名的
-            * using(类){} 括号中的类必须是继承了IDisposable接口才能使用否则报错
-            * 这里没有出现不同命名空间出现相同名字的类属性可以不用using(){}
-            */
-        using (FileStream fs = new FileStream(SaveAssetPath, FileMode.OpenOrCreate, FileAccess.Write))
-        {
-            long nowFileLength = fs.Length; //当前文件长度,断点前已经下载的文件长度。
-            Debug.Log(fs.Length);
-            //判断当前文件是否小于要下载文件的长度，即文件是否下载完成
-            if (nowFileLength < totalLength)
-            {
-                Debug.Log("还没下载完成");
-                /*使用Seek方法 可以随机读写文件
-                * Seek()  ----------有两个参数 第一参数规定文件指针以字节为单位移动的距离。第二个参数规定开始计算的位置
-                * 第二个参数SeekOrigin 有三个值：Begin  Current   End
-                * fs.Seek(8,SeekOrigin.Begin);表示 将文件指针从开头位置移动到文件的第8个字节
-                * fs.Seek(8,SeekOrigin.Current);表示 将文件指针从当前位置移动到文件的第8个字节
-                * fs.Seek(8,SeekOrigin.End);表示 将文件指针从最后位置移动到文件的第8个字节
-                */
-                fs.Seek(nowFileLength, SeekOrigin.Begin);  //从开头位置，移动到当前已下载的子节位置
-                UnityWebRequest uwr = UnityWebRequest.Get(LoadAssetPath); //创建UnityWebRequest对象，将Url传入
-                uwr.SetRequestHeader("Range", "bytes=" + nowFileLength + "-" + totalLength);//修改请求头从n-m之间
-                uwr.SendWebRequest();                      //开始请求
-                if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError) //如果出错
-                {
-                    Debug.Log(uwr.error); //输出 错误信息
-                    yield break;
-                }
-
-                long index = 0;     //从该索引处继续下载
-                while (nowFileLength < totalLength) //只要下载没有完成，一直执行此循环
-                {
-                    yield return null;
-                    byte[] data = uwr.downloadHandler.data;
-                    if (data != null)
-                    {
-                        long length = data.Length - index;
-                        fs.Write(data, (int)index, (int)length); //写入文件
-                        index += length;
-                        nowFileLength += length;
-                        Debug.Log($"当前进度是:{Math.Floor((float)nowFileLength / totalLength * 100)}%");
-                        if (nowFileLength >= totalLength) //如果下载完成了
-                        {
-                            Debug.Log("下载完成");
-                            break;
-                        }
-                    }
-                }
-                huwr.Dispose();
-                uwr.Dispose();
-            }
-        }
-    }
-
 
     /// <summary>
     /// 检查版本XML配置文件
@@ -226,79 +148,9 @@ public class Init : MonoBehaviour
     {
         if (PlayMode == EPlayMode.HostPlayMode)
         {
+            LoadingText.text = "检查版本配置文件";
             yield return LoadAsset(XMLVersionUrl, SaveXMLVersion);
             //TODO 需要添加判断如果没下载成功的话
-
-            //yield return new WaitForSeconds(0.5f);
-            ////下载文件
-            //UnityWebRequest huwr = UnityWebRequest.Head(XMLVersionUrl);
-            //yield return huwr.SendWebRequest();
-            //if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError)
-            //{
-            //    Debug.LogError($"请求的链接错误{huwr.error}"); //出现错误 输出错误信息
-            //    yield break;
-            //}
-
-            //long totalLength = long.Parse(huwr.GetResponseHeader("Content-Length")); //首先拿到文件的全部长度
-            //string dirPath = Path.GetDirectoryName(SaveXMLVersion);//获取文件的上一级目录
-
-            //Directory.Delete(dirPath, true);
-            //if (!Directory.Exists(dirPath)) //判断路径是否存在
-            //    Directory.CreateDirectory(dirPath);//不存在创建
-
-            ///*作用：创建一个文件流，指定路径为filePath,模式为打开或创建，访问为写入
-            //* 使用using(){}方法原因： 当同一个cs引用了不同的命名空间，但这些命名控件都包括了一个相同名字的类型的时候,可以使用using关键字来创建别名，这样会使代码更简洁。注意：并不是说两名字重复，给其中一个用了别名，另外一个就不需要用别名了，如果两个都要使用，则两个都需要用using来定义别名的
-            //* using(类){} 括号中的类必须是继承了IDisposable接口才能使用否则报错
-            //* 这里没有出现不同命名空间出现相同名字的类属性可以不用using(){}
-            //*/
-            //using (FileStream fs = new FileStream(SaveXMLVersion, FileMode.OpenOrCreate, FileAccess.Write))
-            //{
-            //    long nowFileLength = fs.Length; //当前文件长度,断点前已经下载的文件长度。
-            //    Debug.Log(fs.Length);
-            //    //判断当前文件是否小于要下载文件的长度，即文件是否下载完成
-            //    if (nowFileLength < totalLength)
-            //    {
-            //        Debug.Log("还没下载完成");
-            //        /*使用Seek方法 可以随机读写文件
-            //        * Seek()  ----------有两个参数 第一参数规定文件指针以字节为单位移动的距离。第二个参数规定开始计算的位置
-            //        * 第二个参数SeekOrigin 有三个值：Begin  Current   End
-            //        * fs.Seek(8,SeekOrigin.Begin);表示 将文件指针从开头位置移动到文件的第8个字节
-            //        * fs.Seek(8,SeekOrigin.Current);表示 将文件指针从当前位置移动到文件的第8个字节
-            //        * fs.Seek(8,SeekOrigin.End);表示 将文件指针从最后位置移动到文件的第8个字节
-            //        */
-            //        fs.Seek(nowFileLength, SeekOrigin.Begin);  //从开头位置，移动到当前已下载的子节位置
-            //        UnityWebRequest uwr = UnityWebRequest.Get(XMLVersionUrl); //创建UnityWebRequest对象，将Url传入
-            //        uwr.SetRequestHeader("Range", "bytes=" + nowFileLength + "-" + totalLength);//修改请求头从n-m之间
-            //        uwr.SendWebRequest();                      //开始请求
-            //        if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError) //如果出错
-            //        {
-            //            Debug.Log(uwr.error); //输出 错误信息
-            //            yield break;
-            //        }
-
-            //        long index = 0;     //从该索引处继续下载
-            //        while (nowFileLength < totalLength) //只要下载没有完成，一直执行此循环
-            //        {
-            //            yield return null;
-            //            byte[] data = uwr.downloadHandler.data;
-            //            if (data != null)
-            //            {
-            //                long length = data.Length - index;
-            //                fs.Write(data, (int)index, (int)length); //写入文件
-            //                index += length;
-            //                nowFileLength += length;
-            //                Debug.Log($"当前进度是:{Math.Floor((float)nowFileLength / totalLength * 100)}%");
-            //                if (nowFileLength >= totalLength) //如果下载完成了
-            //                {
-            //                    Debug.Log("下载完成");
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //        huwr.Dispose();
-            //        uwr.Dispose();
-            //    }
-            //}
         }
         //进入初始资源流程
         FsmProcessChange(EHotUpdateProcess.FsmInitialize);
@@ -436,6 +288,7 @@ public class Init : MonoBehaviour
             yield break;
         }
         Debug.Log($"找到需要下载{downloader.TotalDownloadCount}的文件! Found total {downloader.TotalDownloadCount} files that need download ！");
+        LoadingText.text = $"找到需要下载{downloader.TotalDownloadCount}的文件!";
         // 发现新更新文件后，挂起流程系统
         // 注意：开发者需要在下载前检测磁盘空间不足
         //需要下载的文件总数和总大小
@@ -454,10 +307,10 @@ public class Init : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         LoadingText.text = "下载更新文件";
         //注册回调方法
+        downloader.OnStartDownloadFileCallback = OnStartDownloadFileFunction;
         downloader.OnDownloadErrorCallback = OnDownloadErrorFunction;
         downloader.OnDownloadProgressCallback = OnDownloadProgressUpdateFunction;
         downloader.OnDownloadOverCallback = OnDownloadOverFunction;
-        downloader.OnStartDownloadFileCallback = OnStartDownloadFileFunction;
 
         //开启下载
         downloader.BeginDownload();
@@ -564,6 +417,86 @@ public class Init : MonoBehaviour
     #endregion
 
     #region 辅助功能
+    /// <summary>
+    /// 下载资源功能
+    /// </summary>
+    /// <param name="LoadAssetPath"></param>
+    /// <param name="SaveAssetPath"></param>
+    /// <returns></returns>
+    IEnumerator LoadAsset(string LoadAssetPath, string SaveAssetPath)
+    {
+        yield return null;
+
+        //下载文件
+        UnityWebRequest huwr = UnityWebRequest.Head(LoadAssetPath);
+        yield return huwr.SendWebRequest();
+        if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError($"请求的链接错误{huwr.error}"); //出现错误 输出错误信息
+            FsmProcessChange(EHotUpdateProcess.FsmErrorPrepare);
+            yield break;
+        }
+        long totalLength = long.Parse(huwr.GetResponseHeader("Content-Length")); //首先拿到文件的全部长度
+        string dirPath = Path.GetDirectoryName(SaveAssetPath);//获取文件的上一级目录
+
+        Directory.Delete(dirPath, true);
+        if (!Directory.Exists(dirPath)) //判断路径是否存在
+            Directory.CreateDirectory(dirPath);//不存在创建
+
+        /*作用：创建一个文件流，指定路径为filePath,模式为打开或创建，访问为写入
+            * 使用using(){}方法原因： 当同一个cs引用了不同的命名空间，但这些命名控件都包括了一个相同名字的类型的时候,可以使用using关键字来创建别名，这样会使代码更简洁。注意：并不是说两名字重复，给其中一个用了别名，另外一个就不需要用别名了，如果两个都要使用，则两个都需要用using来定义别名的
+            * using(类){} 括号中的类必须是继承了IDisposable接口才能使用否则报错
+            * 这里没有出现不同命名空间出现相同名字的类属性可以不用using(){}
+            */
+        using (FileStream fs = new FileStream(SaveAssetPath, FileMode.OpenOrCreate, FileAccess.Write))
+        {
+            long nowFileLength = fs.Length; //当前文件长度,断点前已经下载的文件长度。
+            Debug.Log(fs.Length);
+            //判断当前文件是否小于要下载文件的长度，即文件是否下载完成
+            if (nowFileLength < totalLength)
+            {
+                Debug.Log("还没下载完成");
+                /*使用Seek方法 可以随机读写文件
+                * Seek()  ----------有两个参数 第一参数规定文件指针以字节为单位移动的距离。第二个参数规定开始计算的位置
+                * 第二个参数SeekOrigin 有三个值：Begin  Current   End
+                * fs.Seek(8,SeekOrigin.Begin);表示 将文件指针从开头位置移动到文件的第8个字节
+                * fs.Seek(8,SeekOrigin.Current);表示 将文件指针从当前位置移动到文件的第8个字节
+                * fs.Seek(8,SeekOrigin.End);表示 将文件指针从最后位置移动到文件的第8个字节
+                */
+                fs.Seek(nowFileLength, SeekOrigin.Begin);  //从开头位置，移动到当前已下载的子节位置
+                UnityWebRequest uwr = UnityWebRequest.Get(LoadAssetPath); //创建UnityWebRequest对象，将Url传入
+                uwr.SetRequestHeader("Range", "bytes=" + nowFileLength + "-" + totalLength);//修改请求头从n-m之间
+                uwr.SendWebRequest();                      //开始请求
+                if (huwr.result == UnityWebRequest.Result.ConnectionError || huwr.result == UnityWebRequest.Result.ProtocolError) //如果出错
+                {
+                    Debug.Log(uwr.error); //输出 错误信息
+                    yield break;
+                }
+
+                long index = 0;     //从该索引处继续下载
+                while (nowFileLength < totalLength) //只要下载没有完成，一直执行此循环
+                {
+                    yield return null;
+                    byte[] data = uwr.downloadHandler.data;
+                    if (data != null)
+                    {
+                        long length = data.Length - index;
+                        fs.Write(data, (int)index, (int)length); //写入文件
+                        index += length;
+                        nowFileLength += length;
+                        Debug.Log($"当前进度是:{Math.Floor((float)nowFileLength / totalLength * 100)}%");
+                        if (nowFileLength >= totalLength) //如果下载完成了
+                        {
+                            Debug.Log("下载完成");
+                            break;
+                        }
+                    }
+                }
+                huwr.Dispose();
+                uwr.Dispose();
+            }
+        }
+    }
 
     /// <summary>
     /// 获取资源服务器地址
@@ -617,7 +550,8 @@ public class Init : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void OnDownloadErrorFunction(string fileName, string error)
     {
-        Debug.LogError(string.Format("下载出错：文件名：{0}, 错误信息：{1}", fileName, error));
+        //Debug.LogError(string.Format("下载出错：文件名：{0}, 错误信息：{1}", fileName, error));
+        LoadingText.text = string.Format("下载出错：文件名：{0}, 错误信息：{1}", fileName, error);
     }
 
     /// <summary>
@@ -630,8 +564,12 @@ public class Init : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void OnDownloadProgressUpdateFunction(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)
     {
-        Debug.Log(string.Format("文件总数：{0}, 已下载文件数：{1}, 下载总大小：{2}, 已下载大小：{3}", totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes));
-        LoadingText.text = string.Format("文件总数：{0}, 已下载文件数：{1}, 下载总大小：{2}, 已下载大小：{3}", totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes);
+        //Debug.Log(string.Format("文件总数：{0}, 已下载文件数：{1}, 下载总大小：{2}, 已下载大小：{3}", totalDownloadCount, currentDownloadCount, totalDownloadBytes, currentDownloadBytes));
+        //LoadingText.text = string.Format($"文件总数：{totalDownloadCount}, 已下载文件数：{currentDownloadCount}, 下载总大小：{GetMB(totalDownloadBytes)}, 已下载大小：{GetMB(currentDownloadBytes)}");
+
+        LoadingText.text = string.Format($"已下载文件数：{currentDownloadCount}/{totalDownloadCount}," +
+            $"已下载大小：{(currentDownloadBytes)}/{(totalDownloadBytes)}");
+        Debug.Log("需要下载的:" + currentDownloadBytes);
     }
 
     /// <summary>
@@ -642,8 +580,8 @@ public class Init : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void OnStartDownloadFileFunction(string fileName, long sizeBytes)
     {
-        Debug.Log(string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes));
-        LoadingText.text = string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes);
+        //Debug.Log(string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes));
+        LoadingText.text = string.Format($"开始下载：文件名：{fileName}, 文件大小：{GetMB(sizeBytes)}");
     }
 
     /// <summary>
@@ -653,7 +591,7 @@ public class Init : MonoBehaviour
     /// <exception cref="NotImplementedException"></exception>
     private void OnDownloadOverFunction(bool isSucceed)
     {
-        Debug.Log("下载" + (isSucceed ? "成功" : "失败"));
+        //Debug.Log("下载" + (isSucceed ? "成功" : "失败"));
         LoadingText.text = "下载" + (isSucceed ? "成功" : "失败");
     }
 
@@ -662,7 +600,7 @@ public class Init : MonoBehaviour
     /// </summary>
     private void OnClearCacheFunction(AsyncOperationBase asyncOperationBase)
     {
-        Debug.Log("清理缓存完毕,流程更新完毕");
+        //Debug.Log("清理缓存完毕,流程更新完毕");
         LoadingText.text = "清理缓存完毕,流程更新完毕";
     }
 
@@ -674,7 +612,6 @@ public class Init : MonoBehaviour
     {
         /// 注意，补充元数据是给AOT dll补充元数据，而不是给热更新dll补充元数据。
         /// 热更新dll不缺元数据，不需要补充，如果调用LoadMetadataForAOTAssembly会返回错误
-        /// 
         HomologousImageMode mode = HomologousImageMode.SuperSet;
         foreach (var aotDllName in AOTMetaAssemblyNames)
         {
@@ -693,6 +630,18 @@ public class Init : MonoBehaviour
     private static byte[] GetAssetData(string dllName)
     {
         return s_assetDatas[dllName];
+    }
+
+    /// <summary>
+    /// 将B转换为MB
+    /// </summary>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    private string GetMB(long b)
+    {
+        for (int i = 0; i < 2; i++)
+            b /= 1024;
+        return $"{b}MB";
     }
 
     #endregion

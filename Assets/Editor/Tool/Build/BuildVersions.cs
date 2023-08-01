@@ -59,6 +59,8 @@ namespace ACFrameworkCore
             if (GUILayout.Button("转移版本号到测试服务器目录"))
             {
                 string movePath = $"{Application.dataPath.Replace("Assets", "")}Bundles/ACPackageVersion.xml";
+                if (File.Exists(movePath))
+                    File.Delete(movePath);
                 File.Move(SaveXMLVersion, movePath);
                 AssetDatabase.Refresh();
             }

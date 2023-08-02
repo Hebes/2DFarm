@@ -25,7 +25,8 @@ public class InitGame
                 new MonoComponent(),
                 new ResComponent(),
                 new AduioComponent(),
-                new UIComponent(),
+                //new UIComponent(),
+                new UIManager(),
             };
 
         foreach (var init in _initHs)

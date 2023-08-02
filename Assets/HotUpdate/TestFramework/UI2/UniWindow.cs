@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +18,7 @@ using YooAsset;
 
 namespace UniFramework.Window
 {
-	public static class UniWindow
+    public static class UniWindow
 	{
 		public struct WindowInfo
 		{

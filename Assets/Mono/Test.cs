@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace ACFrameworkCore
 {
-    public interface IRead
+    public class Test:MonoBehaviour
     {
-        void SaveData(object data, string fileName);
-
-        T LoadData<T>(string fileName) where T : class, new();
+        private void Start()
+        {
+        }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 作者:
 	暗沉
 描述:
-    UI界面帮助类
+    UI界面拓展类
 
 -----------------------*/
 

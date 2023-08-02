@@ -57,6 +57,22 @@ namespace ACFrameworkCore
         }
 
         /// <summary>
+        /// ºÏ≤È“Ù–ß «∑Ò≤•∑≈Ω· ¯
+        /// </summary>
+        public void ChackSoundOpenOver()
+        {
+            for (int i = soundList.Count - 1; i >= 0; --i)
+            {
+                if (!soundList[i].isPlaying)
+                {
+                    GameObject.Destroy(soundList[i]);
+                    soundList.RemoveAt(i);
+                }
+            }
+        }
+
+        //***********************±≥æ∞“Ù¿÷***********************
+        /// <summary>
         /// ≤•∑≈±≥æ∞“Ù¿÷
         /// </summary>
         /// <param name="name"></param>
@@ -97,6 +113,7 @@ namespace ACFrameworkCore
         }
 
 
+        //***********************“Ù–ß“Ù¿÷***********************
         /// <summary>
         /// ≤•∑≈“Ù–ß
         /// </summary>
@@ -137,19 +154,6 @@ namespace ACFrameworkCore
             }
         }
 
-        /// <summary>
-        /// ºÏ≤È“Ù–ß «∑Ò≤•∑≈Ω· ¯
-        /// </summary>
-        public void ChackSoundOpenOver()
-        {
-            for (int i = soundList.Count - 1; i >= 0; --i)
-            {
-                if (!soundList[i].isPlaying)
-                {
-                    GameObject.Destroy(soundList[i]);
-                    soundList.RemoveAt(i);
-                }
-            }
-        }
+     
     }
 }

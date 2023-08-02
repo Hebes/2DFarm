@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UniFramework.Window;
 using UnityEngine;
 using YooAsset;
 
@@ -11,6 +12,9 @@ using YooAsset;
 	暗沉
 描述:
     UI管理类
+    需要参考:
+    https://blog.csdn.net/qq_31480839/article/details/106023788
+    https://blog.csdn.net/qq_35030499/article/details/83241388
 
 -----------------------*/
 
@@ -31,28 +35,16 @@ namespace ACFrameworkCore
         public static UIComponent Instance { get; private set; }
 
         private Dictionary<string, IUIState> panelDic { get; set; }
+        private Dictionary<string, AssetOperationHandle> AssetOperationHandleList { get; set; }//资源句柄
 
         private GameObject Global { get; set; }
-        private GameObject canvas { get; set; }
-
-        public GameObject CanvasGO
-        {
-            get
-            {
-                if (canvas == null)
-                {
-                    canvas = Global.transform.Find("Canvas").gameObject;
-                    if (canvas == null)
-                        Debug.LogError($"当前场景中不存在Canvas");
-                }
-                return canvas;
-            }
-        }
+        private GameObject Canvas => Global.transform.Find("Canvas").gameObject;
 
         public void ICroeInit()
         {
             Instance = this;
             panelDic = new Dictionary<string, IUIState>();
+            AssetOperationHandleList = new Dictionary<string, AssetOperationHandle>();
 
             //DLog.Log("创建出来的物体名称是: " + (handle1.AssetObject as GameObject).name);
             GameObject GlobalTemp = YooAssetLoadExpsion.YooaddetLoadSync("Global");//加载全局组件
@@ -61,22 +53,12 @@ namespace ACFrameworkCore
             DLog.Log("UI管理类初始化成功!");
         }
 
-        /// <summary>
-        /// 获取层级
-        /// </summary>
-        /// <param name="layer"></param>
-        /// <returns></returns>
         public Transform GetLayerFather(EUILayer layer)
         {
-            return CanvasGO.transform.Find(layer.ToString());
+            return Canvas.transform.Find(layer.ToString());
         }
 
-        /// <summary>
-        /// 创建UI
-        /// </summary>
-        /// <param name="panelName"></param>
-        /// <param name="layer"></param>
-        public void OnCreatUI<T>(string panelName, EUILayer layer) where T : IUIState, new()
+        public void OnUICreatAsync<T>(string panelName, EUILayer layer, Action action) where T : IUIState, new()
         {
             //不存在的话就加载开启
             YooAssetLoadExpsion.YooaddetLoadAsync(panelName, obj =>
@@ -93,42 +75,43 @@ namespace ACFrameworkCore
                 t.UIGO = UIGO;
                 t.UIAwake();
                 MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+
+                //设置窗口层级
+                WindowAttribute attribute = Attribute.GetCustomAttribute(typeof(T), typeof(WindowAttribute)) as WindowAttribute;
+                if (attribute == null)
+                    throw new Exception($"Window {typeof(T).FullName} not found {nameof(WindowAttribute)} attribute.");
+                UIGO.GetComponent<Canvas>().sortingOrder = attribute.WindowLayer;
+
                 panelDic.Add(panelName, t);
+                AssetOperationHandleList.Add(panelName, obj);
+                action?.Invoke();
             });
         }
-
-        /// <summary>
-        /// 打开UI场景
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="panelName"></param>
-        /// <param name="layer"></param>
-        public void OnOpenUI<T>(string panelName, EUILayer layer) where T : IUIState, new()
+        public void OnOpenUIAsync<T>(string panelName, EUILayer layer, Action action = null) where T : IUIState, new()
         {
             //存在的话就开启
             if (panelDic.ContainsKey(panelName))
                 panelDic[panelName].UIOnEnable();
             else
-                OnCreatUI<T>(panelName, layer);
+                OnUICreatAsync<T>(panelName, layer, action);
         }
 
-        /// <summary>
-        /// 获取面板
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="panelName"></param>
-        /// <returns></returns>
-        public T OnGetUI<T>(string panelName) where T : class
+        public void OnOpenUI(string panelName)
+        {
+            //if (!panelDic.ContainsKey(panelName)) return;
+            //panelDic[panelName]
+        }
+        public T OnUIGet<T>(string panelName) where T : class
         {
             panelDic.TryGetValue(panelName, out IUIState t);
             if (t == null) return default(T);
             return t as T;
         }
-
-        /// <summary>
-        /// 关闭面板
-        /// </summary>
-        /// <param name="panelName"></param>
+        public bool OnUIExist(string panelName)
+        {
+            panelDic.TryGetValue(panelName, out IUIState t);
+            return t != null;
+        }
         public void OnCloseUI(string panelName)
         {
             panelDic.TryGetValue(panelName, out IUIState t);
@@ -137,19 +120,17 @@ namespace ACFrameworkCore
             MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
             t.UIGO.SetActive(false);
         }
-
-        /// <summary>
-        /// 删除面板
-        /// </summary>
-        /// <param name="panelName"></param>
-        public void OnRemoveUI(string panelName)
+        public void OnDestroyUI(string panelName)
         {
             panelDic.TryGetValue(panelName, out IUIState t);
             if (t == null) return;
             MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
             t.UIOnDestroy();//关闭面板
+            //销毁资源
             GameObject.Destroy(panelDic[panelName].UIGO);//删除面板
             panelDic.Remove(panelName);//字典移除
+            AssetOperationHandleList.TryGetValue(panelName, out AssetOperationHandle assetOperationHandle);
+            assetOperationHandle.Release();
         }
     }
 }

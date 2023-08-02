@@ -34,10 +34,5 @@ namespace ACFrameworkCore
                 return instance;
             }
         }
-       
-        //protected virtual void Awake()
-        //{
-        //    instance = this as T;
-        //}
     }
 }

@@ -1,6 +1,10 @@
-﻿using UnityEngine;
+﻿using SUIFW;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using YooAsset;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 /*--------脚本描述-----------
 				
@@ -15,8 +19,9 @@ using UnityEngine.UI;
 
 namespace ACFrameworkCore
 {
+    #region enum
     /// <summary> UI窗体（位置）类型 </summary>
-    public enum UIFormType
+    public enum EUIType
     {
         /// <summary> 普通窗体 </summary>
         Normal,
@@ -26,24 +31,18 @@ namespace ACFrameworkCore
         PopUp,
         /// <summary> 独立的窗口 </summary>
     }
-
-    /// <summary>
-    /// UI窗体的显示类型
-    /// </summary>
-    public enum UIFormShowMode
+    /// <summary> UI窗体的显示类型 </summary>
+    public enum EUIMode
     {
         //普通
-        Normal,
+        Normal,//模式允许多个窗体同时显示
         //反向切换
-        ReverseChange,
+        ReverseChange,//一般要求玩家必须先关闭弹出的顶层窗体，再依次关闭下一级窗体
         //隐藏其他
-        HideOther
+        HideOther,//一般应用于全局性的窗体
     }
-
-    /// <summary>
-    /// UI窗体透明度类型
-    /// </summary>
-    public enum UIFormLucenyType
+    /// <summary> UI窗体透明度类型 </summary>
+    public enum EUILucenyType
     {
         //完全透明，不能穿透
         Lucency,
@@ -54,21 +53,11 @@ namespace ACFrameworkCore
         //可以穿透
         Pentrate
     }
+    #endregion
 
     public class UIManager : ICore
     {
-        private static UIManager m_Instance = null;
-        public static UIManager Instance
-        {
-            get
-            {
-                if (m_Instance == null)
-                {
-                    InitRoot();
-                }
-                return m_Instance;
-            }
-        }
+        public static UIManager Instance = null;
 
         public Transform root;
         public Transform fixedRoot;
@@ -76,9 +65,29 @@ namespace ACFrameworkCore
         public Transform popupRoot;
         public Camera uiCamera;
 
+        private Dictionary<string, UIBase> _DicALLUIForms;          //缓存所有UI窗体
+        private Dictionary<string, UIBase> _DicCurrentShowUIForms;  //当前显示的UI窗体
+        private Stack<UIBase> _StaCurrentUIForms;                   //定义“栈”集合,存储显示当前所有[反向切换]的窗体类型
+        private Dictionary<string, AssetOperationHandle> YooAssetHdnleDic;//资源加载句柄
+        //UI根节点                                                            
+        private Transform _TraCanvasTransfrom = null;
+        //全屏幕显示的节点
+        private Transform Normal = null;
+        //固定显示的节点
+        private Transform Fixed = null;
+        //弹出节点
+        private Transform PopUp = null;
+        //UI管理脚本的节点
+        private Transform _TraUIScripts = null;
+
         public void ICroeInit()
         {
-            m_Instance = this;
+            Instance = this;
+            //字段初始化
+            _DicALLUIForms = new Dictionary<string, UIBase>();
+            _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
+            _StaCurrentUIForms = new Stack<UIBase>();
+            YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
             InitRoot();
         }
         private static void InitRoot()
@@ -168,6 +177,264 @@ namespace ACFrameworkCore
             return null;
         }
 
+        #region 增删改查方法
+        public void OnShwoUIPanel<T>(string uiFormName) where T : UIBase, new()
+        {
+            //UI类
+            T t = LoadUIPanel<T>(uiFormName);
 
+            //是否清空“栈集合”中得数据
+            if (t.IsClearStack)
+                ClearStackArray();
+
+            //根据不同的UI窗体的显示模式，分别作不同的加载处理
+            switch (t.mode)
+            {
+                case EUIMode.Normal:                 //“普通显示”窗口模式
+                    //把当前窗体加载到“当前窗体”集合中。
+                    LoadUIToCurrentCache<T>(uiFormName);
+                    break;
+                case EUIMode.ReverseChange:          //需要“反向切换”窗口模式
+                    PushUIFormToStack(uiFormName);
+                    break;
+                case EUIMode.HideOther:              //“隐藏其他”窗口模式
+                    EnterUIFormsAndHideOther(uiFormName);
+                    break;
+            }
+        }//显示界面
+        public void CloseUIForms(string uiFormName)
+        {
+            UIBase baseUiForm;                          //窗体基类
+
+            //参数检查
+            if (string.IsNullOrEmpty(uiFormName)) return;
+            //“所有UI窗体”集合中，如果没有记录，则直接返回
+            _DicALLUIForms.TryGetValue(uiFormName, out baseUiForm);
+            if (baseUiForm == null) return;
+            //根据窗体不同的显示类型，分别作不同的关闭处理
+            switch (baseUiForm.mode)
+            {
+                case EUIMode.Normal:
+                    //普通窗体的关闭
+                    ExitUIForms(uiFormName);
+                    break;
+                case EUIMode.ReverseChange:
+                    //反向切换窗体的关闭
+                    PopUIFroms();
+                    break;
+                case EUIMode.HideOther:
+                    //隐藏其他窗体关闭
+                    ExitUIFormsAndDisplayOther(uiFormName);
+                    break;
+
+                default:
+                    break;
+            }
+        }//界面关闭
+        #endregion
+
+        #region 显示界面
+        private T LoadUIPanel<T>(string uiFormName) where T : UIBase, new()
+        {
+            T t = new T();
+            //创建的UI克隆体预设
+            //GameObject goCloneUIPrefabs = YooAssetLoadExpsion.YooaddetLoadSync(uiFormName);
+            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(uiFormName);
+            YooAssetHdnleDic.Add(uiFormName, handle);
+            GameObject goCloneUIPrefabs = handle.InstantiateSync();
+
+            if (goCloneUIPrefabs == null)
+                DLog.Error("加载预制体失败");
+            t.gameObject = goCloneUIPrefabs;
+            switch (t.type)
+            {
+                case EUIType.Normal: goCloneUIPrefabs.transform.SetParent(Normal, false); break;//普通窗体节点
+                case EUIType.Fixed: goCloneUIPrefabs.transform.SetParent(Fixed, false); break;//固定窗体节点
+                case EUIType.PopUp: goCloneUIPrefabs.transform.SetParent(PopUp, false); break;//弹出窗体节点
+            }
+            //设置隐藏
+            goCloneUIPrefabs.SetActive(false);
+            //把克隆体，加入到“所有UI窗体”（缓存）集合中。
+            _DicALLUIForms.Add(uiFormName, t);
+            return t;
+        }
+        /// <summary>
+        /// 把当前窗体加载到“当前窗体”集合中
+        /// </summary>
+        /// <param name="uiFormName">窗体预设的名称</param>
+	    private void LoadUIToCurrentCache<T>(string uiFormName) where T : UIBase
+        {
+            UIBase baseUiForm;                          //UI窗体基类
+            UIBase baseUIFormFromAllCache;              //从“所有窗体集合”中得到的窗体
+
+            //如果“正在显示”的集合中，存在整个UI窗体，则直接返回
+            _DicCurrentShowUIForms.TryGetValue(uiFormName, out baseUiForm);
+            if (baseUiForm != null) return;
+            //把当前窗体，加载到“正在显示”集合中
+            _DicALLUIForms.TryGetValue(uiFormName, out baseUIFormFromAllCache);
+            if (baseUIFormFromAllCache != null)
+            {
+                _DicCurrentShowUIForms.Add(uiFormName, baseUIFormFromAllCache as T);
+                baseUIFormFromAllCache.UIOnEnable();           //显示当前窗体
+            }
+        }
+        /// <summary>
+        /// UI窗体入栈
+        /// </summary>
+        /// <param name="uiFormName">窗体的名称</param>
+        private void PushUIFormToStack(string uiFormName)
+        {
+            UIBase baseUIForm;                          //UI窗体
+
+            //判断“栈”集合中，是否有其他的窗体，有则“冻结”处理。
+            if (_StaCurrentUIForms.Count > 0)
+            {
+                UIBase topUIForm = _StaCurrentUIForms.Peek();
+                //栈顶元素作冻结处理
+                topUIForm.Freeze();
+            }
+            //判断“UI所有窗体”集合是否有指定的UI窗体，有则处理。
+            _DicALLUIForms.TryGetValue(uiFormName, out baseUIForm);
+            if (baseUIForm != null)
+            {
+                //当前窗口显示状态
+                baseUIForm.UIOnEnable();
+                //把指定的UI窗体，入栈操作。
+                _StaCurrentUIForms.Push(baseUIForm);
+            }
+            else
+            {
+                Debug.Log("baseUIForm==null,Please Check, 参数 uiFormName=" + uiFormName);
+            }
+        }
+        /// <summary>
+        /// (“隐藏其他”属性)打开窗体，且隐藏其他窗体
+        /// </summary>
+        /// <param name="strUIName">打开的指定窗体名称</param>
+        private void EnterUIFormsAndHideOther(string strUIName)
+        {
+            UIBase baseUIForm;                          //UI窗体基类
+            UIBase baseUIFormFromALL;                   //从集合中得到的UI窗体基类
+
+
+            //参数检查
+            if (string.IsNullOrEmpty(strUIName)) return;
+
+            _DicCurrentShowUIForms.TryGetValue(strUIName, out baseUIForm);
+            if (baseUIForm != null) return;
+
+            //把“正在显示集合”与“栈集合”中所有窗体都隐藏。
+            foreach (UIBase baseUI in _DicCurrentShowUIForms.Values)
+            {
+                baseUI.UIOnDisable();
+            }
+            foreach (UIBase staUI in _StaCurrentUIForms)
+            {
+                staUI.UIOnDisable();
+            }
+
+            //把当前窗体加入到“正在显示窗体”集合中，且做显示处理。
+            _DicALLUIForms.TryGetValue(strUIName, out baseUIFormFromALL);
+            if (baseUIFormFromALL != null)
+            {
+                _DicCurrentShowUIForms.Add(strUIName, baseUIFormFromALL);
+                //窗体显示
+                baseUIFormFromALL.UIOnEnable();
+            }
+        }
+        #endregion
+
+        #region 界面关闭
+        /// <summary>
+        /// 退出指定UI窗体
+        /// </summary>
+        /// <param name="strUIFormName"></param>
+        private void ExitUIForms(string strUIFormName)
+        {
+            UIBase baseUIForm;                          //窗体基类
+
+            //"正在显示集合"中如果没有记录，则直接返回。
+            _DicCurrentShowUIForms.TryGetValue(strUIFormName, out baseUIForm);
+            if (baseUIForm == null) return;
+            //指定窗体，标记为“隐藏状态”，且从"正在显示集合"中移除。
+            baseUIForm.UIOnDisable();
+            _DicCurrentShowUIForms.Remove(strUIFormName);
+            baseUIForm.UIOnDestroy();
+            //资源卸载
+            YooAssetHdnleDic.TryGetValue(strUIFormName, out AssetOperationHandle yooassetHandle);
+            yooassetHandle?.Dispose();
+        }
+
+        /// <summary>
+        /// （“反向切换”属性）窗体的出栈逻辑
+        /// </summary>
+        private void PopUIFroms()
+        {
+            if (_StaCurrentUIForms.Count >= 2)
+            {
+                //出栈处理
+                UIBase topUIForms = _StaCurrentUIForms.Pop();
+                //做隐藏处理
+                topUIForms.UIOnDisable();
+                //出栈后，下一个窗体做“重新显示”处理。
+                UIBase nextUIForms = _StaCurrentUIForms.Peek();
+                nextUIForms.UIOnEnable();
+            }
+            else if (_StaCurrentUIForms.Count == 1)
+            {
+                //出栈处理
+                UIBase topUIForms = _StaCurrentUIForms.Pop();
+                //做隐藏处理
+                topUIForms.UIOnDisable();
+            }
+        }
+
+        /// <summary>
+        /// (“隐藏其他”属性)关闭窗体，且显示其他窗体
+        /// </summary>
+        /// <param name="strUIName">打开的指定窗体名称</param>
+        private void ExitUIFormsAndDisplayOther(string strUIName)
+        {
+            UIBase baseUIForm;                          //UI窗体基类
+
+            //参数检查
+            if (string.IsNullOrEmpty(strUIName)) return;
+
+            _DicCurrentShowUIForms.TryGetValue(strUIName, out baseUIForm);
+            if (baseUIForm == null) return;
+
+            //当前窗体隐藏状态，且“正在显示”集合中，移除本窗体
+            baseUIForm.UIOnDisable();
+            _DicCurrentShowUIForms.Remove(strUIName);
+
+            //把“正在显示集合”与“栈集合”中所有窗体都定义重新显示状态。
+            foreach (UIBase baseUI in _DicCurrentShowUIForms.Values)
+            {
+                baseUI.UIOnEnable();
+            }
+            foreach (UIBase staUI in _StaCurrentUIForms)
+            {
+                staUI.UIOnEnable();
+            }
+        }
+        #endregion
+
+        #region 其他
+        /// <summary>
+        /// 是否清空“栈集合”中得数据
+        /// </summary>
+        /// <returns></returns>
+        private bool ClearStackArray()
+        {
+            if (_StaCurrentUIForms != null && _StaCurrentUIForms.Count >= 1)
+            {
+                //清空栈集合
+                _StaCurrentUIForms.Clear();
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
     }
 }

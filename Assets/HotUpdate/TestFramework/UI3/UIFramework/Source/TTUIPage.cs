@@ -25,6 +25,7 @@
         None,      //独立的窗口
     }
 
+
     public enum UIMode
     {
         DoNothing,

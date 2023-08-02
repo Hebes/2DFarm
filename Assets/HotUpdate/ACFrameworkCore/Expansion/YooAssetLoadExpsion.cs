@@ -17,30 +17,50 @@ namespace ACFrameworkCore
 {
     public static class YooAssetLoadExpsion
     {
-        /// <summary>
-        /// 异步加载资源拓展方法
-        /// </summary>
-        /// <param name="GOName"></param>
+        #region 异步加载资源拓展方法
         public static void YooaddetLoadAsync(this string GOName, Action<AssetOperationHandle> action = null)
         {
             //TODO 后续要从配置中读取 或者直接配置
             var package = YooAssets.GetPackage(Config.YooAseetPackage);
-            AssetOperationHandle handle1 = package.LoadAssetAsync<GameObject>(GOName);
-            handle1.Completed += obj => { action?.Invoke(obj); };
+            AssetOperationHandle handle = package.LoadAssetAsync<GameObject>(GOName);
+            handle.Completed += obj => { action?.Invoke(obj); };
         }
-
-        /// <summary>
-        /// 同步加载资源拓展方法
-        /// </summary>
-        /// <param name="GOName"></param>
-        /// <returns></returns>
-        public static GameObject YooaddetLoadSync(this string GOName)
+        public static AssetOperationHandle YooaddetLoadAsync(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage("PC");
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            return package.LoadAssetAsync<GameObject>(GOName);
+        }
+        public static AssetOperationHandle YooaddetLoadAsync<T>(this string GOName) where T : UnityEngine.Object
+        {
+            //TODO 后续要从配置中读取 或者直接配置
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            return package.LoadAssetAsync<T>(GOName);
+        }
+        public static T YooaddetLoadAsyncObj<T>(this string GOName) where T : UnityEngine.Object
+        {
+            //TODO 后续要从配置中读取 或者直接配置
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(GOName);
+            handle.WaitForAsyncComplete();
+            return handle.AssetObject as T;
+        }
+        #endregion
+
+        #region 同步加载资源拓展方法
+        public static GameObject YooaddetLoadSyncGO(this string GOName)
+        {
+            //TODO 后续要从配置中读取 或者直接配置
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
             AssetOperationHandle handle1 = package.LoadAssetSync<GameObject>(GOName);
             return (GameObject)handle1.AssetObject;
-            //handle1.Completed += obj => { obj.InstantiateSync(); };
         }
+        public static AssetOperationHandle YooaddetLoadSyncAOH(this string GOName)
+        {
+            //TODO 后续要从配置中读取 或者直接配置
+            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            return package.LoadAssetSync<GameObject>(GOName);
+        }
+        #endregion
     }
 }

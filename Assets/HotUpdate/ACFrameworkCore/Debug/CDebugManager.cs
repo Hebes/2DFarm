@@ -20,7 +20,7 @@ namespace ACFrameworkCore
     {
         public void ICroeInit()
         {
-            //InitiativeLog();
+            InitiativeLog();
             PassivityLog();
             DLog.Log("日志模块初始化完毕!");
         }

@@ -9,30 +9,31 @@
         Fixed,
         /// <summary> 弹出窗体 </summary>
         PopUp,
-        /// <summary> 独立的窗口 </summary>
+        /// <summary> 独立的窗口 可移动的 </summary> TODO 等待敲代码
+        Mobile,
     }
 
     /// <summary> UI窗体的显示类型 </summary>
     public enum EUIMode
     {
-        //普通
-        Normal,//模式允许多个窗体同时显示
-        //反向切换
-        ReverseChange,//一般要求玩家必须先关闭弹出的顶层窗体，再依次关闭下一级窗体
-        //隐藏其他
-        HideOther,//一般应用于全局性的窗体
+        /// <summary> 普通 模式允许多个窗体同时显示 </summary>
+        Normal,
+        /// <summary> 反向切换 一般要求玩家必须先关闭弹出的顶层窗体，再依次关闭下一级窗体</summary>
+        ReverseChange,
+        /// <summary> 隐藏其他 一般应用于全局性的窗体 </summary>
+        HideOther,
     }
 
     /// <summary> UI窗体透明度类型 </summary>
     public enum EUILucenyType
     {
-        //完全透明，不能穿透
+        /// <summary> 完全透明，不能穿透 </summary>
         Lucency,
-        //半透明，不能穿透
+        /// <summary> 半透明，不能穿透 </summary>
         Translucence,
-        //低透明度，不能穿透
+        /// <summary> 低透明度，不能穿透 </summary>
         ImPenetrable,
-        //可以穿透
+        /// <summary> 可以穿透 </summary>
         Pentrate
     }
 

@@ -23,9 +23,10 @@ namespace ACFrameworkCore
         public bool IsClearStack;                           //是否清空“栈集合”
         public EUIType type = EUIType.Normal;               //窗口的位置
         public EUIMode mode = EUIMode.Normal;               //窗口显示类型
-        public EUILucenyType lucenyType = EUILucenyType.ImPenetrable;   //窗口的透明度
-        public string name;                //UI的名称
-        public GameObject gameObject;       //窗口的物体
+        public EUILucenyType lucenyType = EUILucenyType.Lucency;   //窗口的透明度
+
+        public string UIName { get; set; }                        //UI的名称
+        public GameObject gameObject { get; set; }                //窗口的物体
 
         /// <summary>
         /// 初始化方法
@@ -34,24 +35,14 @@ namespace ACFrameworkCore
         /// <param name="mod">窗口显示类型</param>
         /// <param name="lucenyType">窗口的透明度</param>
         /// <param name="isClearStack">是否清空“栈集合”</param>
-        //public UIBase(EUIType type, EUIMode mod, EUILucenyType lucenyType, bool isClearStack = false)
-        //{
-        //    this.type = type;
-        //    this.mode = mod;
-        //    this.lucenyType = lucenyType;
-        //    this.name = this.GetType().ToString();
-        //    IsClearStack = isClearStack;
-        //}
-
         protected void InitUIBase(EUIType type, EUIMode mod, EUILucenyType lucenyType, bool isClearStack = false)
         {
             this.type = type;
             this.mode = mod;
             this.lucenyType = lucenyType;
-            this.name = this.GetType().ToString();
+            //this.name = gameObject.name.Replace("(Clone)", "");// this.GetType().ToString();
             IsClearStack = isClearStack;
         }
-
 
         #region 生命周期
         public virtual void UIAwake() { }       //初始化执行
@@ -64,18 +55,14 @@ namespace ACFrameworkCore
             this.gameObject.SetActive(true);
             //设置模态窗体调用(必须是弹出窗体)
             if (type == EUIType.PopUp)
-            {
                 UIMaskMgr.Instance.SetMaskWindow(this.gameObject, lucenyType);
-            }
         }    //开启执行
         public virtual void UIOnDisable()
         {
             this.gameObject.SetActive(false);
             //取消模态窗体调用
             if (type == EUIType.PopUp)
-            {
                 UIMaskMgr.Instance.CancelMaskWindow();
-            }
         }   //关闭执行
         public virtual void UIOnDestroy() { }   //销毁执行
         public virtual void Freeze()
@@ -97,6 +84,7 @@ namespace ACFrameworkCore
             if (goButton != null)
                 EventTriggerListener.Get(goButton).onClick = delHandle;
         }
+
         /// <summary>
         /// 打开UI窗体
         /// </summary>
@@ -105,21 +93,20 @@ namespace ACFrameworkCore
         {
             UIManager.Instance.ShwoUIPanel<T>(uiFormName);
         }
-
         /// <summary>
         /// 关闭当前UI窗体
         /// </summary>
 	    protected void CloseUIForm()
         {
-            string strUIFromName = string.Empty;            //处理后的UIFrom 名称
             int intPosition = -1;
-
-            strUIFromName = GetType().ToString();             //命名空间+类名
+            string strUIFromName = UIName;  // GetType().ToString().Replace("Panel","");             //命名空间+类名 //处理后的UIFrom 名称
             intPosition = strUIFromName.IndexOf('.');
             if (intPosition != -1)
                 strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
+            DLog.Log($"关闭的界面名称是:{strUIFromName}");
             UIManager.Instance.CloseUIForms(strUIFromName);
         }
+
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -140,13 +127,17 @@ namespace ACFrameworkCore
         {
             MessageCenter.AddMsgListener(messagType, handler);
         }
+
         /// <summary>
         /// 显示语言
         /// </summary>
         /// <param name="id"></param>
         public string Show(string message)
         {
-            return LauguageMgr.GetInstance().ShowText(message);
+            //TODO 后续需要自己写
+            return string.Empty;
+            //return LauguageMgr.GetInstance().ShowText(message);
+
         }
         #endregion
     }

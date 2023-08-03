@@ -14,10 +14,11 @@ namespace ACFrameworkCore
         public override void UIAwake()
         {
             base.UIAwake();
+            InitUIBase(EUIType.Normal, EUIMode.HideOther, EUILucenyType.Translucence);
             RigisterButtonObjectEvent("Break",
                p =>
                {
-                   OpenUIForm<StartPanel>("Start");
+                   CloseUIForm();
                });
         }
     }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SUIFW;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using YooAsset;
 
 /*--------脚本描述-----------
@@ -148,12 +148,13 @@ namespace ACFrameworkCore
             return null;
         }
 
-        #region 增删改查方法
+        #region 界面增删改查方法
         public void ShwoUIPanel<T>(string uiFormName) where T : UIBase, new()
         {
-            //UI类
-            T t = LoadUIPanel<T>(uiFormName);
-
+            //是否存在UI类
+            _DicALLUIForms.TryGetValue(uiFormName, out UIBase uIBase);
+            T t = uIBase == null ? LoadUIPanel<T>(uiFormName) : uIBase as T;//UI类
+            //DLog.Log(LogCoLor.Green, $"当前的UI窗体的显示类型是:{t.mode}");
             //是否清空“栈集合”中得数据
             if (t.IsClearStack)
                 ClearStackArray();
@@ -161,48 +162,40 @@ namespace ACFrameworkCore
             //根据不同的UI窗体的显示模式，分别作不同的加载处理
             switch (t.mode)
             {
-                case EUIMode.Normal:                 //“普通显示”窗口模式
-                    //把当前窗体加载到“当前窗体”集合中。
-                    LoadUIToCurrentCache<T>(uiFormName);
-                    break;
-                case EUIMode.ReverseChange:          //需要“反向切换”窗口模式
-                    PushUIFormToStack(uiFormName);
-                    break;
-                case EUIMode.HideOther:              //“隐藏其他”窗口模式
-                    EnterUIFormsAndHideOther(uiFormName);
-                    break;
+                case EUIMode.Normal: LoadUIToCurrentCache<T>(uiFormName); break; //“普通显示”窗口模式//把当前窗体加载到“当前窗体”集合中。
+                case EUIMode.ReverseChange: PushUIFormToStack(uiFormName); break; //需要“反向切换”窗口模式
+                case EUIMode.HideOther: EnterUIFormsAndHideOther(uiFormName); break;//“隐藏其他”窗口模式
             }
-            MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+            
         }//显示界面
         public void CloseUIForms(string uiFormName)
         {
-            UIBase baseUiForm;                          //窗体基类
-
-            //参数检查
-            if (string.IsNullOrEmpty(uiFormName)) return;
             //“所有UI窗体”集合中，如果没有记录，则直接返回
-            _DicALLUIForms.TryGetValue(uiFormName, out baseUiForm);
+            _DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUiForm);
             if (baseUiForm == null) return;
+            //DLog.Log($"当前的UI窗体的显示类型是:{baseUiForm.mode}");
+            //DLog.Log(LogCoLor.Blue, $"当前的UI窗体的显示类型是:{baseUiForm.mode}");
             //根据窗体不同的显示类型，分别作不同的关闭处理
+            MonoComponent.Instance.OnRemoveUpdateEvent(baseUiForm.UIUpdate);
             switch (baseUiForm.mode)
             {
-                case EUIMode.Normal:
-                    //普通窗体的关闭
-                    ExitUIForms(uiFormName);
-                    break;
-                case EUIMode.ReverseChange:
-                    //反向切换窗体的关闭
-                    PopUIFroms();
-                    break;
-                case EUIMode.HideOther:
-                    //隐藏其他窗体关闭
-                    ExitUIFormsAndDisplayOther(uiFormName);
-                    break;
-
-                default:
-                    break;
+                case EUIMode.Normal: ExitUIForms(uiFormName); break;//普通窗体的关闭
+                case EUIMode.ReverseChange: PopUIFroms(); break;//反向切换窗体的关闭
+                case EUIMode.HideOther: ExitUIFormsAndDisplayOther(uiFormName); break;//隐藏其他窗体关闭
             }
         }//界面关闭
+        public void RemoveUIFroms(string uiFormName)
+        {
+            //“所有UI窗体”集合中，如果没有记录，则直接返回
+            _DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUIForm);
+            if (baseUIForm == null) return;
+            MonoComponent.Instance.OnRemoveUpdateEvent(baseUIForm.UIUpdate);
+            baseUIForm.UIOnDestroy();
+            //资源卸载
+            YooAssetHdnleDic.TryGetValue(uiFormName, out AssetOperationHandle yooassetHandle);
+            yooassetHandle?.Dispose();
+
+        }//界面移除
         #endregion
 
         #region 显示界面
@@ -210,15 +203,15 @@ namespace ACFrameworkCore
         {
             T t = new T();
             //创建的UI克隆体预设
-            //GameObject goCloneUIPrefabs = YooAssetLoadExpsion.YooaddetLoadSync(uiFormName);
             AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(uiFormName);
             YooAssetHdnleDic.Add(uiFormName, handle);
             GameObject goCloneUIPrefabs = handle.InstantiateSync();//创建物体
+            t.gameObject = goCloneUIPrefabs;
+            t.UIName = uiFormName;
             t.UIAwake();
-
+            MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
             if (goCloneUIPrefabs == null)
                 DLog.Error("加载预制体失败");
-            t.gameObject = goCloneUIPrefabs;
             switch (t.type)
             {
                 case EUIType.Normal: goCloneUIPrefabs.transform.SetParent(Normal, false); break;//普通窗体节点
@@ -298,13 +291,9 @@ namespace ACFrameworkCore
 
             //把“正在显示集合”与“栈集合”中所有窗体都隐藏。
             foreach (UIBase baseUI in _DicCurrentShowUIForms.Values)
-            {
                 baseUI.UIOnDisable();
-            }
             foreach (UIBase staUI in _StaCurrentUIForms)
-            {
                 staUI.UIOnDisable();
-            }
 
             //把当前窗体加入到“正在显示窗体”集合中，且做显示处理。
             _DicALLUIForms.TryGetValue(strUIName, out baseUIFormFromALL);
@@ -324,33 +313,30 @@ namespace ACFrameworkCore
         /// <param name="strUIFormName"></param>
         private void ExitUIForms(string strUIFormName)
         {
-            UIBase baseUIForm;                          //窗体基类
-
             //"正在显示集合"中如果没有记录，则直接返回。
-            _DicCurrentShowUIForms.TryGetValue(strUIFormName, out baseUIForm);
+            _DicCurrentShowUIForms.TryGetValue(strUIFormName, out UIBase baseUIForm);
             if (baseUIForm == null) return;
             //指定窗体，标记为“隐藏状态”，且从"正在显示集合"中移除。
             baseUIForm.UIOnDisable();
             _DicCurrentShowUIForms.Remove(strUIFormName);
-            baseUIForm.UIOnDestroy();
-            //资源卸载
-            YooAssetHdnleDic.TryGetValue(strUIFormName, out AssetOperationHandle yooassetHandle);
-            yooassetHandle?.Dispose();
         }
         /// <summary>
         /// （“反向切换”属性）窗体的出栈逻辑
         /// </summary>
         private void PopUIFroms()
         {
+            //DLog.Log(LogCoLor.Blue, $"数量栈UI是{_StaCurrentUIForms.Count}");
             if (_StaCurrentUIForms.Count >= 2)
             {
                 //出栈处理
                 UIBase topUIForms = _StaCurrentUIForms.Pop();
                 //做隐藏处理
                 topUIForms.UIOnDisable();
+                //DLog.Log(LogCoLor.Blue, $"数量大于2隐藏的UI名称是:{topUIForms.UIName}");
                 //出栈后，下一个窗体做“重新显示”处理。
                 UIBase nextUIForms = _StaCurrentUIForms.Peek();
                 nextUIForms.UIOnEnable();
+                // DLog.Log(LogCoLor.Blue, $"开启的UI名称是:{nextUIForms.UIName}");
             }
             else if (_StaCurrentUIForms.Count == 1)
             {
@@ -358,6 +344,7 @@ namespace ACFrameworkCore
                 UIBase topUIForms = _StaCurrentUIForms.Pop();
                 //做隐藏处理
                 topUIForms.UIOnDisable();
+                //DLog.Log(LogCoLor.Blue, $"数量等于1隐藏的UI名称是:{topUIForms.UIName}");
             }
         }
         /// <summary>
@@ -366,12 +353,7 @@ namespace ACFrameworkCore
         /// <param name="strUIName">打开的指定窗体名称</param>
         private void ExitUIFormsAndDisplayOther(string strUIName)
         {
-            UIBase baseUIForm;                          //UI窗体基类
-
-            //参数检查
-            if (string.IsNullOrEmpty(strUIName)) return;
-
-            _DicCurrentShowUIForms.TryGetValue(strUIName, out baseUIForm);
+            _DicCurrentShowUIForms.TryGetValue(strUIName, out UIBase baseUIForm);
             if (baseUIForm == null) return;
 
             //当前窗体隐藏状态，且“正在显示”集合中，移除本窗体
@@ -380,13 +362,9 @@ namespace ACFrameworkCore
 
             //把“正在显示集合”与“栈集合”中所有窗体都定义重新显示状态。
             foreach (UIBase baseUI in _DicCurrentShowUIForms.Values)
-            {
                 baseUI.UIOnEnable();
-            }
             foreach (UIBase staUI in _StaCurrentUIForms)
-            {
                 staUI.UIOnEnable();
-            }
         }
         #endregion
 

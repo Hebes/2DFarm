@@ -16,11 +16,11 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class DebugComponent : ICore
+    public class CDebugManager : ICore
     {
         public void ICroeInit()
         {
-            InitiativeLog();
+            //InitiativeLog();
             PassivityLog();
             DLog.Log("日志模块初始化完毕!");
         }

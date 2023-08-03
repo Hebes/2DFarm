@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace ACFrameworkCore
 {
-    public class CameraComponent
+    public class MCameraManager
     {
 
     }

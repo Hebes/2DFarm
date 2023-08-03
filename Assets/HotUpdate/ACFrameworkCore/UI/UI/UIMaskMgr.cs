@@ -46,12 +46,12 @@ namespace ACFrameworkCore
         private void Init()
         {
             //得到UI根节点对象、脚本节点对象
-            _GoCanvasRoot = UIManager.Instance.CanvasTransfrom; 
+            _GoCanvasRoot = CUIManager.Instance.CanvasTransfrom; 
             //得到“顶层面板”、“遮罩面板”
             _GoTopPanel = _GoCanvasRoot;
             _GoMaskPanel = _GoCanvasRoot.GetChild("_UIMaskPanel").gameObject;
             //得到UI摄像机原始的“层深”
-            _UICamera = UIManager.Instance.UICamera; 
+            _UICamera = CUIManager.Instance.UICamera; 
             if (_UICamera != null)
             {
                 //得到UI摄像机原始“层深”

@@ -42,7 +42,7 @@ namespace ACFrameworkCore
         }
         public void LoadAssetAsyncIEnumerator<T>(string SceneName, UnityAction<T> callback) where T : UnityEngine.Object
         {
-            MonoComponent.Instance.MonoStartCoroutine(ResLoadAsync(SceneName, callback));
+            CMonoManager.Instance.MonoStartCoroutine(ResLoadAsync(SceneName, callback));
         }
         public void LoadAssetAsyncDelegate<T>(string ResName, System.Action<T> callback) where T : UnityEngine.Object
         {
@@ -78,7 +78,7 @@ namespace ACFrameworkCore
         }
         public void LoadAllAssetsAsyncIEnumerator<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
-            MonoComponent.Instance.MonoStartCoroutine(AllAssetsAsync(location, callback));
+            CMonoManager.Instance.MonoStartCoroutine(AllAssetsAsync(location, callback));
         }
         IEnumerator AllAssetsAsync<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
@@ -101,7 +101,7 @@ namespace ACFrameworkCore
         }
         public void LoadRawFileAsync<T>(string location, UnityAction<RawFileOperationHandle> callback) where T : UnityEngine.Object
         {
-            MonoComponent.Instance.MonoStartCoroutine(RawFileAsync(location, callback));
+            CMonoManager.Instance.MonoStartCoroutine(RawFileAsync(location, callback));
         }
         IEnumerator RawFileAsync(string location, UnityAction<RawFileOperationHandle> callback)
         {
@@ -125,7 +125,7 @@ namespace ACFrameworkCore
         }
         public void LoadSubAssetsAsyncIEnumerator<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object
         {
-            MonoComponent.Instance.MonoStartCoroutine(SubAssetsAsync(location, ResName, callback));
+            CMonoManager.Instance.MonoStartCoroutine(SubAssetsAsync(location, ResName, callback));
         }
         IEnumerator SubAssetsAsync<T>(string location, string ResName, UnityAction<T> callback) where T : UnityEngine.Object
         {

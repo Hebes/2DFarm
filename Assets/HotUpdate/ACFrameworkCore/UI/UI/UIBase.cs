@@ -91,7 +91,7 @@ namespace ACFrameworkCore
         /// <param name="uiFormName"></param>
 	    protected void OpenUIForm<T>(string uiFormName) where T : UIBase, new()
         {
-            UIManager.Instance.ShwoUIPanel<T>(uiFormName);
+            CUIManager.Instance.ShwoUIPanel<T>(uiFormName);
         }
         /// <summary>
         /// 关闭当前UI窗体
@@ -104,7 +104,7 @@ namespace ACFrameworkCore
             if (intPosition != -1)
                 strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
             DLog.Log($"关闭的界面名称是:{strUIFromName}");
-            UIManager.Instance.CloseUIForms(strUIFromName);
+            CUIManager.Instance.CloseUIForms(strUIFromName);
         }
 
         /// <summary>

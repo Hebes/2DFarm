@@ -76,7 +76,7 @@ namespace ACFrameworkCore
                 T t = new T();
                 t.UIGO = UIGO;
                 t.UIAwake();
-                MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+                CMonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);
 
                 //设置窗口层级
                 WindowAttribute attribute = Attribute.GetCustomAttribute(typeof(T), typeof(WindowAttribute)) as WindowAttribute;
@@ -119,14 +119,14 @@ namespace ACFrameworkCore
             panelDic.TryGetValue(panelName, out IUIState t);
             if (t == null) return;
             t.UIOnDisable();//关闭面板
-            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
+            CMonoManager.Instance.OnRemoveUpdateEvent(t.UIUpdate);
             t.UIGO.SetActive(false);
         }
         public void OnDestroyUI(string panelName)
         {
             panelDic.TryGetValue(panelName, out IUIState t);
             if (t == null) return;
-            MonoComponent.Instance.OnRemoveUpdateEvent(t.UIUpdate);
+            CMonoManager.Instance.OnRemoveUpdateEvent(t.UIUpdate);
             t.UIOnDestroy();//关闭面板
             //销毁资源
             GameObject.Destroy(panelDic[panelName].UIGO);//删除面板

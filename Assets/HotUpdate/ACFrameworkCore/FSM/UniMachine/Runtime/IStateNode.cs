@@ -1,9 +1,9 @@
 ﻿
-namespace UniFramework.Machine
+namespace ACFrameworkCore
 {
 	public interface IStateNode
 	{
-		void OnCreate(StateMachine machine);
+		void OnCreate(CStateMachine machine);
 		void OnEnter();
 		void OnUpdate();
 		void OnExit();

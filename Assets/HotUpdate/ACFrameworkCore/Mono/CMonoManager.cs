@@ -6,9 +6,9 @@ using Time = UnityEngine.Time;
 
 namespace ACFrameworkCore
 {
-    public class MonoComponent : ICore
+    public class CMonoManager : ICore
     {
-        public static MonoComponent Instance { get; private set; }
+        public static CMonoManager Instance { get; private set; }
         public MonoController monoController { get; set; }
 
         private float m_Time = 0f;

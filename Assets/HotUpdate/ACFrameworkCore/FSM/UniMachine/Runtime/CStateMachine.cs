@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UniFramework.Machine
+namespace ACFrameworkCore
 {
-	public class StateMachine
+	public class CStateMachine
 	{
 		private readonly Dictionary<string, IStateNode> _nodes = new Dictionary<string, IStateNode>(100);
 		private IStateNode _curNode;
@@ -32,8 +32,8 @@ namespace UniFramework.Machine
 		}
 
 
-		private StateMachine() { }
-		public StateMachine(System.Object owner)
+		private CStateMachine() { }
+		public CStateMachine(System.Object owner)
 		{
 			Owner = owner;
 		}

@@ -18,16 +18,16 @@ namespace ACFrameworkCore
 
         public void LoadSceneAsync(string SceneName, IEnumerator enumerator)
         {
-            MonoComponent.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
+            CMonoManager.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
         }
         public void LoadSceneAsync(string SceneName, UnityAction unityAction)
         {
-            MonoComponent.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
+            CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
 
         public void LoadSceneIEnumerator(string SceneName, UnityAction unityAction)
         {
-            MonoComponent.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
+            CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
 
         IEnumerator ReallyLoadSceneAsynUnityAction(string SceneName, UnityAction unityAction)

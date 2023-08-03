@@ -14,7 +14,7 @@ public class InitGame
         DLog.Log(value);
         DLog.Log("开始创建物体");
         //EnterGame();
-        UIManager.Instance.ShwoUIPanel<StartPanel>("Start");
+        CUIManager.Instance.ShwoUIPanel<StartPanel>("Start");
     }
 
 
@@ -22,11 +22,11 @@ public class InitGame
     {
         HashSet<ICore> _initHs = new HashSet<ICore>()
             {
-                new DebugComponent(),
-                new UIManager(),
-                new MonoComponent(),
-                new ResComponent(),
-                new AduioComponent(),
+                new CDebugManager(),
+                new CUIManager(),
+                new CMonoManager(),
+                new CResourceManager(),
+                new CAduioManager(),
             };
 
         foreach (var init in _initHs)

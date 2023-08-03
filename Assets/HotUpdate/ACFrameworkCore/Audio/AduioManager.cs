@@ -17,9 +17,9 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class AduioComponent : ICore
+    public class CAduioManager : ICore
     {
-        public static AduioComponent Instance { get; private set; }
+        public static CAduioManager Instance { get; private set; }
 
         private Dictionary<string, AudioClip> AudioClipDic { get; set; }//音效列表
         private GameObject soundObj { get; set; } = null;//音效依附对象

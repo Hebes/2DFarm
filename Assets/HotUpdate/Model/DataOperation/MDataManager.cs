@@ -11,9 +11,9 @@
 
 namespace ACFrameworkCore
 {
-    public class DataManager
+    public class MDataManager
     {
-        private static DataManager instance;
+        private static MDataManager instance;
 
         #region  Type type参数
         //不用object对象传入 而使用 Type传入
@@ -23,12 +23,12 @@ namespace ACFrameworkCore
         //达到了 让你在外部 少写一行代码的作用
         #endregion
 
-        public static DataManager Instance
+        public static MDataManager Instance
         {
             get
             {
                 if (instance == null)
-                    instance = new DataManager();
+                    instance = new MDataManager();
                 return instance;
             }
         }

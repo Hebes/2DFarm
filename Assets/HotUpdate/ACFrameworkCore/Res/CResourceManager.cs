@@ -14,9 +14,9 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class ResComponent : ICore
+    public class CResourceManager : ICore
     {
-        public static ResComponent Insatance { get; set; }
+        public static CResourceManager Insatance { get; set; }
 
         private IResload iload;
 

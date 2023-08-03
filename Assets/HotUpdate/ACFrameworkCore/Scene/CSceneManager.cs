@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class SceneComponent : ICore
+    public class CSceneManager : ICore
     {
-        public static SceneComponent Instance { get; private set; }
+        public static CSceneManager Instance { get; private set; }
 
         private ISceneLoad sceneLoad;
 

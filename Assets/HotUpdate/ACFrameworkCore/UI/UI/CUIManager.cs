@@ -1,5 +1,4 @@
-﻿using SUIFW;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
@@ -16,9 +15,9 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class UIManager : ICore
+    public class CUIManager : ICore
     {
-        public static UIManager Instance = null;
+        public static CUIManager Instance = null;
         public Transform CanvasTransfrom = null;                //UI根节点    
         public Camera UICamera = null;                                  //UI摄像机
         public Camera MainCamera = null;                               //主摄像机
@@ -176,7 +175,7 @@ namespace ACFrameworkCore
             //DLog.Log($"当前的UI窗体的显示类型是:{baseUiForm.mode}");
             //DLog.Log(LogCoLor.Blue, $"当前的UI窗体的显示类型是:{baseUiForm.mode}");
             //根据窗体不同的显示类型，分别作不同的关闭处理
-            MonoComponent.Instance.OnRemoveUpdateEvent(baseUiForm.UIUpdate);
+            CMonoManager.Instance.OnRemoveUpdateEvent(baseUiForm.UIUpdate);
             switch (baseUiForm.mode)
             {
                 case EUIMode.Normal: ExitUIForms(uiFormName); break;//普通窗体的关闭
@@ -189,7 +188,7 @@ namespace ACFrameworkCore
             //“所有UI窗体”集合中，如果没有记录，则直接返回
             _DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUIForm);
             if (baseUIForm == null) return;
-            MonoComponent.Instance.OnRemoveUpdateEvent(baseUIForm.UIUpdate);
+            CMonoManager.Instance.OnRemoveUpdateEvent(baseUIForm.UIUpdate);
             baseUIForm.UIOnDestroy();
             //资源卸载
             YooAssetHdnleDic.TryGetValue(uiFormName, out AssetOperationHandle yooassetHandle);
@@ -209,7 +208,7 @@ namespace ACFrameworkCore
             t.gameObject = goCloneUIPrefabs;
             t.UIName = uiFormName;
             t.UIAwake();
-            MonoComponent.Instance.OnAddUpdateEvent(t.UIUpdate);
+            CMonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);
             if (goCloneUIPrefabs == null)
                 DLog.Error("加载预制体失败");
             switch (t.type)

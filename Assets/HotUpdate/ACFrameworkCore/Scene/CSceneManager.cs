@@ -2,15 +2,11 @@
 
 namespace ACFrameworkCore
 {
-    public class CSceneManager : ICore
+    public class CSceneManager : SingletonInit<CSceneManager>,ISingletonInit
     {
-        public static CSceneManager Instance { get; private set; }
-
         private ISceneLoad sceneLoad;
-
-        public void ICroeInit()
+        public void Init()
         {
-            Instance = this;
             sceneLoad = new YooAssetLoadScene();
         }
 
@@ -32,5 +28,7 @@ namespace ACFrameworkCore
         {
             sceneLoad.LoadSceneAsync(SceneName, unityAction);
         }
+
+        
     }
 }

@@ -6,21 +6,18 @@ using Time = UnityEngine.Time;
 
 namespace ACFrameworkCore
 {
-    public class CMonoManager : ICore
+    public class CMonoManager : SingletonInit<CMonoManager>,ISingletonInit
     {
-        public static CMonoManager Instance { get; private set; }
-        public MonoController monoController { get; set; }
-
-        private float m_Time = 0f;
-
-        public void ICroeInit()
+        public void Init()
         {
-            Instance = this;
             GameObject monoTemp = new GameObject("Mono");
             monoController = monoTemp.AddComponent<MonoController>();
             GameObject.DontDestroyOnLoad(monoTemp);
             DLog.Log("初始化Mono完毕!");
         }
+        public MonoController monoController;
+
+        private float m_Time = 0f;
 
         public void OnAddAwakeEvent(UnityAction unityAction)
         {

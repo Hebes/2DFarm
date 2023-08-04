@@ -15,16 +15,14 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class EventComponent : ICore
+    public class EventComponent : SingletonInit<EventComponent>,ISingletonInit
     {
-        public static EventComponent Instance { get; private set; }
-        private Dictionary<string, IEventInfo> eventDic { get; set; }
-
-        public void ICroeInit()
+        public void Init()
         {
-            Instance = this;
             eventDic = new Dictionary<string, IEventInfo>();
         }
+
+        private Dictionary<string, IEventInfo> eventDic { get; set; }
 
         /// <summary>
         /// 添加事件监听
@@ -104,5 +102,7 @@ namespace ACFrameworkCore
         {
             eventDic.Clear();
         }
+
+        
     }
 }

@@ -50,8 +50,9 @@ namespace ACFrameworkCore
         /// <param name="path">生成的路径</param>
         public static void GenerateDirectory(this string path)
         {
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
+            //if (Directory.Exists(path))
+            //    Directory.Delete(path, true);
+            if (Directory.Exists(path)) return;
             Directory.CreateDirectory(path);
             AssetDatabase.Refresh();
         }

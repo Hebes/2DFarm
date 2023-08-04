@@ -25,7 +25,7 @@ namespace ACFrameworkCore
             DLog.Log("日志模块初始化完毕!");
         }
 
-        private string path { get; set; }
+        private string path;
 
         /// <summary>
         /// 主动日志

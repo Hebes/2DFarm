@@ -32,19 +32,10 @@ namespace ACFrameworkCore
         System = 4,
     }
 
-    public class UIComponent : ICore
+    public class UIComponent : SingletonInit<UIComponent>,ISingletonInit
     {
-        public static UIComponent Instance { get; private set; }
-
-        private Dictionary<string, IUIState> panelDic { get; set; }
-        private Dictionary<string, AssetOperationHandle> AssetOperationHandleList { get; set; }//资源句柄
-
-        private GameObject Global { get; set; }
-        private GameObject Canvas => Global.transform.Find("Canvas").gameObject;
-
-        public void ICroeInit()
+        public void Init()
         {
-            //Instance = this;
             //panelDic = new Dictionary<string, IUIState>();
             //AssetOperationHandleList = new Dictionary<string, AssetOperationHandle>();
 
@@ -54,6 +45,12 @@ namespace ACFrameworkCore
             //GameObject.DontDestroyOnLoad(Global);
             //DLog.Log("UI管理类初始化成功!");
         }
+
+        private Dictionary<string, IUIState> panelDic { get; set; }
+        private Dictionary<string, AssetOperationHandle> AssetOperationHandleList { get; set; }//资源句柄
+
+        private GameObject Global { get; set; }
+        private GameObject Canvas => Global.transform.Find("Canvas").gameObject;
 
         public Transform GetLayerFather(EUILayer layer)
         {
@@ -134,5 +131,7 @@ namespace ACFrameworkCore
             AssetOperationHandleList.TryGetValue(panelName, out AssetOperationHandle assetOperationHandle);
             assetOperationHandle.Release();
         }
+
+       
     }
 }

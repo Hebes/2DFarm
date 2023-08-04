@@ -38,29 +38,29 @@ namespace ACFrameworkCore
         /// </summary>
         public static string EXCEL_PATH = Application.dataPath + "/Editor/Excels/";
 
-        [MenuItem("Tool/字节测试")]
-        public static void TestByte()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("有符号");
-            sb.AppendLine("sbyte" + sizeof(sbyte) + "字节");
-            sb.AppendLine("int" + sizeof(int) + "字节");
-            sb.AppendLine("short" + sizeof(short) + "字节");
-            sb.AppendLine("long" + sizeof(long) + "字节");
-            sb.AppendLine("无符号");
-            sb.AppendLine("byte" + sizeof(byte) + "字节");
-            sb.AppendLine("uint" + sizeof(uint) + "字节");
-            sb.AppendLine("ushort" + sizeof(ushort) + "字节");
-            sb.AppendLine("ulong" + sizeof(ulong) + "字节");
-            sb.AppendLine("浮点");
-            sb.AppendLine("float" + sizeof(float) + "字节");
-            sb.AppendLine("double" + sizeof(double) + "字节");
-            sb.AppendLine("decimal" + sizeof(decimal) + "字节");
-            sb.AppendLine("特殊");
-            sb.AppendLine("bool" + sizeof(bool) + "字节");
-            sb.AppendLine("char" + sizeof(char) + "字节");
-            Debug.Log(sb.ToString());
-        }
+        //[MenuItem("Tool/字节测试")]
+        //public static void TestByte()
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.AppendLine("有符号");
+        //    sb.AppendLine("sbyte" + sizeof(sbyte) + "字节");
+        //    sb.AppendLine("int" + sizeof(int) + "字节");
+        //    sb.AppendLine("short" + sizeof(short) + "字节");
+        //    sb.AppendLine("long" + sizeof(long) + "字节");
+        //    sb.AppendLine("无符号");
+        //    sb.AppendLine("byte" + sizeof(byte) + "字节");
+        //    sb.AppendLine("uint" + sizeof(uint) + "字节");
+        //    sb.AppendLine("ushort" + sizeof(ushort) + "字节");
+        //    sb.AppendLine("ulong" + sizeof(ulong) + "字节");
+        //    sb.AppendLine("浮点");
+        //    sb.AppendLine("float" + sizeof(float) + "字节");
+        //    sb.AppendLine("double" + sizeof(double) + "字节");
+        //    sb.AppendLine("decimal" + sizeof(decimal) + "字节");
+        //    sb.AppendLine("特殊");
+        //    sb.AppendLine("bool" + sizeof(bool) + "字节");
+        //    sb.AppendLine("char" + sizeof(char) + "字节");
+        //    Debug.Log(sb.ToString());
+        //}
 
         [MenuItem("Tool/Excel转换")]//#E
         public static void GenerateExcelInfo()
@@ -80,37 +80,33 @@ namespace ACFrameworkCore
         }
 
 
-        private static string DATA_BINARY_PATH = $"{Application.dataPath}/Excel2Script/Byte/TowerInfo.bytes";
-        [MenuItem("Tool/Bytes数据读取")]//#E
-        public static void ReaDData()
-        {
-            //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
-            //{
-            //    //读取全都的字节
-            //    byte[] bytes = new byte[fs.Length];
-            //    fs.Read(bytes, 0, bytes.Length);
-            //    fs.Close();
-            //    List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
-            //    foreach (TowerInfo info in towerInfos)
-            //    {
-            //        Debug.Log(info.name);
-            //    }
-            //}
-            //TowerInfo towerInfo = Load<TowerInfo>();
-            //TowerInfo towerInfo = new TowerInfo()
-            //{
-            //    atk = 30,
-            //    atkRange = 30,
-            //    atkType = 30,
-            //    eff = "测试1",
-            //    id = 30,
-            //    imgRes= "测试1",
-            //};
-        }
-
-      
-
-        
+        //private static string DATA_BINARY_PATH = $"{Application.dataPath}/Excel2Script/Byte/TowerInfo.bytes";
+        //[MenuItem("Tool/Bytes数据读取")]//#E
+        //public static void ReaDData()
+        //{
+        //    //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
+        //    //{
+        //    //    //读取全都的字节
+        //    //    byte[] bytes = new byte[fs.Length];
+        //    //    fs.Read(bytes, 0, bytes.Length);
+        //    //    fs.Close();
+        //    //    List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
+        //    //    foreach (TowerInfo info in towerInfos)
+        //    //    {
+        //    //        Debug.Log(info.name);
+        //    //    }
+        //    //}
+        //    //TowerInfo towerInfo = Load<TowerInfo>();
+        //    //TowerInfo towerInfo = new TowerInfo()
+        //    //{
+        //    //    atk = 30,
+        //    //    atkRange = 30,
+        //    //    atkType = 30,
+        //    //    eff = "测试1",
+        //    //    id = 30,
+        //    //    imgRes= "测试1",
+        //    //};
+        //}
 
         /// <summary>
         /// 循环获取数据
@@ -190,7 +186,6 @@ namespace ACFrameworkCore
                     }
                 }
                 data.Add((T)dataObj);
-
             }
             return data;
         }

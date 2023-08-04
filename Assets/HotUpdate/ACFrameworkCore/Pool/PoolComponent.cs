@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using YooAsset;
 
 /*--------脚本描述-----------
 				
@@ -18,17 +18,15 @@ using UnityEngine.Events;
 namespace ACFrameworkCore
 {
 
-    public class PoolComponent : ICore
+    public class PoolComponent : SingletonInit<PoolComponent>,ISingletonInit
     {
-        public static PoolComponent Instance { get; private set; }
-        public Dictionary<string, PoolData> poolDic { get; private set; }
-        private GameObject poolObj { get; set; }
-
-        public void ICroeInit()
+        public void Init()
         {
-            Instance = this;
             poolDic = new Dictionary<string, PoolData>();
         }
+
+        public Dictionary<string, PoolData> poolDic { get; private set; }
+        private GameObject poolObj { get; set; }
 
         /// <summary>
         /// 往外拿东西
@@ -39,14 +37,18 @@ namespace ACFrameworkCore
         {
             //有抽屉 并且抽屉里有东西
             if (poolDic.ContainsKey(name) && poolDic[name].poolList.Count > 0)
-                callBack(poolDic[name].GetObj());
+            {
+                callBack?.Invoke(poolDic[name].GetObj());
+            }
             else
             {
-                //ResComponent.Insatance.OnLoadAsync<GameObject>(name, (o) =>
-                //{
-                //    o.name = name;
-                //    callBack(o);
-                //});
+                AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(name);
+                handle.Completed += handleTemp => 
+                {
+                    GameObject go = handleTemp.InstantiateSync();
+                    go.name = name;
+                    callBack?.Invoke(go);
+                };
             }
         }
 
@@ -73,5 +75,7 @@ namespace ACFrameworkCore
             poolDic.Clear();
             poolObj = null;
         }
+
+        
     }
 }

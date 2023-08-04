@@ -27,7 +27,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/Hotdll
+      - CollectPath: Assets/AssetsPackage/HotDll
         CollectorGUID: 614029d323809184cb2ad4b555180d07
         CollectorType: 0
         AddressRuleName: AddressByFileName

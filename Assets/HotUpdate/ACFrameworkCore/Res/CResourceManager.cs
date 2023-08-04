@@ -14,15 +14,22 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
+    /// <summary>
+    /// 加载资源的方式
+    /// </summary>
+    public enum ELoadType
+    {
+        ReResources,
+        YooAsset,
+    }
+
     public class CResourceManager : ICore
     {
-        public static CResourceManager Insatance { get; set; }
-
+        public static CResourceManager Instance;
         private IResload iload;
-
         public void ICroeInit()
         {
-            Insatance = this;
+            Instance = this;
             iload = new YooAssetResLoad();
         }
 
@@ -34,7 +41,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
         {
-           return iload.LoadAsset<T>(ResName);
+            return iload.LoadAsset<T>(ResName);
         }
 
         /// <summary>
@@ -126,5 +133,7 @@ namespace ACFrameworkCore
         {
 
         }
+
+
     }
 }

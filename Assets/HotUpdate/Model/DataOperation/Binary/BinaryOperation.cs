@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class Binary : IData
+    public class BinaryOperation : IData
     {
         private static string SAVE_PATH = $"{Application.dataPath}/Excel2Script/Byte/";
 

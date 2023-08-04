@@ -15,10 +15,13 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class CUIManager : SingletonInit<CUIManager>,ISingletonInit
+    public class CUIManager : ICore
     {
-        public void Init()
+        public static CUIManager Instance;
+
+        public void ICroeInit()
         {
+            Instance = this;
             _DicALLUIForms = new Dictionary<string, UIBase>();
             _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
             _StaCurrentUIForms = new Stack<UIBase>();

@@ -23,11 +23,13 @@ namespace ACFrameworkCore
         YooAsset,
     }
 
-    public class CResourceManager : SingletonInit<CResourceManager>,ISingletonInit
+    public class CResourceManager : ICore
     {
+        public static CResourceManager Instance;
         private IResload iload;
-        public void Init()
+        public void ICroeInit()
         {
+            Instance = this;
             iload = new YooAssetResLoad();
         }
 
@@ -39,7 +41,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
         {
-           return iload.LoadAsset<T>(ResName);
+            return iload.LoadAsset<T>(ResName);
         }
 
         /// <summary>
@@ -132,6 +134,6 @@ namespace ACFrameworkCore
 
         }
 
-      
+
     }
 }

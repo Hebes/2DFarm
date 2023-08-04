@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class XMLSave : IData
+    public class XMLOperation : IData
     {
         public string xmlSavePath = $"{Application.dataPath}/Excel2Script/XML";
 

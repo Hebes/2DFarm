@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using YooAsset;
 
 public class InitGame
 {
@@ -15,19 +14,20 @@ public class InitGame
         DLog.Log("开始创建物体");
         //EnterGame();
         CUIManager.Instance.ShwoUIPanel<StartPanel>("Start");
+        MInputSystemManager.Instance.LoadConfigFile();
     }
 
 
     private static async Task<string> InitRsv()
     {
-        HashSet<ISingletonInit> _initHs = new HashSet<ISingletonInit>()
-            {
-                new CUIManager(),
-            };
+        HashSet<ICore> _initHs = new HashSet<ICore>();
+        _initHs.Add(new CDebugManager());
+        _initHs.Add(new CUIManager());
+        _initHs.Add(new CResourceManager());
 
         foreach (var init in _initHs)
         {
-            init.Init();
+            init.ICroeInit();
             await Task.Delay(TimeSpan.FromSeconds(.001f));
         }
         return "核心框架模块已经全都初始化完毕1!";

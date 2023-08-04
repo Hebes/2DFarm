@@ -16,9 +16,9 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class CDebugManager : SingletonInit<CDebugManager>,ISingletonInit
+    public class CDebugManager : ICore
     {
-        public void Init()
+        public void ICroeInit()
         {
             InitiativeLog();
             PassivityLog();

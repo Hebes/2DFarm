@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 /*--------脚本描述-----------
 				
@@ -17,22 +15,10 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class CAduioManager : ICore
+    public class CAduioManager : SingletonInit<CAduioManager>, ISingletonInit
     {
-        public static CAduioManager Instance { get; private set; }
-
-        private Dictionary<string, AudioClip> AudioClipDic { get; set; }//音效列表
-        private GameObject soundObj { get; set; } = null;//音效依附对象
-
-        private float bkValue { get; set; } = 1;//背景音乐大小
-        public AudioSource bkMusic { get; private set; }//背景音乐组件
-
-        private float soundValue = 1;//音效大小
-        private List<AudioSource> soundList { get; set; } //音效列表
-
-        public void ICroeInit()
+        public void Init()
         {
-            Instance = this;
             AudioClipDic = new Dictionary<string, AudioClip>();
             soundList = new List<AudioSource>();
 
@@ -44,6 +30,13 @@ namespace ACFrameworkCore
             }
             DLog.Log("音频模块初始化成功!");
         }
+
+        private Dictionary<string, AudioClip> AudioClipDic;//音效列表
+        private GameObject soundObj = null;//音效依附对象
+        private float bkValue = 1;//背景音乐大小
+        public AudioSource bkMusic;//背景音乐组件
+        private float soundValue = 1;//音效大小
+        private List<AudioSource> soundList; //音效列表
 
         /// <summary>
         /// 初始化数据
@@ -153,7 +146,5 @@ namespace ACFrameworkCore
                 GameObject.Destroy(source);
             }
         }
-
-     
     }
 }

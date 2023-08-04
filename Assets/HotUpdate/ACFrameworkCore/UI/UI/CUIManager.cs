@@ -15,9 +15,18 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class CUIManager : ICore
+    public class CUIManager : SingletonInit<CUIManager>,ISingletonInit
     {
-        public static CUIManager Instance = null;
+        public void Init()
+        {
+            _DicALLUIForms = new Dictionary<string, UIBase>();
+            _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
+            _StaCurrentUIForms = new Stack<UIBase>();
+            YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
+            InitRoot();
+            DLog.Log("UI管理初始化完毕");
+        }
+
         public Transform CanvasTransfrom = null;                //UI根节点    
         public Camera UICamera = null;                                  //UI摄像机
         public Camera MainCamera = null;                               //主摄像机
@@ -29,18 +38,6 @@ namespace ACFrameworkCore
         private Transform Normal = null;                        //全屏幕显示的节点
         private Transform Fixed = null;                         //固定显示的节点
         private Transform PopUp = null;                         //弹出节点
-
-        public void ICroeInit()
-        {
-            Instance = this;
-            //字段初始化
-            _DicALLUIForms = new Dictionary<string, UIBase>();
-            _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
-            _StaCurrentUIForms = new Stack<UIBase>();
-            YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
-            InitRoot();
-            DLog.Log("UI管理初始化完毕");
-        }
 
         private void InitRoot()
         {
@@ -387,6 +384,8 @@ namespace ACFrameworkCore
         {
             return Instance.CanvasTransfrom.GetChild(UIType.ToString());
         }
+
+       
         #endregion
     }
 }

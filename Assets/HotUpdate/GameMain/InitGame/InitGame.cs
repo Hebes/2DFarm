@@ -20,18 +20,14 @@ public class InitGame
 
     private static async Task<string> InitRsv()
     {
-        HashSet<ICore> _initHs = new HashSet<ICore>()
+        HashSet<ISingletonInit> _initHs = new HashSet<ISingletonInit>()
             {
-                new CDebugManager(),
                 new CUIManager(),
-                new CMonoManager(),
-                new CResourceManager(),
-                new CAduioManager(),
             };
 
         foreach (var init in _initHs)
         {
-            init.ICroeInit();
+            init.Init();
             await Task.Delay(TimeSpan.FromSeconds(.001f));
         }
         return "核心框架模块已经全都初始化完毕1!";

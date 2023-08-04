@@ -16,16 +16,16 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class CDebugManager : ICore
+    public class CDebugManager : SingletonInit<CDebugManager>,ISingletonInit
     {
-        public void ICroeInit()
+        public void Init()
         {
             InitiativeLog();
             PassivityLog();
             DLog.Log("日志模块初始化完毕!");
         }
 
-        private string path { get; set; }
+        private string path;
 
         /// <summary>
         /// 主动日志

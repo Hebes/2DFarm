@@ -14,15 +14,20 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class CResourceManager : ICore
+    /// <summary>
+    /// 加载资源的方式
+    /// </summary>
+    public enum ELoadType
     {
-        public static CResourceManager Insatance { get; set; }
+        ReResources,
+        YooAsset,
+    }
 
+    public class CResourceManager : SingletonInit<CResourceManager>,ISingletonInit
+    {
         private IResload iload;
-
-        public void ICroeInit()
+        public void Init()
         {
-            Insatance = this;
             iload = new YooAssetResLoad();
         }
 
@@ -126,5 +131,7 @@ namespace ACFrameworkCore
         {
 
         }
+
+      
     }
 }

@@ -69,11 +69,11 @@ namespace ACFrameworkCore
         }
 
         //来自ET框架
-        [MenuItem("Tool/打包")]//#E
-        public static void BuildPackage()
-        {
-            GetWindow(typeof(BuildEditor));
-        }
+        //[MenuItem("Tool/打包")]//#E
+        //public static void BuildPackage()
+        //{
+        //    GetWindow(typeof(BuildEditor));
+        //}
 
         private void OnGUI()
         {

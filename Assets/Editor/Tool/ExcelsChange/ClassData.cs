@@ -17,9 +17,7 @@ namespace ACFrameworkCore
 {
     public class ClassData
     {
-        private static string BinaryDataPath = $"{Application.dataPath}/HotUpdate/GameMain/ExcelData/ClassConfigs/";
-        private static string DataClassPath = $"{Application.dataPath}/Excel2Script/Script/";
-
+        private static string DATA_CLASS_PATH = $"{Application.dataPath}/HotUpdate/GameMain/Config/";//Assets/HotUpdate/GameMain/Config
 
         /// <summary>
         /// 通过Excel数据生成脚本文件
@@ -37,10 +35,9 @@ namespace ACFrameworkCore
             {
                 sb.AppendLine($"\tpublic {filedTypeArray[i].PadRight(10, ' ')}\t{filedNameArray[i]};");
             }
-
             sb.AppendLine("}");
-            DataClassPath.GenerateDirectory();
-            string path = $"{DataClassPath}/{className}.cs";
+            DATA_CLASS_PATH.GenerateDirectory();
+            string path = $"{DATA_CLASS_PATH}/{className}.cs";
             File.Delete(path);
             File.WriteAllText(path, sb.ToString());
         }

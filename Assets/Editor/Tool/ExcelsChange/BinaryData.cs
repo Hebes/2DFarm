@@ -20,12 +20,10 @@ namespace ACFrameworkCore
 {
     public static class BinaryData
     {
-        private static string DATA_BINARY_PATH = $"{Application.dataPath}/HotUpdate/GameMain/ExcelData/Binary/";
-
         /// <summary>
         /// 放置要生成的二进制文件的路径
         /// </summary>
-        private static readonly string BytePath = $"{Application.dataPath}/Excel2Script/Byte";
+        private static readonly string BYTE_PATH = $"{Application.dataPath}/AssetsPackage/Config";
 
         /// <summary>
         /// 创建二进制文件
@@ -34,8 +32,8 @@ namespace ACFrameworkCore
         {
             //创建文件
             string className = new FileInfo(filePath).Name.Split('.')[0];
-            BytePath.GenerateDirectory();
-            string path = $"{BytePath}/{className}.bytes";
+            BYTE_PATH.GenerateDirectory();
+            string path = $"{BYTE_PATH}/{className}.bytes";
             //写入文件
             using (FileStream fileStream = new FileStream(path, FileMode.Create))
             {

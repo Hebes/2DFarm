@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine;
+
 
 /*--------脚本描述-----------
 				
@@ -41,6 +43,13 @@ namespace ACFrameworkCore
 
         }
 
+        /// <summary>
+        /// 加载配置文件
+        /// </summary>
+        public void LoadConfigFile()
+        {
+            //Resources.Load<TextAsset>()
+        }
 
         /// <summary>
         /// 更换键位

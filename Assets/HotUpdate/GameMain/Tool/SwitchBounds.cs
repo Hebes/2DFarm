@@ -16,13 +16,17 @@ namespace ACFrameworkCore
 {
     public class SwitchBounds : MonoBehaviour
     {
+        private void Start()
+        {
+            SwichConfinerShape();
+        }
         private void OnEnable()
         {
-            EventConfig.SwichConfinerShape.AddEventListener(SwichConfinerShape);
+            ConfigEvent.SwichConfinerShape.AddEventListener(SwichConfinerShape);
         }
         private void OnDisable()
         {
-            EventConfig.SwichConfinerShape.RemoveEventListener(SwichConfinerShape);
+            ConfigEvent.SwichConfinerShape.RemoveEventListener(SwichConfinerShape);
         }
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace ACFrameworkCore
         /// </summary>
         private void SwichConfinerShape()
         {
-            PolygonCollider2D ConfinerShape = GameObject.FindGameObjectWithTag("BoundsConfiner").GetComponent<PolygonCollider2D>();
+            PolygonCollider2D ConfinerShape = GameObject.FindGameObjectWithTag(ConfigTag.TagBoundsConfiner).GetComponent<PolygonCollider2D>();
             CinemachineConfiner confiner = GetComponent<CinemachineConfiner>();
             confiner.m_BoundingShape2D = ConfinerShape;
             //Call this if the bounding shape's points change at runtime

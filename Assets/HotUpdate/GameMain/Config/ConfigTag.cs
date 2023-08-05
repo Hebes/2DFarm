@@ -9,5 +9,6 @@ namespace ACFrameworkCore
         public const string TagMainCamera = "MainCamera";
         public const string TagPlayer = "Player";
         public const string TagGameController = "GameController";
+        public const string TagBoundsConfiner = "BoundsConfiner";
     }
 }

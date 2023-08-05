@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4811078152077341405}
   - component: {fileID: 4811078152077341408}
   - component: {fileID: 4811078152077341406}
+  - component: {fileID: 1845143419841165681}
   m_Layer: 0
   m_Name: Tree02_Bottom
   m_TagString: Untagged
@@ -101,6 +102,18 @@ CapsuleCollider2D:
   m_Offset: {x: -0.054390013, y: 0.31452948}
   m_Size: {x: 1.1373631, y: 1.1373631}
   m_Direction: 0
+--- !u!114 &1845143419841165681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4811078152077341404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c375b090f73f7498a022fc34ee9769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4811078152304171219
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4811078152304171220}
   - component: {fileID: 4811078152304171222}
+  - component: {fileID: 2192992100851126697}
   m_Layer: 0
   m_Name: Tree02_Top
   m_TagString: Untagged
@@ -185,6 +199,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2192992100851126697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4811078152304171219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c375b090f73f7498a022fc34ee9769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4811078152435028307
 GameObject:
   m_ObjectHideFlags: 0

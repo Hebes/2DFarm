@@ -129,7 +129,7 @@ public class Init : MonoBehaviour
         aCUIComponent = GameObject.Instantiate(go).GetComponent<ACUIComponent>();
         LoadingText = aCUIComponent.Get<GameObject>("T_Text").GetComponent<Text>();
 
-        yield return new WaitForSeconds(0.5f);
+        yield return null;
         LoadingText.text = "流程准备工作";
 
         // 初始化资源系统
@@ -162,7 +162,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmInitialize()
     {
         Debug.Log("初始化资源包");
-        yield return new WaitForSeconds(0.5f);
+        yield return null;
         // 创建默认的资源包
         LoadingText.text = "初始化资源包";
         var package = YooAssets.TryGetPackage(packageName);
@@ -217,7 +217,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmUpdateVersion()
     {
         Debug.Log("更新资源版本号");
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         LoadingText.text = "更新资源版本号";
         var package = YooAssets.GetPackage(packageName);//获取包
         operation = package.UpdatePackageVersionAsync();
@@ -241,7 +241,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmUpdateManifest()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         LoadingText.text = "更新资源清单";
         var package = YooAssets.GetPackage(packageName);//获取包
         // 更新成功后自动保存版本号，作为下次初始化的版本。
@@ -268,11 +268,10 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmCreateDownloader()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         LoadingText.text = "创建文件下载器";
         var package = YooAssets.GetPackage(packageName);//获取包
-
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
 
         int downloadingMaxNum = 10;//下载最大值
         int failedTryAgain = 3;//重试失败次数
@@ -303,7 +302,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmDownloadFiles()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         LoadingText.text = "下载更新文件";
         //注册回调方法
         downloader.OnStartDownloadFileCallback = OnStartDownloadFileFunction;
@@ -332,7 +331,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmDownloadOver()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         FsmProcessChange(EHotUpdateProcess.FsmClearCache);
     }
 
@@ -342,7 +341,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmClearCache()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         var package = YooAssets.GetPackage(packageName);
         var operation = package.ClearUnusedCacheFilesAsync();
         operation.Completed += OnClearCacheFunction;
@@ -355,7 +354,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmPatchDone()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         FsmProcessChange(EHotUpdateProcess.FsmLoadHotDll);
     }
 
@@ -365,7 +364,7 @@ public class Init : MonoBehaviour
     /// <returns></returns>
     IEnumerator FsmLoadHotDll()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return null;
         LoadingText.text = "HybridCLR热更代码进入";
         var package = YooAssets.GetPackage(packageName);
         //var assets = new List<string>

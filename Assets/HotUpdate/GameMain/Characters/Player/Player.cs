@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player :MonoBehaviour
+public class Player : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator[] animators;
@@ -10,23 +10,41 @@ public class Player :MonoBehaviour
     private float inputY;
     private Vector2 movementInput;
     private bool isMoving;
+    private bool InputDisable;              //玩家不能操作
 
-    public float speed = 10f;
+    public float speed = 10f;               //移动速度
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
     }
-
     private void Update()
     {
-        PlayerInput();
+        if (!InputDisable)
+            PlayerInput();
+        else
+            isMoving = false;
+        SwitchAnimation();
+    }
+    private void FixedUpdate()
+    {
+        if (!InputDisable)
+            Movement();
     }
 
-
+    /// <summary>
+    /// 玩家输入
+    /// </summary>
     private void PlayerInput()
     {
+        //用于只能横着走或者竖着走
+        //if (inputY == 0)
+        //    inputX = Input.GetAxisRaw("Horizontal");
+        //if (inputX == 0)
+        //    inputY = Input.GetAxisRaw("Vertical");
+
+        //可以斜射走
         inputX = Input.GetAxisRaw("Horizontal");
         inputY = Input.GetAxisRaw("Vertical");
 
@@ -46,5 +64,27 @@ public class Player :MonoBehaviour
         movementInput = new Vector2(inputX, inputY);
 
         isMoving = movementInput != Vector2.zero;//判断是否在移动
+    }
+    /// <summary>
+    /// 玩家移动
+    /// </summary>
+    private void Movement()
+    {
+        rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
+    }
+    /// <summary>
+    /// 播放动画
+    /// </summary>
+    private void SwitchAnimation()
+    {
+        foreach (var anim in animators)
+        {
+            anim.SetBool("IsMoving", isMoving);//注意IsMoving要和动画那边的一样
+            if (isMoving)
+            {
+                anim.SetFloat("InputX", inputX);
+                anim.SetFloat("InputY", inputY);
+            }
+        }
     }
 }

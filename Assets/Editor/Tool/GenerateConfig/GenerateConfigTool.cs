@@ -111,5 +111,27 @@ namespace ACFrameworkCore
             File.WriteAllText(classPath, sb.ToString());
             AssetDatabase.Refresh();
         }
+
+        [MenuItem("Tool/GenerateConfig/生成Layer配置文件")]//#E
+        public static void GenerateLayerConfig()
+        {
+            var tags = InternalEditorUtility.layers;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigLayer\r\n    {");
+
+            foreach (string s in tags)
+            {
+                string tempstr = s;
+                sb.AppendLine($"        public const string Layer{tempstr.Replace(" ","").Trim()} = \"{tempstr}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigLayer.cs";
+            if (File.Exists(classPath))
+                File.Delete(classPath);
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
     }
 }

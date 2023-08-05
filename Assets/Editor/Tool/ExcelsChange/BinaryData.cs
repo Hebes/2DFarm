@@ -23,7 +23,7 @@ namespace ACFrameworkCore
         /// <summary>
         /// 放置要生成的二进制文件的路径
         /// </summary>
-        private static readonly string BYTE_PATH = $"{Application.dataPath}/AssetsPackage/Config";
+        private static readonly string BYTE_PATH = $"{Application.dataPath}/AssetsPackage/BinaryData";
 
         /// <summary>
         /// 创建二进制文件
@@ -59,7 +59,7 @@ namespace ACFrameworkCore
         }
 
         /// <summary>
-        /// 
+        /// 获取字节
         /// </summary>
         /// <param name="type">例如List<Int>的数据在表格也当成string类型看</param>
         /// <param name="data"></param>
@@ -72,6 +72,8 @@ namespace ACFrameworkCore
                 bytes = BitConverter.GetBytes(int.Parse(data));
             else if (type == typeof(float))
                 bytes = BitConverter.GetBytes(float.Parse(data));
+            else if (type == typeof(bool))
+                bytes = BitConverter.GetBytes(bool.Parse(data));
             else if (type == typeof(string)|| 
                 type == typeof(List<string>)||
                 type == typeof(List<int>)||
@@ -96,6 +98,7 @@ namespace ACFrameworkCore
             for (int i = 0; i < temp.Length; ++i)
             {
                 if (temp[i] == "int") types.Add(typeof(int));
+                else if (temp[i] == "bool") types.Add(typeof(bool));
                 else if (temp[i] == "float") types.Add(typeof(float));
                 else if (temp[i] == "string") types.Add(typeof(string));
                 else if (temp[i] == "List<int>") types.Add(typeof(List<int>));

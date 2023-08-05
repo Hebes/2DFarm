@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEditorInternal;
@@ -129,7 +131,40 @@ namespace ACFrameworkCore
             sb.AppendLine("    }\r\n}");
             string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigLayer.cs";
             if (File.Exists(classPath))
+            {
+                Debug.Log("文件存在开始删除!");
                 File.Delete(classPath);
+            }
+
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Tool/GenerateConfig/生成SortingLayer配置文件")]//#E
+        public static void GenerateSortingLayerConfig()
+        {
+            Type internalEditorUtilityType = typeof(InternalEditorUtility);
+            PropertyInfo sortingLayersProperty = internalEditorUtilityType.GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
+            string[] sortingLayers=(string[])sortingLayersProperty.GetValue(null, new object[0]);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigSortingLayer\r\n    {");
+
+            foreach (string s in sortingLayers)
+            {
+                string tempstr = s;
+                sb.AppendLine($"        public const string SortingLayer{tempstr.Replace(" ", "").Trim()} = \"{tempstr}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigSortingLayer.cs";
+            if (File.Exists(classPath))
+            {
+                Debug.Log("文件存在开始删除!");
+                File.Delete(classPath);
+            }
+
             File.WriteAllText(classPath, sb.ToString());
             AssetDatabase.Refresh();
         }

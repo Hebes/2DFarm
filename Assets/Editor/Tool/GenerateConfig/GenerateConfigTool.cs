@@ -22,6 +22,8 @@ namespace ACFrameworkCore
     public class GenerateConfigTool : EditorWindow
     {
         private static string CommonPath = $"{Application.dataPath}/AssetsPackage/";
+        private static string GenerateConfigPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/Common/";
+
 
         [MenuItem("Tool/GenerateConfig/生成Prefab配置文件")]//#E
         public static void GeneratePrefabConfig()
@@ -39,7 +41,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string {tempstr}Prefab = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/PrefabConfig.cs";
+            string classPath = $"{GenerateConfigPath}ConfigPrefab.cs";
             if (File.Exists(classPath))
                 File.Delete(classPath);
             File.WriteAllText(classPath, sb.ToString());
@@ -62,7 +64,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string {tempstr}Panel = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/UIPanelConfig.cs";
+            string classPath = $"{GenerateConfigPath}ConfigUIPanel.cs";
             if (File.Exists(classPath))
                 File.Delete(classPath);
             File.WriteAllText(classPath, sb.ToString());
@@ -85,7 +87,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string {tempstr}Scenes = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ScenesConfig.cs";
+            string classPath = $"{GenerateConfigPath}ConfigScenes.cs";
             if (File.Exists(classPath))
                 File.Delete(classPath);
             File.WriteAllText(classPath, sb.ToString());
@@ -107,7 +109,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string Tag{tempstr} = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigTag.cs";
+            string classPath = $"{GenerateConfigPath}ConfigTag.cs";
             if (File.Exists(classPath))
                 File.Delete(classPath);
             File.WriteAllText(classPath, sb.ToString());
@@ -129,7 +131,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string Layer{tempstr.Replace(" ","").Trim()} = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigLayer.cs";
+            string classPath = $"{GenerateConfigPath}ConfigLayer.cs";
             if (File.Exists(classPath))
             {
                 Debug.Log("文件存在开始删除!");
@@ -158,7 +160,7 @@ namespace ACFrameworkCore
                 sb.AppendLine($"        public const string SortingLayer{tempstr.Replace(" ", "").Trim()} = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigSortingLayer.cs";
+            string classPath = $"{GenerateConfigPath}ConfigSortingLayer.cs";
             if (File.Exists(classPath))
             {
                 Debug.Log("文件存在开始删除!");

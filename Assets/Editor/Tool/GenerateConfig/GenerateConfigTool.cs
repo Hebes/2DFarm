@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -20,7 +21,7 @@ namespace ACFrameworkCore
     {
         private static string CommonPath = $"{Application.dataPath}/AssetsPackage/";
 
-        [MenuItem("Tool/生成Prefab配置文件")]//#E
+        [MenuItem("Tool/GenerateConfig/生成Prefab配置文件")]//#E
         public static void GeneratePrefabConfig()
         {
             string Path = $"{CommonPath}Prefab/";
@@ -43,7 +44,7 @@ namespace ACFrameworkCore
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Tool/生成UIPanel配置文件")]//#E
+        [MenuItem("Tool/GenerateConfig/生成UIPanel配置文件")]//#E
         public static void GenerateUIPanelConfig()
         {
             string Path = $"{CommonPath}UIPanel/";
@@ -66,7 +67,7 @@ namespace ACFrameworkCore
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Tool/生成Scenes配置文件")]//#E
+        [MenuItem("Tool/GenerateConfig/生成Scenes配置文件")]//#E
         public static void GenerateScenesConfig()
         {
             string Path = $"{CommonPath}Scenes/";
@@ -83,6 +84,28 @@ namespace ACFrameworkCore
             }
             sb.AppendLine("    }\r\n}");
             string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ScenesConfig.cs";
+            if (File.Exists(classPath))
+                File.Delete(classPath);
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Tool/GenerateConfig/生成Tag配置文件")]//#E
+        public static void GenerateTagConfig()
+        {
+            var tags = InternalEditorUtility.tags;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigTag\r\n    {");
+
+            foreach (string s in tags)
+            {
+                string tempstr = s;
+                sb.AppendLine($"        public const string Tag{tempstr} = \"{tempstr}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/ConfigTag.cs";
             if (File.Exists(classPath))
                 File.Delete(classPath);
             File.WriteAllText(classPath, sb.ToString());

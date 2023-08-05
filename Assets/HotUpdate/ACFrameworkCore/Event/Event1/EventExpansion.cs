@@ -1,4 +1,7 @@
-﻿using UnityEngine.Events;
+﻿using dnlib.DotNet;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 /*--------脚本描述-----------
 				
@@ -39,6 +42,15 @@ namespace ACFrameworkCore
         public static void RemoveEventListener(this string eventName , UnityAction action)
         {
             EventComponent.Instance.RemoveEventListener(eventName, action);
+        }
+
+        public static void TriggerEvent<T>(this string eventName, T info)
+        {
+            EventComponent.Instance.EventTrigger<T>(eventName, info);
+        }
+        public static void TriggerEvent(string eventName)
+        {
+            EventComponent.Instance.EventTrigger(eventName);
         }
     }
 }

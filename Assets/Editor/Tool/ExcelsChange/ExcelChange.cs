@@ -80,33 +80,35 @@ namespace ACFrameworkCore
         }
 
 
-        //private static string DATA_BINARY_PATH = $"{Application.dataPath}/Excel2Script/Byte/TowerInfo.bytes";
-        //[MenuItem("Tool/Bytes数据读取")]//#E
-        //public static void ReaDData()
-        //{
-        //    //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
-        //    //{
-        //    //    //读取全都的字节
-        //    //    byte[] bytes = new byte[fs.Length];
-        //    //    fs.Read(bytes, 0, bytes.Length);
-        //    //    fs.Close();
-        //    //    List<TowerInfo> towerInfos = LoopGetData<TowerInfo>(bytes);
-        //    //    foreach (TowerInfo info in towerInfos)
-        //    //    {
-        //    //        Debug.Log(info.name);
-        //    //    }
-        //    //}
-        //    //TowerInfo towerInfo = Load<TowerInfo>();
-        //    //TowerInfo towerInfo = new TowerInfo()
-        //    //{
-        //    //    atk = 30,
-        //    //    atkRange = 30,
-        //    //    atkType = 30,
-        //    //    eff = "测试1",
-        //    //    id = 30,
-        //    //    imgRes= "测试1",
-        //    //};
-        //}
+        private static string DATA_BINARY_PATH = $"{Application.dataPath}/AssetsPackage/BinaryData/ItemDetails.bytes";//Assets/AssetsPackage/BinaryData/ItemDetails.bytes
+        [MenuItem("Tool/Bytes数据读取")]//#E
+        public static void ReaDData()
+        {
+            //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))
+            //{
+            //    //读取全都的字节
+            //    byte[] bytes = new byte[fs.Length];
+            //    fs.Read(bytes, 0, bytes.Length);
+            //    fs.Close();
+            //    List<ItemDetails> towerInfos = LoopGetData<ItemDetails>(bytes);
+            //    foreach (ItemDetails info in towerInfos)
+            //    {
+            //        Debug.Log(info.name);
+            //    }
+            //}
+
+
+            //ItemDetails towerInfo = Load<ItemDetails>();
+            //ItemDetails towerInfo = new ItemDetails()
+            //{
+            //    atk = 30,
+            //    atkRange = 30,
+            //    atkType = 30,
+            //    eff = "测试1",
+            //    id = 30,
+            //    imgRes = "测试1",
+            //};
+        }
 
         /// <summary>
         /// 循环获取数据
@@ -127,10 +129,16 @@ namespace ACFrameworkCore
                 object dataObj = Activator.CreateInstance(classType);
                 foreach (FieldInfo fi in infos)
                 {
+
                     if (fi.FieldType == typeof(int))
                     {
                         fi.SetValue(dataObj, BitConverter.ToInt32(bytes, pointer));
                         pointer += 4;
+                    }
+                    else if (fi.FieldType == typeof(bool))
+                    {
+                        fi.SetValue(dataObj, BitConverter.ToBoolean(bytes, pointer));
+                        pointer += 1;
                     }
                     else if (fi.FieldType == typeof(string))
                     {

@@ -19,6 +19,11 @@ namespace ACFrameworkCore
             sceneLoad.LoadScene(SceneName);
         }
 
+        public void LoadSceneCommon(string SceneName, UnityAction unityAction)
+        {
+            sceneLoad.LoadSceneCommon(SceneName, unityAction);
+        }
+
         /// <summary>
         /// 异步加载场景
         /// </summary>
@@ -28,7 +33,5 @@ namespace ACFrameworkCore
         {
             sceneLoad.LoadSceneAsync(SceneName, unityAction);
         }
-
-        
     }
 }

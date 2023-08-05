@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using System.Collections;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using YooAsset;
 
 namespace ACFrameworkCore
@@ -10,12 +7,17 @@ namespace ACFrameworkCore
     public class YooAssetLoadScene : ISceneLoad
     {
         public readonly string packageName = "PC";
+        public const string LoadingEvenName = "进度条更新";
 
         public void LoadScene(string SceneName)
         {
             //SceneManager.LoadScene(SceneName);
         }
-
+        public void LoadSceneCommon(string SceneName, UnityAction unityAction)
+        {
+            //SceneManager.LoadScene(SceneName);
+            CMonoManager.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneCommon(SceneName, unityAction));
+        }
         public void LoadSceneAsync(string SceneName, IEnumerator enumerator)
         {
             CMonoManager.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
@@ -24,7 +26,6 @@ namespace ACFrameworkCore
         {
             CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
-
         public void LoadSceneIEnumerator(string SceneName, UnityAction unityAction)
         {
             CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
@@ -47,15 +48,14 @@ namespace ACFrameworkCore
 
             while (!handle.IsDone)
             {
-                EventComponent.Instance.EventTrigger("进度条更新", handle.Progress);
+                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
                 yield return handle.Progress;
             }
             unityAction?.Invoke();
             // 释放资源
             package.UnloadUnusedAssets();
         }
-
-        private IEnumerator ReallyLoadSceneIEnumerator(string SceneName, IEnumerator enumerator)
+        IEnumerator ReallyLoadSceneIEnumerator(string SceneName, IEnumerator enumerator)
         {
             var package = YooAssets.GetPackage(packageName);
             var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
@@ -64,11 +64,29 @@ namespace ACFrameworkCore
 
             while (!handle.IsDone)
             {
-                EventComponent.Instance.EventTrigger("进度条更新", handle.Progress);
+                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
                 yield return handle.Progress;
             }
             yield return enumerator;
 
+            // 释放资源
+            package.UnloadUnusedAssets();
+        }
+
+        IEnumerator ReallyLoadSceneCommon(string SceneName, UnityAction unityAction)
+        {
+            var package = YooAssets.GetPackage(packageName);
+            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
+            bool suspendLoad = false;
+            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
+
+            while (!handle.IsDone)
+            {
+                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
+                yield return handle.Progress;
+            }
+            unityAction?.Invoke();
+            handle.ActivateScene();
             // 释放资源
             package.UnloadUnusedAssets();
         }

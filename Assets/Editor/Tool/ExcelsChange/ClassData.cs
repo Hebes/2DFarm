@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -17,7 +18,7 @@ namespace ACFrameworkCore
 {
     public class ClassData
     {
-        private static string DATA_CLASS_PATH = $"{Application.dataPath}/HotUpdate/GameMain/Config/";//Assets/HotUpdate/GameMain/Config
+        private static string DATA_CLASS_PATH = $"{Application.dataPath}/HotUpdate/GameMain/Config/ExcelClass/";//Assets/HotUpdate/GameMain/Config
 
         /// <summary>
         /// 通过Excel数据生成脚本文件
@@ -40,6 +41,7 @@ namespace ACFrameworkCore
             string path = $"{DATA_CLASS_PATH}/{className}.cs";
             File.Delete(path);
             File.WriteAllText(path, sb.ToString());
+            AssetDatabase.Refresh();
         }
     }
 }

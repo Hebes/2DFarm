@@ -15,6 +15,8 @@ namespace ACFrameworkCore
         /// </summary>
         public abstract void LoadScene(string SceneName);
 
+        public abstract void LoadSceneCommon(string SceneName, UnityAction unityAction);
+
         /// <summary>
         /// 异步加载场景
         /// </summary>

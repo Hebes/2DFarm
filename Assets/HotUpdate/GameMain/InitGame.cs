@@ -12,9 +12,11 @@ public class InitGame
         string value = await InitRsv();
         DLog.Log(value);
         DLog.Log("开始创建物体");
+
+        //CSceneManager.Instance.LoadSceneCommon();
         //EnterGame();
-        CUIManager.Instance.ShwoUIPanel<StartPanel>("Start");
-        MInputSystemManager.Instance.LoadConfigFile();
+        //CUIManager.Instance.ShwoUIPanel<StartPanel>("Start");
+        //MInputSystemManager.Instance.LoadConfigFile();
     }
 
 

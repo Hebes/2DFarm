@@ -77,7 +77,6 @@ public class Init : MonoBehaviour
     }
     private void Start()
     {
-
         FsmProcessChange(EHotUpdateProcess.FsmPatchPrepare);
     }
 
@@ -413,7 +412,6 @@ public class Init : MonoBehaviour
 
         GameObject.Destroy(aCUIComponent.gameObject);
     }
-
     #endregion
 
     #region 辅助功能

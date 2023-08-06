@@ -1,56 +1,74 @@
 ﻿using ACFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 
+/// <summary>
+/// 游戏流程
+/// </summary>
+public enum EInitGameProcess
+{
+    FSMInitFramework,//初始化框架
+    FSMInitData,//初始化数据
+    FSMEnterGame,//进入游戏
+}
 public class InitGame
 {
-    public static async void Init()
+    public async static void Init()
     {
-        string value = await InitRsv();
-        DLog.Log(value);
-        DLog.Log("开始创建物体");
+        await InitRsv();
+        await Task.Delay(TimeSpan.FromSeconds(2f));
+        //InventoryManager inventoryManager = InventoryManager.Instance;
+        EnterGame();
 
-        //CSceneManager.Instance.LoadSceneCommon();
-        //EnterGame();
-        //CUIManager.Instance.ShwoUIPanel<StartPanel>("Start");
-        //MInputSystemManager.Instance.LoadConfigFile();
+        //SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
     }
+
+    /// <summary>
+    /// 切换初始化场景
+    /// </summary>
+    private static async void SwitchInitGameProcess(EInitGameProcess initGameProcess)
+    {
+        switch (initGameProcess)
+        {
+            case EInitGameProcess.FSMInitFramework:
+                await InitRsv();
+                SwitchInitGameProcess(EInitGameProcess.FSMInitData);
+                break;
+            case EInitGameProcess.FSMInitData:
+                InventoryManager inventoryManager = InventoryManager.Instance;
+                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+                break;
+            case EInitGameProcess.FSMEnterGame:
+                EnterGame();
+                break;
+        }
+    }
+
 
 
     private static async Task<string> InitRsv()
     {
-        HashSet<ICore> _initHs = new HashSet<ICore>();
-        _initHs.Add(new CDebugManager());
-        _initHs.Add(new CUIManager());
-        _initHs.Add(new CResourceManager());
-
+        HashSet<ICore> _initHs = new HashSet<ICore>()
+        {
+            new DebugManager(),
+            new UIManager(),
+            new ResourceManager(),
+            new MonoManager(),
+        };
         foreach (var init in _initHs)
         {
             init.ICroeInit();
             await Task.Delay(TimeSpan.FromSeconds(.001f));
         }
-        return "核心框架模块已经全都初始化完毕1!";
-    }
 
-    /// <summary>
-    /// 进入游戏
-    /// </summary>
+        return "核心框架模块已经全都初始化完毕";
+    }
     private static void EnterGame()
     {
-        DLog.Log("开始打开界面");
-        //UIComponent.Instance.OnOpenUIAsync<PanelComponent>("Panel", EUILayer.System);
-        //MonoComponent.Instance.MonoStartCoroutine(HideUI());
-        //MonoComponent.Instance.Pause();
-    }
-
-    static IEnumerator HideUI()
-    {
-        yield return new WaitForSeconds(5);
-        //UIComponent.Instance.OnCloseUI("Panel");
-        //UIComponent.Instance.OnCreatUI<PanelComponent>("Panel", EUILayer.System);
-        //MonoComponent.Instance.Pause();
+        DLog.Log("开始游戏!");
+        //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
+        SceneManager.Instance.LoadSceneAsyn(ConfigScenes.FieldScenes);
+        SceneManager.Instance.LoadSceneCommon(ConfigScenes.PersistentSceneScenes);
     }
 }

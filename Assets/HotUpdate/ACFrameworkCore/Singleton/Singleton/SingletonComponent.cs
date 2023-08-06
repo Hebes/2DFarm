@@ -2,13 +2,7 @@
 
 namespace ACFrameworkCore
 {
-    public interface ISingletonInit
-    {
-        public void Init();
-    }
-
-
-    public class SingletonInit<T> where T : ISingletonInit, new()
+    public class SingletonInit<T> where T : ICore, new()
     {
         private static T instance;
         public static T Instance
@@ -18,7 +12,7 @@ namespace ACFrameworkCore
                 if (instance == null)
                 {
                     instance = new T();
-                    instance.Init();
+                    instance.ICroeInit();
                 }
                 return instance;
             }
@@ -39,7 +33,7 @@ namespace ACFrameworkCore
     }
 
 
-    public class MonoSingletonInit<T> : MonoBehaviour where T : MonoBehaviour, ISingletonInit
+    public class MonoSingletonInit<T> : MonoBehaviour where T : MonoBehaviour, ICore
     {
         private static T instance;
         public static T Instance
@@ -51,7 +45,7 @@ namespace ACFrameworkCore
                     GameObject obj = new GameObject();
                     obj.name = typeof(T).ToString();
                     instance = obj.AddComponent<T>();
-                    instance.Init();
+                    instance.ICroeInit();
                     DontDestroyOnLoad(obj);
                 }
 

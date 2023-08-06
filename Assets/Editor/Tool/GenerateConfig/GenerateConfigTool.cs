@@ -21,14 +21,14 @@ namespace ACFrameworkCore
 {
     public class GenerateConfigTool : EditorWindow
     {
-        private static string CommonPath = $"{Application.dataPath}/AssetsPackage/";
+        private static string CommonPath = $"{Application.dataPath}\\AssetsPackage\\";
         private static string GenerateConfigPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/Common/";
 
 
         [MenuItem("Tool/GenerateConfig/生成Prefab配置文件")]//#E
         public static void GeneratePrefabConfig()
         {
-            string Path = $"{CommonPath}Prefab/";
+            string Path = $"{CommonPath}Prefab\\";
             string[] strings = Directory.GetFiles(Path, "*.prefab", SearchOption.AllDirectories);
 
             StringBuilder sb = new StringBuilder();
@@ -37,7 +37,8 @@ namespace ACFrameworkCore
 
             foreach (string s in strings)
             {
-                string tempstr = s.Replace(Path, "").Replace(".prefab", "");
+                string[] strPath = s.Split('\\');
+                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "");
                 sb.AppendLine($"        public const string {tempstr}Prefab = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
@@ -128,7 +129,7 @@ namespace ACFrameworkCore
             foreach (string s in tags)
             {
                 string tempstr = s;
-                sb.AppendLine($"        public const string Layer{tempstr.Replace(" ","").Trim()} = \"{tempstr}\";");
+                sb.AppendLine($"        public const string Layer{tempstr.Replace(" ", "").Trim()} = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
             string classPath = $"{GenerateConfigPath}ConfigLayer.cs";
@@ -147,7 +148,7 @@ namespace ACFrameworkCore
         {
             Type internalEditorUtilityType = typeof(InternalEditorUtility);
             PropertyInfo sortingLayersProperty = internalEditorUtilityType.GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
-            string[] sortingLayers=(string[])sortingLayersProperty.GetValue(null, new object[0]);
+            string[] sortingLayers = (string[])sortingLayersProperty.GetValue(null, new object[0]);
 
 
             StringBuilder sb = new StringBuilder();
@@ -161,6 +162,64 @@ namespace ACFrameworkCore
             }
             sb.AppendLine("    }\r\n}");
             string classPath = $"{GenerateConfigPath}ConfigSortingLayer.cs";
+            if (File.Exists(classPath))
+            {
+                Debug.Log("文件存在开始删除!");
+                File.Delete(classPath);
+            }
+
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Tool/GenerateConfig/生成bytes配置文件")]//#E
+        public static void GeneratebytesConfig()
+        {
+            string Path = $"{CommonPath}BinaryData/";
+            string[] strings = Directory.GetFiles(Path, "*.bytes", SearchOption.AllDirectories);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigBytes\r\n    {");
+
+            foreach (string s in strings)
+            {
+                string tempstr = s.Replace(Path, "").Replace(".bytes", "");
+                sb.AppendLine($"        public const string Bytes{tempstr} = \"{tempstr}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{GenerateConfigPath}ConfigBytes.cs";
+            if (File.Exists(classPath))
+            {
+                Debug.Log("文件存在开始删除!");
+                File.Delete(classPath);
+            }
+
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Tool/GenerateConfig/生成Sprites配置文件")]//#E
+        public static void GenerateSpritesConfig()
+        {
+            string Path = $"{CommonPath}Sprites/";
+            string[] strings = Directory.GetFiles(Path, "*.png", SearchOption.AllDirectories);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigSprites\r\n    {");
+
+            foreach (string s in strings)
+            {
+                string[] strPath = s.Split('\\');
+                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "");
+                string tempstr1 = strPath[strPath.Length - 1].Replace(".png", "");
+                sb.AppendLine($"        public const string Sprites{tempstr} = \"{tempstr1}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{GenerateConfigPath}ConfigSprites.cs";
             if (File.Exists(classPath))
             {
                 Debug.Log("文件存在开始删除!");

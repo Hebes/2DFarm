@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Management.Instrumentation;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -16,10 +17,12 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class CDebugManager : ICore
+    public class DebugManager : ICore
     {
+        public static DebugManager Instance;
         public void ICroeInit()
         {
+            Instance=this;
             InitiativeLog();
             PassivityLog();
             DLog.Log("日志模块初始化完毕!");
@@ -32,12 +35,10 @@ namespace ACFrameworkCore
         /// </summary>
         public void InitiativeLog()
         {
-            bool isLogPrint = PlayerPrefs.GetInt("设置日志开启") == 0;
-
             //主动日志模块
             DLog.InitSettings(new LogConfig()
             {
-                enableSave = isLogPrint,
+                enableSave = true,
                 eLoggerType = LoggerType.Unity,
 #if !UNITY_EDITOR
                 //savePath = $"{Application.persistentDataPath}/LogOut/ActiveLog/",

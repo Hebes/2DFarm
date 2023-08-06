@@ -81,7 +81,7 @@ namespace ACFrameworkCore
 
 
         private static string DATA_BINARY_PATH = $"{Application.dataPath}/AssetsPackage/BinaryData/ItemDetails.bytes";//Assets/AssetsPackage/BinaryData/ItemDetails.bytes
-        [MenuItem("Tool/Bytes数据读取")]//#E
+        //[MenuItem("Tool/Bytes数据读取")]//#E
         public static void ReaDData()
         {
             //using (FileStream fs = File.Open(DATA_BINARY_PATH, FileMode.Open, FileAccess.Read))

@@ -1,4 +1,8 @@
-﻿/*--------脚本描述-----------
+﻿using System;
+using UnityEngine.Events;
+using YooAsset;
+
+/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -8,9 +12,6 @@
     资源加载
 
 -----------------------*/
-
-using System;
-using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
@@ -23,9 +24,9 @@ namespace ACFrameworkCore
         YooAsset,
     }
 
-    public class CResourceManager : ICore
+    public class ResourceManager : ICore
     {
-        public static CResourceManager Instance;
+        public static ResourceManager Instance;
         private IResload iload;
         public void ICroeInit()
         {
@@ -118,9 +119,9 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public void LoadRawFile<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        public RawFileOperationHandle LoadRawFile<T>(string ResName) where T : class
         {
-
+            return iload.LoadRawFile<T>(ResName);
         }
 
         /// <summary>

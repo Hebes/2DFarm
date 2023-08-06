@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Management.Instrumentation;
 using UnityEngine;
 using YooAsset;
 
@@ -15,10 +16,9 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class CUIManager : ICore
+    public class UIManager : ICore
     {
-        public static CUIManager Instance;
-
+        public static UIManager Instance;
         public void ICroeInit()
         {
             Instance = this;
@@ -165,7 +165,7 @@ namespace ACFrameworkCore
                 case EUIMode.ReverseChange: PushUIFormToStack(uiFormName); break; //需要“反向切换”窗口模式
                 case EUIMode.HideOther: EnterUIFormsAndHideOther(uiFormName); break;//“隐藏其他”窗口模式
             }
-            
+
         }//显示界面
         public void CloseUIForms(string uiFormName)
         {
@@ -175,7 +175,7 @@ namespace ACFrameworkCore
             //DLog.Log($"当前的UI窗体的显示类型是:{baseUiForm.mode}");
             //DLog.Log(LogCoLor.Blue, $"当前的UI窗体的显示类型是:{baseUiForm.mode}");
             //根据窗体不同的显示类型，分别作不同的关闭处理
-            CMonoManager.Instance.OnRemoveUpdateEvent(baseUiForm.UIUpdate);
+            MonoManager.Instance.OnRemoveUpdateEvent(baseUiForm.UIUpdate);
             switch (baseUiForm.mode)
             {
                 case EUIMode.Normal: ExitUIForms(uiFormName); break;//普通窗体的关闭
@@ -188,7 +188,7 @@ namespace ACFrameworkCore
             //“所有UI窗体”集合中，如果没有记录，则直接返回
             _DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUIForm);
             if (baseUIForm == null) return;
-            CMonoManager.Instance.OnRemoveUpdateEvent(baseUIForm.UIUpdate);
+            MonoManager.Instance.OnRemoveUpdateEvent(baseUIForm.UIUpdate);
             baseUIForm.UIOnDestroy();
             //资源卸载
             YooAssetHdnleDic.TryGetValue(uiFormName, out AssetOperationHandle yooassetHandle);
@@ -208,7 +208,7 @@ namespace ACFrameworkCore
             t.gameObject = goCloneUIPrefabs;
             t.UIName = uiFormName;
             t.UIAwake();
-            CMonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);
+            MonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);
             if (goCloneUIPrefabs == null)
                 DLog.Error("加载预制体失败");
             switch (t.type)
@@ -388,7 +388,7 @@ namespace ACFrameworkCore
             return Instance.CanvasTransfrom.GetChild(UIType.ToString());
         }
 
-       
+
         #endregion
     }
 }

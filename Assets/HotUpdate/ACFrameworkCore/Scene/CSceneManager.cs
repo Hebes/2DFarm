@@ -2,10 +2,10 @@
 
 namespace ACFrameworkCore
 {
-    public class CSceneManager : SingletonInit<CSceneManager>,ISingletonInit
+    public class SceneManager : SingletonInit<SceneManager>, ICore
     {
         private ISceneLoad sceneLoad;
-        public void Init()
+        public void ICroeInit()
         {
             sceneLoad = new YooAssetLoadScene();
         }
@@ -19,7 +19,7 @@ namespace ACFrameworkCore
             sceneLoad.LoadScene(SceneName);
         }
 
-        public void LoadSceneCommon(string SceneName, UnityAction unityAction)
+        public void LoadSceneCommon(string SceneName, UnityAction unityAction = null)
         {
             sceneLoad.LoadSceneCommon(SceneName, unityAction);
         }
@@ -29,7 +29,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="SceneName">场景名称</param>
         /// <param name="unityAction">加载完毕后的回调</param>
-        public void LoadSceneAsyn(string SceneName, UnityAction unityAction)
+        public void LoadSceneAsyn(string SceneName, UnityAction unityAction = null)
         {
             sceneLoad.LoadSceneAsync(SceneName, unityAction);
         }

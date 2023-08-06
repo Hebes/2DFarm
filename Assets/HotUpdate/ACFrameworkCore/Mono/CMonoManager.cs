@@ -6,16 +6,19 @@ using Time = UnityEngine.Time;
 
 namespace ACFrameworkCore
 {
-    public class CMonoManager : SingletonInit<CMonoManager>,ISingletonInit
+    public class MonoManager : ICore
     {
-        public void Init()
+        public static MonoManager Instance;
+        public void ICroeInit()
         {
+            Instance = this;
             GameObject monoTemp = new GameObject("Mono");
             monoController = monoTemp.AddComponent<MonoController>();
             GameObject.DontDestroyOnLoad(monoTemp);
             DLog.Log("初始化Mono完毕!");
         }
-        public MonoController monoController;
+
+        private MonoController monoController;
 
         private float m_Time = 0f;
 
@@ -46,17 +49,17 @@ namespace ACFrameworkCore
             monoController.OnRemoveFixedUpdateEvent(unityAction);
         }
 
-        public Coroutine MonoStartCoroutine(IEnumerator routine)
+        public Coroutine StartCoroutine(IEnumerator routine)
         {
-            return monoController.MonoStartCoroutine(routine);
+            return monoController.StartCoroutine(routine);
         }
-        public Coroutine MonoStartCoroutine(string methodName, [DefaultValue("null")] object value)
+        public Coroutine StartCoroutine(string methodName, [DefaultValue("null")] object value)
         {
-            return monoController.MonoStartCoroutine(methodName, value);
+            return monoController.StartCoroutine(methodName, value);
         }
-        public Coroutine MonoStartCoroutine(string methodName)
+        public Coroutine StartCoroutine(string methodName)
         {
-            return monoController.MonoStartCoroutine(methodName);
+            return monoController.StartCoroutine(methodName);
         }
         public void MonoStopCoroutine(string methodName, [DefaultValue("null")] object value)
         {

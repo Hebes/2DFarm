@@ -49,7 +49,7 @@ namespace ACFrameworkCore
             }
         }
 
-        public K Load11<K>(string fileName, EDataType dataType) where K : UnityEngine.Object
+        public K Load<K>(string fileName, EDataType dataType) where K : UnityEngine.Object
         {
             switch (dataType)
             {

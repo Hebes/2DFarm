@@ -15,9 +15,9 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class CAduioManager : SingletonInit<CAduioManager>, ISingletonInit
+    public class CAduioManager : SingletonInit<CAduioManager>, ICore
     {
-        public void Init()
+        public void ICroeInit()
         {
             AudioClipDic = new Dictionary<string, AudioClip>();
             soundList = new List<AudioSource>();

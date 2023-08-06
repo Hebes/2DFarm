@@ -33,7 +33,7 @@ namespace ACFrameworkCore
         JUMP,//跳
     }
 
-    public class MInputSystemManager : SingletonInit<MInputSystemManager>, ISingletonInit
+    public class MInputSystemManager : SingletonInit<MInputSystemManager>, ICore
     {
 
         //记录当前改哪一个键
@@ -42,7 +42,7 @@ namespace ACFrameworkCore
 
         public PlayerInput playerInput;
 
-        public void Init()
+        public void ICroeInit()
         {
             //LoadConfigFile();
         }

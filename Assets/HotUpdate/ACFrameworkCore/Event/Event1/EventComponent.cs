@@ -1,6 +1,6 @@
 ﻿
+using System;
 using System.Collections.Generic;
-using UnityEngine.Events;
 
 /*--------脚本描述-----------
 				
@@ -15,94 +15,74 @@ using UnityEngine.Events;
 
 namespace ACFrameworkCore
 {
-    public class EventComponent : SingletonInit<EventComponent>,ISingletonInit
+    public class EventManager : SingletonInit<EventManager>, ICore
     {
-        public void Init()
+        public void ICroeInit()
         {
             eventDic = new Dictionary<string, IEventInfo>();
         }
-
         private Dictionary<string, IEventInfo> eventDic { get; set; }
 
-        /// <summary>
-        /// 添加事件监听
-        /// </summary>
-        /// <param name="name">事件的名字</param>
-        /// <param name="action">准备用来处理事件 的委托函数</param>
-        public void AddEventListener<T>(string name, UnityAction<T> action)
-        {
-            if (eventDic.ContainsKey(name))
-                (eventDic[name] as EventInfo<T>).actions += action;
-            else
-                eventDic.Add(name, new EventInfo<T>(action));
-        }
-
-        /// <summary>
-        /// 监听不需要参数传递的事件
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        public void AddEventListener(string name, UnityAction action)
+        //不需要参数的 
+        public void AddEventListener(string name, Action action)
         {
             if (eventDic.ContainsKey(name))
                 (eventDic[name] as EventInfo).actions += action;
             else
                 eventDic.Add(name, new EventInfo(action));
         }
-
-        /// <summary>
-        /// 移除对应的事件监听
-        /// </summary>
-        /// <param name="name">事件的名字</param>
-        /// <param name="action">对应之前添加的委托函数</param>
-        public void RemoveEventListener<T>(string name, UnityAction<T> action)
-        {
-            if (eventDic.ContainsKey(name))
-                (eventDic[name] as EventInfo<T>).actions -= action;
-        }
-
-        /// <summary>
-        /// 移除不需要参数的事件
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="action"></param>
-        public void RemoveEventListener(string name, UnityAction action)
+        public void RemoveEventListener(string name, Action action)
         {
             if (eventDic.ContainsKey(name))
                 (eventDic[name] as EventInfo).actions -= action;
         }
-
-        /// <summary>
-        /// 事件触发
-        /// </summary>
-        /// <param name="name">哪一个名字的事件触发了</param>
-        public void EventTrigger<T>(string name, T info)
-        {
-            if (!eventDic.ContainsKey(name)) return;
-            if ((eventDic[name] as EventInfo<T>).actions != null)
-                (eventDic[name] as EventInfo<T>).actions.Invoke(info);
-        }
-
-        /// <summary>
-        /// 事件触发（不需要参数的）
-        /// </summary>
-        /// <param name="name"></param>
         public void EventTrigger(string name)
         {
             if (!eventDic.ContainsKey(name)) return;
-            if ((eventDic[name] as EventInfo).actions != null)
-                (eventDic[name] as EventInfo).actions.Invoke();
+            (eventDic[name] as EventInfo).Trigger();
         }
 
-        /// <summary>
-        /// 清空事件中心
-        /// 主要用在 场景切换时
-        /// </summary>
+        //带1参数的
+        public void AddEventListener<T>(string name, Action<T> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T>).actions += action;
+            else
+                eventDic.Add(name, new EventInfo<T>(action));
+        }
+        public void RemoveEventListener<T>(string name, Action<T> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T>).actions -= action;
+        }
+        public void EventTrigger<T>(string name, T info)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            (eventDic[name] as EventInfo<T>).Trigger(info);
+        }
+
+        //带2个参数的
+        public void AddEventListener<T, K>(string name, Action<T, K> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K>).actions += action;
+            else
+                eventDic.Add(name, new EventInfo<T, K>(action));
+        }
+        public void RemoveEventListener<T, K>(string name, Action<T, K> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K>).actions -= action;
+        }
+        public void EventTrigger<T, K>(string name, T t, K k)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            (eventDic[name] as EventInfo<T, K>).Trigger(t, k);
+        }
+
         public void Clear()
         {
             eventDic.Clear();
         }
-
-        
     }
 }

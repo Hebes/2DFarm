@@ -38,7 +38,7 @@ namespace ACFrameworkCore
         /// <summary>
         /// 砍树工具
         /// </summary>
-        ChopTool = 5,
+        ChopTool = 5, 
         /// <summary>
         /// 砸石头工具
         /// </summary>
@@ -67,9 +67,9 @@ namespace ACFrameworkCore
     /// </summary>
     public enum ESlotType
     {
-        Ba = 1,
-        Box = 2,
-        Shop = 3,
+        Bag = 1,        //背包类型
+        Box = 2,        //盒子类型
+        Shop = 3,       //商店
     }
 
     /// <summary>

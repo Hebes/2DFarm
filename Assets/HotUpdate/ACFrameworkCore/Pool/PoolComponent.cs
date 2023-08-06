@@ -18,9 +18,9 @@ using YooAsset;
 namespace ACFrameworkCore
 {
 
-    public class PoolComponent : SingletonInit<PoolComponent>,ISingletonInit
+    public class PoolManager : SingletonInit<PoolManager>,ICore
     {
-        public void Init()
+        public void ICroeInit()
         {
             poolDic = new Dictionary<string, PoolData>();
         }

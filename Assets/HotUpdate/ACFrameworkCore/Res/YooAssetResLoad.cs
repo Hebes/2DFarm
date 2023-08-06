@@ -42,7 +42,7 @@ namespace ACFrameworkCore
         }
         public void LoadAssetAsyncIEnumerator<T>(string SceneName, UnityAction<T> callback) where T : UnityEngine.Object
         {
-            CMonoManager.Instance.MonoStartCoroutine(ResLoadAsync(SceneName, callback));
+            MonoManager.Instance.StartCoroutine(ResLoadAsync(SceneName, callback));
         }
         public void LoadAssetAsyncDelegate<T>(string ResName, System.Action<T> callback) where T : UnityEngine.Object
         {
@@ -78,7 +78,7 @@ namespace ACFrameworkCore
         }
         public void LoadAllAssetsAsyncIEnumerator<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
-            CMonoManager.Instance.MonoStartCoroutine(AllAssetsAsync(location, callback));
+            MonoManager.Instance.StartCoroutine(AllAssetsAsync(location, callback));
         }
         IEnumerator AllAssetsAsync<T>(string location, UnityAction<T[]> callback) where T : UnityEngine.Object
         {
@@ -90,7 +90,7 @@ namespace ACFrameworkCore
         #endregion
 
         #region 原生文件加载
-        public RawFileOperationHandle LoadRawFile<T>(string location) where T : UnityEngine.Object
+        public RawFileOperationHandle LoadRawFile<T>(string location) where T : class
         {
             var package = GetPakckage();
             RawFileOperationHandle handle = package.LoadRawFileAsync(location);
@@ -101,7 +101,7 @@ namespace ACFrameworkCore
         }
         public void LoadRawFileAsync<T>(string location, UnityAction<RawFileOperationHandle> callback) where T : UnityEngine.Object
         {
-            CMonoManager.Instance.MonoStartCoroutine(RawFileAsync(location, callback));
+            MonoManager.Instance.StartCoroutine(RawFileAsync(location, callback));
         }
         IEnumerator RawFileAsync(string location, UnityAction<RawFileOperationHandle> callback)
         {
@@ -125,7 +125,7 @@ namespace ACFrameworkCore
         }
         public void LoadSubAssetsAsyncIEnumerator<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object
         {
-            CMonoManager.Instance.MonoStartCoroutine(SubAssetsAsync(location, ResName, callback));
+            MonoManager.Instance.StartCoroutine(SubAssetsAsync(location, ResName, callback));
         }
         IEnumerator SubAssetsAsync<T>(string location, string ResName, UnityAction<T> callback) where T : UnityEngine.Object
         {

@@ -16,19 +16,19 @@ namespace ACFrameworkCore
         public void LoadSceneCommon(string SceneName, UnityAction unityAction)
         {
             //SceneManager.LoadScene(SceneName);
-            CMonoManager.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneCommon(SceneName, unityAction));
+            MonoManager.Instance.StartCoroutine(ReallyLoadSceneCommon(SceneName, unityAction));
         }
         public void LoadSceneAsync(string SceneName, IEnumerator enumerator)
         {
-            CMonoManager.Instance.monoController.MonoStartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
+            MonoManager.Instance.StartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
         }
         public void LoadSceneAsync(string SceneName, UnityAction unityAction)
         {
-            CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
+            MonoManager.Instance.StartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
         public void LoadSceneIEnumerator(string SceneName, UnityAction unityAction)
         {
-            CMonoManager.Instance.MonoStartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
+            MonoManager.Instance.StartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
         }
 
         IEnumerator ReallyLoadSceneAsynUnityAction(string SceneName, UnityAction unityAction)
@@ -48,7 +48,7 @@ namespace ACFrameworkCore
 
             while (!handle.IsDone)
             {
-                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
+                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
                 yield return handle.Progress;
             }
             unityAction?.Invoke();
@@ -64,7 +64,7 @@ namespace ACFrameworkCore
 
             while (!handle.IsDone)
             {
-                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
+                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
                 yield return handle.Progress;
             }
             yield return enumerator;
@@ -76,19 +76,19 @@ namespace ACFrameworkCore
         IEnumerator ReallyLoadSceneCommon(string SceneName, UnityAction unityAction)
         {
             var package = YooAssets.GetPackage(packageName);
-            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
+            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Additive;
             bool suspendLoad = false;
             SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
 
             while (!handle.IsDone)
             {
-                EventExpansion.TriggerEvent(LoadingEvenName, handle.Progress);//触发事件
+                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
                 yield return handle.Progress;
             }
             unityAction?.Invoke();
             handle.ActivateScene();
             // 释放资源
-            package.UnloadUnusedAssets();
+            //package.UnloadUnusedAssets();
         }
     }
 }

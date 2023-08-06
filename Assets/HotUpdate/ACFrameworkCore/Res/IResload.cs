@@ -91,7 +91,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public RawFileOperationHandle LoadRawFile<T>(string ResName) where T : UnityEngine.Object;
+        public RawFileOperationHandle LoadRawFile<T>(string ResName) where T : class;
 
         /// <summary>
         /// 异步获取原生文件

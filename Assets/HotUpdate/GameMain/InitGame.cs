@@ -1,6 +1,7 @@
 ﻿using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 游戏流程
@@ -13,26 +14,31 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
-    public static void Init()
+    public static async UniTaskVoid Init()
     {
-        SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
+
+        Debug.Log("初始化场景");
+        await InitRsv();
+        EnterGame();
+        //await SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
     }
 
     /// <summary>
     /// 切换初始化场景
     /// </summary>
-    private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
+    private static async UniTask SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
         {
             case EInitGameProcess.FSMInitFramework:
                 await InitRsv();
-                SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
+                await SwitchInitGameProcess(EInitGameProcess.FSMInitData);
                 break;
             case EInitGameProcess.FSMInitData:
-                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
+                await SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
                 break;
             case EInitGameProcess.FSMEnterGame:
+                Debug.Log("进入游戏");
                 EnterGame();
                 break;
         }
@@ -59,7 +65,7 @@ public class InitGame
     {
         ACDebug.Log("开始游戏!");
         //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
-        ManagerScene.Instance.LoadSceneAsync(ConfigScenes.FieldScenes);
-        ManagerScene.Instance.LoadSceneAsync(ConfigScenes.PersistentSceneScenes, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        //SceneExpansion.LoadSceneAsync(ConfigScenes.FieldScenes);
+        //SceneExpansion.LoadSceneAsync(ConfigScenes.PersistentSceneScenes, UnityEngine.SceneManagement.LoadSceneMode.Additive);
     }
 }

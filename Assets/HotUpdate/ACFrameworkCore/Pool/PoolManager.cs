@@ -75,7 +75,5 @@ namespace ACFrameworkCore
             poolDic.Clear();
             poolObj = null;
         }
-
-
     }
 }

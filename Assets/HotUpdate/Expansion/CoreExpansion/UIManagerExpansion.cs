@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 /*--------脚本描述-----------
 				
 电子邮箱：
@@ -10,13 +11,17 @@ using System.Threading.Tasks;
 作者:
 	暗沉
 描述:
-    鼠标样式管理
+    Ui面板拓展类
 
 -----------------------*/
 
 namespace ACFrameworkCore
 {
-    public class MMouseManager
+    public static class UIManagerExpansion
     {
+        public static void ShwoUIPanel<T>(string uiFormName)
+        {
+
+        }
     }
 }

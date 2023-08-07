@@ -27,7 +27,7 @@ namespace ACFrameworkCore
         /// <summary> XML </summary>
         XML,
     }
-    public class MDataManager : Singleton<MDataManager>
+    public class ManagerData : Singleton<ManagerData>
     {
 
         #region  Type type参数

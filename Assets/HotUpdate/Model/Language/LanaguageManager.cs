@@ -13,28 +13,13 @@ namespace ACFrameworkCore
         English = 1,
     }
 
-    public class LanaguageManager
+    public class LanaguageManager:Singleton<LanaguageManager>
     {
-        private static LanaguageManager instance;
 
         private Dictionary<string, string> LanguageTextKeyDic { get; set; }//语言字典
         public event Action OnLanguageChangeEvt;//回调事件
 
         public Font font { get; set; }//字体
-
-        public static LanaguageManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new LanaguageManager();
-                    return instance;
-                }
-                else
-                    return instance;
-            }
-        }
 
         /// <summary>
         /// 切换语言

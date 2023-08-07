@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Management.Instrumentation;
 using UnityEngine;
 using YooAsset;
+using Cysharp.Threading.Tasks;
 
 /*--------脚本描述-----------
 				
@@ -26,7 +26,7 @@ namespace ACFrameworkCore
             _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
             _StaCurrentUIForms = new Stack<UIBase>();
             YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
-            InitRoot();
+            InitRoot().Forget();
             ACDebug.Log("UI管理初始化完毕");
         }
 
@@ -42,21 +42,34 @@ namespace ACFrameworkCore
         private Transform Fixed = null;                         //固定显示的节点
         private Transform PopUp = null;                         //弹出节点
 
-        private void InitRoot()
+        //初始化
+        private async UniTaskVoid InitRoot()
         {
-            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync("Global");
-            handle.Completed += go =>
-            {
-                //实例化
-                CanvasTransfrom = go.InstantiateSync().transform;
-                GameObject.DontDestroyOnLoad(CanvasTransfrom);
-                //获取子节点
-                Normal = GetUITypeTransform(EUIType.Normal);
-                Fixed = GetUITypeTransform(EUIType.Fixed);
-                PopUp = GetUITypeTransform(EUIType.PopUp);
-                UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
-                MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
-            };
+            AssetOperationHandle handle = await YooAssetLoadExpsion.YooaddetLoadUniTaskAsync<GameObject>(ConfigPrefab.GlobalPrefab);
+            GameObject gameObject = handle.InstantiateSync();
+            //实例化
+            CanvasTransfrom = gameObject.transform;
+            GameObject.DontDestroyOnLoad(CanvasTransfrom);
+            //获取子节点
+            Normal = GetUITypeTransform(EUIType.Normal);
+            Fixed = GetUITypeTransform(EUIType.Fixed);
+            PopUp = GetUITypeTransform(EUIType.PopUp);
+            UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
+            MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
+
+            //AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync("Global");
+            //handle.Completed += go =>
+            //{
+            //    //实例化
+            //    CanvasTransfrom = go.InstantiateSync().transform;
+            //    GameObject.DontDestroyOnLoad(CanvasTransfrom);
+            //    //获取子节点
+            //    Normal = GetUITypeTransform(EUIType.Normal);
+            //    Fixed = GetUITypeTransform(EUIType.Fixed);
+            //    PopUp = GetUITypeTransform(EUIType.PopUp);
+            //    UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
+            //    MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
+            //};
             //创建Canvas
             //GameObject go = new GameObject("UICanvasRoot");
             //go.layer = LayerMask.NameToLayer("UI");
@@ -147,7 +160,7 @@ namespace ACFrameworkCore
             return null;
         }
 
-        #region 界面增删改查方法
+        //界面增删改查方法
         public void ShwoUIPanel<T>(string uiFormName) where T : UIBase, new()
         {
             //是否存在UI类
@@ -195,13 +208,13 @@ namespace ACFrameworkCore
             yooassetHandle?.Dispose();
 
         }//界面移除
-        #endregion
 
-        #region 显示界面
+        //显示界面
         private T LoadUIPanel<T>(string uiFormName) where T : UIBase, new()
         {
             T t = new T();
             //创建的UI克隆体预设
+            //YooAssetLoadExpsion
             AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(uiFormName);
             YooAssetHdnleDic.Add(uiFormName, handle);
             GameObject goCloneUIPrefabs = handle.InstantiateSync();//创建物体
@@ -303,9 +316,8 @@ namespace ACFrameworkCore
                 baseUIFormFromALL.UIOnEnable();
             }
         }
-        #endregion
 
-        #region 界面关闭
+        //界面关闭
         /// <summary>
         /// 退出指定UI窗体
         /// </summary>
@@ -365,9 +377,8 @@ namespace ACFrameworkCore
             foreach (UIBase staUI in _StaCurrentUIForms)
                 staUI.UIOnEnable();
         }
-        #endregion
 
-        #region 其他
+        //其他
         /// <summary>
         /// 是否清空“栈集合”中得数据
         /// </summary>
@@ -387,8 +398,5 @@ namespace ACFrameworkCore
         {
             return Instance.CanvasTransfrom.GetChild(UIType.ToString());
         }
-
-
-        #endregion
     }
 }

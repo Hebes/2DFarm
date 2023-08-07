@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using YooAsset;
 
@@ -17,7 +18,7 @@ namespace ACFrameworkCore
 {
     public static class YooAssetLoadExpsion
     {
-        #region 异步加载资源拓展方法
+        //异步加载资源拓展方法
         public static void YooaddetLoadAsync(this string GOName, Action<AssetOperationHandle> action = null)
         {
             //TODO 后续要从配置中读取 或者直接配置
@@ -45,9 +46,31 @@ namespace ACFrameworkCore
             handle.WaitForAsyncComplete();
             return handle.AssetObject as T;
         }
-        #endregion
 
-        #region 同步加载资源拓展方法
+        public static async UniTask<AssetOperationHandle> YooaddetLoadUniTaskAsync<T>(this string assetName) where T : UnityEngine.Object
+        {
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
+            //handle.WaitForAsyncComplete();
+            await handle.ToUniTask();
+            if (handle.Status == EOperationStatus.Succeed)
+            {
+                return handle;
+                //var obj = handle.InstantiateAsync();
+                //await obj.ToUniTask();
+                //if (obj.Result == null)
+                //{
+                //    Debug.Log("加载预制体为空");
+                //}
+            }
+            else
+            {
+                Debug.Log("加载预制体为空");
+                return null;
+            }
+        }
+
+        //同步加载资源拓展方法
         public static GameObject YooaddetLoadSyncGO(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
@@ -61,6 +84,5 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetSync<GameObject>(GOName);
         }
-        #endregion
     }
 }

@@ -26,10 +26,10 @@ namespace ACFrameworkCore
         /// <summary>设置提示工具信息</summary>
         public void SetupTooltip(ItemDetails itemDatails, ESlotType eSlotType)
         {
-            nameText.text = itemDatails.itemName;
-            typeText.text = GetItemType(itemDatails.eItemType);
+            nameText.text = itemDatails.name;
+            typeText.text = GetItemType((EItemType)itemDatails.itemType);
             descriptionText.text = itemDatails.itemDescription;
-            switch (itemDatails.eItemType)
+            switch ((EItemType)itemDatails.itemType)
             {
                 case EItemType.Seed:
                 case EItemType.Commdity:

@@ -28,11 +28,12 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public T Load<T>(string fileName) where T : class
         {
+            string filePath = $"{SAVE_PATH}{fileName}.bytes";
             //如果不存在这个文件 就直接返回泛型对象的默认值
-            if (!File.Exists(SAVE_PATH + fileName + ".tang"))
+            if (!File.Exists(filePath))
                 return default(T);
             T obj;
-            using (FileStream fs = File.Open(SAVE_PATH + fileName + ".tang", FileMode.Open, FileAccess.Read))
+            using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 obj = bf.Deserialize(fs) as T;
@@ -48,11 +49,12 @@ namespace ACFrameworkCore
         /// <param name="fileName"></param>
         public void Save(object obj, string fileName)
         {
+            string filePath = $"{SAVE_PATH}{fileName}.bytes";
             //先判断路径文件夹有没有
-            if (!Directory.Exists(SAVE_PATH + fileName + ".tang"))
+            if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(SAVE_PATH);
 
-            using (FileStream fs = new FileStream(SAVE_PATH + fileName + ".tang", FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, obj);

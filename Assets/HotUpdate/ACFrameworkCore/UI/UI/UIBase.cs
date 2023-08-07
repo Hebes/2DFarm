@@ -1,9 +1,4 @@
-﻿using SUIFW;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using TinyTeam.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*--------脚本描述-----------
 				
@@ -103,7 +98,7 @@ namespace ACFrameworkCore
             intPosition = strUIFromName.IndexOf('.');
             if (intPosition != -1)
                 strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
-            DLog.Log($"关闭的界面名称是:{strUIFromName}");
+            ACDebug.Log($"关闭的界面名称是:{strUIFromName}");
             UIManager.Instance.CloseUIForms(strUIFromName);
         }
 

@@ -1,5 +1,4 @@
-﻿using DemoProject;
-
+﻿
 namespace ACFrameworkCore
 {
     public class StartPanel : UIBase

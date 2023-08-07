@@ -1,7 +1,6 @@
 ﻿using ACFrameworkCore;
-using System;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 /// <summary>
 /// 游戏流程
@@ -14,30 +13,24 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
-    public async static void Init()
+    public static void Init()
     {
-        await InitRsv();
-        await Task.Delay(TimeSpan.FromSeconds(2f));
-        //InventoryManager inventoryManager = InventoryManager.Instance;
-        EnterGame();
-
-        //SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+        SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
     }
 
     /// <summary>
     /// 切换初始化场景
     /// </summary>
-    private static async void SwitchInitGameProcess(EInitGameProcess initGameProcess)
+    private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
         {
             case EInitGameProcess.FSMInitFramework:
                 await InitRsv();
-                SwitchInitGameProcess(EInitGameProcess.FSMInitData);
+                SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
                 break;
             case EInitGameProcess.FSMInitData:
-                InventoryManager inventoryManager = InventoryManager.Instance;
-                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
                 break;
             case EInitGameProcess.FSMEnterGame:
                 EnterGame();
@@ -47,7 +40,7 @@ public class InitGame
 
 
 
-    private static async Task<string> InitRsv()
+    private static async UniTask InitRsv()
     {
         HashSet<ICore> _initHs = new HashSet<ICore>()
         {
@@ -59,16 +52,14 @@ public class InitGame
         foreach (var init in _initHs)
         {
             init.ICroeInit();
-            await Task.Delay(TimeSpan.FromSeconds(.001f));
+            await UniTask.Yield();
         }
-
-        return "核心框架模块已经全都初始化完毕";
     }
     private static void EnterGame()
     {
-        DLog.Log("开始游戏!");
+        ACDebug.Log("开始游戏!");
         //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
-        SceneManager.Instance.LoadSceneAsyn(ConfigScenes.FieldScenes);
-        SceneManager.Instance.LoadSceneCommon(ConfigScenes.PersistentSceneScenes);
+        ManagerScene.Instance.LoadSceneAsync(ConfigScenes.FieldScenes);
+        ManagerScene.Instance.LoadSceneAsync(ConfigScenes.PersistentSceneScenes, UnityEngine.SceneManagement.LoadSceneMode.Additive);
     }
 }

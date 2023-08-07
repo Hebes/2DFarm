@@ -60,7 +60,7 @@ namespace ACFrameworkCore
         {
             if (LanguageTextKeyDic.ContainsKey(key))
                 return LanguageTextKeyDic[key];
-            DLog.Error("多语言未配置：" + key);
+            ACDebug.Error("多语言未配置：" + key);
             return key;
         }
     }

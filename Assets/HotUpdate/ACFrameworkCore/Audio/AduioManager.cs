@@ -28,7 +28,7 @@ namespace ACFrameworkCore
                 soundObj.name = "Aduio";
                 bkMusic = soundObj.AddComponent<AudioSource>();
             }
-            DLog.Log("音频模块初始化成功!");
+            ACDebug.Log("音频模块初始化成功!");
         }
 
         private Dictionary<string, AudioClip> AudioClipDic;//音效列表

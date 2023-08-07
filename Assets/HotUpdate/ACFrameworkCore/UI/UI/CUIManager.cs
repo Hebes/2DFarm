@@ -27,7 +27,7 @@ namespace ACFrameworkCore
             _StaCurrentUIForms = new Stack<UIBase>();
             YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
             InitRoot();
-            DLog.Log("UI管理初始化完毕");
+            ACDebug.Log("UI管理初始化完毕");
         }
 
         public Transform CanvasTransfrom = null;                //UI根节点    
@@ -210,7 +210,7 @@ namespace ACFrameworkCore
             t.UIAwake();
             MonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);
             if (goCloneUIPrefabs == null)
-                DLog.Error("加载预制体失败");
+                ACDebug.Error("加载预制体失败");
             switch (t.type)
             {
                 case EUIType.Normal: goCloneUIPrefabs.transform.SetParent(Normal, false); break;//普通窗体节点

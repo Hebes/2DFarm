@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Collections;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using YooAsset;
 
 namespace ACFrameworkCore
@@ -9,84 +12,27 @@ namespace ACFrameworkCore
         public readonly string packageName = "PC";
         public const string LoadingEvenName = "进度条更新";
 
-        public void LoadScene(string SceneName)
+        /// <summary>
+        /// 异步加载场景
+        /// </summary>
+        /// <param name="SceneName">场景名称</param>
+        /// <param name="action"></param>
+        /// <param name="loadSceneMode">场景加载模式</param>
+        /// <param name="suspendLoad">场景加载到90%自动挂起</param>
+        /// <param name="priority">优先级</param>
+        /// <returns></returns>
+        public async UniTask LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
+            Action<SceneOperationHandle> action = null, bool suspendLoad = false, int priority = 100)
         {
-            //SceneManager.LoadScene(SceneName);
-        }
-        public void LoadSceneCommon(string SceneName, UnityAction unityAction)
-        {
-            //SceneManager.LoadScene(SceneName);
-            MonoManager.Instance.StartCoroutine(ReallyLoadSceneCommon(SceneName, unityAction));
-        }
-        public void LoadSceneAsync(string SceneName, IEnumerator enumerator)
-        {
-            MonoManager.Instance.StartCoroutine(ReallyLoadSceneIEnumerator(SceneName, enumerator));
-        }
-        public void LoadSceneAsync(string SceneName, UnityAction unityAction)
-        {
-            MonoManager.Instance.StartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
-        }
-        public void LoadSceneIEnumerator(string SceneName, UnityAction unityAction)
-        {
-            MonoManager.Instance.StartCoroutine(ReallyLoadSceneAsynUnityAction(SceneName, unityAction));
-        }
-
-        IEnumerator ReallyLoadSceneAsynUnityAction(string SceneName, UnityAction unityAction)
-        {
-            //AsyncOperation ao = SceneManager.LoadSceneAsync(SceneName);
-            //while (!ao.isDone)
-            //{
-            //    EventComponent.Instance.EventTrigger("进度条更新", ao.progress);
-            //    yield return ao.progress;
-            //}
-            //unityAction();
-
+            //这里
             var package = YooAssets.GetPackage(packageName);
-            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
-            bool suspendLoad = false;
-            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
-
+            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad);
             while (!handle.IsDone)
             {
-                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
-                yield return handle.Progress;
+                LoadingEvenName.EventTrigger(handle.Progress);//触发事件
+                await UniTask.Yield();
             }
-            unityAction?.Invoke();
-            // 释放资源
-            package.UnloadUnusedAssets();
-        }
-        IEnumerator ReallyLoadSceneIEnumerator(string SceneName, IEnumerator enumerator)
-        {
-            var package = YooAssets.GetPackage(packageName);
-            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Single;
-            bool suspendLoad = false;
-            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
-
-            while (!handle.IsDone)
-            {
-                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
-                yield return handle.Progress;
-            }
-            yield return enumerator;
-
-            // 释放资源
-            package.UnloadUnusedAssets();
-        }
-
-        IEnumerator ReallyLoadSceneCommon(string SceneName, UnityAction unityAction)
-        {
-            var package = YooAssets.GetPackage(packageName);
-            var sceneMode = UnityEngine.SceneManagement.LoadSceneMode.Additive;
-            bool suspendLoad = false;
-            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, sceneMode, suspendLoad);
-
-            while (!handle.IsDone)
-            {
-                EventExpansion.EventTrigger(LoadingEvenName, handle.Progress);//触发事件
-                yield return handle.Progress;
-            }
-            unityAction?.Invoke();
-            handle.ActivateScene();
+            action?.Invoke(handle);
             // 释放资源
             //package.UnloadUnusedAssets();
         }

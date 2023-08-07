@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -72,7 +71,7 @@ namespace ACFrameworkCore
                 isSelected = false;
                 //清空所有高亮
                 inventoryUI.UpdateSlotHightLight(-1);
-                EventHandler.CallItemSelectEvent(itemDatails, isSelected);
+                ConfigEvent.ItemSelect.EventTrigger(itemDatails, isSelected);
             }
             itemDatails = null;
             slotImage.enabled = false;
@@ -107,10 +106,7 @@ namespace ACFrameworkCore
             inventoryUI.UpdateSlotHightLight(slotIndex);
             //判断是否是在商店中点击(商店不执行代码)
             if (eSlotType == ESlotType.Bag)
-            {
-                //通知物品被选中的状态和信息
-                EventHandler.CallItemSelectEvent(itemDatails, isSelected);
-            }
+                ConfigEvent.ItemSelect.EventTrigger(itemDatails, isSelected);
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)

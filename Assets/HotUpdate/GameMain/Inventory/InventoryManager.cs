@@ -129,6 +129,10 @@ namespace ACFrameworkCore
             }
         }
 
+        public void SwapItem(int slotIndex,int targetIndex)
+        {
+
+        }
         #region 其他功能
         /// <summary>
         /// 通过物品ID找到背包已有物品位置

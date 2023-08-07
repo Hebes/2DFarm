@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 /*--------脚本描述-----------
 
 电子邮箱：
@@ -15,7 +14,7 @@ using UnityEngine.SceneManagement;
 
 namespace ACFrameworkCore
 {
-    public class WorldItemManager
+    public class WorldItemManager : MonoBehaviour
     {
         public Item itemPrefab;
         public Item bounceItemPrefab;//抛投的物品模板
@@ -32,17 +31,17 @@ namespace ACFrameworkCore
 
         private void OnEnable()
         {
-            EventHandler.InstantiateItemScen += OnInstantiateItemScen;
-            EventHandler.DropItemEvent += OnDropItemEvent;
-            EventHandler.BeforeSceneUnloadEvent += OnBeforeSceneUnloadEvent;
-            EventHandler.AfterSceneLoadedEvent += OnAfterSceneLoadedEvent;
+            ConfigEvent.CreatItemScene.AddEventListener<int, Vector3>(OnInstantiateItemScen);
+            ConfigEvent.DropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
+            ConfigEvent.BeforeSceneUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.BeforeSceneUnload.AddEventListener(OnAfterSceneLoadedEvent);
         }
         private void OnDisable()
         {
-            EventHandler.InstantiateItemScen -= OnInstantiateItemScen;
-            EventHandler.DropItemEvent -= OnDropItemEvent;
-            EventHandler.BeforeSceneUnloadEvent -= OnBeforeSceneUnloadEvent;
-            EventHandler.AfterSceneLoadedEvent -= OnAfterSceneLoadedEvent;
+            ConfigEvent.CreatItemScene.RemoveEventListener<int, Vector3>(OnInstantiateItemScen);
+            ConfigEvent.DropItem.RemoveEventListener<int, Vector3>(OnDropItemEvent);
+            ConfigEvent.BeforeSceneUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.BeforeSceneUnload.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
 
         /// <summary>

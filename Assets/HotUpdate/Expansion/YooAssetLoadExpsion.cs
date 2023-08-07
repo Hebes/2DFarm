@@ -21,26 +21,26 @@ namespace ACFrameworkCore
         public static void YooaddetLoadAsync(this string GOName, Action<AssetOperationHandle> action = null)
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetAsync<GameObject>(GOName);
             handle.Completed += obj => { action?.Invoke(obj); };
         }
         public static AssetOperationHandle YooaddetLoadAsync(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetAsync<GameObject>(GOName);
         }
         public static AssetOperationHandle YooaddetLoadAsync<T>(this string GOName) where T : UnityEngine.Object
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetAsync<T>(GOName);
         }
         public static T YooaddetLoadAsyncObj<T>(this string GOName) where T : UnityEngine.Object
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetAsync<T>(GOName);
             handle.WaitForAsyncComplete();
             return handle.AssetObject as T;
@@ -51,14 +51,14 @@ namespace ACFrameworkCore
         public static GameObject YooaddetLoadSyncGO(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle1 = package.LoadAssetSync<GameObject>(GOName);
             return (GameObject)handle1.AssetObject;
         }
         public static AssetOperationHandle YooaddetLoadSyncAOH(this string GOName)
         {
             //TODO 后续要从配置中读取 或者直接配置
-            var package = YooAssets.GetPackage(Config.YooAseetPackage);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetSync<GameObject>(GOName);
         }
         #endregion

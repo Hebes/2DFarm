@@ -74,9 +74,6 @@ public class Init : MonoBehaviour
         Debug.Log($"资源系统运行模式：{PlayMode}");
         //Application.targetFrameRate = 60;//限定帧数
         Application.runInBackground = true;//是否后台开启
-    }
-    private void Start()
-    {
         FsmProcessChange(EHotUpdateProcess.FsmPatchPrepare);
     }
 

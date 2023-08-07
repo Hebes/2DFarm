@@ -1,6 +1,4 @@
-﻿using SUIFW;
-using System.Management.Instrumentation;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -84,21 +82,19 @@ namespace ACFrameworkCore
                 //半透明，不能穿透
                 case EUILucenyType.Translucence:
                     _GoMaskPanel.SetActive(true);
-                    Color newColor2 = new Color(UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, SysDefine.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB_A);
+                    Color newColor2 = new Color(UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB, UIConfig.SYS_UIMASK_TRANS_LUCENCY_COLOR_RGB_A);
                     _GoMaskPanel.GetComponent<Image>().color = newColor2;
                     break;
                 //低透明，不能穿透
                 case EUILucenyType.ImPenetrable:
                     _GoMaskPanel.SetActive(true);
-                    Color newColor3 = new Color(UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, SysDefine.SYS_UIMASK_IMPENETRABLE_COLOR_RGB_A);
+                    Color newColor3 = new Color(UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB, UIConfig.SYS_UIMASK_IMPENETRABLE_COLOR_RGB_A);
                     _GoMaskPanel.GetComponent<Image>().color = newColor3;
                     break;
                 //可以穿透
                 case EUILucenyType.Pentrate:
                     if (_GoMaskPanel.activeInHierarchy)
                         _GoMaskPanel.SetActive(false);
-                    break;
-                default:
                     break;
             }
 

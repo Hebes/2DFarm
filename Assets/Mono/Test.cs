@@ -11,20 +11,10 @@ namespace ACFrameworkCore
 {
     public class Test : MonoBehaviour
     {
-
-        async UniTaskVoid Start()
+        private void Start()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(2), ignoreTimeScale: false);
-            Debug.Log("等待了2秒执行");
-            Debug.Log("开始执行");
-            ttt().Forget();
-            Debug.Log("执行l");
-        }
+            
 
-        public async UniTaskVoid ttt()
-        {
-            await UniTask.Delay(TimeSpan.FromSeconds(2), ignoreTimeScale: false);
-            Debug.Log("等待了2秒执行");
         }
     }
 }

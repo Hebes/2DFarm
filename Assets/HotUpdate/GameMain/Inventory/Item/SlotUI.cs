@@ -54,7 +54,7 @@ namespace ACFrameworkCore
         public void UpdateSlot(ItemDetails item, int Amount)
         {
             itemDatails = item;
-            slotImage.sprite = ResourceExtension.LoadAsync<Sprite>(item.itemIcon);
+            slotImage.sprite = ResourceExtension.LoadAsyncAsT<Sprite>(item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;

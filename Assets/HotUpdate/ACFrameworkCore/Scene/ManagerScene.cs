@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
@@ -21,6 +22,10 @@ namespace ACFrameworkCore
             Action<SceneOperationHandle> action = null, bool suspendLoad = false, int priority = 100)
         {
             sceneLoad.LoadSceneAsync(SceneName, loadSceneMode, action, suspendLoad, priority);
+        }
+        public async UniTask LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
+        {
+            await  sceneLoad.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
         }
 
         /// <summary>

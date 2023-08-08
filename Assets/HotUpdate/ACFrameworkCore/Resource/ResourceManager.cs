@@ -34,26 +34,20 @@ namespace ACFrameworkCore
             iload = new YooAssetResLoad();
         }
 
-        /// <summary>
-        /// 同步加载资源对象
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        //同步加载
         public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
         {
             return iload.LoadAsset<T>(ResName);
         }
-
-        /// <summary>
-        /// 异步加载资源对象
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <param name="callback"></param>
-        public void LoadAssetAsync<T>(string ResName, Action<AssetOperationHandle> callback) where T : UnityEngine.Object
+        
+        //异步加载
+        public AssetOperationHandle LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
         {
-            iload.LoadAssetAsync<T>(ResName, callback);
+           return iload.LoadAssetAsync<T>(assetName);
+        }
+        public T LoadAssetAsyncAsT<T>(string assetName) where T : UnityEngine.Object
+        {
+            return iload.LoadAssetAsyncAsT<T>(assetName);
         }
 
 

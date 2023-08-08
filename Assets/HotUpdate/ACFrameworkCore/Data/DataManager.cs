@@ -17,39 +17,45 @@ namespace ACFrameworkCore
 {
     public class DataManager : ICore
     {
-        private Dictionary<string, List<IData>> bytesDic;
-        private Dictionary<string, IData> tttDic;
+        public static DataManager Instance;
+        private Dictionary<string, List<IData>> bytesDataDic;//数据
+
         public void ICroeInit()
         {
-            bytesDic = new Dictionary<string, List<IData>>();
-            tttDic = new Dictionary<string, IData>();
-            InitData();
-        }
-
-
-        private void InitData()
-        {
-            GetData<ItemDetails>(ConfigBytes.BytesItemDetails);
-            GetData<TowerInfo>(ConfigBytes.BytesTowerInfo);
+            Instance = this;
+            bytesDataDic = new Dictionary<string, List<IData>>();
+            //加载数据
+            //InitData<ItemDetails>(ConfigBytes.BytesItemDetails);
+            //InitData<TowerInfo>(ConfigBytes.BytesTowerInfo);
             Debug.Log("数据初始化完毕");
         }
 
-        public void GetData<T>(string fileName) where T : IData
+        public void InitData<T>(string fileName) where T : IData
         {
             RawFileOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadRawFileAsync(fileName);
             byte[] fileData = handle.GetRawFileData();
             List<T> itemDetailsList = BinaryAnalysis.LoopGetData<T>(fileData);
             foreach (var item in itemDetailsList)
             {
-                if (bytesDic.ContainsKey(typeof(T).FullName))
-                {
-                    bytesDic[typeof(T).FullName].Add(item);
-                }
+                if (bytesDataDic.ContainsKey(typeof(T).FullName))
+                    bytesDataDic[typeof(T).FullName].Add(item);
                 else
-                {
-                    bytesDic.Add(typeof(T).FullName, new List<IData> { item });
-                }
+                    bytesDataDic.Add(typeof(T).FullName, new List<IData> { item });
             }
+        }
+
+
+        public T GetDataOne<T>(int id) where T : class, IData
+        {
+            if (!bytesDataDic.ContainsKey(typeof(T).FullName)) return null;
+            IData data = bytesDataDic[typeof(T).FullName].Find(data => { return data.GetId() == id; });
+            return data == null ? null : data as T;
+        }
+        public List<T> GetDataList<T>() where T : class, IData
+        {
+            if (!bytesDataDic.ContainsKey(typeof(T).FullName)) return null;
+            List<IData> dataListTemp = bytesDataDic[typeof(T).FullName];
+           return  dataListTemp as List<T>;
         }
     }
 }

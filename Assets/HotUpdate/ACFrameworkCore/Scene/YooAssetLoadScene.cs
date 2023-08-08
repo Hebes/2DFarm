@@ -9,7 +9,6 @@ namespace ACFrameworkCore
 {
     public class YooAssetLoadScene : ISceneLoad
     {
-        public readonly string packageName = "PC";
         public const string LoadingEvenName = "进度条更新";
 
         /// <summary>
@@ -24,8 +23,7 @@ namespace ACFrameworkCore
         public async UniTask LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
             Action<SceneOperationHandle> action = null, bool suspendLoad = false, int priority = 100)
         {
-            //这里
-            var package = YooAssets.GetPackage(packageName);
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             SceneOperationHandle handle = package.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad);
             while (!handle.IsDone)
             {
@@ -35,6 +33,17 @@ namespace ACFrameworkCore
             action?.Invoke(handle);
             // 释放资源
             //package.UnloadUnusedAssets();
+        }
+
+        public async UniTask LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
+        {
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad);
+            while (!handle.IsDone)
+            {
+                LoadingEvenName.EventTrigger(handle.Progress);//触发事件
+                await UniTask.Yield();
+            }
         }
     }
 }

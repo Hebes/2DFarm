@@ -71,6 +71,9 @@ namespace ACFrameworkCore
         /// <param name="callback"></param>
         public UniTask<UnityEngine.Object[]> LoadAllAssetsAsync<T>(string location, UnityAction<UnityEngine.Object[]> callback) where T : UnityEngine.Object;
 
+
+        public AssetOperationHandle LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object;
+        public T LoadAssetAsyncAsT<T>(string assetName) where T : UnityEngine.Object;
         /// <summary>
         /// 同步获取原生文件
         /// </summary>

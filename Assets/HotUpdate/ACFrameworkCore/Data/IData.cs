@@ -13,5 +13,6 @@ namespace ACFrameworkCore
 {
     public interface IData
     {
+        public abstract int GetId();
     }
 }

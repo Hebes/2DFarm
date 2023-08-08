@@ -40,8 +40,32 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/Prefab
-        CollectorGUID: 22873ace4c3e0d141aa1492e7f5954c1
+      - CollectPath: Assets/AssetsPackage/Prefab/Bushes
+        CollectorGUID: 000cff26afc3a614b9f71906ddb07226
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Prefab/Item
+        CollectorGUID: 0d30f7072cc01d34290e426a96b724f0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Prefab/Tree
+        CollectorGUID: a7f91289b6c052f4cb82091c80dbcc0f
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Prefab/UI
+        CollectorGUID: bf25b4fdd0b329c4e89aa310c24facdf
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

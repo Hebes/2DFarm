@@ -32,14 +32,28 @@ namespace ACFrameworkCore
             AssetOperationHandle handle = package.LoadAssetSync<T>(ResName);
             return handle.AssetObject as T;
         }
-        public async UniTask<T> LoadAssetAsync<T>(string AssetName, Action<AssetOperationHandle> callback) where T : UnityEngine.Object
+        public AssetOperationHandle LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AssetOperationHandle handle = package.LoadAssetAsync<T>(AssetName);
-            await handle.ToUniTask();
-            callback?.Invoke(handle);
-            return handle.AssetObject as T;
-            //GameObject go = handle.InstantiateSync();//创建物体
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
+            handle.WaitForAsyncComplete();
+            return handle.Status == EOperationStatus.Succeed ? handle : null;
+        }
+        public T LoadAssetAsyncAsT<T>(string assetName) where T : UnityEngine.Object
+        {
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
+            handle.WaitForAsyncComplete();
+            handle.InstantiateSync();
+            if (handle.Status == EOperationStatus.Succeed)
+            {
+                return handle as T;
+            }
+            else
+            {
+                ACDebug.Error($"没有加载到预制体!{assetName}");
+                return null;
+            }
         }
 
         //资源包内所有对象加载
@@ -115,6 +129,11 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetInfo[] assetInfos = package.GetAssetInfos(tag);
             return assetInfos;
+        }
+
+        public UniTask<T> LoadAssetAsync<T>(string AssetName, Action<AssetOperationHandle> callback) where T : UnityEngine.Object
+        {
+            throw new NotImplementedException();
         }
 
         #region 配置文件加载范例

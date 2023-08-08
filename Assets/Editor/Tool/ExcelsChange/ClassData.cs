@@ -27,8 +27,11 @@ namespace ACFrameworkCore
         {
             StringBuilder sb = new StringBuilder();
             string className = new FileInfo(filePath).Name.Split('.')[0];
-            sb.AppendLine("using System.Collections.Generic;\n");
-            sb.AppendLine($"public class {className}");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using ACFrameworkCore;");
+            sb.AppendLine("using System;\n\t");
+            sb.AppendLine($"[Serializable]");
+            sb.AppendLine($"public class {className} : IData");
             sb.AppendLine("{");
             string[] filedTypeArray = data[(int)RowType.FIELD_TYPE];
             string[] filedNameArray = data[(int)RowType.FIELD_NAME];
@@ -36,6 +39,7 @@ namespace ACFrameworkCore
             {
                 sb.AppendLine($"\tpublic {filedTypeArray[i].PadRight(10, ' ')}\t{filedNameArray[i]};");
             }
+            sb.AppendLine($"    public int GetId()\r\n    {{\r\n\t\treturn {data[0][0]};\r\n    }}");
             sb.AppendLine("}");
             DATA_CLASS_PATH.GenerateDirectory();
             string path = $"{DATA_CLASS_PATH}/{className}.cs";

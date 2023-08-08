@@ -1,7 +1,9 @@
-using ACFrameworkCore;
 using System.Collections.Generic;
-
-public class TowerInfo:IData
+using ACFrameworkCore;
+using System;
+	
+[Serializable]
+public class TowerInfo : IData
 {
 	public int       	id;
 	public List<int> 	skill;
@@ -15,4 +17,8 @@ public class TowerInfo:IData
 	public string    	res;
 	public int       	atkType;
 	public string    	eff;
+    public int GetId()
+    {
+		return id;
+    }
 }

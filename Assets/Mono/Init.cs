@@ -315,7 +315,7 @@ public class Init : MonoBehaviour
                 LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(buffur, mode);
                 Debug.Log($"LoadMetadataForAOTAssembly:{fs.Name}. mode:{mode} ret:{err}");
             }
-
+            //进入游戏
 #if !UNITY_EDITOR
          _hotUpdateAss = Assembly.Load(ReadBytesFromStreamingAssets("HotUpdate.dll.bytes"));
 #else

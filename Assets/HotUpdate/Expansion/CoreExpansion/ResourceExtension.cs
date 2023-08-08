@@ -9,6 +9,8 @@
 
 -----------------------*/
 
+using YooAsset;
+
 namespace ACFrameworkCore
 {
     public static class ResourceExtension
@@ -29,10 +31,15 @@ namespace ACFrameworkCore
         {
             //ResComponent.Insatance.OnLoadAsync(path);
         }
-        public static T LoadAsync<T>(string Name) where T : UnityEngine.Object
+
+        //异步加载
+        public static AssetOperationHandle LoadAsync<T>(string assetName) where T : UnityEngine.Object
         {
-            //ResComponent.Insatance.OnLoadAsync<T>(path);
-            return null;
+            return ResourceManager.Instance.LoadAssetAsync<T>(assetName);
+        }
+        public static T LoadAsyncAsT<T>(string assetName) where T : UnityEngine.Object
+        {
+           return ResourceManager.Instance.LoadAssetAsyncAsT<T>(assetName);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
@@ -16,22 +17,20 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class InventoryManager : MonoSingleton<InventoryManager>
+    public class InventoryManager : ICore
     {
+
+        public static InventoryManager Instance;
         public List<ItemDetails> itemDetailsList;
         public List<InventoryItem> PlayerBagItemList;//玩家背包数量
 
-        private void Awake()
+        public async void ICroeInit()
         {
-            StartCoroutine(Start11());
-        }
-
-        public void ICroeInit()
-        {
+            Instance = this;
             Debug.Log("开始获取数据执行");
             if (MonoManager.Instance == null)
                 Debug.Log("空了");
-            MonoManager.Instance.StartCoroutine(Start11());
+            await Start11();
         }
 
         IEnumerator Start11()
@@ -149,6 +148,8 @@ namespace ACFrameworkCore
             }
             return -1;
         }
+
+       
         #endregion
     }
 }

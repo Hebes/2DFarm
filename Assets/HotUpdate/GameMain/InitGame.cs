@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 游戏流程
@@ -16,7 +17,6 @@ public class InitGame
 {
     public static void Init()
     {
-
         Debug.Log("初始化场景");
         //await InitRsv();
         //EnterGame();
@@ -35,12 +35,12 @@ public class InitGame
                 SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
                 break;
             case EInitGameProcess.FSMInitData:
-
+                await InitData();
                 SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
                 break;
             case EInitGameProcess.FSMEnterGame:
                 Debug.Log("进入游戏");
-                EnterGame();
+                EnterGame().Forget();
                 break;
         }
     }
@@ -53,6 +53,19 @@ public class InitGame
             new UIManager(),
             new ResourceManager(),
             new MonoManager(),
+        };
+        foreach (var init in _initHs)
+        {
+            init.ICroeInit();
+            await UniTask.Yield();
+        }
+    }
+
+    private static async UniTask InitData()
+    {
+        HashSet<ICore> _initHs = new HashSet<ICore>()
+        {
+            new InventoryManager(),
             new DataManager(),
         };
         foreach (var init in _initHs)
@@ -61,11 +74,15 @@ public class InitGame
             await UniTask.Yield();
         }
     }
-    private static void EnterGame()
+    private static async UniTaskVoid EnterGame()
     {
         ACDebug.Log("开始游戏!");
         //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
-        //SceneExpansion.LoadSceneAsync(ConfigScenes.FieldScenes);
-        //SceneExpansion.LoadSceneAsync(ConfigScenes.PersistentSceneScenes, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
+        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        GameObject gameObject = ConfigPrefab.ItemBasePrefab.YooaddetLoadAsyncAsT<GameObject>();
+        //GameObject gameObject =  ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
+        GameObject go = GameObject.Instantiate(gameObject);
+        Debug.Log($"物体名称是  {go.name}");
     }
 }

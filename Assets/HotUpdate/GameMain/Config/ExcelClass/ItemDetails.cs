@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using ACFrameworkCore;
 using System;
-
+	
 [Serializable]
-public class ItemDetails :IData
+public class ItemDetails : IData
 {
 	public int       	itemID;
 	public string    	name;
@@ -16,5 +17,8 @@ public class ItemDetails :IData
 	public bool      	canCarried;
 	public int       	itemPrice;
 	public float     	sellPercentage;
-
+    public int GetId()
+    {
+		return itemID;
+    }
 }

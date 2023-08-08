@@ -66,6 +66,7 @@ public class Init : MonoBehaviour
         "mscorlib.dll",
         "System.dll",
         "System.Core.dll",
+        "UniTask.dll",
     };
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();//资源数据
 

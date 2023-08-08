@@ -18,9 +18,16 @@ public class InitGame
     {
 
         Debug.Log("初始化场景");
-        await InitRsv();
-        EnterGame();
+        //await InitRsv();
+        //EnterGame();
         //await SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+        var ss = await getid();
+        Debug.Log(ss);
+    }
+    private static async UniTask<int> getid()
+    {
+        await UniTask.Delay(1000);
+        return 0;
     }
 
     /// <summary>

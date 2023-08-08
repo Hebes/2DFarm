@@ -1,19 +1,7 @@
+using ACFrameworkCore;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UI;
 
-
-public enum BTN_TYPE
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-
-    FIRE,
-    JUMP, 
-}
 
 public class ChangeInputPanel : MonoBehaviour
 {
@@ -31,58 +19,58 @@ public class ChangeInputPanel : MonoBehaviour
     public Button btnFire;
     public Button btnJump;
 
-    //private InputInfo inputInfo;
+    public ConfigInputInfo inputInfo { get; private set; }
 
-    ////记录当前改哪一个键
-    //private BTN_TYPE nowType;
-
-    //public PlayerLesson17 player;
 
     // Start is called before the first frame update
     void Start()
     {
-        //inputInfo = DataManager.Instance.InputInfo;
-        //UpdateBtnInfo();
+        inputInfo = InputSystemManager.Instance.inputInfo;
+        UpdateBtnInfo();
 
-        //btnUp.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.UP);
-        //});
-        //btnDown.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.DOWN);
-        //});
-        //btnLeft.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.LEFT);
-        //});
-        //btnRight.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.RIGHT);
-        //});
-        //btnFire.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.FIRE);
-        //});
-        //btnJump.onClick.AddListener(() =>
-        //{
-        //    ChangeBtn(BTN_TYPE.JUMP);
-        //});
+        btnUp.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.UP);
+        });
+        btnDown.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.DOWN);
+        });
+        btnLeft.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.LEFT);
+        });
+        btnRight.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.RIGHT);
+        });
+        btnFire.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.FIRE);
+        });
+        btnJump.onClick.AddListener(() =>
+        {
+            InputSystemManager.Instance.ChangeBtn(BTN_TYPE.JUMP);
+        });
     }
 
+    private void Update()
+    {
+        UpdateBtnInfo();
+    }
 
     /// <summary>
     /// 更新键位显示信息
     /// </summary>
     private void UpdateBtnInfo()
     {
-        //txtUp.text = inputInfo.up;
-        //txtDown.text = inputInfo.down;
-        //txtLeft.text = inputInfo.left;
-        //txtRight.text = inputInfo.right;
+        txtUp.text = inputInfo.up;
+        txtDown.text = inputInfo.down;
+        txtLeft.text = inputInfo.left;
+        txtRight.text = inputInfo.right;
 
-        //txtFire.text = inputInfo.fire;
-        //txtJump.text = inputInfo.jump;
+        txtFire.text = inputInfo.fire;
+        txtJump.text = inputInfo.jump;
     }
 
 }

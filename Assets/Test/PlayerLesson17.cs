@@ -23,6 +23,7 @@ public class PlayerLesson17 : MonoBehaviour
         PlayerInput playerInput = this.GetComponent<PlayerInput>();
         InputSystemManager inputSystemManager = InputSystemManager.Instance;
         inputSystemManager.InitPlayerInput(playerInput);
+        inputSystemManager.jsonStr = Resources.Load<TextAsset>("Lesson17").text;
 
         //playerInput.actions = inputSystemManager.GetActionAsset();
         //playerInput.actions.Enable();

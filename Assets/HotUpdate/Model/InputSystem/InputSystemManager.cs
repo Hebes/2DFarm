@@ -1,4 +1,5 @@
-﻿using UnityEngine.InputSystem;
+﻿using System.Diagnostics;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
 
@@ -29,8 +30,8 @@ namespace ACFrameworkCore
 
     public class InputSystemManager : SingletonInit<InputSystemManager>, ICore
     {
-        private ConfigInputInfo inputInfo;//按键信息
-        private string jsonStr;//Json配置信息
+        public ConfigInputInfo inputInfo;//按键信息
+        public string jsonStr;//Json配置信息
         private BTN_TYPE nowType;//记录当前改哪一个键
         public PlayerInput playerInput;
 
@@ -58,7 +59,7 @@ namespace ACFrameworkCore
             return InputActionAsset.FromJson(str);
         }
         //更换按键
-        private void ChangeBtn(BTN_TYPE type)
+        public void ChangeBtn(BTN_TYPE type)
         {
             nowType = type;
             //得到一次任意键输入
@@ -74,7 +75,7 @@ namespace ACFrameworkCore
         //切换真实的按键
         private void ChangeBtnReally(InputControl control)
         {
-            ACDebug.Log(control.path);
+            //ACDebug.Log("切换真实的按键"+control.path);
             string[] strs = control.path.Split('/');
             string path = "<" + strs[1] + ">/" + strs[2];
             switch (nowType)

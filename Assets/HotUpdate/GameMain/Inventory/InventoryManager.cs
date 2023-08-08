@@ -26,13 +26,13 @@ namespace ACFrameworkCore
             StartCoroutine(Start11());
         }
 
-        //public void ICroeInit()
-        //{
-        //    Debug.Log("开始获取数据执行");
-        //    if (CMonoManager.Instance == null)
-        //        Debug.Log("空了");
-        //    CMonoManager.Instance.StartCoroutine(Start());
-        //}
+        public void ICroeInit()
+        {
+            Debug.Log("开始获取数据执行");
+            if (MonoManager.Instance == null)
+                Debug.Log("空了");
+            MonoManager.Instance.StartCoroutine(Start11());
+        }
 
         IEnumerator Start11()
         {

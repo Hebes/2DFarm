@@ -5,16 +5,13 @@
 作者:
 	暗沉
 描述:
-    数据加载管理
+    数据接口
 
 -----------------------*/
 
 namespace ACFrameworkCore
 {
-    public class DataManager : Singleton<DataManager>, ICore
+    public interface IData
     {
-        public void ICroeInit()
-        {
-        }
     }
 }

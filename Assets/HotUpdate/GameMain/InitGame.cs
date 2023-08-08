@@ -14,28 +14,29 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
-    public static async UniTaskVoid Init()
+    public static void Init()
     {
 
         Debug.Log("初始化场景");
-        await InitRsv();
-        EnterGame();
-        //await SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+        //await InitRsv();
+        //EnterGame();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitFramework).Forget();
     }
 
     /// <summary>
     /// 切换初始化场景
     /// </summary>
-    private static async UniTask SwitchInitGameProcess(EInitGameProcess initGameProcess)
+    private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
         {
             case EInitGameProcess.FSMInitFramework:
                 await InitRsv();
-                await SwitchInitGameProcess(EInitGameProcess.FSMInitData);
+                SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
                 break;
             case EInitGameProcess.FSMInitData:
-                await SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
+
+                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
                 break;
             case EInitGameProcess.FSMEnterGame:
                 Debug.Log("进入游戏");
@@ -43,8 +44,6 @@ public class InitGame
                 break;
         }
     }
-
-
 
     private static async UniTask InitRsv()
     {
@@ -54,6 +53,7 @@ public class InitGame
             new UIManager(),
             new ResourceManager(),
             new MonoManager(),
+            new DataManager(),
         };
         foreach (var init in _initHs)
         {

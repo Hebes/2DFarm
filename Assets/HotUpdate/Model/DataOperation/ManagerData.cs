@@ -72,7 +72,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="fileName"></param>
-        private void Save<T>(object obj, string fileName) where T : IData, new()
+        private void Save<T>(object obj, string fileName) where T : IDataHandle, new()
         {
             T t = new T();
             t.Save(obj, fileName);
@@ -85,7 +85,7 @@ namespace ACFrameworkCore
         /// <typeparam name="K"></typeparam>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private K Load<T, K>(string fileName) where T : IData, new() where K : UnityEngine.Object
+        private K Load<T, K>(string fileName) where T : IDataHandle, new() where K : UnityEngine.Object
         {
             T t = new T();
             return t.Load<K>(fileName);

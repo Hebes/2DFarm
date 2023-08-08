@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class PlayerPrefsOperation : IData
+    public class PlayerPrefsOperation : IDataHandle
     {
 
         #region 知识点一 PlayerPrefs存储的数据存在哪里？

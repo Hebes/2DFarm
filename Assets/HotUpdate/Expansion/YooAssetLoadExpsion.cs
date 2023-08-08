@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using UnityEngine;
 using YooAsset;
@@ -32,7 +32,6 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetAsync<GameObject>(assetName);
         }
-       
         public static T YooaddetLoadAsyncAsT<T>(this string assetName) where T : UnityEngine.Object
         {
             //TODO 后续要从配置中读取 或者直接配置
@@ -41,7 +40,6 @@ namespace ACFrameworkCore
             handle.WaitForAsyncComplete();
             return handle.Status == EOperationStatus.Succeed ? handle.AssetObject as T : null;
         }
-
         public static AssetOperationHandle YooaddetLoadAsync<T>(this string assetName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
@@ -49,6 +47,15 @@ namespace ACFrameworkCore
             handle.WaitForAsyncComplete();
             return handle.Status == EOperationStatus.Succeed ? handle : null;
             //await UniTask.WaitUntilValueChanged(handle, x => handle.Status == EOperationStatus.Succeed);
+        }
+
+        //异步加载二进制文件
+        public static RawFileOperationHandle YooaddetLoadRawFileAsync(string fileName)
+        {
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            RawFileOperationHandle handle = package.LoadRawFileAsync(fileName);
+            handle.WaitForAsyncComplete();
+            return handle.Status == EOperationStatus.Succeed ? handle : null;
         }
 
         //同步加载资源拓展方法

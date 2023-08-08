@@ -22,5 +22,44 @@ namespace ACFrameworkCore
         {
             sceneLoad.LoadSceneAsync(SceneName, loadSceneMode, action, suspendLoad, priority);
         }
+
+        /// <summary>
+        /// 黑幕淡入
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="curtain"></param>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        //public static IEnumerator Fadein(this UIMateLoadingComponent self, GameObject curtain, float speed)
+        //{
+        //    curtain.SetActive(true);
+        //    Image image;
+        //    image = curtain.GetComponent<Image>();
+        //    while (image.color.a >= 0.1f)
+        //    {
+        //        image.color = Color.Lerp(image.color, Color.clear, speed * Time.deltaTime);
+        //        yield return null;
+        //    }
+        //    curtain.SetActive(false);
+        //}
+
+        /// <summary>
+        /// 黑幕淡出
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="curtain"></param>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        //public static IEnumerator Fadeout(this UIMateLoadingComponent self, float speed)
+        //{
+        //    self.Curtain.SetActive(true);
+        //    Image image;
+        //    image = self.Curtain.GetComponent<Image>();
+        //    while (image.color.a <= 0.999f)
+        //    {
+        //        image.color = Color.Lerp(image.color, Color.black, speed * Time.deltaTime);
+        //        yield return null;
+        //    }
+        //}
     }
 }

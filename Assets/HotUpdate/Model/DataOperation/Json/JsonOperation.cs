@@ -24,7 +24,7 @@ namespace ACFrameworkCore
         LitJson,
     }
 
-    public class JsonOperation : IData
+    public class JsonOperation : IDataHandle
     {
         #region 知识点二 JsonUtlity和LitJson不同点
         //1.JsonUtlity是Unity自带，LitJson是第三方需要引用命名空间

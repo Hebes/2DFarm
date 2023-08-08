@@ -1,6 +1,7 @@
+using ACFrameworkCore;
 using System.Collections.Generic;
 
-public class TowerInfo
+public class TowerInfo:IData
 {
 	public int       	id;
 	public List<int> 	skill;

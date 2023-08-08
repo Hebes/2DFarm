@@ -26,7 +26,7 @@ namespace ACFrameworkCore
             _DicCurrentShowUIForms = new Dictionary<string, UIBase>();
             _StaCurrentUIForms = new Stack<UIBase>();
             YooAssetHdnleDic = new Dictionary<string, AssetOperationHandle>();
-            InitRoot().Forget();
+            InitRoot();
             ACDebug.Log("UI管理初始化完毕");
         }
 
@@ -43,9 +43,9 @@ namespace ACFrameworkCore
         private Transform PopUp = null;                         //弹出节点
 
         //初始化
-        private async UniTaskVoid InitRoot()
+        private void InitRoot()
         {
-            AssetOperationHandle handle = await YooAssetLoadExpsion.YooaddetLoadUniTaskAsync<GameObject>(ConfigPrefab.GlobalPrefab);
+            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync<GameObject>(ConfigPrefab.GlobalPrefab);
             GameObject gameObject = handle.InstantiateSync();
             //实例化
             CanvasTransfrom = gameObject.transform;

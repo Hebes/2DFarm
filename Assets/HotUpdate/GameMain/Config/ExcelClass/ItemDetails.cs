@@ -1,7 +1,8 @@
+using ACFrameworkCore;
 using System;
 
 [Serializable]
-public class ItemDetails
+public class ItemDetails :IData
 {
 	public int       	itemID;
 	public string    	name;
@@ -15,4 +16,5 @@ public class ItemDetails
 	public bool      	canCarried;
 	public int       	itemPrice;
 	public float     	sellPercentage;
+
 }

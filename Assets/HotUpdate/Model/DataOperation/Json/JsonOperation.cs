@@ -57,11 +57,11 @@ namespace ACFrameworkCore
         {
             //确定从哪个路径读取
             //首先先判断 默认数据文件夹中是否有我们想要的数据 如果有 就从中获取
-            string path = Application.streamingAssetsPath + "/" + fileName + ".json";
+            string path = $"{Application.streamingAssetsPath}/{fileName}.json";
             //先判断 是否存在这个文件
             //如果不存在默认文件 就从 读写文件夹中去寻找
             if (!File.Exists(path))
-                path = Application.persistentDataPath + "/" + fileName + ".json";
+                path = $"{Application.persistentDataPath}/{fileName}.json";
             //如果读写文件夹中都还没有 那就返回一个默认对象
             if (!File.Exists(path))
                 return null;
@@ -92,12 +92,8 @@ namespace ACFrameworkCore
             string jsonStr = "";
             switch (jsonType)
             {
-                case JsonType.JsonUtlity:
-                    jsonStr = JsonUtility.ToJson(data);
-                    break;
-                case JsonType.LitJson:
-                    jsonStr = JsonMapper.ToJson(data);
-                    break;
+                case JsonType.JsonUtlity: jsonStr = JsonUtility.ToJson(data); break;
+                case JsonType.LitJson: jsonStr = JsonMapper.ToJson(data); break;
             }
             //把序列化的Json字符串 存储到指定路径的文件中
             File.WriteAllText(path, jsonStr);

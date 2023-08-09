@@ -21,13 +21,15 @@ public class ChangeInputPanel : MonoBehaviour
 
     public ConfigInputInfo inputInfo { get; private set; }
 
+    private void Awake()
+    {
+        inputInfo = InputSystemManager.Instance.inputInfo;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        inputInfo = InputSystemManager.Instance.inputInfo;
         UpdateBtnInfo();
-
         btnUp.onClick.AddListener(() =>
         {
             InputSystemManager.Instance.ChangeBtn(BTN_TYPE.UP);
@@ -64,13 +66,11 @@ public class ChangeInputPanel : MonoBehaviour
     /// </summary>
     private void UpdateBtnInfo()
     {
-        txtUp.text = inputInfo.up;
-        txtDown.text = inputInfo.down;
-        txtLeft.text = inputInfo.left;
-        txtRight.text = inputInfo.right;
-
-        txtFire.text = inputInfo.fire;
-        txtJump.text = inputInfo.jump;
+        txtUp.text = inputInfo.upCurrent; 
+        txtDown.text = inputInfo.downCurrent;
+        txtLeft.text = inputInfo.leftCurrent;
+        txtRight.text = inputInfo.rightCurrent;
+        txtFire.text = inputInfo.fireCurrent;
+        txtJump.text = inputInfo.jumpCurrent;
     }
-
 }

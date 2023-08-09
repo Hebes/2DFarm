@@ -13,7 +13,11 @@ namespace ACFrameworkCore
 {
     public static class ManagerDataExpansion
     {
-        public static K Load<K>(this string fileName, EDataType dataType) where K : UnityEngine.Object
+        public static void Save(object obj, string fileName, EDataType dataType)
+        {
+            ManagerData.Instance.Save(obj, fileName, dataType);
+        }
+        public static K Load<K>(this string fileName, EDataType dataType) where K : class
         {
             return ManagerData.Instance.Load<K>(fileName, dataType);
         }

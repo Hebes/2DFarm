@@ -47,9 +47,10 @@ namespace ACFrameworkCore
                 case EDataType.PlayerPrefs: Save<PlayerPrefsOperation>(obj, fileName); break;
                 case EDataType.XML: Save<XMLOperation>(obj, fileName); break;
             }
+
         }
 
-        public K Load<K>(string fileName, EDataType dataType) where K : UnityEngine.Object
+        public K Load<K>(string fileName, EDataType dataType) where K : class
         {
             switch (dataType)
             {
@@ -85,7 +86,7 @@ namespace ACFrameworkCore
         /// <typeparam name="K"></typeparam>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private K Load<T, K>(string fileName) where T : IDataHandle, new() where K : UnityEngine.Object
+        private K Load<T, K>(string fileName) where T : IDataHandle, new() where K : class
         {
             T t = new T();
             return t.Load<K>(fileName);

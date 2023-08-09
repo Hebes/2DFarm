@@ -143,7 +143,7 @@ namespace ACFrameworkCore
                 case BTN_TYPE.FIRE: inputInfo.fireCurrent = inputInfo.fireTemp; break;
                 case BTN_TYPE.JUMP: inputInfo.jumpCurrent = inputInfo.jumpTemp; break;
             }
-            //SaveInputConfig();//测试 可以放在改键页面的保存按钮
+            SaveInputConfig();//测试 可以放在改键页面的保存按钮
         }
     }
 }

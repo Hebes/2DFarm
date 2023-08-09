@@ -9,7 +9,7 @@
         Fixed,
         /// <summary> 弹出窗体 </summary>
         PopUp,
-        /// <summary> 独立的窗口 可移动的 </summary> TODO 等待敲代码
+        /// <summary> 独立的窗口可移动的 </summary> TODO 等待敲代码
         Mobile,
     }
 

@@ -47,7 +47,6 @@ namespace ACFrameworkCore
                 case EDataType.PlayerPrefs: Save<PlayerPrefsOperation>(obj, fileName); break;
                 case EDataType.XML: Save<XMLOperation>(obj, fileName); break;
             }
-
         }
 
         public K Load<K>(string fileName, EDataType dataType) where K : class

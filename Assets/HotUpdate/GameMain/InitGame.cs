@@ -77,9 +77,17 @@ public class InitGame
     private static async UniTaskVoid EnterGame()
     {
         ACDebug.Log("开始游戏!");
-        //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
         await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
         await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(UnityEngine.SceneManagement.LoadSceneMode.Additive);
+
+        //打开窗口面板
+        //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
+        ActionBarPanel actionBarPanel = ConfigUIPanel.ActionBarPanel.ShwoUIPanel<ActionBarPanel>();
+        ItemToolTipPanel itemToolTipPanel =  ConfigUIPanel.ItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
+        itemToolTipPanel.gameObject.SetActive(false);
+        PlayerBagPanel playerBagPanel =  ConfigUIPanel.PlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
+        playerBagPanel.gameObject.SetActive(false);
+        //创建物体
         GameObject gameObject = ConfigPrefab.ItemBasePrefab.YooaddetLoadAsyncAsT<GameObject>();
         //GameObject gameObject =  ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
         GameObject go = GameObject.Instantiate(gameObject);

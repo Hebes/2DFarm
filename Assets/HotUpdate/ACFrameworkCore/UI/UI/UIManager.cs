@@ -41,6 +41,7 @@ namespace ACFrameworkCore
         private Transform Normal = null;                        //全屏幕显示的节点
         private Transform Fixed = null;                         //固定显示的节点
         private Transform PopUp = null;                         //弹出节点
+        private Transform Mobile = null;                         //独立的窗口可移动的
 
         //初始化
         private void InitRoot()
@@ -54,9 +55,11 @@ namespace ACFrameworkCore
             Normal = GetUITypeTransform(EUIType.Normal);
             Fixed = GetUITypeTransform(EUIType.Fixed);
             PopUp = GetUITypeTransform(EUIType.PopUp);
+            Mobile = GetUITypeTransform(EUIType.Mobile);
             UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
             MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
 
+            #region 旧代码
             //AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync("Global");
             //handle.Completed += go =>
             //{
@@ -138,7 +141,10 @@ namespace ACFrameworkCore
             //eventObj.transform.SetParent(go.transform);
             //eventObj.AddComponent<EventSystem>();
             //eventObj.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            #endregion
         }
+        #region 旧代码
+
         static GameObject CreateSubCanvasForRoot(Transform root, int sort)
         {
             //GameObject go = new GameObject("canvas");
@@ -159,9 +165,11 @@ namespace ACFrameworkCore
             //return go;
             return null;
         }
+        #endregion
+
 
         //界面增删改查方法
-        public void ShwoUIPanel<T>(string uiFormName) where T : UIBase, new()
+        public T ShwoUIPanel<T>(string uiFormName) where T : UIBase, new()
         {
             //是否存在UI类
             _DicALLUIForms.TryGetValue(uiFormName, out UIBase uIBase);
@@ -178,7 +186,7 @@ namespace ACFrameworkCore
                 case EUIMode.ReverseChange: PushUIFormToStack(uiFormName); break; //需要“反向切换”窗口模式
                 case EUIMode.HideOther: EnterUIFormsAndHideOther(uiFormName); break;//“隐藏其他”窗口模式
             }
-
+            return t;
         }//显示界面
         public void CloseUIForms(string uiFormName)
         {
@@ -228,6 +236,7 @@ namespace ACFrameworkCore
             {
                 case EUIType.Normal: goCloneUIPrefabs.transform.SetParent(Normal, false); break;//普通窗体节点
                 case EUIType.Fixed: goCloneUIPrefabs.transform.SetParent(Fixed, false); break;//固定窗体节点
+                case EUIType.Mobile: goCloneUIPrefabs.transform.SetParent(Mobile, false); break;//独立的窗口可移动的
                 case EUIType.PopUp: goCloneUIPrefabs.transform.SetParent(PopUp, false); break;//弹出窗体节点
             }
             //设置隐藏

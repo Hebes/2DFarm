@@ -41,31 +41,31 @@ public class PlayerLesson17 : MonoBehaviour
                 {
                     case "Fire":
                         Debug.Log("开火");
-                        //鼠标位置的射线检测
-                        //不是按键触发事件 就不处理后面的内容了
-                        if (context.phase != InputActionPhase.Performed)
-                            return;
-                        RaycastHit info;
-                        if (Physics.Raycast(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()), out info))
-                        {
-                            //得到子弹飞出去的向量
-                            Vector3 point = info.point;
-                            point.y = this.transform.position.y;
-                            Vector3 dir = point - this.transform.position;
-                            //创建子弹 飞出去
-                            Instantiate(bullet, this.transform.position, Quaternion.LookRotation(dir));
-                        }
+                        ////鼠标位置的射线检测
+                        ////不是按键触发事件 就不处理后面的内容了
+                        //if (context.phase != InputActionPhase.Performed)
+                        //    return;
+                        //RaycastHit info;
+                        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()), out info))
+                        //{
+                        //    //得到子弹飞出去的向量
+                        //    Vector3 point = info.point;
+                        //    point.y = this.transform.position.y;
+                        //    Vector3 dir = point - this.transform.position;
+                        //    //创建子弹 飞出去
+                        //    Instantiate(bullet, this.transform.position, Quaternion.LookRotation(dir));
+                        //}
                         break;
                     case "Jump":
                         Debug.Log("跳跃");
-                        if (context.phase == InputActionPhase.Performed)
-                            body.AddForce(Vector3.up * 200);
+                        //if (context.phase == InputActionPhase.Performed)
+                        //    body.AddForce(Vector3.up * 200);
                         break;
                     case "Move":
                         Debug.Log("移动");
-                        dir = context.ReadValue<Vector2>();
-                        dir.z = dir.y;
-                        dir.y = 0;
+                        //dir = context.ReadValue<Vector2>();
+                        //dir.z = dir.y;
+                        //dir.y = 0;
                         break;
                 }
             }

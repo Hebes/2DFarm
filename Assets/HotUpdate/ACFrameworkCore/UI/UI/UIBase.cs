@@ -40,7 +40,10 @@ namespace ACFrameworkCore
         }
 
         #region 生命周期
-        public virtual void UIAwake() { }       //初始化执行
+        public virtual void UIAwake() 
+        {
+
+        }       //初始化执行
         public virtual void UIUpdate()
         {
 

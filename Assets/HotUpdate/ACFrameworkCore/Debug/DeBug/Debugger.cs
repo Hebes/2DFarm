@@ -5,7 +5,6 @@ using UnityEngine.Profiling;
 
 namespace ACFrameworkCore
 {
-
     public class Debugger : MonoBehaviour
     {
         /// <summary>

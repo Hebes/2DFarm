@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
@@ -24,28 +22,18 @@ namespace ACFrameworkCore
         public List<ItemDetails> itemDetailsList;
         public List<InventoryItem> PlayerBagItemList;//玩家背包数量
 
-        public async void ICroeInit()
+        public void ICroeInit()
         {
             Instance = this;
             Debug.Log("开始获取数据执行");
             if (MonoManager.Instance == null)
                 Debug.Log("空了");
-            await Start11();
-        }
-
-        IEnumerator Start11()
-        {
-            ResourcePackage package = YooAssets.GetPackage("PC");
-            RawFileOperationHandle handle = package.LoadRawFileAsync(ConfigBytes.BytesItemDetails);
-            yield return handle;
+            RawFileOperationHandle handle = ConfigBytes.BytesItemDetails.YooaddetLoadRawFileAsync();
             byte[] fileData = handle.GetRawFileData();
-            string fileText = handle.GetRawFileText();
-            string filePath = handle.GetRawFilePath();
-
             itemDetailsList = BinaryAnalysis.LoopGetData<ItemDetails>(fileData);
             foreach (ItemDetails info in itemDetailsList)
             {
-                Debug.Log(info.name);
+               ACDebug.Log(info.name);
             }
         }
 

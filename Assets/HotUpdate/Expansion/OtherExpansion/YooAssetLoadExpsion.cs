@@ -50,7 +50,7 @@ namespace ACFrameworkCore
         }
 
         //异步加载二进制文件
-        public static RawFileOperationHandle YooaddetLoadRawFileAsync(string fileName)
+        public static RawFileOperationHandle YooaddetLoadRawFileAsync(this string fileName)
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             RawFileOperationHandle handle = package.LoadRawFileAsync(fileName);

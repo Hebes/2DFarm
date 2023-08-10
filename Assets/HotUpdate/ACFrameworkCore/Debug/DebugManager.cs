@@ -33,6 +33,10 @@ namespace ACFrameworkCore
             });
             //被动日志
             SystemExceptionDebug.InitSystemExceptionDebug();
+            //屏幕显示日志
+            GameObject debugGo = new GameObject("DebugGo");
+            debugGo.AddComponent<Debugger>();
+            GameObject.DontDestroyOnLoad(debugGo);
             ACDebug.Log("日志模块初始化完毕!");
         }
     }

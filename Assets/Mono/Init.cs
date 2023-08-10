@@ -51,7 +51,7 @@ public class Init : MonoBehaviour
     public UpdatePackageVersionOperation operation;                                             //更新包
     private static Assembly _hotUpdateAss;
     private string packageVersion;                                              // 更新成功后自动保存版本号，作为下次初始化的版本。也可以通过operation.SavePackageVersion()方法保存。
-    private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";                //资源版本下载
+    private string XMLVersionUrl = "http://192.168.2.4:8000/ACPackageVersion.xml";                //资源版本下载
     private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";  //版本路径读取
     public static List<string> AOTMetaAssemblyNames = new List<string>()
     {

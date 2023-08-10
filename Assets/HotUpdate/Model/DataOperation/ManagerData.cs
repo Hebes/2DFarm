@@ -9,8 +9,6 @@
 
 -----------------------*/
 
-using System.Runtime.Remoting.Metadata;
-
 namespace ACFrameworkCore
 {
     /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using YooAsset;
-using Cysharp.Threading.Tasks;
 
 /*--------脚本描述-----------
 				

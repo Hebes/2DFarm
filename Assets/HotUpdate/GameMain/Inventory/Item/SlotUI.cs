@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,6 +31,13 @@ namespace ACFrameworkCore
         public int itemAmount;              //物品数量
         public int slotIndex;               //物品序列号
 
+        private void Awake()
+        {
+            slotImage = gameObject.GetChildComponent<Image>("Image");
+            amountText = gameObject.GetChildComponent<TextMeshProUGUI>("Amount");
+            button = gameObject.GetComponent<Button>();
+            slotHightLight = gameObject.GetChildComponent<Image>("HighLight");
+        }
 
         private void Start()
         {
@@ -54,7 +62,7 @@ namespace ACFrameworkCore
         public void UpdateSlot(ItemDetails item, int Amount)
         {
             itemDatails = item;
-            slotImage.sprite = ResourceExtension.LoadAsyncAsT<Sprite>(item.itemIcon);
+            slotImage.sprite = ResourceExtension.LoadAssetSync<Sprite>(item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;
@@ -120,8 +128,8 @@ namespace ACFrameworkCore
                 int targetIndex = targetSlot.slotIndex;
 
                 //在player自身背包范围内的交换
-                if (eSlotType == ESlotType.Bag && targetSlot.eSlotType == ESlotType.Bag)//类型都相同的话
-                    InventoryManager.Instance.SwapItem(slotIndex, targetIndex);
+                //if (eSlotType == ESlotType.Bag && targetSlot.eSlotType == ESlotType.Bag)//类型都相同的话
+                //    InventoryAllManager.Instance.SwapItem(slotIndex, targetIndex);
                 Debug.Log(eventData.pointerCurrentRaycast.gameObject);//打印鼠标指针的射线检测到的物体
                 slotImage.color = new Color(slotImage.color.r, slotImage.color.g, slotImage.color.b, 1);
             }

@@ -21,7 +21,7 @@ namespace ACFrameworkCore
         public EUILucenyType lucenyType = EUILucenyType.Lucency;   //窗口的透明度
 
         public string UIName { get; set; }                        //UI的名称
-        public GameObject gameObject { get; set; }                //窗口的物体
+        public GameObject panelGameObject { get; set; }                //窗口的物体
 
         /// <summary>
         /// 初始化方法
@@ -50,14 +50,14 @@ namespace ACFrameworkCore
         }      //轮询执行
         public virtual void UIOnEnable()
         {
-            this.gameObject.SetActive(true);
+            this.panelGameObject.SetActive(true);
             //设置模态窗体调用(必须是弹出窗体)
             if (type == EUIType.PopUp)
-                UIMaskMgr.Instance.SetMaskWindow(this.gameObject, lucenyType);
+                UIMaskMgr.Instance.SetMaskWindow(this.panelGameObject, lucenyType);
         }    //开启执行
         public virtual void UIOnDisable()
         {
-            this.gameObject.SetActive(false);
+            this.panelGameObject.SetActive(false);
             //取消模态窗体调用
             if (type == EUIType.PopUp)
                 UIMaskMgr.Instance.CancelMaskWindow();
@@ -65,7 +65,7 @@ namespace ACFrameworkCore
         public virtual void UIOnDestroy() { }   //销毁执行
         public virtual void Freeze()
         {
-            this.gameObject.SetActive(true);
+            this.panelGameObject.SetActive(true);
         }         //冻结状态（即：窗体显示在其他窗体下面）
         #endregion
 
@@ -77,7 +77,7 @@ namespace ACFrameworkCore
         /// <param name="delHandle">委托：需要注册的方法</param>
         protected void RigisterButtonObjectEvent(string buttonName, EventTriggerListener.VoidDelegate delHandle)
         {
-            GameObject goButton = this.gameObject.GetChild(buttonName);
+            GameObject goButton = this.panelGameObject.GetChild(buttonName);
             //给按钮注册事件方法
             if (goButton != null)
                 EventTriggerListener.Get(goButton).onClick = delHandle;

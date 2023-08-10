@@ -46,7 +46,7 @@ namespace ACFrameworkCore
         //初始化
         private void InitRoot()
         {
-            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync<GameObject>(ConfigPrefab.GlobalPrefab);
+            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync<GameObject>(ConfigUIPanel.GlobalPanel);
             GameObject gameObject = handle.InstantiateSync();
             //实例化
             CanvasTransfrom = gameObject.transform;
@@ -226,7 +226,7 @@ namespace ACFrameworkCore
             AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(uiFormName);
             YooAssetHdnleDic.Add(uiFormName, handle);
             GameObject goCloneUIPrefabs = handle.InstantiateSync();//创建物体
-            t.gameObject = goCloneUIPrefabs;
+            t.panelGameObject = goCloneUIPrefabs;
             t.UIName = uiFormName;
             t.UIAwake();
             MonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);

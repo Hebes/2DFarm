@@ -23,10 +23,11 @@ namespace ACFrameworkCore
 {
     public class YooAssetResLoad : IResload
     {
-        public HashSet<AssetOperationHandle> assetHashSet = new HashSet<AssetOperationHandle>();
+        public List<AssetOperationHandle> assetHashSet = new List<AssetOperationHandle>();
+        //public HashSet<AssetOperationHandle> assetHashSet = new HashSet<AssetOperationHandle>();
 
         //资源加载
-        public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
+        public T LoadAssetSync<T>(string ResName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetSync<T>(ResName);
@@ -44,7 +45,6 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
             handle.WaitForAsyncComplete();
-            handle.InstantiateSync();
             if (handle.Status == EOperationStatus.Succeed)
             {
                 return handle as T;

@@ -13,9 +13,10 @@
 
 namespace ACFrameworkCore
 {
-    public class Item:MonoBehaviour
+    public class Item : MonoBehaviour
     {
         public int itemID;
+        public int itemAmount;
         public ItemDetails itemDatails;
 
         private SpriteRenderer spriteRenderer;
@@ -40,12 +41,12 @@ namespace ACFrameworkCore
         public void Init(int ID)
         {
             itemID = ID;
-            itemDatails = InventoryManager.Instance.GetItem(ID);
+            itemDatails = InventoryAllManager.Instance.GetItem(ID);
             if (itemDatails != null)
             {
                 //加载图片
                 string icon = !string.IsNullOrEmpty(itemDatails.itemOnWorldSprite) ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
-                spriteRenderer.sprite = ResourceManager.Instance.LoadAsset<Sprite>(icon);
+                spriteRenderer.sprite = ResourceManager.Instance.LoadAssetSync<Sprite>(icon);
                 //spriteRenderer.sprite = itemDatails.itemOnWorldSprite != null ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);

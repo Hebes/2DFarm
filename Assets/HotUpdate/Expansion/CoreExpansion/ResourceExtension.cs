@@ -32,6 +32,12 @@ namespace ACFrameworkCore
             //ResComponent.Insatance.OnLoadAsync(path);
         }
 
+        //同步加载
+        public static T LoadAssetSync<T>(string assetName) where T : UnityEngine.Object
+        {
+            return ResourceManager.Instance.LoadAssetSync<T>(assetName);
+        }
+
         //异步加载
         public static AssetOperationHandle LoadAsync<T>(string assetName) where T : UnityEngine.Object
         {

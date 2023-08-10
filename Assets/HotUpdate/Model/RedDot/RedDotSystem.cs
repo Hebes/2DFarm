@@ -19,6 +19,6 @@ namespace ACFrameworkCore
 {
     public class RedDotSystem
     {
-        
+       
     }
 }

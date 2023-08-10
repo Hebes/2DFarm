@@ -19,7 +19,7 @@ namespace ACFrameworkCore
         {
             return DataManager.Instance.GetDataOne<T>(id);
         }
-        public static List<T> GetDataList<T>() where T : class, IData
+        public static List<IData> GetDataList<T>(this object obj) where T : class, IData
         {
             return DataManager.Instance.GetDataList<T>();
         }

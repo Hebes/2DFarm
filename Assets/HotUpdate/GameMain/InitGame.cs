@@ -40,7 +40,7 @@ public class InitGame
                 break;
             case EInitGameProcess.FSMEnterGame:
                 Debug.Log("进入游戏");
-                EnterGame().Forget();
+                //EnterGame().Forget();
                 break;
         }
     }
@@ -65,8 +65,8 @@ public class InitGame
     {
         HashSet<ICore> _initHs = new HashSet<ICore>()
         {
-            new InventoryManager(),
             new DataManager(),
+            new InventoryManager(),
         };
         foreach (var init in _initHs)
         {

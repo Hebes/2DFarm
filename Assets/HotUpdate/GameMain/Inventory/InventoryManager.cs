@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
@@ -17,30 +18,24 @@ namespace ACFrameworkCore
 {
     public class InventoryManager : ICore
     {
-
         public static InventoryManager Instance;
-        public List<ItemDetails> itemDetailsList;
+        public List<IData> itemDetailsList;         //物品数据
+        Dictionary<string, IEnumerable> inventoryDic;//所有物品的管理字典 key:比如背包 Value:背包里面的数据
         public List<InventoryItem> PlayerBagItemList;//玩家背包数量
 
         public void ICroeInit()
         {
             Instance = this;
-            Debug.Log("开始获取数据执行");
-            if (MonoManager.Instance == null)
-                Debug.Log("空了");
-            RawFileOperationHandle handle = ConfigBytes.BytesItemDetails.YooaddetLoadRawFileAsync();
-            byte[] fileData = handle.GetRawFileData();
-            itemDetailsList = BinaryAnalysis.LoopGetData<ItemDetails>(fileData);
-            foreach (ItemDetails info in itemDetailsList)
-            {
-               ACDebug.Log(info.name);
-            }
+            itemDetailsList = this.GetDataList<ItemDetails>();
+            //foreach (ItemDetails info in itemDetailsList)
+            //    ACDebug.Log(info.GetId());
         }
 
         public ItemDetails GetItem(int ID)
         {
-            return itemDetailsList.Find(i => i.itemID == ID);
+            return itemDetailsList.Find(i => i.GetId() == ID) as ItemDetails;
         }
+
         public void AddItem(Item item, bool toDestory)
         {
             //背包是否有该物品
@@ -74,7 +69,8 @@ namespace ACFrameworkCore
             {
                 PlayerBagItemList[index] = new InventoryItem();//清空 数量相减等于0 约等于没有物品了
             }
-            //EventHandler.CallUpdateInventoryUI(EInventoryLocation.Player, PlayerBag.itemList);//刷新UI
+            //更新物品UI 呼叫事件中心,执行委托的代码
+            ConfigEvent.UpdateInvenoryUI.EventTrigger(EInventoryLocation.Player, PlayerBagItemList);//刷新UI
         }
         /// <summary>
         /// 检查背包空位
@@ -116,7 +112,8 @@ namespace ACFrameworkCore
             }
         }
 
-        public void SwapItem(int slotIndex,int targetIndex)
+        //交换功能
+        public void SwapItem(int slotIndex, int targetIndex)
         {
 
         }
@@ -137,7 +134,7 @@ namespace ACFrameworkCore
             return -1;
         }
 
-       
+
         #endregion
     }
 }

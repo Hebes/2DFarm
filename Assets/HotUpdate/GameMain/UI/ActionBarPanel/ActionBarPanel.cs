@@ -9,6 +9,7 @@
 
 -----------------------*/
 
+using System.Linq;
 using UnityEngine;
 
 namespace ACFrameworkCore
@@ -20,11 +21,16 @@ namespace ACFrameworkCore
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
 
-            for (int i = 0; i < 8; i++)
+            ACUIComponent aCUIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            //aCUIComponent
+            InventoryItem[] inventoryItems = InventoryAllManager.Instance.ItemDicArray[ConfigInventory.ActionBar];
+            GameObject gameObject = ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
+
+            for (int i = 0; i < inventoryItems.Length; i++)
             {
-                GameObject gameObject= ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
-                Item item = gameObject.GetComponent<Item>();
-                
+                GameObject go = GameObject.Instantiate(gameObject);
+                Item item = go.GetComponent<Item>();
+                item.Init(inventoryItems[i].itemID);
             }
 
             //InventoryAllManager.Instance.AddItem

@@ -84,9 +84,9 @@ public class InitGame
         //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
         ActionBarPanel actionBarPanel = ConfigUIPanel.ActionBarPanel.ShwoUIPanel<ActionBarPanel>();
         ItemToolTipPanel itemToolTipPanel =  ConfigUIPanel.ItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
-        itemToolTipPanel.gameObject.SetActive(false);
+        itemToolTipPanel.panelGameObject.SetActive(false);
         PlayerBagPanel playerBagPanel =  ConfigUIPanel.PlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
-        playerBagPanel.gameObject.SetActive(false);
+        playerBagPanel.panelGameObject.SetActive(false);
         //创建物体
         GameObject gameObject = ConfigPrefab.ItemBasePrefab.YooaddetLoadAsyncAsT<GameObject>();
         //GameObject gameObject =  ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);

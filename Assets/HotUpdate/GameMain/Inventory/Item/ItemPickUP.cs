@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*--------脚本描述-----------
 				
@@ -28,7 +23,7 @@ namespace ACFrameworkCore
                 if (item.itemDatails.canPickedup)
                 {
                     //拾取物品到背包
-                    InventoryAllManager.Instance.AddItem(item, true);
+                    InventoryAllManager.Instance.AddItemItemDicArray(ConfigInventory.PalayerBag,item, true);
                 }
             }
         }

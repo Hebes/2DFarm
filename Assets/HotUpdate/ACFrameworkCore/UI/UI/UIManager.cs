@@ -226,7 +226,7 @@ namespace ACFrameworkCore
             AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(uiFormName);
             YooAssetHdnleDic.Add(uiFormName, handle);
             GameObject goCloneUIPrefabs = handle.InstantiateSync();//创建物体
-            t.gameObject = goCloneUIPrefabs;
+            t.panelGameObject = goCloneUIPrefabs;
             t.UIName = uiFormName;
             t.UIAwake();
             MonoManager.Instance.OnAddUpdateEvent(t.UIUpdate);

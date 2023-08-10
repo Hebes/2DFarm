@@ -16,8 +16,8 @@ namespace ACFrameworkCore
     public class Item : MonoBehaviour
     {
         public int itemID;
+        public int itemAmount;
         public ItemDetails itemDatails;
-        public int count;
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;

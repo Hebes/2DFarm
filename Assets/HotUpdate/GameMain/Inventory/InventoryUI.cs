@@ -102,7 +102,7 @@ namespace ACFrameworkCore
                     {
                         if (list[i].itemAmount > 0)//有物品
                         {
-                            ItemDetails item = InventoryManager.Instance.GetItem(list[i].itemID);
+                            ItemDetails item = InventoryAllManager.Instance.GetItem(list[i].itemID);
                             playerSlot[i].UpdateSlot(item, list[i].itemAmount);
                         }
                         else

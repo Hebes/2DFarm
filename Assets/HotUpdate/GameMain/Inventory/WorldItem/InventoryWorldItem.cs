@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class WorldItemManager : MonoBehaviour
+    public class InventoryWorldItem : MonoBehaviour
     {
         public Item itemPrefab;
         public Item bounceItemPrefab;//抛投的物品模板

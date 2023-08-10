@@ -13,10 +13,11 @@
 
 namespace ACFrameworkCore
 {
-    public class Item:MonoBehaviour
+    public class Item : MonoBehaviour
     {
         public int itemID;
         public ItemDetails itemDatails;
+        public int count;
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;
@@ -40,7 +41,7 @@ namespace ACFrameworkCore
         public void Init(int ID)
         {
             itemID = ID;
-            itemDatails = InventoryManager.Instance.GetItem(ID);
+            itemDatails = InventoryAllManager.Instance.GetItem(ID);
             if (itemDatails != null)
             {
                 //加载图片

@@ -66,7 +66,7 @@ public class InitGame
         HashSet<ICore> _initHs = new HashSet<ICore>()
         {
             new DataManager(),
-            new InventoryManager(),
+            new InventoryAllManager(),
         };
         foreach (var init in _initHs)
         {

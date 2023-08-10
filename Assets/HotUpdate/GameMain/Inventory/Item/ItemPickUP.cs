@@ -28,7 +28,7 @@ namespace ACFrameworkCore
                 if (item.itemDatails.canPickedup)
                 {
                     //拾取物品到背包
-                    InventoryManager.Instance.AddItem(item, true);
+                    InventoryAllManager.Instance.AddItem(item, true);
                 }
             }
         }

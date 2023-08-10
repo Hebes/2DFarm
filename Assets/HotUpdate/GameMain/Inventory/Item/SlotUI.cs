@@ -121,7 +121,7 @@ namespace ACFrameworkCore
 
                 //在player自身背包范围内的交换
                 if (eSlotType == ESlotType.Bag && targetSlot.eSlotType == ESlotType.Bag)//类型都相同的话
-                    InventoryManager.Instance.SwapItem(slotIndex, targetIndex);
+                    InventoryAllManager.Instance.SwapItem(slotIndex, targetIndex);
                 Debug.Log(eventData.pointerCurrentRaycast.gameObject);//打印鼠标指针的射线检测到的物体
                 slotImage.color = new Color(slotImage.color.r, slotImage.color.g, slotImage.color.b, 1);
             }

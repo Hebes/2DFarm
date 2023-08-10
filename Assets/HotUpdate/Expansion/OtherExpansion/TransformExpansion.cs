@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*--------脚本描述-----------
 				
@@ -19,6 +14,7 @@ namespace ACFrameworkCore
 {
     public static class TransformExpansion
     {
+        //获取子物体
         public static Transform GetChild(this Transform transform, string childName)
         {
             Transform childTF = transform.Find(childName);
@@ -49,6 +45,7 @@ namespace ACFrameworkCore
             return t?.GetComponent<T>() != null ? t.GetComponent<T>() : gameObject.AddComponent<T>();
         }
 
+        //清除子物体
         public static void ClearChild(this Transform transform, params int[] Number)
         {
             if (transform.childCount <= 0) return;
@@ -68,6 +65,7 @@ namespace ACFrameworkCore
 
         }
 
+        //通过全路径获取组件
         public static T GetChildAllPath<T>(this Transform transform, string childPath) where T : UnityEngine.Object
         {
             return transform.Find(childPath)?.GetComponent<T>();
@@ -77,11 +75,7 @@ namespace ACFrameworkCore
             return gameObject.transform.Find(childPath)?.GetComponent<T>();
         }
 
-        /// <summary>
-        /// 给子节点添加父对象
-        /// </summary>
-        /// <param name="parents">父对象的方位</param>
-        /// <param name="child">子对象的方法</param>
+        //给子节点添加父对象
         public static void AddChildNodeToParentNode(Transform parents, Transform child)
         {
             child.SetParent(parents, false);

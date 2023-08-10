@@ -9,6 +9,8 @@
 
 -----------------------*/
 
+using UnityEngine;
+
 namespace ACFrameworkCore
 {
     public class ActionBarPanel : UIBase
@@ -18,6 +20,14 @@ namespace ACFrameworkCore
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
 
+            for (int i = 0; i < 8; i++)
+            {
+                GameObject gameObject= ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
+                Item item = gameObject.GetComponent<Item>();
+                
+            }
+
+            //InventoryAllManager.Instance.AddItem
             //RigisterButtonObjectEvent("Back",
             //  p =>
             //  {

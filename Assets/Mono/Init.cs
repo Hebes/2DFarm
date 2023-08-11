@@ -46,7 +46,11 @@ public class Init : MonoBehaviour
     //Yooasset相关
     public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;                                   //资源系统运行模式
     private EProcess CurrentProcess;                                                            //当前所在的流程
+#if UNITY_ANDROID
+    private readonly string packageName = "Android";                                            //包名
+#elif UNITY_EDITOR_64
     private readonly string packageName = "PC";                                                 //包名
+#endif
     private ResourceDownloaderOperation downloader;                                             //下载器
     public UpdatePackageVersionOperation operation;                                             //更新包
     private static Assembly _hotUpdateAss;

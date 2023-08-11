@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemID: 1007
+  itemAmount: 2
   itemDatails:
     itemID: 0
     name: 

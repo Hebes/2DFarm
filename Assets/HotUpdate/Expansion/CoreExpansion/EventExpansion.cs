@@ -43,7 +43,15 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.AddEventListener<T>(eventName, action);
         }
+        public static void AddEventListener<T>(this string eventName, Action<T> action)
+        {
+            EventManager.Instance.AddEventListener<T>(eventName, action);
+        }
         public static void RemoveEventListener<T>(this Action<T> action, string eventName)
+        {
+            EventManager.Instance.RemoveEventListener<T>(eventName, action);
+        }
+        public static void RemoveEventListener<T>(this string eventName, Action<T> action)
         {
             EventManager.Instance.RemoveEventListener<T>(eventName, action);
         }

@@ -61,7 +61,8 @@ namespace ACFrameworkCore
 
             foreach (string s in strings)
             {
-                string tempstr = s.Replace(Path, "").Replace(".prefab", "");
+                string[] strPath = s.Split('\\');
+                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "");
                 sb.AppendLine($"        public const string {tempstr}Panel = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");

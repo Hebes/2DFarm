@@ -35,9 +35,9 @@ namespace ACFrameworkCore
         }
 
         //同步加载
-        public T LoadAsset<T>(string ResName) where T : UnityEngine.Object
+        public T LoadAssetSync<T>(string ResName) where T : UnityEngine.Object
         {
-            return iload.LoadAsset<T>(ResName);
+            return iload.LoadAssetSync<T>(ResName);
         }
         
         //异步加载

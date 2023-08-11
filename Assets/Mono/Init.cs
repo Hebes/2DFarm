@@ -51,7 +51,7 @@ public class Init : MonoBehaviour
     public UpdatePackageVersionOperation operation;                                             //更新包
     private static Assembly _hotUpdateAss;
     private string packageVersion;                                              // 更新成功后自动保存版本号，作为下次初始化的版本。也可以通过operation.SavePackageVersion()方法保存。
-    private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";                //资源版本下载
+    private string XMLVersionUrl = "http://192.168.2.4:8000/ACPackageVersion.xml";                //资源版本下载
     private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";  //版本路径读取
     public static List<string> AOTMetaAssemblyNames = new List<string>()
     {
@@ -62,8 +62,9 @@ public class Init : MonoBehaviour
     };//补充元数据dll的列表
     private static Dictionary<string, byte[]> s_assetDatas = new Dictionary<string, byte[]>();  //资源数据
 
+    public GameObject goTemp { get; private set; }
+
     //UILoading界面
-    private ACUIComponent aCUIComponent;
     private Text LoadingText;
 
     //开始加载
@@ -106,8 +107,8 @@ public class Init : MonoBehaviour
         Debug.Log("流程准备工作");
         //TODO 暂时试用Resources
         GameObject go = Resources.Load<GameObject>("UILoading");
-        aCUIComponent = GameObject.Instantiate(go).GetComponent<ACUIComponent>();
-        LoadingText = aCUIComponent.Get<GameObject>("T_Text").GetComponent<Text>();
+        goTemp = GameObject.Instantiate(go);
+        LoadingText = goTemp.transform.Find("Canvas/UILoading/Image/Image (1)/T_Text").GetComponent<Text>();
 
         yield return null;
         LoadingText.text = "流程准备工作";
@@ -301,7 +302,7 @@ public class Init : MonoBehaviour
         //进入的是编辑器加载热更模式,用于打断点
         if (PlayMode == EPlayMode.EditorSimulateMode)
         {
-            //补充元数据
+            //补充元数据HashSet
             string dllPath = $"{Application.dataPath}/AssetsPackage/HotDll";//热更新的DLL
             string[] filesPath = Directory.GetFiles(dllPath, "*.bytes", System.IO.SearchOption.AllDirectories);
             foreach (string filePath in filesPath)
@@ -317,12 +318,12 @@ public class Init : MonoBehaviour
             }
             //进入游戏
 #if !UNITY_EDITOR
-         _hotUpdateAss = Assembly.Load(ReadBytesFromStreamingAssets("HotUpdate.dll.bytes"));
+         //_hotUpdateAss = Assembly.Load(ReadBytesFromStreamingAssets("HotUpdate.dll.bytes"));
 #else
             _hotUpdateAss = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotUpdate");
 #endif
             _hotUpdateAss.GetType("InitGame").GetMethod("Init").Invoke(null, null);
-            GameObject.Destroy(aCUIComponent.gameObject);
+            GameObject.Destroy(goTemp.gameObject);
             yield break;
         }
         #endregion
@@ -353,7 +354,7 @@ public class Init : MonoBehaviour
         _hotUpdateAss = Assembly.Load(fileDataHotUpdate);
         Type entryType = _hotUpdateAss.GetType("InitGame");
         entryType.GetMethod("Init").Invoke(null, null);
-        GameObject.Destroy(aCUIComponent.gameObject);
+        GameObject.Destroy(goTemp.gameObject);
         #endregion
 
     }              //HybridCLR热更代码

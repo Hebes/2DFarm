@@ -364,7 +364,7 @@ namespace ACFrameworkCore
         {
             StringBuilder sb = new StringBuilder();
             //自己填写需要的代码
-            sb.AppendLine($"aCUIManager = GetComponent<ACUIManager>();");
+            sb.AppendLine($"ACUIComponent UIComponent = GetComponent<ACUIComponent>();");
             Debug.Log(sb.ToString());
             Copy(sb.ToString());
 
@@ -387,13 +387,13 @@ namespace ACFrameworkCore
 
                 if (type == typeof(GameObject))
                 {
-                    sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name} {{get;set;}}");
+                    sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name};");// {{get;set;}}
                 }
                 else
                 {
                     Component component = (gameObjectProperty.objectReferenceValue as GameObject).GetComponent(type);
                     if (component != null)
-                        sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name}{eTUITool_ClassName} {{get;set;}}");
+                        sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name}{eTUITool_ClassName}");// {{get;set;}}
                 }
             }
 
@@ -423,13 +423,13 @@ namespace ACFrameworkCore
 
                 if (type == typeof(GameObject))
                 {
-                    sb.AppendLine($"self.{gameObjectProperty.objectReferenceValue.name} = rc.Get<{eTUITool_ClassName}>(\"{gameObjectProperty.objectReferenceValue.name}\");");
+                    sb.AppendLine($"{gameObjectProperty.objectReferenceValue.name} = UIComponent.Get<{eTUITool_ClassName}>(\"{gameObjectProperty.objectReferenceValue.name}\");");
                 }
                 else
                 {
                     Component component = (gameObjectProperty.objectReferenceValue as GameObject).GetComponent(type);
                     if (component != null)
-                        sb.AppendLine($"{gameObjectProperty.objectReferenceValue.name} = rc.Get<{eTUITool_ClassName}>(\"{gameObjectProperty.objectReferenceValue.name}\");");
+                        sb.AppendLine($"{gameObjectProperty.objectReferenceValue.name} = UIComponent.Get<{eTUITool_ClassName}>(\"{gameObjectProperty.objectReferenceValue.name}\");");
                 }
             }
 
@@ -456,14 +456,14 @@ namespace ACFrameworkCore
                     //self.T_Close.GetComponent<Button>().onClick.AddListener(self.OnT_Close);
                     Component component = (gameObjectProperty.objectReferenceValue as GameObject).GetComponent(type);
                     if (component != null)
-                        sb.AppendLine($"self.{gameObjectProperty.objectReferenceValue.name}.GetComponent<{eTUITool_ClassName}>().onClick.AddListener(self.On{gameObjectProperty.objectReferenceValue.name});");
+                        sb.AppendLine($"{gameObjectProperty.objectReferenceValue.name}.GetComponent<{eTUITool_ClassName}>().onClick.AddListener(self.On{gameObjectProperty.objectReferenceValue.name});");
                 }
                 else if (type == typeof(Text))
                 {
                     //self.T_Close.GetComponent<Button>().onClick.AddListener(self.OnT_Close);
                     Component component = (gameObjectProperty.objectReferenceValue as GameObject).GetComponent(type);
                     if (component != null)
-                        sb.AppendLine($"self.{gameObjectProperty.objectReferenceValue.name}.GetComponent<{eTUITool_ClassName}>().text =;");
+                        sb.AppendLine($"{gameObjectProperty.objectReferenceValue.name}.GetComponent<{eTUITool_ClassName}>().text =;");
                 }
             }
             Debug.Log(sb.ToString());

@@ -15,6 +15,11 @@ namespace ACFrameworkCore
     public static class TransformExpansion
     {
         //获取子物体
+        public static T AddChildComponent<T>(this GameObject gameObject, string childName) where T : Component
+        {
+            Transform t = GetChild(gameObject.transform, childName);
+            return t?.GetComponent<T>() != null ? t.GetComponent<T>() : gameObject.AddComponent<T>();
+        }
         public static Transform GetChild(this Transform transform, string childName)
         {
             Transform childTF = transform.Find(childName);
@@ -39,10 +44,9 @@ namespace ACFrameworkCore
         {
             return GetChild(gameObject.transform, childName)?.GetComponent<T>();
         }
-        public static T AddChildComponent<T>(this GameObject gameObject, string childName) where T : Component
+        public static T GetChildComponent<T>(this GameObject gameObject, int i)
         {
-            Transform t = GetChild(gameObject.transform, childName);
-            return t?.GetComponent<T>() != null ? t.GetComponent<T>() : gameObject.AddComponent<T>();
+           return gameObject.transform.GetChild(i).GetComponent<T>();
         }
 
         //清除子物体

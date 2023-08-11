@@ -39,7 +39,7 @@ namespace ACFrameworkCore
             IsClearStack = isClearStack;
         }
 
-        #region 生命周期
+        //生命周期
         public virtual void UIAwake() 
         {
 
@@ -67,9 +67,28 @@ namespace ACFrameworkCore
         {
             this.panelGameObject.SetActive(true);
         }         //冻结状态（即：窗体显示在其他窗体下面）
-        #endregion
 
-        #region 封装子类常用的方法
+        //面板操作
+	    protected void OpenUIForm<T>(string uiFormName) where T : UIBase, new()
+        {
+            UIManager.Instance.ShwoUIPanel<T>(uiFormName);
+        }
+        protected void GetUIForm<T>(string uiFormName) where T : UIBase, new()
+        {
+            UIManager.Instance.GetUIPanl<T>(uiFormName);
+        }
+	    protected void CloseUIForm()
+        {
+            int intPosition = -1;
+            string strUIFromName = UIName;  // GetType().ToString().Replace("Panel","");             //命名空间+类名 //处理后的UIFrom 名称
+            intPosition = strUIFromName.IndexOf('.');
+            if (intPosition != -1)
+                strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
+            ACDebug.Log($"关闭的界面名称是:{strUIFromName}");
+            UIManager.Instance.CloseUIForms(strUIFromName);
+        }
+
+        //事件推送
         /// <summary>
         /// 注册按钮事件
         /// </summary>
@@ -82,29 +101,6 @@ namespace ACFrameworkCore
             if (goButton != null)
                 EventTriggerListener.Get(goButton).onClick = delHandle;
         }
-
-        /// <summary>
-        /// 打开UI窗体
-        /// </summary>
-        /// <param name="uiFormName"></param>
-	    protected void OpenUIForm<T>(string uiFormName) where T : UIBase, new()
-        {
-            UIManager.Instance.ShwoUIPanel<T>(uiFormName);
-        }
-        /// <summary>
-        /// 关闭当前UI窗体
-        /// </summary>
-	    protected void CloseUIForm()
-        {
-            int intPosition = -1;
-            string strUIFromName = UIName;  // GetType().ToString().Replace("Panel","");             //命名空间+类名 //处理后的UIFrom 名称
-            intPosition = strUIFromName.IndexOf('.');
-            if (intPosition != -1)
-                strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
-            ACDebug.Log($"关闭的界面名称是:{strUIFromName}");
-            UIManager.Instance.CloseUIForms(strUIFromName);
-        }
-
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -126,6 +122,7 @@ namespace ACFrameworkCore
             MessageCenter.AddMsgListener(messagType, handler);
         }
 
+        //其他方法
         /// <summary>
         /// 显示语言
         /// </summary>
@@ -137,6 +134,5 @@ namespace ACFrameworkCore
             //return LauguageMgr.GetInstance().ShowText(message);
 
         }
-        #endregion
     }
 }

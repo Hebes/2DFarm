@@ -25,7 +25,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T LoadAsset<T>(string ResName) where T : UnityEngine.Object;
+        public T LoadAssetSync<T>(string ResName) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载资源对象(协程加载)

@@ -7,7 +7,7 @@
 作者:
 	暗沉
 描述:
-    物品信息
+    物品信息,用于ItemBase
 
 -----------------------*/
 
@@ -46,7 +46,7 @@ namespace ACFrameworkCore
             {
                 //加载图片
                 string icon = !string.IsNullOrEmpty(itemDatails.itemOnWorldSprite) ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
-                spriteRenderer.sprite = ResourceManager.Instance.LoadAsset<Sprite>(icon);
+                spriteRenderer.sprite = ResourceManager.Instance.LoadAssetSync<Sprite>(icon);
                 //spriteRenderer.sprite = itemDatails.itemOnWorldSprite != null ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);

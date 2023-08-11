@@ -18,8 +18,6 @@ public class InitGame
     public static void Init()
     {
         Debug.Log("初始化场景");
-        //await InitRsv();
-        //EnterGame();
         SwitchInitGameProcess(EInitGameProcess.FSMInitFramework).Forget();
     }
 
@@ -40,14 +38,14 @@ public class InitGame
                 break;
             case EInitGameProcess.FSMEnterGame:
                 Debug.Log("进入游戏");
-                //EnterGame().Forget();
+                EnterGame().Forget();
                 break;
         }
     }
 
     private static async UniTask InitRsv()
     {
-        HashSet<ICore> _initHs = new HashSet<ICore>()
+        List<ICore> _initHs = new List<ICore>()
         {
             new DebugManager(),
             new UIManager(),
@@ -63,7 +61,7 @@ public class InitGame
 
     private static async UniTask InitData()
     {
-        HashSet<ICore> _initHs = new HashSet<ICore>()
+        List<ICore> _initHs = new List<ICore>()
         {
             new DataManager(),
             new InventoryAllManager(),
@@ -76,21 +74,14 @@ public class InitGame
     }
     private static async UniTaskVoid EnterGame()
     {
-        ACDebug.Log("开始游戏!");
         await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
-        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
 
         //打开窗口面板
-        //CUIManager.Instance.ShwoUIPanel<StartPanel>(ConfigUIPanel.StartPanel);
-        ActionBarPanel actionBarPanel = ConfigUIPanel.ActionBarPanel.ShwoUIPanel<ActionBarPanel>();
-        ItemToolTipPanel itemToolTipPanel =  ConfigUIPanel.ItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
-        itemToolTipPanel.panelGameObject.SetActive(false);
-        PlayerBagPanel playerBagPanel =  ConfigUIPanel.PlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
-        playerBagPanel.panelGameObject.SetActive(false);
-        //创建物体
-        GameObject gameObject = ConfigPrefab.ItemBasePrefab.YooaddetLoadAsyncAsT<GameObject>();
-        //GameObject gameObject =  ResourceExtension.LoadAsyncAsT<GameObject>(ConfigPrefab.ItemBasePrefab);
-        GameObject go = GameObject.Instantiate(gameObject);
-        Debug.Log($"物体名称是  {go.name}");
+        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();
+        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
+        ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();
+        ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
+        ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();
     }
 }

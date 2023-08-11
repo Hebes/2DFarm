@@ -44,6 +44,7 @@ public class InitGame
         }
     }
 
+    //初始化框架
     private static async UniTask InitRsv()
     {
         List<ICore> _initHs = new List<ICore>()
@@ -60,6 +61,7 @@ public class InitGame
         }
     }
 
+    //初始化需要的数据
     private static async UniTask InitData()
     {
         List<ICore> _initHs = new List<ICore>()

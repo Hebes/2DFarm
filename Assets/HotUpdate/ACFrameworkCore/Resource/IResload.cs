@@ -94,7 +94,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="ResName">资源的名称</param>
-        public void ReleaseAsset(string ResName);
+        public void ReleaseAsset(string ResName = null);
 
         /// <summary>
         /// 资源释放

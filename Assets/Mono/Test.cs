@@ -11,10 +11,17 @@ namespace ACFrameworkCore
 {
     public class Test : MonoBehaviour
     {
+        GameObject go;
         private void Start()
         {
-            
+            go = Resources.Load<GameObject>("Cube");
+            GameObject.Instantiate(go);
+            Invoke("Remove", 2);
+        }
 
+        public void Remove()
+        {
+            go = null;
         }
     }
 }

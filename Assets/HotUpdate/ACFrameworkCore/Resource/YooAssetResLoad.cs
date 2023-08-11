@@ -40,8 +40,17 @@ namespace ACFrameworkCore
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetAsync<T>(AssetName);
+            assetHashSet.Add(handle);
             await handle.ToUniTask();
-            return handle.AssetObject as T;
+            if (handle.Status == EOperationStatus.Succeed)
+            {
+                return handle.AssetObject as T;
+            }
+            else
+            {
+                ACDebug.Error($"资源加载失败,请检查资源名称:{AssetName}");
+                return null;
+            }
         }
 
         public AssetOperationHandle LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object
@@ -129,16 +138,21 @@ namespace ACFrameworkCore
         }
 
         //资源卸载和释放
-        public void ReleaseAsset(string ResName)
+        public void ReleaseAsset(string ResName = null)
         {
-            AssetOperationHandle assetTemp = assetHashSet.First((go) => { return go.AssetObject.name == ResName; });
-            if (assetTemp != null) { ACDebug.Error($"没有找到{ResName}的资源!"); }
-            assetTemp.Release();
+            foreach (var item in assetHashSet)
+            {
+                item.Release();
+            }
+            //AssetOperationHandle assetTemp = assetHashSet.First((go) => { return go.AssetObject.name == ResName; });
+            //if (assetTemp != null) { ACDebug.Error($"没有找到{ResName}的资源!"); }
+            //assetTemp.Release();
         }
 
         //资源释放
         public void UnloadAssets()
         {
+            ReleaseAsset();
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             package.UnloadUnusedAssets();
         }

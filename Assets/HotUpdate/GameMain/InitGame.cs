@@ -1,5 +1,6 @@
 ﻿using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -74,6 +75,7 @@ public class InitGame
     }
     private static async UniTaskVoid EnterGame()
     {
+        //MonoManager.Instance.OnAddUpdateEvent(ttt);
         await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
         await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
 
@@ -84,4 +86,12 @@ public class InitGame
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();
     }
+
+    //private static void ttt()
+    //{
+    //    YooAssetLoadScene.LoadingEvenName.AddEventListener<float>((progress) => 
+    //    {
+    //        ACDebug.Log($"当前的进度是{progress}");
+    //    });
+    //}
 }

@@ -5,7 +5,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using YooAsset;
-//using static Cysharp.Threading.Tasks.Internal.Error;
+using static Cysharp.Threading.Tasks.Internal.Error;
 
 
 namespace Cysharp.Threading.Tasks
@@ -21,8 +21,7 @@ namespace Cysharp.Threading.Tasks
                                         IProgress<float> progress = null,
                                         PlayerLoopTiming timing = PlayerLoopTiming.Update)
         {
-            //TODO 如果出现问题,请去YooAsset那边再去处理
-            //ThrowArgumentNullException(handle, nameof(handle));
+            ThrowArgumentNullException(handle, nameof(handle));
 
             if (!handle.IsValid)
             {

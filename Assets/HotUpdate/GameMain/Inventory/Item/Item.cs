@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 /*--------脚本描述-----------
 				
@@ -31,14 +32,14 @@ namespace ACFrameworkCore
         private void Start()
         {
             if (itemID != 0)
-                Init(itemID);
+                Init(itemID).Forget();
         }
 
         /// <summary>
         /// 根据ID生成物品
         /// </summary>
         /// <param name="ID"></param>
-        public void Init(int ID)
+        public async UniTask Init(int ID)
         {
             itemID = ID;
             itemDatails = InventoryAllManager.Instance.GetItem(ID);
@@ -46,7 +47,7 @@ namespace ACFrameworkCore
             {
                 //加载图片
                 string icon = !string.IsNullOrEmpty(itemDatails.itemOnWorldSprite) ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
-                spriteRenderer.sprite = ResourceManager.Instance.LoadAssetSync<Sprite>(icon);
+                spriteRenderer.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(icon);
                 //spriteRenderer.sprite = itemDatails.itemOnWorldSprite != null ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);

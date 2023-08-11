@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -50,17 +51,17 @@ namespace ACFrameworkCore
                 UpdateEmptySlot();
         }
 
-        
+
 
         /// <summary>
         /// 更新Slot显示
         /// </summary>
         /// <param name="item"></param>
         /// <param name="Amount"></param>
-        public void UpdateSlot(ItemDetails item, int Amount)
+        public async UniTask UpdateSlot(ItemDetails item, int Amount)
         {
             itemDatails = item;
-            slotImage.sprite = ResourceExtension.LoadAssetSync<Sprite>(item.itemIcon);
+            slotImage.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;
@@ -102,7 +103,7 @@ namespace ACFrameworkCore
                 IAM.dragItem.SetNativeSize();
 
                 isSelected = true;
-                IAM.UpdateSlotHightLight(key,slotIndex);
+                IAM.UpdateSlotHightLight(key, slotIndex);
             }
         }
         public void OnPointerClick(PointerEventData eventData)//点击

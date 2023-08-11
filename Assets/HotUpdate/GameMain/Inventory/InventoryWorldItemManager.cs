@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -130,7 +131,7 @@ namespace ACFrameworkCore
                 foreach (var item in currentSceneItems)
                 {
                     Item newItem = Instantiate(itemPrefab, item.position.ToVector3(), Quaternion.identity, itemParent);
-                    newItem.Init(item.itemID);
+                    newItem.Init(item.itemID).Forget();
                 }
 
                 ////清场

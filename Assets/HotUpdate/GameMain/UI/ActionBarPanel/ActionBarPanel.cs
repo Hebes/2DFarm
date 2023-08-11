@@ -9,6 +9,7 @@
 
 -----------------------*/
 
+using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,14 @@ namespace ACFrameworkCore
         private bool bagOpened = false;                     //背包是否被打开了
 
 
-        public override void UIAwake()
+        public override async void UIAwake()
         {
             base.UIAwake();
             //初始化
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             ActionBarSlotUIList = new List<SlotUI>();
+            ////TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
+            //InventoryAllManager.Instance.CreatItemDicArrayRecord(ConfigInventory.ActionBar, 10);//初始化背包数据
             //获取变量
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             T_BagButton = UIComponent.Get<GameObject>("T_BagButton");
@@ -50,7 +53,7 @@ namespace ACFrameworkCore
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
             InventoryAllManager.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
             //测试创建拾取的物体
-            GameObject gameObject = ResourceExtension.LoadAssetSync<GameObject>(ConfigPrefab.ItemBasePrefab);
+            GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
             GameObject.Instantiate(gameObject);
         }
         public override void UIOnEnable()
@@ -76,13 +79,13 @@ namespace ACFrameworkCore
             if (bagOpened)
             {
                 bagOpened = false;
-                CloseUIForm();
+                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBagPanel);
             }
             else
             {
                 bagOpened = true;
                 ACDebug.Log("开启界面" + ConfigUIPanel.UIPlayerBagPanel);
-                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBagPanel);
+                CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPanel);
             }
         }//背包按钮
 
@@ -93,7 +96,7 @@ namespace ACFrameworkCore
                 if (obj[i].itemAmount > 0)//有物品
                 {
                     ItemDetails item = InventoryAllManager.Instance.GetItem(obj[i].itemID);
-                    ActionBarSlotUIList[i].UpdateSlot(item, obj[i].itemAmount);
+                    ActionBarSlotUIList[i].UpdateSlot(item, obj[i].itemAmount).Forget();
                 }
                 else
                 {

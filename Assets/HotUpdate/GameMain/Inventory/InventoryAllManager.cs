@@ -32,7 +32,7 @@ namespace ACFrameworkCore
             ItemDicArray = new Dictionary<string, InventoryItem[]>();
             slotUIDic = new Dictionary<string, List<SlotUI>>();
             //TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
-            ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[8]);
+            ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[10]);
             ItemDicArray.Add(ConfigInventory.PalayerBag, new InventoryItem[16]);
             //ConfigEvent.BeforeSceneUnloadEvent.AddEventListener<string,int>(UpdateSlotHightLight);//切换场景的时候触发下
         }

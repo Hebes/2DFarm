@@ -9,6 +9,7 @@
 
 -----------------------*/
 
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +26,9 @@ namespace ACFrameworkCore
             base.UIAwake();
             //初始化
             playerBagSlotList = new List<SlotUI>();
-            InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+            //InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+            ////TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
+            //InventoryAllManager.Instance.CreatItemDicArrayRecord(ConfigInventory.PalayerBag, 16);//初始化背包数据
             //获取变量
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
@@ -61,7 +64,7 @@ namespace ACFrameworkCore
                 if (obj[i].itemAmount > 0)//有物品
                 {
                     ItemDetails item = InventoryAllManager.Instance.GetItem(obj[i].itemID);
-                    playerBagSlotList[i].UpdateSlot(item, obj[i].itemAmount);
+                    playerBagSlotList[i].UpdateSlot(item, obj[i].itemAmount).Forget();
                 }
                 else
                 {

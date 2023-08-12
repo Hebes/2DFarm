@@ -42,6 +42,15 @@ namespace ACFrameworkCore
             slotUI.isSelected = !slotUI.isSelected;
             slotUI.slotHightLight.gameObject.SetActive(slotUI.isSelected);
             ConfigEvent.UpdateSlotHightLight.EventTrigger(slotUI.key, slotUI.slotIndex);
+
+            switch (slotUI.key)
+            {
+                case ConfigInventory.PalayerBag:
+                case ConfigInventory.ActionBar:
+                    //通知物品被选中的状态
+                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
+                    break;
+            }
             //InventoryAllManager.Instance.UpdateSlotHightLight(slotUI.key, slotUI.slotIndex);
             //判断是否是在商店中点击(商店不执行代码)
             //if (eSlotType == ESlotType.Bag)

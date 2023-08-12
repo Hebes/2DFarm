@@ -24,7 +24,6 @@ namespace ACFrameworkCore
         public Dictionary<string, List<SlotUI>> slotUIDic;       //所有的高亮的格子
 
         public Image dragItem;//拖拽的物体
-        public ItemToolTip itemToolTip;//信息提示框
 
         public void ICroeInit()
         {

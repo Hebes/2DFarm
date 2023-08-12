@@ -28,22 +28,15 @@ namespace ACFrameworkCore
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            
             if (slotUI.itemDatails != null)
-            {
-                InventoryAllManager.Instance.itemToolTip.gameObject.SetActive(true);
-                InventoryAllManager.Instance.itemToolTip.SetupTooltip(slotUI.itemDatails, slotUI.eSlotType);
-
-                InventoryAllManager.Instance.itemToolTip.GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);//设置锚点
-                InventoryAllManager.Instance.itemToolTip.transform.position = transform.position + Vector3.up * 60;//设置距离
-            }
+                ConfigEvent.ItemToolTipShow.EventTrigger(slotUI.itemDatails, slotUI.eSlotType, transform.position);
             else
-            {
-                InventoryAllManager.Instance.itemToolTip.gameObject.SetActive(false);
-            }
+                ConfigEvent.ItemToolTipClose.EventTrigger();
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            InventoryAllManager.Instance.itemToolTip.gameObject.SetActive(false);
+            ConfigEvent.ItemToolTipClose.EventTrigger();
         }
     }
 }

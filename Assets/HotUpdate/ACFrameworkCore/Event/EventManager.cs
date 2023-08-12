@@ -39,6 +39,7 @@ namespace ACFrameworkCore
         public void EventTrigger(string name)
         {
             if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo).Trigger();
         }
 
@@ -58,6 +59,7 @@ namespace ACFrameworkCore
         public void EventTrigger<T>(string name, T info)
         {
             if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T>).Trigger(info);
         }
 
@@ -77,7 +79,28 @@ namespace ACFrameworkCore
         public void EventTrigger<T, K>(string name, T t, K k)
         {
             if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K>).Trigger(t, k);
+        }
+
+        //带3个参数的
+        public void AddEventListener<T, K, V>(string name, Action<T, K, V> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V>).actions += action;
+            else
+                eventDic.Add(name, new EventInfo<T, K, V>(action));
+        }
+        public void RemoveEventListener<T, K, V>(string name, Action<T, K, V> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V>).actions -= action;
+        }
+        public void EventTrigger<T, K, V>(string name, T t, K k, V v)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
+            (eventDic[name] as EventInfo<T, K, V>).Trigger(t, k, v);
         }
 
         public void Clear()

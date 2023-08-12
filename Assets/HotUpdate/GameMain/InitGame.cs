@@ -84,7 +84,7 @@ public class InitGame
 
         //打开窗口面板
         ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();
-        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
+        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<UIItemToolTipPanel>();
         ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();

@@ -28,16 +28,28 @@ namespace ACFrameworkCore
         }
     }
 
-    public class EventInfo<T,K> : IEventInfo
+    public class EventInfo<T, K> : IEventInfo
     {
         public event Action<T, K> actions;
         public EventInfo(Action<T, K> action)
         {
             actions += action;
         }
-        public void Trigger(T obj,K obj2)
+        public void Trigger(T obj, K obj2)
         {
             actions?.Invoke(obj, obj2);
+        }
+    }
+    public class EventInfo<T, K, V> : IEventInfo
+    {
+        public event Action<T, K, V> actions;
+        public EventInfo(Action<T, K, V> action)
+        {
+            actions += action;
+        }
+        public void Trigger(T obj, K obj2,V obj3)
+        {
+            actions?.Invoke(obj, obj2, obj3);
         }
     }
 }

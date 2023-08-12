@@ -124,6 +124,19 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Animations
+      GroupDesc: "\u52A8\u753B"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetsPackage/Animations/Player
+        CollectorGUID: 72b474274ab2e4867bba25e2250c3d69
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
   - PackageName: Android
     PackageDesc: "\u5B89\u5353\u5305"
     Groups:
@@ -226,6 +239,19 @@ MonoBehaviour:
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Animations
+      GroupDesc: "\u52A8\u753B"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetsPackage/Animations/Player
+        CollectorGUID: 72b474274ab2e4867bba25e2250c3d69
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

@@ -33,7 +33,7 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.RemoveEventListener(eventName, action);
         }
-        public static void EventTrigger(string eventName)
+        public static void EventTrigger(this string eventName)
         {
             EventManager.Instance.EventTrigger(eventName);
         }
@@ -72,6 +72,20 @@ namespace ACFrameworkCore
         public static void EventTrigger<T, K>(this string name, T t, K k)
         {
             EventManager.Instance.EventTrigger<T, K>(name, t, k);
+        }
+
+        //3个参数
+        public static void AddEventListener<T, K, V>(this string name, Action<T, K, V> action)
+        {
+            EventManager.Instance.AddEventListener<T, K, V>(name, action);
+        }
+        public static void RemoveEventListener<T, K, V>(this string name, Action<T, K, V> action)
+        {
+            EventManager.Instance.RemoveEventListener<T, K, V>(name, action);
+        }
+        public static void EventTrigger<T, K, V>(this string name, T t, K k, V v)
+        {
+            EventManager.Instance.EventTrigger<T, K, V>(name, t, k, v);
         }
 
         public static void Clear()

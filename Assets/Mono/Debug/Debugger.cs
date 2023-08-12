@@ -407,8 +407,7 @@ namespace ACFrameworkCore
         {
             GUI.DragWindow(new Rect(0, 0, 10000, 20));
 
-            GUI.contentColor = _fpsColor;
-            if (GUILayout.Button("FPS:" + _fps, GUILayout.Width(80), GUILayout.Height(30)))
+            if (GUILayout.Button("FPS:" + _fps, GUILayout.Width((Screen.width / 640) * 90), GUILayout.Height((Screen.height / 360) * 50)))
             {
                 _expansion = true;
                 _windowRect.width = (Screen.width / 640) * 640;

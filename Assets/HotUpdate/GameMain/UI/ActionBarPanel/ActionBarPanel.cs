@@ -10,10 +10,7 @@
 -----------------------*/
 
 using Cysharp.Threading.Tasks;
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ACFrameworkCore
@@ -23,7 +20,7 @@ namespace ACFrameworkCore
         public GameObject T_BagButton;              //背包按钮
         public GameObject T_ActionBar;              //槽父物体
         private List<SlotUI> ActionBarSlotUIList;   //快捷键槽
-        private bool bagOpened = false;                     //背包是否被打开了
+        private bool bagOpened = false;             //背包是否被打开了
 
 
         public override async void UIAwake()
@@ -43,7 +40,7 @@ namespace ACFrameworkCore
             {
                 if (i == 0) continue;//第0个是背包按钮
                 SlotUI slotUI = T_ActionBar.GetChildComponent<SlotUI>(i);
-                slotUI.slotIndex = i;
+                slotUI.slotIndex = i - 1;
                 slotUI.key = ConfigInventory.ActionBar;//所属于的管理的Key
                 ActionBarSlotUIList.Add(slotUI);
             }
@@ -54,7 +51,21 @@ namespace ACFrameworkCore
             InventoryAllManager.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
             //测试创建拾取的物体
             GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
-            GameObject.Instantiate(gameObject);
+
+            GameObject go1 = GameObject.Instantiate(gameObject);
+            Item item = go1.GetComponent<Item>();
+            item.itemID = 1007;
+            item.itemAmount = 3;
+
+            GameObject go2 = GameObject.Instantiate(gameObject);
+            Item item2 = go2.GetComponent<Item>();
+            item2.itemID = 1008;
+            item2.itemAmount = 6;
+
+            GameObject go3 = GameObject.Instantiate(gameObject);
+            Item item3 = go3.GetComponent<Item>();
+            item3.itemID = 1015;
+            item3.itemAmount = 119;
         }
         public override void UIOnEnable()
         {

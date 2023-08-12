@@ -68,6 +68,7 @@ public class InitGame
         {
             new DataManager(),
             new InventoryAllManager(),
+            new InventoryWorldItemManager(),
         };
         foreach (var init in _initHs)
         {
@@ -87,6 +88,7 @@ public class InitGame
         ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();
+        ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();
     }
 
     //private static void ttt()

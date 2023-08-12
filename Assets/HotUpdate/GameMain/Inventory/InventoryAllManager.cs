@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -35,6 +36,9 @@ namespace ACFrameworkCore
             ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[10]);
             ItemDicArray.Add(ConfigInventory.PalayerBag, new InventoryItem[16]);
             //ConfigEvent.BeforeSceneUnloadEvent.AddEventListener<string,int>(UpdateSlotHightLight);//切换场景的时候触发下
+
+            //事件监听
+            ConfigEvent.UpdateSlotHightLight.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
         }
 
         //ItemDicList字典操作
@@ -120,22 +124,66 @@ namespace ACFrameworkCore
             if (toDestory)
                 GameObject.Destroy(item.gameObject);
             //更新物品UI 呼叫事件中心,执行委托的代码
-            key.EventTrigger(ItemDicArray[key]);
+            key.EventTrigger(ItemDicArray[key]);//这里的在比如背包页面那边开启的时候监听
             return true;
         }
         public void CreatItemDicArrayRecord(string key, int count)
         {
             ItemDicArray.Add(key, new InventoryItem[count]);
         }//创建
-        public bool RemoveItemDicArray(string key, Item item)
+        public bool RemoveItemDicArray(string key,int itemID ,int itemAmount)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] inventoryItemArray);
             if (inventoryItemArray == null) return false;
-            int index1 = GetItemIndexArray(key, item.itemID);
+            int index1 = GetItemIndexArray(key, itemID);
             if (index1 == -1)//没有物品
                 return false;
             else
-                inventoryItemArray[index1].itemAmount -= item.itemAmount;
+            {
+                inventoryItemArray[index1].itemAmount -= itemAmount;
+                if (inventoryItemArray[index1].itemAmount==0)
+                    inventoryItemArray[index1] = new InventoryItem();
+            }
+
+            key.EventTrigger(inventoryItemArray);
+            return true;
+        }//删除
+        public bool ChangeItemDicArray(string oldKey, string newKey, int oldIndex, int newIndex)
+        {
+            ItemDicArray.TryGetValue(oldKey, out InventoryItem[] oldInventoryItemArray);
+            if (oldInventoryItemArray == null)
+            {
+                ACDebug.Error($"老的{oldKey}是空的,请先创建");
+                return false;
+            }
+            ItemDicArray.TryGetValue(newKey, out InventoryItem[] newInventoryItemArray);
+            if (newInventoryItemArray == null)
+            {
+                ACDebug.Error($"新的{oldKey}是空的,请先创建");
+                return false;
+            }
+            InventoryItem currentItem = oldInventoryItemArray[oldIndex];
+            InventoryItem targetItem = newInventoryItemArray[newIndex];
+            //数据交换
+            if (targetItem.itemID != 0)//交换的目标有物品的情况下
+            {
+                oldInventoryItemArray[oldIndex] = targetItem;
+                newInventoryItemArray[newIndex] = currentItem;
+            }
+            else
+            {
+                oldInventoryItemArray[oldIndex] = targetItem;
+                newInventoryItemArray[newIndex] = currentItem;// new InventoryItem();
+            }
+
+            //if (oldInventoryItemArray[oldIndex].itemID == newInventoryItemArray[newIndex].itemID)//说明拖拽放下的是同一个物体
+            //{
+            //    oldInventoryItemArray[oldIndex].itemAmount += newInventoryItemArray[newIndex].itemAmount;
+            //    newInventoryItemArray[newIndex].itemID = 0;
+            //    newInventoryItemArray[newIndex].itemAmount = 0;
+            //}
+            oldKey.EventTrigger(ItemDicArray[oldKey]);//这里的在比如背包页面那边开启的时候监听
+            newKey.EventTrigger(ItemDicArray[newKey]);//这里的在比如背包页面那边开启的时候监听
             return true;
         }
         public InventoryItem[] GetItemListArray(string key)
@@ -167,10 +215,18 @@ namespace ACFrameworkCore
         }//检查空位
 
         //ItemDicList和ItemDicArray交换 TODO 需要编写代码 
-        public bool ChangeItem()
+        public bool ChangeItem(string oldKey, string newKey, int oldIndex, int newIndex)
         {
-            return false;
+            //ItemDicArray交换
+            bool ChangeItemDicArrayIsOk = ChangeItemDicArray(oldKey, newKey, oldIndex, newIndex);
+            if (ChangeItemDicArrayIsOk==false) { ACDebug.Log("temDicArray交换失败,进入ItemDicList交换."); }
+            //TODO 后面继续写ItemDicList交换和上面差不多
+            return ChangeItemDicArrayIsOk;
         }
+        //public void UpdateItemInfos()
+        //{
+
+        //}//更新所有的物品信息
 
         //高亮格子添加  TODO 需要编写代码
         public void AddSlotUIList(string key, List<SlotUI> slotUIs)
@@ -180,7 +236,7 @@ namespace ACFrameworkCore
             else
                 slotUIDic.Add(key, slotUIs);
         }
-        public void UpdateSlotHightLight(string key, int index = -1)//-1全都不显示
+        public void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
         {
             foreach (KeyValuePair<string, List<SlotUI>> slotUI in slotUIDic)
             {

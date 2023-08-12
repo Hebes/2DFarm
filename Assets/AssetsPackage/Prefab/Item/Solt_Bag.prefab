@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 9184764985598749983}
   - component: {fileID: 2080349029476312334}
   - component: {fileID: 5135253315771350924}
-  - component: {fileID: 1556970469198828449}
-  - component: {fileID: 2687875106662838952}
   m_Layer: 5
   m_Name: Solt_Bag
   m_TagString: Untagged
@@ -126,52 +124,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1556970469198828449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993745885344130029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40955cb344465ca4da688f14bca88fec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotImage: {fileID: 189599542216990394}
-  amountText: {fileID: 1352085868974639295}
-  slotHightLight: {fileID: 3650797123953314029}
-  button: {fileID: 5135253315771350924}
-  eSlotType: 0
-  isSelected: 0
-  itemDatails:
-    itemID: 0
-    itemName: 
-    itemAmount: 0
-    eItemType: 0
-    itemIcon: {fileID: 0}
-    itemOnWorldSprite: {fileID: 0}
-    itemDescription: 
-    itemUseRadius: 0
-    canPickedUp: 0
-    canDropped: 0
-    canCarried: 0
-    itemPrice: 0
-    sellPercentage: 0
-  itemAmount: 0
-  slotIndex: 0
---- !u!114 &2687875106662838952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 993745885344130029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64ac4a5df36b4a419c97001b6d6b7f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4401374301935954914
 GameObject:
   m_ObjectHideFlags: 0

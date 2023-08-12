@@ -217,10 +217,14 @@ namespace ACFrameworkCore
                         default:
                             break;
                     }
-                    
+
                     if (show)
                     {
                         GUILayout.BeginHorizontal();
+                        if (GUILayout.Button($"{i}", GUILayout.Height((Screen.height / 360) * 10), GUILayout.Width((Screen.width / 360) * 30)))
+                        {
+                            _currentLogIndex = i;
+                        }
                         if (GUILayout.Toggle(_currentLogIndex == i, ""))
                         {
                             _currentLogIndex = i;
@@ -237,7 +241,7 @@ namespace ACFrameworkCore
                 }
                 GUILayout.EndScrollView();
 
-                _scrollCurrentLogView = GUILayout.BeginScrollView(_scrollCurrentLogView, "Box", GUILayout.Height((Screen.height / 360)*100));
+                _scrollCurrentLogView = GUILayout.BeginScrollView(_scrollCurrentLogView, "Box", GUILayout.Height((Screen.height / 360) * 100));
                 if (_currentLogIndex != -1)
                 {
                     if (GUILayout.Button("复制"))

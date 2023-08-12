@@ -24,9 +24,9 @@ namespace ACFrameworkCore
         public override void UIAwake()
         {
             base.UIAwake();
+            InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             //初始化
             playerBagSlotList = new List<SlotUI>();
-            //InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             ////TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
             //InventoryAllManager.Instance.CreatItemDicArrayRecord(ConfigInventory.PalayerBag, 16);//初始化背包数据
             //获取变量

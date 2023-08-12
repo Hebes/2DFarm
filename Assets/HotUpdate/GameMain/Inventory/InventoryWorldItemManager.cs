@@ -16,34 +16,35 @@ using UnityEngine.SceneManagement;
 
 namespace ACFrameworkCore
 {
-    public class InventoryWorldItemManager : MonoBehaviour
+    public class InventoryWorldItemManager : ICore
     {
-        public Item itemPrefab;
+        public static InventoryWorldItemManager Instance;
         public Item bounceItemPrefab;//抛投的物品模板
-        private Transform itemParent;
-        private Dictionary<string, List<SceneItem>> sceneItemDict = new Dictionary<string, List<SceneItem>>();//
+        private Dictionary<string, List<SceneItem>> sceneItemDict;//世界场景的所有物体
+        private Transform itemParent;//统一保存的父物体
 
-        private Transform playerTransform
+        public Item itemPrefab;
+
+        public void ICroeInit()
         {
-            get
-            {
-                return FindObjectOfType<Player>().transform;
-            }
+            Instance = this;
+            sceneItemDict = new Dictionary<string, List<SceneItem>>();
+
+            //初始化监听信息
+            ConfigEvent.ItemCreatOnWorld.AddEventListener<SlotUI, Vector3>(OnInstantiateItemScen);
+            //ConfigEvent.DropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
+            //ConfigEvent.BeforeSceneUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+            //ConfigEvent.BeforeSceneUnload.AddEventListener(OnAfterSceneLoadedEvent);
+
+            LoadInit().Forget();
         }
 
-        private void OnEnable()
+        public async UniTaskVoid LoadInit()
         {
-            ConfigEvent.CreatItemScene.AddEventListener<int, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.DropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
-            ConfigEvent.BeforeSceneUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.BeforeSceneUnload.AddEventListener(OnAfterSceneLoadedEvent);
-        }
-        private void OnDisable()
-        {
-            ConfigEvent.CreatItemScene.RemoveEventListener<int, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.DropItem.RemoveEventListener<int, Vector3>(OnDropItemEvent);
-            ConfigEvent.BeforeSceneUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.BeforeSceneUnload.RemoveEventListener(OnAfterSceneLoadedEvent);
+            GameObject itemPrefabGo = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+            itemPrefab = itemPrefabGo.GetComponent<Item>();
+            itemParent = new GameObject("ItemParent").transform;
+            GameObject.DontDestroyOnLoad(itemParent);
         }
 
         /// <summary>
@@ -51,14 +52,13 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="pos"></param>
-        private void OnDropItemEvent(int ID, Vector3 mousePos)
+        private void OnDropItemEvent(SlotUI slotUI, Vector3 mousePos)
         {
-            Item item = Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
-            item.itemID = ID;
-            //抛出方向
-            var dir = (mousePos - playerTransform.position).normalized;
-            item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
-
+            //Item item = Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
+            //item.itemID = ID;
+            ////抛出方向
+            //var dir = (mousePos - playerTransform.position).normalized;
+            //item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
         }
 
         /// <summary>
@@ -75,10 +75,12 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="arg1"></param>
         /// <param name="arg2"></param>
-        private void OnInstantiateItemScen(int ID, Vector3 pos)
+        private void OnInstantiateItemScen(SlotUI slotUI, Vector3 pos)
         {
-            Item item = Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
-            item.itemID = ID;
+            Item item = GameObject.Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
+            item.itemID = slotUI.itemDatails.itemID;
+            item.itemAmount = slotUI.itemAmount;
+
         }
 
         /// <summary>
@@ -94,26 +96,26 @@ namespace ACFrameworkCore
         /// </summary>
         private void GetAllSceneItems()
         {
-            List<SceneItem> currentSceneItems = new List<SceneItem>();
-            foreach (var item in FindObjectsOfType<Item>())
-            {
-                SceneItem sceneItem = new SceneItem
-                {
-                    itemID = item.itemID,
-                    position = new SerializableVector3(item.transform.position)
-                };
-                currentSceneItems.Add(sceneItem);
+            //List<SceneItem> currentSceneItems = new List<SceneItem>();
+            //foreach (var item in FindObjectsOfType<Item>())
+            //{
+            //    SceneItem sceneItem = new SceneItem
+            //    {
+            //        itemID = item.itemID,
+            //        position = new SerializableVector3(item.transform.position)
+            //    };
+            //    currentSceneItems.Add(sceneItem);
 
-                if (sceneItemDict.ContainsKey(SceneManager.GetActiveScene().name))
-                {
-                    //找剄数据就更新tem数据列表
-                    sceneItemDict[SceneManager.GetActiveScene().name] = currentSceneItems;
-                }
-                else
-                {   //如果是新场景
-                    sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);
-                }
-            }
+            //    if (sceneItemDict.ContainsKey(SceneManager.GetActiveScene().name))
+            //    {
+            //        //找剄数据就更新tem数据列表
+            //        sceneItemDict[SceneManager.GetActiveScene().name] = currentSceneItems;
+            //    }
+            //    else
+            //    {   //如果是新场景
+            //        sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -121,29 +123,29 @@ namespace ACFrameworkCore
         /// </summary>
         private void RecreateAllItems()
         {
-            List<SceneItem> currentSceneItems = new List<SceneItem>();
-            if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out currentSceneItems))
-            {
-                //清场
-                foreach (var item in FindObjectsOfType<Item>())
-                    Destroy(item.gameObject);
-                //重新创建   
-                foreach (var item in currentSceneItems)
-                {
-                    Item newItem = Instantiate(itemPrefab, item.position.ToVector3(), Quaternion.identity, itemParent);
-                    newItem.Init(item.itemID).Forget();
-                }
+            //List<SceneItem> currentSceneItems = new List<SceneItem>();
+            //if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out currentSceneItems))
+            //{
+            //    //清场
+            //    foreach (var item in FindObjectsOfType<Item>())
+            //        Destroy(item.gameObject);
+            //    //重新创建   
+            //    foreach (var item in currentSceneItems)
+            //    {
+            //        Item newItem = Instantiate(itemPrefab, item.position.ToVector3(), Quaternion.identity, itemParent);
+            //        newItem.Init(item.itemID).Forget();
+            //    }
 
-                ////清场
-                //for (int i = 0; i < FindObjectsOfType<Item>()?.Length; i++)
-                //    Destroy(FindObjectsOfType<Item>()[i].gameObject);
-                // //重新创建   
-                //for (int i = 0; i < currentSceneItems?.Count; i++)
-                //{
-                //    Item newItem = Instantiate(itemPrefab, currentSceneItems[i].position.ToVector3(), Quaternion.identity, itemParent);
-                //    newItem.Init(currentSceneItems[i].itemID);
-                //}
-            }
+            //    ////清场
+            //    //for (int i = 0; i < FindObjectsOfType<Item>()?.Length; i++)
+            //    //    Destroy(FindObjectsOfType<Item>()[i].gameObject);
+            //    // //重新创建   
+            //    //for (int i = 0; i < currentSceneItems?.Count; i++)
+            //    //{
+            //    //    Item newItem = Instantiate(itemPrefab, currentSceneItems[i].position.ToVector3(), Quaternion.identity, itemParent);
+            //    //    newItem.Init(currentSceneItems[i].itemID);
+            //    //}
+            //}
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using TMPro;
-using UnityEditor;
+﻿using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,13 +23,16 @@ namespace ACFrameworkCore
         private Image slotImage;            //图片
         private TextMeshProUGUI amountText; //数量
         private Button button;              //按钮
-
         public Image slotHightLight;        //高亮
+
         public ESlotType eSlotType;         //类型
         public bool isSelected;             //是否启用高亮
         public ItemDetails itemDatails;     //物品信息
         public int itemAmount;              //物品数量
-        public int slotIndex;               //物品序列号
+        public int slotIndex;               //格子序列号
+        public string key;                  //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray
+
+        private InventoryAllManager IAM;
 
         private void Awake()
         {
@@ -37,6 +40,8 @@ namespace ACFrameworkCore
             amountText = gameObject.GetChildComponent<TextMeshProUGUI>("Amount");
             button = gameObject.GetComponent<Button>();
             slotHightLight = gameObject.GetChildComponent<Image>("HighLight");
+
+            IAM = InventoryAllManager.Instance;
         }
 
         private void Start()
@@ -46,23 +51,17 @@ namespace ACFrameworkCore
                 UpdateEmptySlot();
         }
 
-        private InventoryUI inventoryUI
-        {
-            get
-            {
-                return GetComponentInParent<InventoryUI>();
-            }
-        }
+
 
         /// <summary>
         /// 更新Slot显示
         /// </summary>
         /// <param name="item"></param>
         /// <param name="Amount"></param>
-        public void UpdateSlot(ItemDetails item, int Amount)
+        public async UniTask UpdateSlot(ItemDetails item, int Amount)
         {
             itemDatails = item;
-            slotImage.sprite = ResourceExtension.LoadAssetSync<Sprite>(item.itemIcon);
+            slotImage.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;
@@ -78,8 +77,10 @@ namespace ACFrameworkCore
             {
                 isSelected = false;
                 //清空所有高亮
-                inventoryUI.UpdateSlotHightLight(-1);
-                ConfigEvent.ItemSelect.EventTrigger(itemDatails, isSelected);
+                isSelected = false;
+                slotHightLight.gameObject.SetActive(false);
+                //TODO 这里需要编写代码,参考下面
+                //ConfigEvent.ItemSelect.EventTrigger(itemDatails, isSelected);
             }
             itemDatails = null;
             slotImage.enabled = false;
@@ -88,38 +89,36 @@ namespace ACFrameworkCore
         }
 
 
-        public void OnDrag(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)//拖拽中
         {
-            inventoryUI.dragItem.transform.position = Input.mousePosition;//拖拽物品的移动
+            IAM.dragItem.transform.position = Input.mousePosition;
         }
-
-        public void OnEndDrag(PointerEventData eventData)
+        public void OnEndDrag(PointerEventData eventData)//拖拽结束
         {
             if (itemAmount != 0)
             {
-                inventoryUI.dragItem.enabled = true;//启用拖拽的物体
-                inventoryUI.dragItem.sprite = slotImage.sprite;//设置拖拽物体的图片
+                IAM.dragItem.enabled = true;//启用拖拽的物体
+                IAM.dragItem.sprite = slotImage.sprite;//设置拖拽物体的图片
                 slotImage.color = new Color(slotImage.color.r, slotImage.color.g, slotImage.color.b, .5f);
-                inventoryUI.dragItem.SetNativeSize();
+                IAM.dragItem.SetNativeSize();
 
                 isSelected = true;
-                inventoryUI.UpdateSlotHightLight(slotIndex);
+                IAM.UpdateSlotHightLight(key, slotIndex);
             }
         }
-        public void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)//点击
         {
             if (itemDatails == null) return;
             isSelected = !isSelected;
             slotHightLight.gameObject.SetActive(isSelected);
-            inventoryUI.UpdateSlotHightLight(slotIndex);
+            IAM.UpdateSlotHightLight(key, slotIndex);
             //判断是否是在商店中点击(商店不执行代码)
             if (eSlotType == ESlotType.Bag)
                 ConfigEvent.ItemSelect.EventTrigger(itemDatails, isSelected);
         }
-
-        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
+        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)//拖拽结束
         {
-            inventoryUI.dragItem.enabled = false;
+            IAM.dragItem.enabled = false;
             if (eventData.pointerCurrentRaycast.gameObject != null)
             {
                 //物品交换
@@ -145,7 +144,7 @@ namespace ACFrameworkCore
             //}
 
             //清空所有高亮
-            inventoryUI.UpdateSlotHightLight(-1);
+            IAM.UpdateSlotHightLight(key);
         }
     }
 }

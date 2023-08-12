@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*--------脚本描述-----------
-
+				
 电子邮箱：
-1607388033@qq.com
+	1607388033@qq.com
 作者:
-暗沉
+	暗沉
 描述:
-世界地图上的物品管理
+    世界地图上的物品管理
 
 -----------------------*/
 
 namespace ACFrameworkCore
 {
-    public class InventoryWorldItem : MonoBehaviour
+    public class InventoryWorldItemManager : MonoBehaviour
     {
         public Item itemPrefab;
         public Item bounceItemPrefab;//抛投的物品模板
@@ -102,14 +104,14 @@ namespace ACFrameworkCore
                 };
                 currentSceneItems.Add(sceneItem);
 
-                if (sceneItemDict.ContainsKey(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name))
+                if (sceneItemDict.ContainsKey(SceneManager.GetActiveScene().name))
                 {
                     //找剄数据就更新tem数据列表
-                    sceneItemDict[UnityEngine.SceneManagement.SceneManager.GetActiveScene().name] = currentSceneItems;
+                    sceneItemDict[SceneManager.GetActiveScene().name] = currentSceneItems;
                 }
                 else
                 {   //如果是新场景
-                    sceneItemDict.Add(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, currentSceneItems);
+                    sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);
                 }
             }
         }
@@ -129,7 +131,7 @@ namespace ACFrameworkCore
                 foreach (var item in currentSceneItems)
                 {
                     Item newItem = Instantiate(itemPrefab, item.position.ToVector3(), Quaternion.identity, itemParent);
-                    newItem.Init(item.itemID);
+                    newItem.Init(item.itemID).Forget();
                 }
 
                 ////清场

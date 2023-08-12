@@ -1,5 +1,6 @@
 ﻿using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,8 +19,6 @@ public class InitGame
     public static void Init()
     {
         Debug.Log("初始化场景");
-        //await InitRsv();
-        //EnterGame();
         SwitchInitGameProcess(EInitGameProcess.FSMInitFramework).Forget();
     }
 
@@ -45,6 +44,7 @@ public class InitGame
         }
     }
 
+    //初始化框架
     private static async UniTask InitRsv()
     {
         List<ICore> _initHs = new List<ICore>()
@@ -61,6 +61,7 @@ public class InitGame
         }
     }
 
+    //初始化需要的数据
     private static async UniTask InitData()
     {
         List<ICore> _initHs = new List<ICore>()
@@ -76,14 +77,23 @@ public class InitGame
     }
     private static async UniTaskVoid EnterGame()
     {
+        //MonoManager.Instance.OnAddUpdateEvent(ttt);
         await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
-        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
 
         //打开窗口面板
-        ActionBarPanel actionBarPanel = ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();
-        ItemToolTipPanel itemToolTipPanel =  ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
-        itemToolTipPanel.panelGameObject.SetActive(false);
-        PlayerBagPanel playerBagPanel =  ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
-        playerBagPanel.panelGameObject.SetActive(false);
+        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();
+        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
+        ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();
+        ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
+        ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();
     }
+
+    //private static void ttt()
+    //{
+    //    YooAssetLoadScene.LoadingEvenName.AddEventListener<float>((progress) => 
+    //    {
+    //        ACDebug.Log($"当前的进度是{progress}");
+    //    });
+    //}
 }

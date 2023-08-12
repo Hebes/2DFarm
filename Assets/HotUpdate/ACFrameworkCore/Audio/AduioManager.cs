@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class CAduioManager : SingletonInit<CAduioManager>, ICore
+    public class AduioManager : SingletonInit<AduioManager>, ICore
     {
         public void ICroeInit()
         {

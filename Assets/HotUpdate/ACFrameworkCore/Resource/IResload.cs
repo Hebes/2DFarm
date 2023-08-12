@@ -10,8 +10,6 @@
 -----------------------*/
 
 using Cysharp.Threading.Tasks;
-using System;
-using UnityEngine;
 using UnityEngine.Events;
 using YooAsset;
 
@@ -23,17 +21,17 @@ namespace ACFrameworkCore
         /// 同步加载资源对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
+        /// <param name="AssetName"></param>
         /// <returns></returns>
-        public T LoadAssetSync<T>(string ResName) where T : UnityEngine.Object;
+        public T Load<T>(string AssetName) where T : UnityEngine.Object;
 
         /// <summary>
-        /// 异步加载资源对象(协程加载)
+        /// 异步加载资源对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <param name="callback"></param>
-        public UniTask<T> LoadAssetAsync<T>(string AssetName, Action<AssetOperationHandle> callback) where T : UnityEngine.Object;
+        /// <param name="AssetName"></param>
+        /// <returns></returns>
+        public UniTask<T> LoadAsyncUniTack<T>(string AssetName) where T : UnityEngine.Object;
 
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public T LoadSubAssets<T>(string location, string ResName) where T : UnityEngine.Object;
+        public T LoadSub<T>(string location, string ResName) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载子资源对象
@@ -53,7 +51,7 @@ namespace ACFrameworkCore
         /// <param name="location">加载资源的地址</param>
         /// <param name="ResName">资源的名称</param>
         /// <param name="callback"></param>
-        public UniTask LoadSubAssetsAsync<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
+        public UniTask LoadSubAsync<T>(string location, string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
 
         /// <summary>
         /// 同步加载资源包内所有资源对象
@@ -61,7 +59,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public T[] LoadAllAssets<T>(string ResName, UnityAction<T[]> callback) where T : UnityEngine.Object;
+        public T[] LoadAll<T>(string ResName, UnityAction<T[]> callback) where T : UnityEngine.Object;
 
         /// <summary>
         /// 异步加载资源包内所有资源对象
@@ -69,7 +67,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public UniTask<UnityEngine.Object[]> LoadAllAssetsAsync<T>(string location, UnityAction<UnityEngine.Object[]> callback) where T : UnityEngine.Object;
+        public UniTask<UnityEngine.Object[]> LoadAllAsync<T>(string location) where T : UnityEngine.Object;
 
 
         public AssetOperationHandle LoadAssetAsync<T>(string assetName) where T : UnityEngine.Object;
@@ -88,7 +86,7 @@ namespace ACFrameworkCore
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="callback"></param>
-        public UniTask LoadRawFileAsync<T>(string location, UnityAction<RawFileOperationHandle> callback) where T : UnityEngine.Object;
+        public UniTask<RawFileOperationHandle> LoadRawFileAsync<T>(string location) where T : UnityEngine.Object;
 
 
         /// <summary>
@@ -96,8 +94,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="ResName">资源的名称</param>
-        /// <param name="callback">资源卸载后执行的方法</param>
-        public void ReleaseAssetIEnumerator<T>(string ResName, UnityAction<T> callback = null) where T : UnityEngine.Object;
+        public void ReleaseAsset(string ResName = null);
 
         /// <summary>
         /// 资源释放

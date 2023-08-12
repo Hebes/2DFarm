@@ -188,6 +188,11 @@ namespace ACFrameworkCore
             }
             return t;
         }//显示界面
+        public T GetUIPanl<T>(string uiFormName) where T :UIBase
+        {
+            _DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUiForm);
+            return baseUiForm as T;
+        }
         public void CloseUIForms(string uiFormName)
         {
             //“所有UI窗体”集合中，如果没有记录，则直接返回

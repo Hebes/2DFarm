@@ -387,13 +387,13 @@ namespace ACFrameworkCore
 
                 if (type == typeof(GameObject))
                 {
-                    sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name} {{get;set;}}");
+                    sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name};");// {{get;set;}}
                 }
                 else
                 {
                     Component component = (gameObjectProperty.objectReferenceValue as GameObject).GetComponent(type);
                     if (component != null)
-                        sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name}{eTUITool_ClassName} {{get;set;}}");
+                        sb.AppendLine($"public {eTUITool_ClassName} {gameObjectProperty.objectReferenceValue.name}{eTUITool_ClassName}");// {{get;set;}}
                 }
             }
 

@@ -9,43 +9,28 @@
 
 -----------------------*/
 
-using YooAsset;
+using Cysharp.Threading.Tasks;
 
 namespace ACFrameworkCore
 {
     public static class ResourceExtension
     {
-
-        public static void Load<T>(this string path) where T : UnityEngine.Object
-        {
-            //ResComponent.Insatance.OnLoad<T>(path);
-
-        }
-
-        //public static void OnLoadAll(string path)
-        //{
-        //    ResComponent.Insatance.OnLoadAll(path);
-        //}
-
-        public static void LoadAsync(string path)
-        {
-            //ResComponent.Insatance.OnLoadAsync(path);
-        }
-
         //同步加载
-        public static T LoadAssetSync<T>(string assetName) where T : UnityEngine.Object
+        public static T Load<T>(string assetName) where T : UnityEngine.Object
         {
-            return ResourceManager.Instance.LoadAssetSync<T>(assetName);
+            return ResourceManager.Instance.Load<T>(assetName);
         }
 
         //异步加载
-        public static AssetOperationHandle LoadAsync<T>(string assetName) where T : UnityEngine.Object
+        public static UniTask<T> LoadAsyncUniTask<T>(string assetName) where T : UnityEngine.Object
         {
-            return ResourceManager.Instance.LoadAssetAsync<T>(assetName);
+            return ResourceManager.Instance.LoadAsyncUniTack<T>(assetName);
         }
-        public static T LoadAsyncAsT<T>(string assetName) where T : UnityEngine.Object
+
+        //资源释放
+        public static void UnloadAssets()
         {
-           return ResourceManager.Instance.LoadAssetAsyncAsT<T>(assetName);
+            ResourceManager.Instance.UnloadAssets();
         }
     }
 }

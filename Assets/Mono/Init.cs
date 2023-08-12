@@ -48,15 +48,14 @@ public class Init : MonoBehaviour
     private EProcess CurrentProcess;                                                            //当前所在的流程
 #if UNITY_ANDROID
     private readonly string packageName = "Android";                                            //包名
-#elif UNITY_EDITOR_64
-    private readonly string packageName = "PC";                                                 //包名
 #endif
+    //private readonly string packageName = "PC";                                                 //包名
     private ResourceDownloaderOperation downloader;                                             //下载器
-    public UpdatePackageVersionOperation operation;                                             //更新包
+    public UpdatePackageVersionOperation operation;                                             //更新包192.168.2.4
     private static Assembly _hotUpdateAss;
     private string packageVersion;                                              // 更新成功后自动保存版本号，作为下次初始化的版本。也可以通过operation.SavePackageVersion()方法保存。
-    private string XMLVersionUrl = "http://192.168.2.4:8000/ACPackageVersion.xml";                //资源版本下载
-    private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";  //版本路径读取
+    //private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";                //资源版本下载
+    //private string SaveXMLVersion = $"{Application.streamingAssetsPath}/ACPackageVersion.xml";  //版本路径读取
     public static List<string> AOTMetaAssemblyNames = new List<string>()
     {
         "mscorlib.dll",
@@ -74,6 +73,7 @@ public class Init : MonoBehaviour
     //开始加载
     private void Awake()
     {
+        Debug.Log($"当前下载包名是：{packageName}");
         Debug.Log($"资源系统运行模式：{PlayMode}");
         Application.targetFrameRate = 60;//限定帧数
         Application.runInBackground = true;//是否后台开启
@@ -109,6 +109,11 @@ public class Init : MonoBehaviour
     IEnumerator FsmPatchPrepare()
     {
         Debug.Log("流程准备工作");
+        //加载日志
+        GameObject debugGo = new GameObject("Debugger");
+        debugGo.AddComponent<Debugger>();
+        GameObject.DontDestroyOnLoad(debugGo);
+
         //TODO 暂时试用Resources
         GameObject go = Resources.Load<GameObject>("UILoading");
         goTemp = GameObject.Instantiate(go);
@@ -128,8 +133,9 @@ public class Init : MonoBehaviour
         if (PlayMode == EPlayMode.HostPlayMode)
         {
             LoadingText.text = "检查版本配置文件";
-            yield return LoadAsset(XMLVersionUrl, SaveXMLVersion);
+            //yield return LoadAsset(XMLVersionUrl, SaveXMLVersion);
             //TODO 需要添加判断如果没下载成功的话
+            yield return null;
         }
         //进入初始资源流程
         FsmProcessChange(EProcess.FsmInitialize);
@@ -376,17 +382,18 @@ public class Init : MonoBehaviour
     private void OnDownloadErrorFunction(string fileName, string error)
     {
         //Debug.LogError(string.Format("下载出错：文件名：{0}, 错误信息：{1}", fileName, error));
-        LoadingText.text = string.Format("下载出错：文件名：{0}, 错误信息：{1}", fileName, error);
+        LoadingText.text = string.Format($"下载出错：文件名：{fileName}, 错误信息：{error}");
     }//下载出错
     private void OnStartDownloadFileFunction(string fileName, long sizeBytes)
     {
         //Debug.Log(string.Format("开始下载：文件名：{0}, 文件大小：{1}", fileName, sizeBytes));
-        LoadingText.text = string.Format($"开始下载：文件名：{fileName}, 文件大小：{GetMB(sizeBytes)}");
+        //LoadingText.text = string.Format($"开始下载：文件名：{fileName}, 文件大小：{GetMB(sizeBytes)}");
+        LoadingText.text = string.Format($"文件大小：{GetMB(sizeBytes)}");
     }//开始下载
     private void OnDownloadOverFunction(bool isSucceed)
     {
         //Debug.Log("下载" + (isSucceed ? "成功" : "失败"));
-        LoadingText.text = "下载" + (isSucceed ? "成功" : "失败");
+        LoadingText.text = $"下载{(isSucceed ? "成功" : "失败")}";
     }                   //下载完成
     private void OnClearCacheFunction(AsyncOperationBase asyncOperationBase)
     {
@@ -474,25 +481,27 @@ public class Init : MonoBehaviour
         //加载XML文件信息
         XmlDocument xml = new XmlDocument();
         //加载
-        xml.Load(SaveXMLVersion);
+        //xml.Load(SaveXMLVersion);
         //读取数据
-        XmlNode root = xml.SelectSingleNode("PackageInfo");
-        XmlNode nodeItem = root.SelectSingleNode("URL");
+        //XmlNode root = xml.SelectSingleNode("PackageInfo");
+        //XmlNode nodeItem = root.SelectSingleNode("URL");
         //Debug.Log($"获取的PackageURL是{nodeItem.Attributes["PackageURL"].Value}");
         //Debug.Log($"获取的Verson是{nodeItem.Attributes["Verson"].Value}");
 
         //TODO 后续会改成XML读取配置
-        //string hostServerIP = "http://10.0.2.2"; //安卓模拟器地址
-        string hostServerIP = nodeItem.Attributes["PackageURL"].Value;
-        string appVersion = nodeItem.Attributes["Verson"].Value;
+        //string hostServerIP = "http://127.0.0.1:8000/"; //安卓模拟器地址
+        string hostServerIP = "http://192.168.2.4:8000/"; //安卓模拟器地址
+        string appVersion = "1"; //安卓模拟器地址
+        //string hostServerIP = nodeItem.Attributes["PackageURL"].Value;
+        //string appVersion = nodeItem.Attributes["Verson"].Value;
 
 #if UNITY_EDITOR
         if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)
-            return $"{hostServerIP}/CDN/Android/{appVersion}";
+            return $"{hostServerIP}/Android/Android/{appVersion}";
         else if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.iOS)
-            return $"{hostServerIP}/CDN/IPhone/{appVersion}";
+            return $"{hostServerIP}/StandaloneWindows64/IPhone/{appVersion}";
         else if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.WebGL)
-            return $"{hostServerIP}/CDN/WebGL/{appVersion}";
+            return $"{hostServerIP}/StandaloneWindows64/WebGL/{appVersion}";
         else
             return $"{hostServerIP}/StandaloneWindows64/PC/{appVersion}";//需要添加http开头的
         //return $"{hostServerIP}/CDN/PC/{appVersion}";

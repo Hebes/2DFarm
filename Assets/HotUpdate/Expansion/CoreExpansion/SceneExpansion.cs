@@ -24,9 +24,9 @@ namespace ACFrameworkCore
             ManagerScene.Instance.LoadSceneAsync(SceneName, loadSceneMode, action, suspendLoad, priority);
         }
 
-        public static async UniTask LoadSceneAsyncUnitask(this string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
+        public static async UniTask<SceneOperationHandle> LoadSceneAsyncUnitask(this string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
         {
-            await ManagerScene.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
+            return await ManagerScene.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
         }
     }
 }

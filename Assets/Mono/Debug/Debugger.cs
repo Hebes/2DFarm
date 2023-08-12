@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -239,6 +240,10 @@ namespace ACFrameworkCore
                 _scrollCurrentLogView = GUILayout.BeginScrollView(_scrollCurrentLogView, "Box", GUILayout.Height((Screen.height / 360)*100));
                 if (_currentLogIndex != -1)
                 {
+                    if (GUILayout.Button("复制"))
+                    {
+                        GUIUtility.systemCopyBuffer = _logInformations[_currentLogIndex].message + "\r\n\r\n" + _logInformations[_currentLogIndex].stackTrace;
+                    }
                     GUILayout.Label(_logInformations[_currentLogIndex].message + "\r\n\r\n" + _logInformations[_currentLogIndex].stackTrace, myStyle);
                 }
                 GUILayout.EndScrollView();

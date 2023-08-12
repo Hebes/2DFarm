@@ -23,7 +23,7 @@ namespace ACFrameworkCore
                 if (item.itemDatails.canPickedup)
                 {
                     //拾取物品到背包
-                    InventoryAllManager.Instance.AddItemItemDicArray(ConfigInventory.PalayerBag,item, true);
+                    InventoryAllManager.Instance.AddItemDicArray(ConfigInventory.PalayerBag,item, true);
                 }
             }
         }

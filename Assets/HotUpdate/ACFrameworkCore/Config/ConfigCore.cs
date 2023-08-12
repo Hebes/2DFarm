@@ -3,7 +3,7 @@
     public class ConfigCore
     {
 #if UNITY_ANDROID
-		public const string YooAseetPackage = "Android";
+		//public const string YooAseetPackage = "Android";
 #elif UNITY_IOS
 		public const string YooAseetPackage = "IOS";
 #elif UNITY_STANDALONE_WIN
@@ -13,5 +13,6 @@
 #else
 		public const string YooAseetPackage = "PC";
 #endif
+        public const string YooAseetPackage = "Android";
     }
 }

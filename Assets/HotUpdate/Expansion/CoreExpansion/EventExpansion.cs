@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 using UnityEngine.Events;
 
 /*--------脚本描述-----------
@@ -79,6 +81,7 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.AddEventListener<T, K, V>(name, action);
         }
+
         public static void RemoveEventListener<T, K, V>(this string name, Action<T, K, V> action)
         {
             EventManager.Instance.RemoveEventListener<T, K, V>(name, action);
@@ -86,6 +89,20 @@ namespace ACFrameworkCore
         public static void EventTrigger<T, K, V>(this string name, T t, K k, V v)
         {
             EventManager.Instance.EventTrigger<T, K, V>(name, t, k, v);
+        }
+
+        //5个参数
+        public static void AddEventListener<T, K, V, N, M>(this string name, Action<T, K, V, N, M> action)
+        {
+            EventManager.Instance.AddEventListener<T, K, V, N, M>(name, action);
+        }
+        public static void RemoveEventListener<T, K, V, N, M>(this string name, Action<T, K, V, N, M> action)
+        {
+            EventManager.Instance.RemoveEventListener<T, K, V, N, M>(name, action);
+        }
+        public static void EventTrigger<T, K, V, N, M>(this string name, T t, K k, V v, N n, M m)
+        {
+            EventManager.Instance.EventTrigger<T, K, V, N, M>(name, t, k, v, n, m);
         }
 
         public static void Clear()

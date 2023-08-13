@@ -9,10 +9,13 @@ EditorBuildSettings:
     path: Assets/AssetsPackage/Scenes/Init.unity
     guid: 549e0e9d2ffcb5441a61873ce5c58901
   - enabled: 1
-    path: Assets/AssetsPackage/Scenes/01.Field.unity
+    path: Assets/AssetsPackage/Scenes/01Field.unity
     guid: 09c436a1177df094f8e9fd303348f780
   - enabled: 1
     path: Assets/AssetsPackage/Scenes/PersistentScene.unity
     guid: 9b786192a59323240beb0fe34e7a1942
+  - enabled: 1
+    path: Assets/AssetsPackage/Scenes/02Home.unity
+    guid: 9cbd344e20986e644b4a94ea73990e6f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 54352d05f9b3eb541843e7c15ec3989e, type: 2}

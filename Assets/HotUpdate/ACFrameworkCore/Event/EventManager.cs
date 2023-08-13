@@ -1,4 +1,5 @@
 ﻿
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 
@@ -91,6 +92,7 @@ namespace ACFrameworkCore
             else
                 eventDic.Add(name, new EventInfo<T, K, V>(action));
         }
+
         public void RemoveEventListener<T, K, V>(string name, Action<T, K, V> action)
         {
             if (eventDic.ContainsKey(name))
@@ -101,6 +103,26 @@ namespace ACFrameworkCore
             if (!eventDic.ContainsKey(name)) return;
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K, V>).Trigger(t, k, v);
+        }
+
+        //带5个参数的
+        public void AddEventListener<T, K, V, N, M>(string name, Action<T, K, V, N, M> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V, N, M>).actions += action;
+            else
+                eventDic.Add(name, new EventInfo<T, K, V, N, M>(action));
+        }
+        public void RemoveEventListener<T, K, V, N, M>(string name, Action<T, K, V, N, M> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V, N, M>).actions -= action;
+        }
+        public void EventTrigger<T, K, V, N, M>(string name, T t, K k, V v, N n, M m)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
+            (eventDic[name] as EventInfo<T, K, V, N, M>).Trigger(t, k, v, n, m);
         }
 
         public void Clear()

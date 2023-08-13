@@ -62,7 +62,7 @@ namespace ACFrameworkCore
             foreach (string s in strings)
             {
                 string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "");
+                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "").Replace(" ","");
                 sb.AppendLine($"        public const string {tempstr}Panel = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
@@ -215,7 +215,7 @@ namespace ACFrameworkCore
             foreach (string s in strings)
             {
                 string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "");
+                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "").Replace("(","").Replace(")", "");
                 string tempstr1 = strPath[strPath.Length - 1].Replace(".png", "");
                 sb.AppendLine($"        public const string Sprites{tempstr} = \"{tempstr1}\";");
             }

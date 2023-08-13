@@ -32,5 +32,7 @@ namespace ACFrameworkCore
 
         public UniTask<SceneOperationHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
             bool suspendLoad = false, int priority = 100);
+
+        public object GetManagerDic();
     }
 }

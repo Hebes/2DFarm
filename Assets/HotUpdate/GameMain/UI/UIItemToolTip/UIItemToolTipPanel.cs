@@ -59,7 +59,7 @@ namespace ACFrameworkCore
         /// <param name="vector3"></param>
         public void SetupTooltip(ItemDetails itemDatails, ESlotType eSlotType, Vector3 vector3)
         {
-            ACDebug.Log("进入了设置提示工具信息");
+            //ACDebug.Log("进入了设置提示工具信息");
             OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTipPanel);
             itemToolTip.GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);//设置锚点
             itemToolTip.position = vector3 + Vector3.up * 30;//设置距离

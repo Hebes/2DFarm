@@ -47,9 +47,22 @@ namespace ACFrameworkCore
         {
             actions += action;
         }
-        public void Trigger(T obj, K obj2,V obj3)
+        public void Trigger(T obj, K obj2, V obj3)
         {
             actions?.Invoke(obj, obj2, obj3);
+        }
+    }
+
+    public class EventInfo<T, K, V, N, M> : IEventInfo
+    {
+        public event Action<T, K, V, N, M> actions;
+        public EventInfo(Action<T, K, V, N, M> action)
+        {
+            actions += action;
+        }
+        public void Trigger(T obj, K obj2, V obj3, N obj4, M obj5)
+        {
+            actions?.Invoke(obj, obj2, obj3, obj4, obj5);
         }
     }
 }

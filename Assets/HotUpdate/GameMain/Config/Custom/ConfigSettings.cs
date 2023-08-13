@@ -18,10 +18,10 @@ namespace ACFrameworkCore
 
         //时间相关
         public const float secondThreshold = 0.01f;         //数值越小时间越快
-        public const int secondHold = 59;
-        public const int minuteHold = 59;
-        public const int hourHold = 23;
-        public const int dayHold = 30;
+        public const int secondHold = 59;                   //多少秒
+        public const int minuteHold = 59;                   //多少分钟
+        public const int hourHold = 23;                     //一天多少小时
+        public const int dayHold = 30;                      //一个月有多少时间
         public const int seasonHold = 3;                    //季节
         public const float fadeDuretion = 1.5f;             //Loading画面的结束需要的时间
     }

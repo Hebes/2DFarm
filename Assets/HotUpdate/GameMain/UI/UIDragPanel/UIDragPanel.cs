@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -28,12 +22,14 @@ namespace ACFrameworkCore
         {
             base.UIAwake();
             InitUIBase(EUIType.Mobile, EUIMode.Normal, EUILucenyType.Pentrate);
+
+            GameObject DragItem = panelGameObject.GetChild("DragItemImage");
+            DragItemImage = DragItem.GetComponent<Image>();
+
             ConfigEvent.ItemOnDrag.AddEventListener<Vector3>(ItemDrag);
             ConfigEvent.ItemOnBeginDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnBeginDrag);
             ConfigEvent.ItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
             ConfigEvent.ItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
-            GameObject DragItem = panelGameObject.GetChild("DragItemImage");
-            DragItemImage = DragItem.GetComponent<Image>();
         }
 
         private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
@@ -47,8 +43,7 @@ namespace ACFrameworkCore
             {
                 case ConfigInventory.PalayerBag:
                 case ConfigInventory.ActionBar:
-                    //通知物品被选中的状态
-                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
+                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
                     break;
             }
             //InventoryAllManager.Instance.UpdateSlotHightLight(slotUI.key, slotUI.slotIndex);

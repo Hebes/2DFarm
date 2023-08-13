@@ -78,7 +78,7 @@ namespace ACFrameworkCore
             intPosition = strUIFromName.IndexOf('.');
             if (intPosition != -1)
                 strUIFromName = strUIFromName.Substring(intPosition + 1);//剪切字符串中“.”之间的部分
-            ACDebug.Log($"关闭的界面名称是:{strUIFromName}");
+            //ACDebug.Log($"关闭的界面名称是:{strUIFromName}");
             UIManager.Instance.CloseUIForms(strUIFromName);
         }
         protected void CloseOtherUIForm(string uiFormName)

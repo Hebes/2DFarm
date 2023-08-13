@@ -23,7 +23,7 @@ namespace ACFrameworkCore
         private bool bagOpened = false;             //背包是否被打开了
 
 
-        public override async void UIAwake()
+        public override void UIAwake()
         {
             base.UIAwake();
             //初始化
@@ -49,23 +49,6 @@ namespace ACFrameworkCore
             //设置变量
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
             InventoryAllManager.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
-            //测试创建拾取的物体
-            GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
-
-            GameObject go1 = GameObject.Instantiate(gameObject);
-            Item item = go1.GetComponent<Item>();
-            item.itemID = 1007;
-            item.itemAmount = 3;
-
-            GameObject go2 = GameObject.Instantiate(gameObject);
-            Item item2 = go2.GetComponent<Item>();
-            item2.itemID = 1008;
-            item2.itemAmount = 6;
-
-            GameObject go3 = GameObject.Instantiate(gameObject);
-            Item item3 = go3.GetComponent<Item>();
-            item3.itemID = 1015;
-            item3.itemAmount = 119;
         }
         public override void UIOnEnable()
         {
@@ -73,16 +56,17 @@ namespace ACFrameworkCore
             ConfigInventory.ActionBar.AddEventListener<InventoryItem[]>(RefreshItem);
             InitItemInfo();
         }
+
+        public override void UIOnDisable()
+        {
+            base.UIOnDisable();
+            ConfigInventory.ActionBar.RemoveEventListener<InventoryItem[]>(RefreshItem);
+        }
         public override void UIUpdate()
         {
             base.UIUpdate();
             if (Input.GetKeyDown(KeyCode.B))
                 T_BagButtonMethod(null);
-        }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-            ConfigInventory.ActionBar.RemoveEventListener<InventoryItem[]>(RefreshItem);
         }
 
         private void T_BagButtonMethod(GameObject go)

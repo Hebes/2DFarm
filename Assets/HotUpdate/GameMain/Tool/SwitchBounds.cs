@@ -16,10 +16,6 @@ namespace ACFrameworkCore
 {
     public class SwitchBounds : MonoBehaviour
     {
-        private void Start()
-        {
-            SwichConfinerShape();
-        }
         private void OnEnable()
         {
             ConfigEvent.SwichConfinerShape.AddEventListener(SwichConfinerShape);

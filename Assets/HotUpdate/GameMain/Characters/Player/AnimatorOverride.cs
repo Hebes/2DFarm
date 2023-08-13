@@ -42,7 +42,6 @@ namespace ACFrameworkCore
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Hold),
             });
             holdItem = transform.GetChildComponent<SpriteRenderer>("HoldItem");
-            Debug.Log(1);
         }
         private void OnEnable()
         {
@@ -83,7 +82,7 @@ namespace ACFrameworkCore
                 case EItemType.ReapableSceney:
                 default: currentType = EPartType.None; break;
             }
-
+            //idSelect按钮是都被点选中
             if (idSelect == false)
             {
                 currentType = EPartType.None;//如果没有选中物品的话，就切换普通动画状态

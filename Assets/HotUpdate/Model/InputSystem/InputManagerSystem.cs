@@ -1,6 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
@@ -31,10 +29,9 @@ namespace ACFrameworkCore
         JUMP,//跳
     }
 
-
-
-    public class InputSystemSystem : SingletonInit<InputSystemSystem>, ICore
+    public class InputManagerSystem : ICore
     {
+        public static InputManagerSystem Instance;
         public ConfigInputInfo inputInfo;//按键信息
         public PlayerInput playerInput;//玩家角色控制器
 
@@ -45,6 +42,7 @@ namespace ACFrameworkCore
         //核心初始化
         public void ICroeInit()
         {
+            Instance = this;
             jsonStr = Resources.Load<TextAsset>("Lesson17").text;//加载配置按键模板
             LoadInputConfig();
         }
@@ -78,7 +76,7 @@ namespace ACFrameworkCore
         }
 
         //改建
-        public void GetActionAsset() 
+        public void GetActionAsset()
         {
             //替换按键
             string str = jsonStr.Replace(inputInfo.upCurrent, inputInfo.upTemp);//上键
@@ -111,7 +109,7 @@ namespace ACFrameworkCore
         {
             nowType = type;
             //得到一次任意键输入
-            InputSystem.onAnyButtonPress.CallOnce(ChangeBtnReally);
+            UnityEngine.InputSystem.InputSystem.onAnyButtonPress.CallOnce(ChangeBtnReally);
         }
 
         //切换真实按键
@@ -132,7 +130,7 @@ namespace ACFrameworkCore
             //让玩家产生改建效果
             GetActionAsset();
             //启用设置
-            EnableInputConfig();   
+            EnableInputConfig();
             //把临时按键给到当前按键
             switch (nowType)
             {

@@ -9,7 +9,7 @@
         {
             base.UIAwake();
             InitUIBase(EUIType.Normal, EUIMode.HideOther, EUILucenyType.Translucence);
-            RigisterButtonObjectEvent("Break",
+            ButtonOnClickAddListener("Break",
                p =>
                {
                    CloseUIForm();

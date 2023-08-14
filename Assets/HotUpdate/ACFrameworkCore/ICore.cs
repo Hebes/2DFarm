@@ -1,6 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-
-namespace ACFrameworkCore
+﻿namespace ACFrameworkCore
 {
     public interface ICore
     {

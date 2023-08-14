@@ -55,7 +55,6 @@ namespace ACFrameworkCore
             ConfigEvent.GameDate.AddEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
             ConfigEvent.GameMinute.AddEventListener<int, int>(OnGameMinuteEvent);
         }
-
         public override void UIOnDisable()
         {
             base.UIOnDisable();

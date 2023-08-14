@@ -8,7 +8,7 @@ namespace ACFrameworkCore
             base.UIAwake();
             InitUIBase(EUIType.PopUp, EUIMode.ReverseChange, EUILucenyType.Translucence);
 
-            RigisterButtonObjectEvent("Back",
+            ButtonOnClickAddListener("Back",
               p =>
               {
                   CloseUIForm();

@@ -22,41 +22,40 @@ namespace ACFrameworkCore
         private List<SlotUI> ActionBarSlotUIList;   //快捷键槽
         private bool bagOpened = false;             //背包是否被打开了
 
-
         public override void UIAwake()
         {
             base.UIAwake();
-            //初始化
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
-            ActionBarSlotUIList = new List<SlotUI>();
-            ////TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
-            //InventoryAllManager.Instance.CreatItemDicArrayRecord(ConfigInventory.ActionBar, 10);//初始化背包数据
-            //获取变量
+
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             T_BagButton = UIComponent.Get<GameObject>("T_BagButton");
             T_ActionBar = UIComponent.Get<GameObject>("T_ActionBar");
-            //添加数据
+
+            ActionBarSlotUIList = new List<SlotUI>();
             for (int i = 0; i < T_ActionBar.transform.childCount; i++)
             {
                 if (i == 0) continue;//第0个是背包按钮
                 SlotUI slotUI = T_ActionBar.GetChildComponent<SlotUI>(i);
                 slotUI.slotIndex = i - 1;
-                slotUI.key = ConfigInventory.ActionBar;//所属于的管理的Key
+                slotUI.configInventoryKey = ConfigInventory.ActionBar;//所属于的管理的Key
                 ActionBarSlotUIList.Add(slotUI);
             }
-            //按钮监听
-            RigisterButtonObjectEvent(T_BagButton.name, T_BagButtonMethod);
-            //设置变量
+            InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
+
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
-            InventoryAllManager.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
+
+            ButtonOnClickAddListener(T_BagButton.name, T_BagButtonListener);
+
+            InventoryAllSystem.Instance.ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[10]);
         }
+
         public override void UIOnEnable()
         {
             base.UIOnEnable();
             ConfigInventory.ActionBar.AddEventListener<InventoryItem[]>(RefreshItem);
-            InitItemInfo();
+            InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigInventory.ActionBar);
+            ConfigInventory.ActionBar.EventTrigger(playerBagItems);
         }
-
         public override void UIOnDisable()
         {
             base.UIOnDisable();
@@ -66,10 +65,10 @@ namespace ACFrameworkCore
         {
             base.UIUpdate();
             if (Input.GetKeyDown(KeyCode.B))
-                T_BagButtonMethod(null);
+                T_BagButtonListener(null);
         }
 
-        private void T_BagButtonMethod(GameObject go)
+        private void T_BagButtonListener(GameObject go)
         {
             if (bagOpened)
             {
@@ -79,18 +78,16 @@ namespace ACFrameworkCore
             else
             {
                 bagOpened = true;
-                ACDebug.Log("开启界面" + ConfigUIPanel.UIPlayerBagPanel);
                 CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPanel);
             }
-        }//背包按钮
-
+        }//背包按钮监听
         private void RefreshItem(InventoryItem[] obj)
         {
             for (int i = 0; i < obj?.Length; i++)
             {
                 if (obj[i].itemAmount > 0)//有物品
                 {
-                    ItemDetails item = InventoryAllManager.Instance.GetItem(obj[i].itemID);
+                    ItemDetails item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
                     ActionBarSlotUIList[i].UpdateSlot(item, obj[i].itemAmount).Forget();
                 }
                 else
@@ -99,12 +96,5 @@ namespace ACFrameworkCore
                 }
             }
         } //刷新界面
-        public void InitItemInfo()
-        {
-            //获取物品信息
-            InventoryItem[] playerBagItems = InventoryAllManager.Instance.GetItemListArray(ConfigInventory.ActionBar);
-            //刷新界面
-            RefreshItem(playerBagItems);
-        } //初始化物品信息
     }
 }

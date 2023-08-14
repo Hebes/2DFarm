@@ -14,12 +14,12 @@ namespace ACFrameworkCore
         {
             base.UIAwake();
             InitUIBase(EUIType.Normal, EUIMode.HideOther, EUILucenyType.ImPenetrable);
-            RigisterButtonObjectEvent("Setting",
+            ButtonOnClickAddListener("Setting",
                p =>
                {
                    OpenUIForm<SettingPanel>("Setting");
                });
-            RigisterButtonObjectEvent("About",
+            ButtonOnClickAddListener("About",
                p => OpenUIForm<AboutPanel>("About")
                );
         }

@@ -21,7 +21,6 @@ namespace ACFrameworkCore
         public List<AnimatorType> animatorTypes;//各部分动画列表
         private Dictionary<string, Animator> animatorNameDic;
 
-
         private async void Awake()
         {
             animatorTypes = new List<AnimatorType>();
@@ -42,16 +41,9 @@ namespace ACFrameworkCore
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Hold),
             });
             holdItem = transform.GetChildComponent<SpriteRenderer>("HoldItem");
-        }
-        private void OnEnable()
-        {
+
             ConfigEvent.PlayerHoldUpAnimations.AddEventListener<ItemDetails, bool>(OnItemSelectEvent);
-            ConfigEvent.BeforeSceneUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-        }
-        private void OnDisable()
-        {
-            ConfigEvent.PlayerHoldUpAnimations.RemoveEventListener<ItemDetails, bool>(OnItemSelectEvent);
-            ConfigEvent.BeforeSceneUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
         }
 
         private void OnBeforeSceneUnloadEvent()

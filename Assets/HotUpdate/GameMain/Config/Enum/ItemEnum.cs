@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-/*--------脚本描述-----------
+﻿/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -19,58 +13,29 @@ namespace ACFrameworkCore
 {
     public enum EItemType
     {
-        /// <summary>
-        /// 种子
-        /// </summary>
+        /// <summary>种子</summary>
         Seed = 1,
-        /// <summary>
-        /// 商品
-        /// </summary>
+        /// <summary> 商品 </summary>
         Commdity = 2,
-        /// <summary>
-        /// 家具
-        /// </summary>
+        /// <summary> 家具 </summary>
         Furniture = 3,
-        /// <summary>
-        /// 锄头
-        /// </summary>
+        /// <summary> 锄头 </summary>
         HoeTool = 4,
-        /// <summary>
-        /// 砍树工具
-        /// </summary>
-        ChopTool = 5, 
-        /// <summary>
-        /// 砸石头工具
-        /// </summary>
+        /// <summary> 砍树工具 </summary>
+        ChopTool = 5,
+        /// <summary> 砸石头工具 </summary>
         BreakTool = 6,
-        /// <summary>
-        /// 割草工具
-        /// </summary>
+        /// <summary> 割草工具 </summary>
         ReapTool = 7,
-        /// <summary>
-        /// 浇水工具
-        /// </summary>
+        /// <summary> 浇水工具 </summary>
         WaterTool = 8,
-        /// <summary>
-        /// 菜篮子收割工具
-        /// </summary>
+        /// <summary> 菜篮子收割工具 </summary>
         ClooectTool = 9,
-
-        /// <summary>
-        /// 可以被割的杂草
-        /// </summary>
+        /// <summary> 可以被割的杂草 </summary>
         ReapableSceney = 10,
     }
 
-    /// <summary>
-    /// 格子的类型
-    /// </summary>
-    public enum ESlotType
-    {
-        Bag = 1,        //背包类型
-        Box = 2,        //盒子类型
-        Shop = 3,       //商店
-    }
+    
 
     /// <summary>
     /// 物品的位置

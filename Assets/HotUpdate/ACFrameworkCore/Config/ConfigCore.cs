@@ -13,6 +13,6 @@
 #else
 		public const string YooAseetPackage = "PC";
 #endif
-        public const string YooAseetPackage = "Android";
+        //public const string YooAseetPackage = "Android";
     }
 }

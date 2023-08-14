@@ -41,8 +41,8 @@ namespace ACFrameworkCore
             GameObject T_Name = UIComponent.Get<GameObject>("T_Name");
             nameText = T_Name.GetComponent<TextMeshProUGUI>();
             itemToolTip = panelGameObject.transform.Find("ItemToolTip");
-            //事件监听
-            ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetails, ESlotType, Vector3>(SetupTooltip);
+            
+            ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetails, string, Vector3>(SetupTooltip);
             ConfigEvent.ItemToolTipClose.AddEventListener(ItemToolTipClose);
         }
 
@@ -55,9 +55,9 @@ namespace ACFrameworkCore
         /// 设置提示工具信息
         /// </summary>
         /// <param name="itemDatails"></param>
-        /// <param name="eSlotType"></param>
+        /// <param name="configInventoryKey"></param>
         /// <param name="vector3"></param>
-        public void SetupTooltip(ItemDetails itemDatails, ESlotType eSlotType, Vector3 vector3)
+        public void SetupTooltip(ItemDetails itemDatails, string configInventoryKey, Vector3 vector3)
         {
             //ACDebug.Log("进入了设置提示工具信息");
             OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTipPanel);
@@ -73,7 +73,7 @@ namespace ACFrameworkCore
                 case EItemType.Commdity:
                 case EItemType.Furniture:
                     bottomPart.SetActive(true);
-                    valueText.text = SetSellPrice(itemDatails, eSlotType).ToString();
+                    valueText.text = SetSellPrice(itemDatails, configInventoryKey).ToString();
                     break;
                 case EItemType.HoeTool:
                 case EItemType.ChopTool:
@@ -93,19 +93,19 @@ namespace ACFrameworkCore
         /// 设置出售价格
         /// </summary>
         /// <param name="itemDatails"></param>
-        /// <param name="eSlotType"></param>
+        /// <param name="configInventoryKey"></param>
         /// <returns></returns>
-        private int SetSellPrice(ItemDetails itemDatails, ESlotType eSlotType)
+        private int SetSellPrice(ItemDetails itemDatails, string configInventoryKey)
         {
             int price = itemDatails.itemPrice;
-
-            return eSlotType switch
+            switch (configInventoryKey)
             {
-                ESlotType.Bag => (int)(price * itemDatails.sellPercentage),
-                ESlotType.Box => price,
-                ESlotType.Shop => price,
-                _ => price
-            };
+                case ConfigInventory.ActionBar: 
+                case ConfigInventory.PalayerBag: 
+                    return (int)(price * itemDatails.sellPercentage);
+                default: 
+                    return price;
+            }
         }
 
         /// <summary>

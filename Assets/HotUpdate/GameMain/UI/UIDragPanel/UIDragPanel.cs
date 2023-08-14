@@ -18,6 +18,7 @@ namespace ACFrameworkCore
     public class UIDragPanel : UIBase
     {
         public Image DragItemImage;
+
         public override void UIAwake()
         {
             base.UIAwake();
@@ -26,10 +27,10 @@ namespace ACFrameworkCore
             GameObject DragItem = panelGameObject.GetChild("DragItemImage");
             DragItemImage = DragItem.GetComponent<Image>();
 
-            ConfigEvent.ItemOnDrag.AddEventListener<Vector3>(ItemDrag);
-            ConfigEvent.ItemOnBeginDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnBeginDrag);
-            ConfigEvent.ItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
-            ConfigEvent.ItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
+            ConfigEvent.UIItemOnDrag.AddEventListener<Vector3>(ItemDrag);
+            ConfigEvent.UIItemOnBeginDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnBeginDrag);
+            ConfigEvent.UIItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
+            ConfigEvent.UIItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
         }
 
         private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
@@ -37,21 +38,16 @@ namespace ACFrameworkCore
             if (slotUI.itemDatails == null) return;
             slotUI.isSelected = !slotUI.isSelected;
             slotUI.slotHightLight.gameObject.SetActive(slotUI.isSelected);
-            ConfigEvent.UpdateSlotHightLight.EventTrigger(slotUI.key, slotUI.slotIndex);
+            ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
 
-            switch (slotUI.key)
+            switch (slotUI.configInventoryKey)
             {
                 case ConfigInventory.PalayerBag:
                 case ConfigInventory.ActionBar:
                     ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
                     break;
             }
-            //InventoryAllManager.Instance.UpdateSlotHightLight(slotUI.key, slotUI.slotIndex);
-            //判断是否是在商店中点击(商店不执行代码)
-            //if (eSlotType == ESlotType.Bag)
-            //    ConfigEvent.ItemSelect.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
         }
-
         private void ItemOnEndDrag(PointerEventData eventData, SlotUI slotUI)
         {
             DragItemImage.enabled = false;
@@ -60,12 +56,11 @@ namespace ACFrameworkCore
                 //物品交换
                 if (eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>() == null) return;
                 var targetSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>();//如果是存在SlotUI组件的话
-                int targetIndex = targetSlot.slotIndex;
 
                 //物品交换
-                ACDebug.Log($"当前的{slotUI.key}{slotUI.slotIndex},目标的是{targetSlot.key}{targetSlot.slotIndex}");
-                InventoryAllManager.Instance.ChangeItem(slotUI.key, targetSlot.key, slotUI.slotIndex, targetSlot.slotIndex);
-                ACDebug.Log($"鼠标指针的射线检测到的物体: {eventData.pointerCurrentRaycast.gameObject}");
+                //ACDebug.Log($"当前的{slotUI.key}{slotUI.slotIndex},目标的是{targetSlot.key}{targetSlot.slotIndex}");
+                //ACDebug.Log($"鼠标指针的射线检测到的物体: {eventData.pointerCurrentRaycast.gameObject}");
+                InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
                 slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
             }
             else //测试仍在地上
@@ -77,14 +72,13 @@ namespace ACFrameworkCore
                 }
                 //屏幕坐标转成世界坐标 鼠标对应的世界坐标
                 var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-                ConfigEvent.ItemCreatOnWorld.EventTrigger(slotUI, pos);//id 数量,坐标//创建世界物体
-                InventoryAllManager.Instance.RemoveItemDicArray(slotUI.key, slotUI.itemDatails.itemID, slotUI.itemAmount);//删除原先的
+                ConfigEvent.UIItemCreatOnWorld.EventTrigger(slotUI, pos);//id 数量,坐标//创建世界物体
+                InventoryAllSystem.Instance.RemoveItemDicArray(slotUI.configInventoryKey, slotUI.itemDatails.itemID, slotUI.itemAmount);//删除原先的
                 slotUI.UpdateEmptySlot();
             }
             //清空所有高亮
-            ConfigEvent.UpdateSlotHightLight.EventTrigger(string.Empty, -1);//清空所有高亮
+            ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
         }
-
         private void ItemOnBeginDrag(PointerEventData eventData, SlotUI slotUI)
         {
             if (slotUI.itemAmount != 0)
@@ -94,11 +88,9 @@ namespace ACFrameworkCore
                 DragItemImage.color = new Color(DragItemImage.color.r, DragItemImage.color.g, DragItemImage.color.b, .5f);
                 DragItemImage.SetNativeSize();
                 slotUI.isSelected = true;
-                ConfigEvent.UpdateSlotHightLight.EventTrigger(slotUI.key, slotUI.slotIndex);
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
             }
         }
-
-        //物品拖拽
         private void ItemDrag(Vector3 obj)
         {
             DragItemImage.transform.position = obj;

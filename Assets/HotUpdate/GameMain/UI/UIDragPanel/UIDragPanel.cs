@@ -63,19 +63,6 @@ namespace ACFrameworkCore
                 InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
                 slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
             }
-            else //测试仍在地上
-            {
-                if (slotUI.itemDatails.canDropped == false)
-                {
-                    ACDebug.Log($"{slotUI.itemDatails.name}是不能被扔掉的");
-                    return;
-                }
-                //屏幕坐标转成世界坐标 鼠标对应的世界坐标
-                var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-                ConfigEvent.UIItemCreatOnWorld.EventTrigger(slotUI, pos);//id 数量,坐标//创建世界物体
-                InventoryAllSystem.Instance.RemoveItemDicArray(slotUI.configInventoryKey, slotUI.itemDatails.itemID, slotUI.itemAmount);//删除原先的
-                slotUI.UpdateEmptySlot();
-            }
             //清空所有高亮
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
         }

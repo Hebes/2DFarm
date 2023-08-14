@@ -37,23 +37,23 @@ namespace ACFrameworkCore
             currentceneName.SetActivateScene();//设置为激活场景
             ConfigEvent.SwichConfinerShape.EventTrigger();//切换场景边界
 
-            //测试创建拾取的物体
-            GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+            ////测试创建拾取的物体
+            //GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
 
-            GameObject go1 = GameObject.Instantiate(gameObject);
-            Item item = go1.GetComponent<Item>();
-            item.itemID = 1007;
-            item.itemAmount = 3;
+            //GameObject go1 = GameObject.Instantiate(gameObject);
+            //Item item = go1.GetComponent<Item>();
+            //item.itemID = 1007;
+            //item.itemAmount = 3;
 
-            GameObject go2 = GameObject.Instantiate(gameObject);
-            Item item2 = go2.GetComponent<Item>();
-            item2.itemID = 1008;
-            item2.itemAmount = 6;
+            //GameObject go2 = GameObject.Instantiate(gameObject);
+            //Item item2 = go2.GetComponent<Item>();
+            //item2.itemID = 1008;
+            //item2.itemAmount = 6;
 
-            GameObject go3 = GameObject.Instantiate(gameObject);
-            Item item3 = go3.GetComponent<Item>();
-            item3.itemID = 1015;
-            item3.itemAmount = 119;
+            //GameObject go3 = GameObject.Instantiate(gameObject);
+            //Item item3 = go3.GetComponent<Item>();
+            //item3.itemID = 1015;
+            //item3.itemAmount = 119;
         }
 
         //切换场景
@@ -63,20 +63,13 @@ namespace ACFrameworkCore
             {
                 ConfigEvent.SceneBeforeUnload.EventTrigger();
                 await Fade(1);
-                //ACDebug.Log("当前的激活场景是:" + SceneManager.GetActiveScene().name);
-                //ACDebug.Log("当前的激活场景位置是:" + SceneManager.GetActiveScene().buildIndex);
-                //Scene newScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
-                //SceneManager.SetActiveScene(newScene);
-                //ACDebug.Log("当前获取的激活场景是:" + newScene.name);
                 SceneOperationHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
-                //await UniTask.Yield();
                 sceneOperationHandle.ActivateScene();//设置场景激活
-                //await UniTask.Yield();
                 currentceneName.UnloadAsync();//卸载原来的场景
                 currentceneName = targetScene;//变换当前场景的名称
                 
                 ConfigEvent.PlayerMoveToPosition.EventTrigger(targetPosition);  //移动人物坐标
-                ConfigEvent.SceneBeforeUnload.EventTrigger();
+                ConfigEvent.SceneAfterLoaded.EventTrigger();
                 ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
                 await Fade(0);
             }

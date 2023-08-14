@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Management.Instrumentation;
 
 /*--------脚本描述-----------
 				

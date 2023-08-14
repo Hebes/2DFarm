@@ -3,24 +3,27 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private Animator[] animators;
-    private float inputX;
-    private float inputY;
-    private Vector2 movementInput;
-    private bool isMoving;
+    private Rigidbody2D rb;                 //玩家的碰撞体
+    private Animator[] animators;           //玩家的动画组件
+    private float inputX;                   //输入X
+    private float inputY;                   //输入Y
+    private Vector2 movementInput;          //移动的输入
+    private bool isMoving;                  //是否在移动
     private bool InputDisable;              //玩家不能操作
-
     public float speed = 10f;               //移动速度
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
+        ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
+        ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+        ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+        ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetails>(OnMouseClickedEvent);
     }
     private void Update()
     {
-        if (!InputDisable)
+        if (InputDisable == false)
             PlayerInput();
         else
             isMoving = false;
@@ -32,10 +35,24 @@ public class Player : MonoBehaviour
             Movement();
     }
 
-    /// <summary>
-    /// 玩家输入
-    /// </summary>
-    private void PlayerInput()
+    private void OnBeforeSceneUnloadEvent()
+    {
+        InputDisable = true;
+    }
+    private void OnAfterSceneLoadedEvent()
+    {
+        InputDisable = false;
+    }
+    private void OnMoveToPosition(Vector3 targetPosition)
+    {
+        transform.position = targetPosition;
+    }
+    private void OnMouseClickedEvent(Vector3 pos, ItemDetails itemDetails)
+    {
+        ConfigEvent.PlayerExecuteActionAfterAnimation.EventTrigger(pos, itemDetails);
+    }
+
+    private void PlayerInput()//玩家输入
     {
         //用于只能横着走或者竖着走
         //if (inputY == 0)
@@ -64,17 +81,11 @@ public class Player : MonoBehaviour
 
         isMoving = movementInput != Vector2.zero;//判断是否在移动
     }
-    /// <summary>
-    /// 玩家移动
-    /// </summary>
-    private void Movement()
+    private void Movement()//玩家移动
     {
         rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
     }
-    /// <summary>
-    /// 播放动画
-    /// </summary>
-    private void SwitchAnimation()
+    private void SwitchAnimation()//播放动画
     {
         foreach (var anim in animators)
         {

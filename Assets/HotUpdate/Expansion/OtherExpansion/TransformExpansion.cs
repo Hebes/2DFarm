@@ -36,6 +36,10 @@ namespace ACFrameworkCore
         {
             return GetChild(gameObject.transform, childName).gameObject;
         }
+        public static T GetChild<T>(this GameObject gameObject, string childName)where T : Component
+        {
+            return GetChild(gameObject.transform, childName).GetComponent<T>();
+        }
         public static T GetChildComponent<T>(this Transform transform, string childName) where T : UnityEngine.Object
         {
             return GetChild(transform, childName)?.GetComponent<T>();

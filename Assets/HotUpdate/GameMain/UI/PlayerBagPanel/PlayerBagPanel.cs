@@ -24,31 +24,29 @@ namespace ACFrameworkCore
         public override void UIAwake()
         {
             base.UIAwake();
-            //初始化
-            playerBagSlotList = new List<SlotUI>();
-            //InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
-            ////TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
-            //InventoryAllManager.Instance.CreatItemDicArrayRecord(ConfigInventory.PalayerBag, 16);//初始化背包数据
-            //获取变量
+            InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
             T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
-            //添加数据
+
+            InventoryAllSystem.Instance.ItemDicArray.Add(ConfigInventory.PalayerBag, new InventoryItem[16]);
+            playerBagSlotList = new List<SlotUI>();
             for (int i = 0; i < T_SlotHolder.transform.childCount; i++)
             {
                 SlotUI slotUI = T_SlotHolder.GetChildComponent<SlotUI>(i);
                 slotUI.slotIndex = i;
-                slotUI.key = ConfigInventory.PalayerBag;
+                slotUI.configInventoryKey = ConfigInventory.PalayerBag;
                 playerBagSlotList.Add(slotUI);
             }
-            //设置变量
-            InventoryAllManager.Instance.AddSlotUIList(ConfigInventory.PalayerBag, playerBagSlotList);
+            InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.PalayerBag, playerBagSlotList);
         }
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            ConfigInventory.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);
-            InitItemInfo();
+            ConfigInventory.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
+            InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigInventory.PalayerBag);
+            RefreshItem(playerBagItems);
         }
         public override void UIOnDisable()
         {
@@ -63,7 +61,7 @@ namespace ACFrameworkCore
             {
                 if (obj[i].itemAmount > 0)//有物品
                 {
-                    ItemDetails item = InventoryAllManager.Instance.GetItem(obj[i].itemID);
+                    ItemDetails item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
                     playerBagSlotList[i].UpdateSlot(item, obj[i].itemAmount).Forget();
                 }
                 else
@@ -71,15 +69,6 @@ namespace ACFrameworkCore
                     playerBagSlotList[i].UpdateEmptySlot();
                 }
             }
-        }
-
-        //初始化物品信息
-        public void InitItemInfo()
-        {
-            //获取物品信息
-            InventoryItem[] playerBagItems = InventoryAllManager.Instance.GetItemListArray(ConfigInventory.PalayerBag);
-            //刷新界面
-            RefreshItem(playerBagItems);
         }
     }
 }

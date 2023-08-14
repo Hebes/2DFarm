@@ -16,13 +16,13 @@ namespace ACFrameworkCore
     public static class ResourceExtension
     {
         //同步加载
-        public static T Load<T>(string assetName) where T : UnityEngine.Object
+        public static T Load<T>(this string assetName) where T : UnityEngine.Object
         {
             return ResourceManager.Instance.Load<T>(assetName);
         }
 
         //异步加载
-        public static UniTask<T> LoadAsyncUniTask<T>(string assetName) where T : UnityEngine.Object
+        public static UniTask<T> LoadAsyncUniTask<T>(this string assetName) where T : UnityEngine.Object
         {
             return ResourceManager.Instance.LoadAsyncUniTack<T>(assetName);
         }

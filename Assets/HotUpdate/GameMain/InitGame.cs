@@ -1,57 +1,50 @@
 ﻿using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
-using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 游戏流程
 /// </summary>
 public enum EInitGameProcess
 {
-    FSMInitFramework,//初始化框架
-    FSMInitData,//初始化数据
-    FSMEnterGame,//进入游戏
+    /// <summary> 初始化框架基础核心 </summary>
+    FSMInitBaseCore,
+    /// <summary> 初始化框架管理核心 </summary>
+    FSMInitManagerCore,
+    /// <summary> 初始化数据 </summary>
+    FSMInitData,
+    /// <summary> 初始化UI </summary>
+    FSMInitUI,
+    /// <summary> 加载保存的数据 </summary>
+    FSMInitSaveDataLoad,
+    /// <summary> 进入游戏 </summary>
+    FSMEnterGame,
 }
 public class InitGame
 {
     public static void Init()
     {
-        Debug.Log("初始化场景");
-        SwitchInitGameProcess(EInitGameProcess.FSMInitFramework).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitBaseCore).Forget();
     }
 
-    /// <summary>
-    /// 切换初始化场景
-    /// </summary>
     private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
         {
-            case EInitGameProcess.FSMInitFramework:
-                await InitRsv();
-                SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
-                break;
-            case EInitGameProcess.FSMInitData:
-                await InitData();
-                SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
-                break;
-            case EInitGameProcess.FSMEnterGame:
-                Debug.Log("进入游戏");
-                EnterGame().Forget();
-                break;
+            case EInitGameProcess.FSMInitBaseCore: await FSMInitBaseCore(); break;
+            case EInitGameProcess.FSMInitManagerCore: await FSMInitManagerCore(); break;
+            case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
+            case EInitGameProcess.FSMInitData: await FSMInitData(); break;
+            case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
+            case EInitGameProcess.FSMEnterGame: FSMEnterGame(); break;
         }
     }
 
-    //初始化框架
-    private static async UniTask InitRsv()
+    private static async UniTask FSMInitBaseCore()
     {
         List<ICore> _initHs = new List<ICore>()
         {
             new DebugManager(),
-            new UIManager(),
-            new ResourceManager(),
             new MonoManager(),
         };
         foreach (var init in _initHs)
@@ -59,41 +52,72 @@ public class InitGame
             init.ICroeInit();
             await UniTask.Yield();
         }
+        SwitchInitGameProcess(EInitGameProcess.FSMInitManagerCore).Forget();
     }
-
-    //初始化需要的数据
-    private static async UniTask InitData()
+    private static async UniTask FSMInitManagerCore()
     {
         List<ICore> _initHs = new List<ICore>()
         {
+            new AduioManager(),
+            new EventManager(),
             new DataManager(),
-            new InventoryAllManager(),
+            new PoolManager(),
+            new ResourceManager(),
+            new ManagerScene(),
+            new UIManager(),
         };
         foreach (var init in _initHs)
         {
             init.ICroeInit();
             await UniTask.Yield();
         }
+        SwitchInitGameProcess(EInitGameProcess.FSMInitSaveDataLoad).Forget();
     }
-    private static async UniTaskVoid EnterGame()
+    private static async UniTask FSMInitSaveDataLoad()
     {
-        //MonoManager.Instance.OnAddUpdateEvent(ttt);
-        await ConfigScenes.FieldScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
-        await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
-
-        //打开窗口面板
-        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();
-        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<ItemToolTipPanel>();
-        ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();
-        ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();
-        ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();
+        await UniTask.Yield();
+        List<ICore> _initHs = new List<ICore>()
+        {
+            new RecordedDataLoadSystem(),
+        };
+        foreach (var init in _initHs)
+        {
+            init.ICroeInit();
+            await UniTask.Yield();
+        }
+        SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
     }
+    private static async UniTask FSMInitData()
+    {
+        List<ICore> _initHs = new List<ICore>()
+        {
+            new InventoryAllSystem(),
+            new InventoryWorldItemSystem(),
+            new TimeSystem(),
+            new SceneTransitionSystem(),
+        };
+        foreach (var init in _initHs)
+        {
+            init.ICroeInit();
+            await UniTask.Yield();
+        }
+        SwitchInitGameProcess(EInitGameProcess.FSMInitUI).Forget();
+    }
+    private static void FSMInitUI()
+    {
+        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();                           //显示快捷栏面板
+        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<UIItemToolTipPanel>();                     //显示物体信息描述面板
+        ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
+        ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
+        ConfigUIPanel.UIGameTimePanel.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
 
-    //private static void ttt()
-    //{
-    //    YooAssetLoadScene.LoadingEvenName.AddEventListener<float>((progress) => 
-    //    {
-    //        ACDebug.Log($"当前的进度是{progress}");
-    //    });
-    //}
+        ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();                                        //关闭物体信息描述面板
+        ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();                                          //关闭玩家背包面板
+
+        SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
+    }
+    private static void FSMEnterGame()
+    {
+        ACDebug.Log("开始游戏");
+    }
 }

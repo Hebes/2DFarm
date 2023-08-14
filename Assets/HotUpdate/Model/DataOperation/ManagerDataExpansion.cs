@@ -15,11 +15,11 @@ namespace ACFrameworkCore
     {
         public static void Save(object obj, string fileName, EDataType dataType)
         {
-            ManagerData.Instance.Save(obj, fileName, dataType);
+            DataSystem.Instance.Save(obj, fileName, dataType);
         }
         public static K Load<K>(this string fileName, EDataType dataType) where K : class
         {
-            return ManagerData.Instance.Load<K>(fileName, dataType);
+            return DataSystem.Instance.Load<K>(fileName, dataType);
         }
     }
 }

@@ -28,5 +28,17 @@ namespace ACFrameworkCore
         {
             return await ManagerScene.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
         }
+        public static async UniTask<SceneOperationHandle> ChangeScene(this string oldScene, string newScene, LoadSceneMode loadSceneMode)
+        {
+            return await ManagerScene.Instance.ChangeScene(oldScene, newScene, loadSceneMode);
+        }
+        public static  void UnloadAsync(this string scnenName)
+        {
+            ManagerScene.Instance.UnloadAsync(scnenName);
+        }
+        public static void SetActivateScene(this string scnenName)
+        {
+            ManagerScene.Instance.SetActivateScene(scnenName);
+        }
     }
 }

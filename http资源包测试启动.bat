@@ -21,5 +21,5 @@ chcp 65001
 
 echo 请用浏览器打开127.0.0:8000
 cd /d %~dp0
-cd Bundles & python -m http.server
+cd Bundles & python -m http.server --bind 0.0.0.0
 pause

@@ -62,7 +62,7 @@ namespace ACFrameworkCore
             foreach (string s in strings)
             {
                 string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "");
+                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "").Replace(" ","");
                 sb.AppendLine($"        public const string {tempstr}Panel = \"{tempstr}\";");
             }
             sb.AppendLine("    }\r\n}");
@@ -215,7 +215,7 @@ namespace ACFrameworkCore
             foreach (string s in strings)
             {
                 string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "");
+                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "").Replace("(","").Replace(")", "");
                 string tempstr1 = strPath[strPath.Length - 1].Replace(".png", "");
                 sb.AppendLine($"        public const string Sprites{tempstr} = \"{tempstr1}\";");
             }
@@ -230,5 +230,36 @@ namespace ACFrameworkCore
             File.WriteAllText(classPath, sb.ToString());
             AssetDatabase.Refresh();
         }
+
+        [MenuItem("Tool/GenerateConfig/生成Animations配置文件")]//#E
+        public static void GenerateAnimationsConfig()
+        {
+            string Path = $"{CommonPath}Animations/";
+            string[] strings = Directory.GetFiles(Path, "*.overrideController", SearchOption.AllDirectories);
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("namespace ACFrameworkCore\r\n{");
+            sb.AppendLine("    public class ConfigAnimations\r\n    {");
+
+            foreach (string s in strings)
+            {
+                string[] strPath = s.Split('\\');
+                string tempstr = strPath[strPath.Length - 1].Replace(".overrideController", "").Replace("@", "_").Replace("-", "_").Replace(" ", "");
+                string tempstr1 = strPath[strPath.Length - 1].Replace(".overrideController", "");
+                sb.AppendLine($"        public const string Animations{tempstr} = \"{tempstr1}\";");
+            }
+            sb.AppendLine("    }\r\n}");
+            string classPath = $"{GenerateConfigPath}ConfigAnimations.cs";
+            if (File.Exists(classPath))
+            {
+                Debug.Log("文件存在开始删除!");
+                File.Delete(classPath);
+            }
+
+            File.WriteAllText(classPath, sb.ToString());
+            AssetDatabase.Refresh();
+        }
+
     }
 }

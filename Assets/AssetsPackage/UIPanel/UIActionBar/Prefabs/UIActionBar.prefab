@@ -2177,6 +2177,7 @@ GameObject:
   - component: {fileID: 2954898110613455605}
   - component: {fileID: 8258229424590657655}
   - component: {fileID: 7299472540616389748}
+  - component: {fileID: 7596926390561769488}
   m_Layer: 5
   m_Name: Solt_Bag
   m_TagString: Untagged
@@ -2301,6 +2302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -2319,6 +2321,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &7596926390561769488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041264714190439446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5336281365731901604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3636,6 +3651,7 @@ GameObject:
   - component: {fileID: 7765462847682727186}
   - component: {fileID: 3485364535855830928}
   - component: {fileID: 1993153932886731865}
+  - component: {fileID: 4410548691642887353}
   m_Layer: 5
   m_Name: Solt_Bag (8)
   m_TagString: Untagged
@@ -3760,6 +3776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -3778,6 +3795,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &4410548691642887353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832359716817905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832359879820643
 GameObject:
   m_ObjectHideFlags: 0
@@ -3791,6 +3821,7 @@ GameObject:
   - component: {fileID: 7765462847375934336}
   - component: {fileID: 3485364536362866946}
   - component: {fileID: 6978188855218193109}
+  - component: {fileID: 8582370838683144009}
   m_Layer: 5
   m_Name: Solt_Bag (3)
   m_TagString: Untagged
@@ -3915,6 +3946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -3933,6 +3965,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &8582370838683144009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832359879820643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832360033265215
 GameObject:
   m_ObjectHideFlags: 0
@@ -3946,6 +3991,7 @@ GameObject:
   - component: {fileID: 7765462847533408476}
   - component: {fileID: 3485364536239323742}
   - component: {fileID: 142474497263033713}
+  - component: {fileID: 1484930405980946694}
   m_Layer: 5
   m_Name: Solt_Bag (9)
   m_TagString: Untagged
@@ -4070,6 +4116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4088,6 +4135,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &1484930405980946694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832360033265215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832360265451691
 GameObject:
   m_ObjectHideFlags: 0
@@ -4101,6 +4161,7 @@ GameObject:
   - component: {fileID: 7765462848231427656}
   - component: {fileID: 3485364536412918986}
   - component: {fileID: 7255199889485699331}
+  - component: {fileID: 6255484080776317704}
   m_Layer: 5
   m_Name: Solt_Bag (7)
   m_TagString: Untagged
@@ -4225,6 +4286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4243,6 +4305,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &6255484080776317704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832360265451691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832360309723960
 GameObject:
   m_ObjectHideFlags: 0
@@ -4256,6 +4331,7 @@ GameObject:
   - component: {fileID: 7765462848279827931}
   - component: {fileID: 3485364536465641305}
   - component: {fileID: 5278975135107976193}
+  - component: {fileID: 9076121177627681663}
   m_Layer: 5
   m_Name: Solt_Bag (1)
   m_TagString: Untagged
@@ -4380,6 +4456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4398,6 +4475,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &9076121177627681663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832360309723960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832360332722172
 GameObject:
   m_ObjectHideFlags: 0
@@ -4411,6 +4501,7 @@ GameObject:
   - component: {fileID: 7765462848298400031}
   - component: {fileID: 3485364536479884189}
   - component: {fileID: 615034887547016265}
+  - component: {fileID: 3363878527250567551}
   m_Layer: 5
   m_Name: Solt_Bag (2)
   m_TagString: Untagged
@@ -4535,6 +4626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4553,6 +4645,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &3363878527250567551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832360332722172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832360904446454
 GameObject:
   m_ObjectHideFlags: 0
@@ -4566,6 +4671,7 @@ GameObject:
   - component: {fileID: 7765462848398268181}
   - component: {fileID: 3485364535239675287}
   - component: {fileID: 2368824349048403861}
+  - component: {fileID: 719301354905429428}
   m_Layer: 5
   m_Name: Solt_Bag (5)
   m_TagString: Untagged
@@ -4690,6 +4796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4708,6 +4815,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &719301354905429428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832360904446454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832361107868181
 GameObject:
   m_ObjectHideFlags: 0
@@ -4721,6 +4841,7 @@ GameObject:
   - component: {fileID: 7765462848605883638}
   - component: {fileID: 3485364535166277236}
   - component: {fileID: 8232792036753462945}
+  - component: {fileID: 3151314408855373219}
   m_Layer: 5
   m_Name: Solt_Bag (4)
   m_TagString: Untagged
@@ -4845,6 +4966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -4863,6 +4985,19 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &3151314408855373219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832361107868181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8849832361541819078
 GameObject:
   m_ObjectHideFlags: 0
@@ -4876,6 +5011,7 @@ GameObject:
   - component: {fileID: 7765462848968727589}
   - component: {fileID: 3485364535810262695}
   - component: {fileID: 1216550806122610144}
+  - component: {fileID: 534742955490053297}
   m_Layer: 5
   m_Name: Solt_Bag (6)
   m_TagString: Untagged
@@ -5000,6 +5136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8712e0c2a0f3c264cbfa5ab3edaf2ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotImage: {fileID: 0}
   slotHightLight: {fileID: 0}
   eSlotType: 0
   isSelected: 0
@@ -5018,3 +5155,16 @@ MonoBehaviour:
     sellPercentage: 0
   itemAmount: 0
   slotIndex: 0
+  key: 
+--- !u!114 &534742955490053297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849832361541819078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be037cc364d181409b08d6a37a116d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

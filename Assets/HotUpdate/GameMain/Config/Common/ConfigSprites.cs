@@ -2,6 +2,15 @@ namespace ACFrameworkCore
 {
     public class ConfigSprites
     {
+        public const string Spritescursor11 = "cursor(11)";
+        public const string Spritescursor2 = "cursor(2)";
+        public const string Spritescursor3 = "cursor(3)";
+        public const string Spritescursor4 = "cursor(4)";
+        public const string Spritescursor5 = "cursor(5)";
+        public const string Spritescursor6 = "cursor(6)";
+        public const string Spritescursor7 = "cursor(7)";
+        public const string Spritescursor8 = "cursor(8)";
+        public const string Spritescursor9 = "cursor(9)";
         public const string SpritesCursor = "Cursor";
         public const string SpritesBoy01_1 = "Boy01-1";
         public const string SpritesBoy01_2 = "Boy01-2";

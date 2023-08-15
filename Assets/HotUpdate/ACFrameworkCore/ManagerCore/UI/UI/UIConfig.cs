@@ -11,6 +11,8 @@
         PopUp,
         /// <summary> 独立的窗口可移动的 </summary> TODO 等待敲代码
         Mobile,
+        /// <summary> 渐变过度窗体 </summary>
+        Fade,
     }
 
     /// <summary> UI窗体的显示类型 </summary>

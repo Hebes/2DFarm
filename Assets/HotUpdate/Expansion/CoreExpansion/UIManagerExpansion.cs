@@ -13,13 +13,17 @@ namespace ACFrameworkCore
 {
     public static class UIManagerExpansion
     {
-        public static T ShwoUIPanel<T>(this string uiFormName)where T : UIBase, new()
+        public static T ShwoUIPanel<T>(this string uiFormName) where T : UIBase, new()
         {
-           return UIManager.Instance.ShwoUIPanel<T>(uiFormName);
+            return UIManager.Instance.ShwoUIPanel<T>(uiFormName);
         }
         public static void CloseUIPanel(this string uiFormName)
         {
             UIManager.Instance.CloseUIForms(uiFormName);
+        }
+        public static T GetUIPanl<T>(this string uiFormName) where T : UIBase
+        {
+            return UIManager.Instance.GetUIPanl<T>(uiFormName);
         }
     }
 }

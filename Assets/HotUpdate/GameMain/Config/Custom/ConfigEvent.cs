@@ -30,5 +30,8 @@
         public const string UIItemOnEndDrag = "物品拖拽结束";
         public const string UIItemOnBeginDrag = "物品拖拽开始";
         public const string UIItemOnPointerClick = "物品点击";
+
+        //场景过度相关
+        public const string UIFade = "场景过度";
     }
 }

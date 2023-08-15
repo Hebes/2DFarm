@@ -121,25 +121,25 @@ public class InitGame
     }
     private static async UniTask FSMEnterGame()
     {
+        await UniTask.DelayFrame(40);
         ACDebug.Log("开始游戏");
-
         await UniTask.Yield();
         //测试创建拾取的物体
-        //GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+        GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
 
-        //GameObject go1 = GameObject.Instantiate(gameObject);
-        //Item item = go1.GetComponent<Item>();
-        //item.itemID = 1007;
-        //item.itemAmount = 3;
+        GameObject go1 = GameObject.Instantiate(gameObject);
+        Item item = go1.GetComponent<Item>();
+        item.itemID = 1007;
+        item.itemAmount = 3;
 
-        //GameObject go2 = GameObject.Instantiate(gameObject);
-        //Item item2 = go2.GetComponent<Item>();
-        //item2.itemID = 1008;
-        //item2.itemAmount = 6;
+        GameObject go2 = GameObject.Instantiate(gameObject);
+        Item item2 = go2.GetComponent<Item>();
+        item2.itemID = 1008;
+        item2.itemAmount = 6;
 
-        //GameObject go3 = GameObject.Instantiate(gameObject);
-        //Item item3 = go3.GetComponent<Item>();
-        //item3.itemID = 1015;
-        //item3.itemAmount = 119;
+        GameObject go3 = GameObject.Instantiate(gameObject);
+        Item item3 = go3.GetComponent<Item>();
+        item3.itemID = 1015;
+        item3.itemAmount = 119;
     }
 }

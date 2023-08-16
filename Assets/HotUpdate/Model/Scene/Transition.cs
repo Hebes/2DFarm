@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 /*--------脚本描述-----------
 				
@@ -21,7 +22,7 @@ namespace ACFrameworkCore
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag(ConfigTag.TagPlayer))
-                ConfigEvent.SceneTransition.EventTrigger(sceneToGo, positionTpGo);
+                ConfigEvent.SceneTransition.EventTriggerUniTask(sceneToGo, positionTpGo).Forget();
         }
     }
 }

@@ -218,11 +218,6 @@ namespace ACFrameworkCore
             //TODO 后面继续写ItemDicList交换和上面差不多
             return ChangeItemDicArrayIsOk;
         }
-        //public void UpdateItemInfos()
-        //{
-
-        //}//更新所有的物品信息
-
         //高亮格子添加  TODO 需要编写代码
         public void AddSlotUIList(string key, List<SlotUI> slotUIs)
         {

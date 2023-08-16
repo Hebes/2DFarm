@@ -37,7 +37,7 @@ public class InitGame
             case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
             case EInitGameProcess.FSMInitData: await FSMInitData(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
-            case EInitGameProcess.FSMEnterGame: FSMEnterGame().Forget(); break;
+            case EInitGameProcess.FSMEnterGame: await FSMEnterGame(); break;
         }
     }
 
@@ -111,9 +111,9 @@ public class InitGame
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
         ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
         ConfigUIPanel.UIGameTimePanel.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
-        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                           //显示时间面板
+        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                                   //显示时间面板
 
-        ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(0).Forget();
+        ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();                                    //显隐界面
         ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();                                        //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();                                          //关闭玩家背包面板
 

@@ -3,6 +3,7 @@ using System;
 
 namespace ACFrameworkCore
 {
+    //不等待事件监听
     public class EventInfo : IEventInfo
     {
         public event Action actions;
@@ -15,7 +16,6 @@ namespace ACFrameworkCore
             actions?.Invoke();
         }
     }
-
     public class EventInfo<T> : IEventInfo
     {
         public event Action<T> actions;
@@ -27,12 +27,7 @@ namespace ACFrameworkCore
         {
             actions?.Invoke(obj);
         }
-        //public async UniTask TriggerUniTask(T obj)
-        //{
-        //  await actions?.Invoke(obj);
-        //}
     }
-
     public class EventInfo<T, K> : IEventInfo
     {
         public event Action<T, K> actions;
@@ -57,7 +52,6 @@ namespace ACFrameworkCore
             actions?.Invoke(obj, obj2, obj3);
         }
     }
-
     public class EventInfo<T, K, V, N, M> : IEventInfo
     {
         public event Action<T, K, V, N, M> actions;
@@ -68,6 +62,52 @@ namespace ACFrameworkCore
         public void Trigger(T obj, K obj2, V obj3, N obj4, M obj5)
         {
             actions?.Invoke(obj, obj2, obj3, obj4, obj5);
+        }
+    }
+
+    //等待事件监听
+    public class EventInfoUniTask : IEventInfo
+    {
+        public delegate UniTask ActionUniTaskEvent();
+        public event ActionUniTaskEvent actionUniTaskEvent;
+
+        public EventInfoUniTask(ActionUniTaskEvent actionUniTaskEvent)
+        {
+            this.actionUniTaskEvent += actionUniTaskEvent;
+        }
+        public async UniTask TriggerUniTask()
+        {
+            Delegate[] actionUniTaskEventDelegate = actionUniTaskEvent.GetInvocationList();
+            await UniTask.WhenAll(Array.ConvertAll(actionUniTaskEventDelegate, del => ((ActionUniTaskEvent)del)()));
+        }
+    }
+    public class EventInfoUniTask<T> : IEventInfo
+    {
+        public delegate UniTask ActionUniTaskEvent(T t);
+        public event ActionUniTaskEvent actionUniTaskEvent;
+
+        public EventInfoUniTask(ActionUniTaskEvent actionUniTaskEvent)
+        {
+            this.actionUniTaskEvent += actionUniTaskEvent;
+        }
+        public async UniTask TriggerUniTask(T obj)
+        {
+            Delegate[] actionUniTaskEventDelegate = actionUniTaskEvent.GetInvocationList();
+            await UniTask.WhenAll(Array.ConvertAll(actionUniTaskEventDelegate, del => ((ActionUniTaskEvent)del)(obj)));
+        }
+    }
+    public class EventInfoUniTask<T, K> : IEventInfo
+    {
+        public delegate UniTask ActionUniTaskEvent(T t,K k);
+        public event ActionUniTaskEvent actionUniTaskEvent;
+        public EventInfoUniTask(ActionUniTaskEvent actionUniTaskEvent)
+        {
+            this.actionUniTaskEvent += actionUniTaskEvent;
+        }
+        public async UniTask TriggerUniTask(T obj1, K obj2)
+        {
+            Delegate[] actionUniTaskEventDelegate = actionUniTaskEvent.GetInvocationList();
+            await UniTask.WhenAll(Array.ConvertAll(actionUniTaskEventDelegate, del => ((ActionUniTaskEvent)del)(obj1, obj2)));
         }
     }
 }

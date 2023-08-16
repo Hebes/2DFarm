@@ -1,7 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
-using System.Threading.Tasks;
-using UnityEngine.Events;
 
 /*--------脚本描述-----------
 				
@@ -18,7 +16,7 @@ namespace ACFrameworkCore
 {
     public static class EventExpansion
     {
-        //不需要参数
+        //不等待
         public static void AddEventListener(this Action action, string eventName)
         {
             EventManager.Instance.AddEventListener(eventName, action);
@@ -39,8 +37,6 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.EventTrigger(eventName);
         }
-
-        //一个参数
         public static void AddEventListener<T>(this Action<T> action, string eventName)
         {
             EventManager.Instance.AddEventListener<T>(eventName, action);
@@ -61,13 +57,6 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.EventTrigger<T>(eventName, info);
         }
-
-        //public static UniTask EventTrigger<T>(this string eventName, T info)
-        //{
-        //   // EventManager.Instance.EventTrigger<T>(eventName, info);
-        //}
-
-        //2个参数
         public static void AddEventListener<T, K>(this string name, Action<T, K> action)
         {
             EventManager.Instance.AddEventListener<T, K>(name, action);
@@ -80,8 +69,6 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.EventTrigger<T, K>(name, t, k);
         }
-
-        //3个参数
         public static void AddEventListener<T, K, V>(this string name, Action<T, K, V> action)
         {
             EventManager.Instance.AddEventListener<T, K, V>(name, action);
@@ -95,8 +82,6 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.EventTrigger<T, K, V>(name, t, k, v);
         }
-
-        //5个参数
         public static void AddEventListener<T, K, V, N, M>(this string name, Action<T, K, V, N, M> action)
         {
             EventManager.Instance.AddEventListener<T, K, V, N, M>(name, action);
@@ -110,6 +95,24 @@ namespace ACFrameworkCore
             EventManager.Instance.EventTrigger<T, K, V, N, M>(name, t, k, v, n, m);
         }
 
+        //等待
+        public static void AddEventListenerUniTask<T>(this string eventName, EventInfoUniTask<T>.ActionUniTaskEvent action)
+        {
+            EventManager.Instance.AddEventListenerUniTask<T>(eventName, action);
+        }
+        public static async UniTask EventTriggerUniTask<T>(this string eventName, T info)
+        {
+            await EventManager.Instance.EventTriggerUniTask<T>(eventName, info);
+        }
+        public static void AddEventListenerUniTask<T, K>(this string eventName, EventInfoUniTask<T, K>.ActionUniTaskEvent action)
+        {
+            EventManager.Instance.AddEventListenerUniTask<T, K>(eventName, action);
+        }
+        public static async UniTask EventTriggerUniTask<T, K>(this string eventName, T t, K k)
+        {
+            await EventManager.Instance.EventTriggerUniTask<T, K>(eventName, t, k);
+        }
+        //清理
         public static void Clear()
         {
             EventManager.Instance.Clear();

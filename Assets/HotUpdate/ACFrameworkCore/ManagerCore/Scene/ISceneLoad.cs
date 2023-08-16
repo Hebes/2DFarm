@@ -10,7 +10,6 @@
 -----------------------*/
 
 using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
@@ -27,9 +26,6 @@ namespace ACFrameworkCore
         /// <param name="suspendLoad">场景加载到90%自动挂起</param>
         /// <param name="priority">优先级</param>
         /// <returns></returns>
-        public UniTask LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
-            Action<SceneOperationHandle> action = null, bool suspendLoad = false, int priority = 100);
-
         public UniTask<SceneOperationHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
             bool suspendLoad = false, int priority = 100);
 

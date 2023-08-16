@@ -6,17 +6,17 @@ namespace ACFrameworkCore
     public class UIFadePanel : UIBase
     {
         private CanvasGroup fadeCanvasGroup;
-        private bool isFade;
+        private bool isFade = true;
 
         public override void UIAwake()
         {
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
             fadeCanvasGroup = panelGameObject.GetComponent<CanvasGroup>();
-            ConfigEvent.UIFade.AddEventListener<float>(vaule => { Fade(vaule).Forget(); });
+            ConfigEvent.UIFade.AddEventListenerUniTask<float>(Fade);
         }
 
-        /// <summary>loading画面的显示与隐藏 淡入淡出场景</summary>
+        /// <summary>loading画面淡入淡出场景</summary>
         /// <param name="targetAlpha">1是黑 0是透明</param>
         /// <returns></returns>
         public async UniTask Fade(float targetAlpha)

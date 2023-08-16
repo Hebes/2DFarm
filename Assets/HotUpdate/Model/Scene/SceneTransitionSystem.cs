@@ -26,7 +26,8 @@ namespace ACFrameworkCore
         {
             Instance = this;
             currentceneName = ConfigScenes.FieldScenes;
-            ConfigEvent.SceneTransition.AddEventListener<string, Vector3>((arg2, pos) => { SceneTransition(arg2, pos).Forget(); });
+            ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
+            //ConfigEvent.SceneTransition.AddEventListener<string, Vector3>((arg2, pos) => { SceneTransition(arg2, pos).Forget(); });
             CreatScene().Forget();
         }
 
@@ -39,25 +40,64 @@ namespace ACFrameworkCore
         }
 
         //切换场景
-        private async UniTaskVoid SceneTransition(string targetScene, Vector3 targetPosition)
+        private async UniTask SceneTransition(string targetScene, Vector3 targetPosition)
         {
             if (!isFade)//如果是切换场景的情况下
             {
                 isFade = true;
                 ConfigEvent.SceneBeforeUnload.EventTrigger();
-                await ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(1);
+                await ConfigEvent.UIFade.EventTriggerUniTask((float)1);
                 SceneOperationHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
-                sceneOperationHandle.ActivateScene();//设置场景激活
-                currentceneName.UnloadAsync();//卸载原来的场景
-                currentceneName = targetScene;//变换当前场景的名称
+                sceneOperationHandle.ActivateScene();                           //设置场景激活
+                currentceneName.UnloadAsync();                                  //卸载原来的场景
+                currentceneName = targetScene;                                  //变换当前场景的名称
                 ConfigEvent.PlayerMoveToPosition.EventTrigger(targetPosition);  //移动人物坐标
-                ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
                 ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
                 await UniTask.DelayFrame(40);
-                await ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(0);
+                ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
+                await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
                 isFade = false;
             }
         }
+
+        /// <summary>
+        /// 黑幕淡入
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="curtain"></param>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        //public static IEnumerator Fadein(this UIMateLoadingComponent self, GameObject curtain, float speed)
+        //{
+        //    curtain.SetActive(true);
+        //    Image image;
+        //    image = curtain.GetComponent<Image>();
+        //    while (image.color.a >= 0.1f)
+        //    {
+        //        image.color = Color.Lerp(image.color, Color.clear, speed * Time.deltaTime);
+        //        yield return null;
+        //    }
+        //    curtain.SetActive(false);
+        //}
+
+        /// <summary>
+        /// 黑幕淡出
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="curtain"></param>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        //public static IEnumerator Fadeout(this UIMateLoadingComponent self, float speed)
+        //{
+        //    self.Curtain.SetActive(true);
+        //    Image image;
+        //    image = self.Curtain.GetComponent<Image>();
+        //    while (image.color.a <= 0.999f)
+        //    {
+        //        image.color = Color.Lerp(image.color, Color.black, speed * Time.deltaTime);
+        //        yield return null;
+        //    }
+        //}
     }
 }

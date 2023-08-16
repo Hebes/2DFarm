@@ -11571,7 +11571,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1875110897}
   m_Layer: 0
-  m_Name: ItemParent
+  m_Name: 02HomeItemParent
   m_TagString: ItemParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,8 +16,9 @@ namespace ACFrameworkCore
     [Serializable]
     public class SceneItem
     {
-        public int itemID;
-        public SerializableVector3 position;
+        public int itemID;                  //物品ID
+        public int ItemAmount;              //物品数量
+        public SerializableVector3 position;//物品位置
     }
 
     /// <summary>

@@ -70,7 +70,8 @@ namespace ACFrameworkCore
             {
                 //清空所有高亮
                 isSelected = false;
-                slotHightLight.gameObject.SetActive(false);
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
+                ConfigEvent.CursorItemSelect.EventTrigger(itemDatails, isSelected);
             }
             itemDatails = null;
             slotImage.enabled = false;

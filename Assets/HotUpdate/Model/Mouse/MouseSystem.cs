@@ -18,8 +18,14 @@ namespace ACFrameworkCore
         Cilck = 1,//点击
     }
 
-    public class MouseSystem
+    public class MouseSystem : ICore
     {
-
+        public static MouseSystem Instance;
+        public void ICroeInit()
+        {
+            Instance = this;
+            //打开UI界面
+            ConfigUIPanel.UICursorPanel.ShwoUIPanel<UICursorPanel>();
+        }
     }
 }

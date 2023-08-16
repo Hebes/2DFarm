@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -218,11 +219,6 @@ namespace ACFrameworkCore
             //TODO 后面继续写ItemDicList交换和上面差不多
             return ChangeItemDicArrayIsOk;
         }
-        //public void UpdateItemInfos()
-        //{
-
-        //}//更新所有的物品信息
-
         //高亮格子添加  TODO 需要编写代码
         public void AddSlotUIList(string key, List<SlotUI> slotUIs)
         {
@@ -231,7 +227,7 @@ namespace ACFrameworkCore
             else
                 slotUIDic.Add(key, slotUIs);
         }
-        public void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
+        private void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
         {
             //关闭所有的
             foreach (KeyValuePair<string, List<SlotUI>> slotUI in slotUIDic)
@@ -257,7 +253,7 @@ namespace ACFrameworkCore
                 }
             }
         }//显示高亮
-
+        
         //获取物品信息
         public ItemDetails GetItem(int id)
         {

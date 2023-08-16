@@ -37,7 +37,7 @@ public class InitGame
             case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
             case EInitGameProcess.FSMInitData: await FSMInitData(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
-            case EInitGameProcess.FSMEnterGame: FSMEnterGame().Forget(); break;
+            case EInitGameProcess.FSMEnterGame: await FSMEnterGame(); break;
         }
     }
 
@@ -96,6 +96,7 @@ public class InitGame
             new InventoryWorldItemSystem(),
             new TimeSystem(),
             new SceneTransitionSystem(),
+            new MouseSystem(),
         };
         foreach (var init in _initHs)
         {
@@ -111,9 +112,9 @@ public class InitGame
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
         ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
         ConfigUIPanel.UIGameTimePanel.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
-        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                           //显示时间面板
+        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                                   //显示时间面板
 
-        ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(0).Forget();
+        ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();                                    //显隐界面
         ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();                                        //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();                                          //关闭玩家背包面板
 
@@ -129,17 +130,22 @@ public class InitGame
 
         GameObject go1 = GameObject.Instantiate(gameObject);
         Item item = go1.GetComponent<Item>();
-        item.itemID = 1007;
-        item.itemAmount = 3;
+        item.Init(1007,3).Forget();
 
         GameObject go2 = GameObject.Instantiate(gameObject);
         Item item2 = go2.GetComponent<Item>();
-        item2.itemID = 1008;
-        item2.itemAmount = 6;
+        item2.Init(1008, 6).Forget();
 
         GameObject go3 = GameObject.Instantiate(gameObject);
         Item item3 = go3.GetComponent<Item>();
-        item3.itemID = 1015;
-        item3.itemAmount = 119;
+        item3.Init(1015, 119).Forget();
+
+        GameObject go4 = GameObject.Instantiate(gameObject);
+        Item item4 = go4.GetComponent<Item>();
+        item4.Init(1001, 1).Forget();
+
+        GameObject go5 = GameObject.Instantiate(gameObject);
+        Item item5 = go5.GetComponent<Item>();
+        item5.Init(1004, 1).Forget();
     }
 }

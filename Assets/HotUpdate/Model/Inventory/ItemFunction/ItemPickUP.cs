@@ -21,10 +21,7 @@ namespace ACFrameworkCore
             if (item != null)
             {
                 if (item.itemDatails.canPickedup)
-                {
-                    //拾取物品到背包
-                    InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar,item, true);
-                }
+                    InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar,item, true);//拾取物品到背包
             }
         }
     }

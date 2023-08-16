@@ -36,24 +36,6 @@ namespace ACFrameworkCore
             await currentceneName.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
             currentceneName.SetActivateScene();//设置为激活场景
             ConfigEvent.SwichConfinerShape.EventTrigger();//切换场景边界
-
-            //测试创建拾取的物体
-            GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
-
-            GameObject go1 = GameObject.Instantiate(gameObject);
-            Item item = go1.GetComponent<Item>();
-            item.itemID = 1007;
-            item.itemAmount = 3;
-
-            GameObject go2 = GameObject.Instantiate(gameObject);
-            Item item2 = go2.GetComponent<Item>();
-            item2.itemID = 1008;
-            item2.itemAmount = 6;
-
-            GameObject go3 = GameObject.Instantiate(gameObject);
-            Item item3 = go3.GetComponent<Item>();
-            item3.itemID = 1015;
-            item3.itemAmount = 119;
         }
 
         //切换场景
@@ -61,42 +43,21 @@ namespace ACFrameworkCore
         {
             if (!isFade)//如果是切换场景的情况下
             {
+                isFade = true;
                 ConfigEvent.SceneBeforeUnload.EventTrigger();
-                await Fade(1);
-                //ACDebug.Log("当前的激活场景是:" + SceneManager.GetActiveScene().name);
-                //ACDebug.Log("当前的激活场景位置是:" + SceneManager.GetActiveScene().buildIndex);
-                //Scene newScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
-                //SceneManager.SetActiveScene(newScene);
-                //ACDebug.Log("当前获取的激活场景是:" + newScene.name);
+                await ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(1);
                 SceneOperationHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
-                //await UniTask.Yield();
                 sceneOperationHandle.ActivateScene();//设置场景激活
-                //await UniTask.Yield();
                 currentceneName.UnloadAsync();//卸载原来的场景
                 currentceneName = targetScene;//变换当前场景的名称
-                
                 ConfigEvent.PlayerMoveToPosition.EventTrigger(targetPosition);  //移动人物坐标
-                ConfigEvent.SceneBeforeUnload.EventTrigger();
+                ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
                 ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
-                await Fade(0);
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
+                await UniTask.DelayFrame(40);
+                await ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(0);
+                isFade = false;
             }
-        }
-        /// <summary>loading画面的显示与隐藏 淡入淡出场景</summary>
-        /// <param name="targetAlpha">1是黑 0是透明</param>
-        /// <returns></returns>
-        private async UniTask Fade(float targetAlpha)
-        {
-            await UniTask.Yield();
-            //isFade = true;
-            //fadeCanvasGroup.blocksRaycasts = true;
-            //float speed = Mathf.Abs(fadeCanvasGroup.alpha - targetAlpha) / Settings.fadeDuretion;
-            //while (!Mathf.Approximately(fadeCanvasGroup.alpha, targetAlpha))//Approximately 判断是否大概相似
-            //{
-            //    fadeCanvasGroup.alpha = Mathf.MoveTowards(fadeCanvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
-            //    await UniTask.Yield();
-            //}
-            //fadeCanvasGroup.blocksRaycasts = false;
-            //isFade = false;
         }
     }
 }

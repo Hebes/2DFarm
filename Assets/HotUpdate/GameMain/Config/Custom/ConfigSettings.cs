@@ -23,6 +23,6 @@ namespace ACFrameworkCore
         public const int hourHold = 23;                     //一天多少小时
         public const int dayHold = 30;                      //一个月有多少时间
         public const int seasonHold = 3;                    //季节
-        public const float fadeDuretion = 1.5f;             //Loading画面的结束需要的时间
+        public const float fadeDuretion = 1f;             //Loading画面的结束需要的时间
     }
 }

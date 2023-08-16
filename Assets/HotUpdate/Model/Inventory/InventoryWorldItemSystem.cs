@@ -20,6 +20,7 @@ namespace ACFrameworkCore
         public static InventoryWorldItemSystem Instance;
         public Item bounceItemPrefab;//抛投的物品模板
         private Dictionary<string, List<SceneItem>> sceneItemDict;//世界场景的所有物体
+        private Transform playerTransform;//玩家
         private Transform itemParent;//统一保存的父物体
 
         public Item itemPrefab;
@@ -28,13 +29,11 @@ namespace ACFrameworkCore
         {
             Instance = this;
             sceneItemDict = new Dictionary<string, List<SceneItem>>();
-
             //初始化监听信息
             ConfigEvent.UIItemCreatOnWorld.AddEventListener<SlotUI, Vector3>(OnInstantiateItemScen);
-            //ConfigEvent.DropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
-            //ConfigEvent.BeforeSceneUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-            //ConfigEvent.BeforeSceneUnload.AddEventListener(OnAfterSceneLoadedEvent);
-
+            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
+            ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
             LoadInit().Forget();
         }
 
@@ -42,8 +41,6 @@ namespace ACFrameworkCore
         {
             GameObject itemPrefabGo = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
             itemPrefab = itemPrefabGo.GetComponent<Item>();
-            itemParent = new GameObject("ItemParent").transform;
-            GameObject.DontDestroyOnLoad(itemParent);
         }
 
         /// <summary>
@@ -51,13 +48,24 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="pos"></param>
-        private void OnDropItemEvent(SlotUI slotUI, Vector3 mousePos)
+        private void OnDropItemEvent(int itemID, Vector3 mousePos)
         {
-            //Item item = Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
-            //item.itemID = ID;
-            ////抛出方向
-            //var dir = (mousePos - playerTransform.position).normalized;
-            //item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
+            Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
+            item.itemID = itemID;
+            //抛出方向
+            var dir = (mousePos - playerTransform.position).normalized;
+            item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
+
+            //if (slotUI.itemDatails.canDropped == false)
+            //{
+            //    ACDebug.Log($"{slotUI.itemDatails.name}是不能被扔掉的");
+            //    return;
+            //}
+            ////屏幕坐标转成世界坐标 鼠标对应的世界坐标
+            //var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
+            //ConfigEvent.UIItemCreatOnWorld.EventTrigger(slotUI, pos);//id 数量,坐标//创建世界物体
+            //InventoryAllSystem.Instance.RemoveItemDicArray(slotUI.configInventoryKey, slotUI.itemDatails.itemID, slotUI.itemAmount);//删除原先的
+            //slotUI.UpdateEmptySlot();
         }
 
         /// <summary>
@@ -65,7 +73,8 @@ namespace ACFrameworkCore
         /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
-            itemParent = GameObject.FindGameObjectWithTag("ItemParent").transform;
+            playerTransform = GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
+            itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
             RecreateAllItems();
         }
 

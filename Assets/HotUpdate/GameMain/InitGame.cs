@@ -1,6 +1,7 @@
 ﻿using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 游戏流程
@@ -36,7 +37,7 @@ public class InitGame
             case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
             case EInitGameProcess.FSMInitData: await FSMInitData(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
-            case EInitGameProcess.FSMEnterGame: FSMEnterGame(); break;
+            case EInitGameProcess.FSMEnterGame: FSMEnterGame().Forget(); break;
         }
     }
 
@@ -110,14 +111,35 @@ public class InitGame
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
         ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
         ConfigUIPanel.UIGameTimePanel.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
+        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                           //显示时间面板
 
+        ConfigUIPanel.UIFadePanel.GetUIPanl<UIFadePanel>().Fade(0).Forget();
         ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();                                        //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();                                          //关闭玩家背包面板
 
         SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
     }
-    private static void FSMEnterGame()
+    private static async UniTask FSMEnterGame()
     {
+        await UniTask.DelayFrame(40);
         ACDebug.Log("开始游戏");
+        await UniTask.Yield();
+        //测试创建拾取的物体
+        GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+
+        GameObject go1 = GameObject.Instantiate(gameObject);
+        Item item = go1.GetComponent<Item>();
+        item.itemID = 1007;
+        item.itemAmount = 3;
+
+        GameObject go2 = GameObject.Instantiate(gameObject);
+        Item item2 = go2.GetComponent<Item>();
+        item2.itemID = 1008;
+        item2.itemAmount = 6;
+
+        GameObject go3 = GameObject.Instantiate(gameObject);
+        Item item3 = go3.GetComponent<Item>();
+        item3.itemID = 1015;
+        item3.itemAmount = 119;
     }
 }

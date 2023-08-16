@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-using System.Management.Instrumentation;
 
 /*--------脚本描述-----------
 				
@@ -64,6 +64,12 @@ namespace ACFrameworkCore
             if (!eventDic.ContainsKey(name)) return;
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T>).Trigger(info);
+        }
+        public async UniTask EventTriggerUniTask<T>(string name, T info)
+        {
+           // if (!eventDic.ContainsKey(name)) return;
+           // //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
+           //await (eventDic[name] as EventInfo<T>).Trigger(info);
         }
 
         //带2个参数的

@@ -62,6 +62,11 @@ namespace ACFrameworkCore
             EventManager.Instance.EventTrigger<T>(eventName, info);
         }
 
+        //public static UniTask EventTrigger<T>(this string eventName, T info)
+        //{
+        //   // EventManager.Instance.EventTrigger<T>(eventName, info);
+        //}
+
         //2个参数
         public static void AddEventListener<T, K>(this string name, Action<T, K> action)
         {

@@ -45,8 +45,9 @@ public class Init : MonoBehaviour
 {
 #if UNITY_ANDROID
     private readonly string packageName = "Android";                                            //包名
-#endif
+#elif UNITY_STANDALONE_WIN
     private readonly string packageName = "PC";                                                 //包名
+#endif
 
     //Yooasset相关
     public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;                                   //资源系统运行模式

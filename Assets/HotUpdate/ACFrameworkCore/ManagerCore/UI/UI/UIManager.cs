@@ -41,6 +41,7 @@ namespace ACFrameworkCore
         private Transform Fixed = null;                         //固定显示的节点
         private Transform PopUp = null;                         //弹出节点
         private Transform Mobile = null;                         //独立的窗口可移动的
+        private Transform Fade = null;                         //渐变过度窗体
 
         //初始化
         private void InitRoot()
@@ -55,6 +56,7 @@ namespace ACFrameworkCore
             Fixed = GetUITypeTransform(EUIType.Fixed);
             PopUp = GetUITypeTransform(EUIType.PopUp);
             Mobile = GetUITypeTransform(EUIType.Mobile);
+            Fade = GetUITypeTransform(EUIType.Fade);
             UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
             MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
 
@@ -242,6 +244,7 @@ namespace ACFrameworkCore
                 case EUIType.Fixed: goCloneUIPrefabs.transform.SetParent(Fixed, false); break;//固定窗体节点
                 case EUIType.Mobile: goCloneUIPrefabs.transform.SetParent(Mobile, false); break;//独立的窗口可移动的
                 case EUIType.PopUp: goCloneUIPrefabs.transform.SetParent(PopUp, false); break;//弹出窗体节点
+                case EUIType.Fade: goCloneUIPrefabs.transform.SetParent(Fade, false); break;//渐变过度窗体
             }
             //设置隐藏
             goCloneUIPrefabs.SetActive(false);

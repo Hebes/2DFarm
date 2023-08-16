@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
+﻿using System;
 
 namespace ACFrameworkCore
 {
@@ -16,6 +15,7 @@ namespace ACFrameworkCore
         }
     }
 
+
     public class EventInfo<T> : IEventInfo
     {
         public event Action<T> actions;
@@ -27,10 +27,6 @@ namespace ACFrameworkCore
         {
             actions?.Invoke(obj);
         }
-        //public async UniTask TriggerUniTask(T obj)
-        //{
-        //  await actions?.Invoke(obj);
-        //}
     }
 
     public class EventInfo<T, K> : IEventInfo

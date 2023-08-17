@@ -37,6 +37,7 @@ namespace ACFrameworkCore
             await currentceneName.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
             currentceneName.SetActivateScene();//设置为激活场景
             ConfigEvent.SwichConfinerShape.EventTrigger();//切换场景边界
+            ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
         }
 
         //切换场景

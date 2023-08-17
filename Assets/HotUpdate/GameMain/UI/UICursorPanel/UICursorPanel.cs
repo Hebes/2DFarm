@@ -64,7 +64,7 @@ namespace ACFrameworkCore
             base.UIUpdate();
             //if (cursorCanvas == null) return;
             cursorImage.transform.position = Input.mousePosition;
-
+            ACDebug.Log($"当前bool:{!InteractwithUI()}{cursorEnable}");
             if (!InteractwithUI() && cursorEnable)
             {
                 SetCursorImage(currentSprite);
@@ -136,7 +136,7 @@ namespace ACFrameworkCore
 
         }
 
-        private void OnAfterSceneLoadedEvent()
+        private void OnAfterSceneLoadedEvent() 
         {
             currentGrid = Object.FindObjectOfType<Grid>();
             cursorEnable = true;
@@ -182,13 +182,13 @@ namespace ACFrameworkCore
             Debug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
 
             //判断在使用范围内
-            var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
-            if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
-                || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
-            {
-                SetCursorInValid();
-                return;
-            }
+            //var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+            //if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
+            //    || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
+            //{
+            //    SetCursorInValid();
+            //    return;
+            //}
 
             ////能否扔东西
             //TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);

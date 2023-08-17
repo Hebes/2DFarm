@@ -12,11 +12,15 @@
 
 namespace ACFrameworkCore
 {
-    /// <summary>
-    /// 网格的类型
-    /// </summary>
     public enum EGridType
     {
-        Diggable, DropItem, PlaceFurniture, NPCObstacle,
+        /// <summary> 可挖掘的 </summary>
+        Diggable,
+        /// <summary> 可丢弃的 </summary>
+        DropItem,
+        /// <summary> 放置家具  </summary>
+        PlaceFurniture,
+        /// <summary> Npc障碍物 </summary>
+        NPCObstacle,
     }
 }

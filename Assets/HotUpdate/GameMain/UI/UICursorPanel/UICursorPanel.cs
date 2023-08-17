@@ -22,20 +22,8 @@ namespace ACFrameworkCore
         private bool cursorEnable;              //场景加载之前鼠标不可用
         private bool cursorPositionValid;       //鼠标是否可点按
 
-        private Camera mainCamera
-        {
-            get
-            {
-                return Camera.main;
-            }
-        }
-        private Transform playerTransform
-        {
-            get
-            {
-                return Object.FindObjectOfType<Player>().transform;
-            }
-        }
+        private Camera mainCamera => Camera.main;                                           //主摄像机
+        private Transform playerTransform => Object.FindObjectOfType<Player>().transform;   //玩家
 
 
         public override void UIAwake()
@@ -81,10 +69,12 @@ namespace ACFrameworkCore
             {
                 SetCursorImage(currentSprite);
                 CheckCursorValid();//检查鼠标是否有效
-                CheckPlayerInput();//检查玩家输入
+                //CheckPlayerInput();//检查玩家输入
             }
             else
+            {
                 SetCursorImage(normal);
+            }
         }
 
         //检查玩家输入
@@ -149,6 +139,7 @@ namespace ACFrameworkCore
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = Object.FindObjectOfType<Grid>();
+            cursorEnable = true;
         }
         private void OnBeforeSceneUnloadEvent()
         {
@@ -186,21 +177,21 @@ namespace ACFrameworkCore
         /// </summary>
         private void CheckCursorValid()
         {
-            //mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
-            //mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
-            //Debug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
+            mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
+            mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
+            Debug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
 
-            ////判断在使用范围内
-            //var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
-            //if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
-            //    || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
-            //{
-            //    SetCursorInValid();
-            //    return;
-            //}
+            //判断在使用范围内
+            var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+            if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
+                || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
+            {
+                SetCursorInValid();
+                return;
+            }
 
-            //能否扔东西
-            //TileDetails currentTile = GridMapManager.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
+            ////能否扔东西
+            //TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
             //if (currentTile != null)
             //{
             //    switch ((EItemType)currentItem.itemType)

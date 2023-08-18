@@ -37,9 +37,8 @@ namespace ACFrameworkCore
             {
                 sceneSceneOperationHandleDic.Add(SceneName, handle);
                 package.UnloadUnusedAssets();
-                return handle;
+                ACDebug.Log($"加载场景成功:{handle.SceneObject.name}");
             }
-
             return handle;
         }
 

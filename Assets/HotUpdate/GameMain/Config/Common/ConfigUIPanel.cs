@@ -12,6 +12,7 @@ namespace ACFrameworkCore
         public const string SettingPanel = "Setting";
         public const string StartPanel = "Start";
         public const string Start1Panel = "Start1";
+        public const string UICursorPanel = "UICursor";
         public const string UIDragPanelPanel = "UIDragPanel";
         public const string UIFadePanel = "UIFade";
         public const string UIGameTimePanel = "UIGameTime";

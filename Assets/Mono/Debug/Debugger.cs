@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ACFrameworkCore
@@ -165,6 +166,7 @@ namespace ACFrameworkCore
             #region console
             if (_debugType == DebugType.Console)
             {
+                int contentHeight = 0;//滚动视图内容的总高度
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("清除"))
                 {
@@ -189,8 +191,8 @@ namespace ACFrameworkCore
 
                 GUIStyle myStyle = new GUIStyle();
                 myStyle.fontSize = (Screen.height / 360) * 10;
-
-                _scrollLogView = GUILayout.BeginScrollView(_scrollLogView, "Box", GUILayout.Height((Screen.height / 360) * 165));
+                
+                _scrollLogView = GUILayout.BeginScrollView(_scrollLogView, "Box", GUILayout.Height((Screen.height / 360) * 100));
                 for (int i = 0; i < _logInformations.Count; i++)
                 {
                     bool show = false;
@@ -224,6 +226,7 @@ namespace ACFrameworkCore
                         {
                             _currentLogIndex = i;
                         }
+                        contentHeight += (Screen.height / 360) * 10;
                         if (GUILayout.Toggle(_currentLogIndex == i, ""))
                         {
                             _currentLogIndex = i;
@@ -240,7 +243,23 @@ namespace ACFrameworkCore
                 }
                 GUILayout.EndScrollView();
 
-                _scrollCurrentLogView = GUILayout.BeginScrollView(_scrollCurrentLogView, "Box", GUILayout.Height((Screen.height / 360) * 100));
+                if (GUILayout.Button("滚动到底部"))
+                {
+                    // 检查是否需要将滚动视图设置到底部
+                    if (Event.current.type == EventType.Used)
+                    {
+                        var scrollViewHeight = GUILayoutUtility.GetLastRect().height;
+                        //int contentHeight = (Screen.height / 360) * 100;// 计算滚动视图内容的总高度，根据实际情况进行计算
+
+                        if (contentHeight > scrollViewHeight)
+                        {
+                            _scrollLogView.y = contentHeight - scrollViewHeight;
+                        }
+                    }
+                }
+
+
+                _scrollCurrentLogView = GUILayout.BeginScrollView(_scrollCurrentLogView, "Box", GUILayout.Height((Screen.height / 360) * 200));
                 if (_currentLogIndex != -1)
                 {
                     if (GUILayout.Button("复制"))

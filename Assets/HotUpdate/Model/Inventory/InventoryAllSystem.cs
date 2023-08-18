@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -226,7 +227,7 @@ namespace ACFrameworkCore
             else
                 slotUIDic.Add(key, slotUIs);
         }
-        public void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
+        private void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
         {
             //关闭所有的
             foreach (KeyValuePair<string, List<SlotUI>> slotUI in slotUIDic)
@@ -252,7 +253,7 @@ namespace ACFrameworkCore
                 }
             }
         }//显示高亮
-
+        
         //获取物品信息
         public ItemDetails GetItem(int id)
         {

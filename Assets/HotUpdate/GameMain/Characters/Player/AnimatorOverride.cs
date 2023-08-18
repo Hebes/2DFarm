@@ -52,7 +52,7 @@ namespace ACFrameworkCore
             SwitchAnimator(EPartType.None);
         }
 
-        /// <summary>物品选中类型，播放对应动画</summary>
+        /// <summary>物品选中类型播放对应动画</summary>
         /// <param name="itemDatails"></param><param name="idSelect">是否选中</param>
         private void OnItemSelectEvent(ItemDetails itemDatails, bool idSelect)
         {
@@ -74,7 +74,7 @@ namespace ACFrameworkCore
                 case EItemType.ReapableSceney:
                 default: currentType = EPartType.None; break;
             }
-            //idSelect按钮是都被点选中
+            //idSelect按钮是被点选中
             if (idSelect == false)
             {
                 currentType = EPartType.None;//如果没有选中物品的话，就切换普通动画状态
@@ -86,6 +86,10 @@ namespace ACFrameworkCore
                 {
                     holdItem.enabled = true;
                     holdItem.sprite = ResourceExtension.Load<Sprite>(itemDatails.itemOnWorldSprite);
+                }
+                else
+                {
+                    holdItem.enabled = false;
                 }
             }
 

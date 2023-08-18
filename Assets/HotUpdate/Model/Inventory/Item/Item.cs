@@ -17,7 +17,7 @@ namespace ACFrameworkCore
     public class Item : MonoBehaviour
     {
         public int itemID;
-        public int itemAmount;
+        public int itemAmount;//默认数量是2
         public ItemDetails itemDatails;
 
         private SpriteRenderer spriteRenderer;
@@ -32,23 +32,23 @@ namespace ACFrameworkCore
         private void Start()
         {
             if (itemID != 0)
-                Init(itemID).Forget();
+                Init(itemID, itemAmount).Forget();
         }
 
         /// <summary>
         /// 根据ID生成物品
         /// </summary>
         /// <param name="ID"></param>
-        public async UniTask Init(int ID)
+        public async UniTask Init(int ID,int itemAmount)
         {
-            itemID = ID;
-            itemDatails = InventoryAllSystem.Instance.GetItem(ID);
+            this.itemID = ID;
+            this.itemDatails = InventoryAllSystem.Instance.GetItem(ID);
+            this.itemAmount = itemAmount;
             if (itemDatails != null)
             {
                 //加载图片
                 string icon = !string.IsNullOrEmpty(itemDatails.itemOnWorldSprite) ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
                 spriteRenderer.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(icon);
-                //spriteRenderer.sprite = itemDatails.itemOnWorldSprite != null ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);
                 coll.size = newSize;//设置尺寸

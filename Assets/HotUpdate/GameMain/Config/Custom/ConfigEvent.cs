@@ -33,5 +33,11 @@
 
         //场景过度相关
         public const string UIFade = "场景过度";
+
+        //鼠标相关
+        public const string CursorItemSelect = "鼠标选择样式";
+        public const string CursorClicked = "鼠标点击";
+        public const string ExecuteActionAfterAnimation = "执行操作后的动画播放";
+
     }
 }

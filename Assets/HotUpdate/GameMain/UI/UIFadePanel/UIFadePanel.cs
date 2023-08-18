@@ -6,7 +6,7 @@ namespace ACFrameworkCore
     public class UIFadePanel : UIBase
     {
         private CanvasGroup fadeCanvasGroup;
-        private bool isFade = true;
+        private bool isFade;
 
         public override void UIAwake()
         {

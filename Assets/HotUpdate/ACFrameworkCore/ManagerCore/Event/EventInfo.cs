@@ -16,6 +16,7 @@ namespace ACFrameworkCore
             actions?.Invoke();
         }
     }
+
     public class EventInfo<T> : IEventInfo
     {
         public event Action<T> actions;

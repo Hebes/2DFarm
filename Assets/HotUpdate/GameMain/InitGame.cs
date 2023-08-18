@@ -23,11 +23,11 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
+
     public static void Init()
     {
         SwitchInitGameProcess(EInitGameProcess.FSMInitBaseCore).Forget();
     }
-
     private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)

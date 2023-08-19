@@ -13,9 +13,10 @@ namespace ACFrameworkCore
 {
     public class RecordedDataLoadSystem : ICore
     {
+        public static RecordedDataLoadSystem Instance;
         public void ICroeInit()
         {
-
+            Instance = this;
         }
     }
 }

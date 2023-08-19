@@ -73,7 +73,6 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.AddEventListener<T, K, V>(name, action);
         }
-
         public static void RemoveEventListener<T, K, V>(this string name, Action<T, K, V> action)
         {
             EventManager.Instance.RemoveEventListener<T, K, V>(name, action);
@@ -112,6 +111,7 @@ namespace ACFrameworkCore
         {
             await EventManager.Instance.EventTriggerUniTask<T, K>(eventName, t, k);
         }
+
         //清理
         public static void Clear()
         {

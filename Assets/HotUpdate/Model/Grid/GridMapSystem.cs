@@ -18,8 +18,9 @@ using UnityEngine.Tilemaps;
 
 namespace ACFrameworkCore
 {
-    public class GridMapSystem : MonoSingleton<GridMapSystem>
+    public class GridMapSystem : MonoBehaviour
     {
+        public static GridMapSystem Instance;
         public RuleTile digTile;
         public RuleTile waterTile;
 
@@ -28,21 +29,13 @@ namespace ACFrameworkCore
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();//场景名字+坐标和对应的瓦片信息
         private Grid currentGrid;
 
-        private Tilemap digTilemap
-        {
-            get
-            {
-                return GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
-            }
-        }
-        private Tilemap waterTilemap
-        {
-            get
-            {
-                return GameObject.FindWithTag("Water").GetComponent<Tilemap>();
-            }
-        }
+        private Tilemap digTilemap => GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
+        private Tilemap waterTilemap => GameObject.FindWithTag("Water").GetComponent<Tilemap>();
 
+        private void Awake()
+        {
+            Instance = this;
+        }
         private void Start()
         {
             foreach (var mapData in mapDataList)
@@ -58,8 +51,6 @@ namespace ACFrameworkCore
             ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetails>(OnExecuteActionAfterAnimation);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
-
-       
 
         /// <summary>
         /// 根据地图信息生成字典
@@ -96,15 +87,15 @@ namespace ACFrameworkCore
                     tileDetailsDict.Add(key, tileDetails);
             }
         }
-
-
         /// <summary>
         /// 根据key返回瓦片信息
         /// </summary>
         /// <param name="key">x+y+地图名字</param>
         /// <returns></returns>
-        private TileDetails GetTileDetails(string key) => tileDetailsDict.ContainsKey(key) ? tileDetailsDict[key] : null;
-
+        private TileDetails GetTileDetails(string key)
+        {
+            return tileDetailsDict.ContainsKey(key) ? tileDetailsDict[key] : null;
+        }
         /// <summary>
         /// 根据鼠标网格坐标返回瓦片信息
         /// </summary>
@@ -115,7 +106,6 @@ namespace ACFrameworkCore
             string key = mouseGridPos.x + "x" + mouseGridPos.y + "y" + SceneManager.GetActiveScene().name;
             return GetTileDetails(key);
         }
-
         /// <summary>
         /// 执行实际工具或物品功能
         /// </summary>
@@ -132,7 +122,7 @@ namespace ACFrameworkCore
                 switch ((EItemType)itemDetails.itemType)
                 {
                     case EItemType.Commdity:
-                       // EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos);
+                        // EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos);
                         break;
                     case EItemType.HoeTool:
                         SetDigGround(currentTile);
@@ -149,12 +139,10 @@ namespace ACFrameworkCore
                 }
             }
         }
-
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = Object.FindObjectOfType<Grid>();
         }
-
         /// <summary>
         /// 显示挖坑瓦片
         /// </summary>

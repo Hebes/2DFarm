@@ -23,7 +23,7 @@ namespace ACFrameworkCore
             //主动日志
             ACDebug.InitSettings(new LogConfig()
             {
-                enableSave = true,
+                enableSave = false,
                 loggerType = LoggerType.Unity,
 #if !UNITY_EDITOR
                 //savePath = $"{Application.persistentDataPath}/LogOut/ActiveLog/",

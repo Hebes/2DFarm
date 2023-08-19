@@ -58,18 +58,17 @@ namespace ACFrameworkCore
             ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
-
         public override void UIUpdate()
         {
             base.UIUpdate();
             //if (cursorCanvas == null) return;
             cursorImage.transform.position = Input.mousePosition;
-            ACDebug.Log($"当前bool:{!InteractwithUI()}{cursorEnable}");
+            //ACDebug.Log($"当前bool:{!InteractwithUI()}{cursorEnable}");
             if (!InteractwithUI() && cursorEnable)
             {
                 SetCursorImage(currentSprite);
                 CheckCursorValid();//检查鼠标是否有效
-                //CheckPlayerInput();//检查玩家输入
+                CheckPlayerInput();//检查玩家输入
             }
             else
             {
@@ -77,19 +76,15 @@ namespace ACFrameworkCore
             }
         }
 
-        //检查玩家输入
+
+        /// <summary> 检查玩家输入 </summary>
         private void CheckPlayerInput()
         {
             //执行方法
             if (Input.GetMouseButtonDown(0) && cursorPositionValid)
                 ConfigEvent.CursorClicked.EventTrigger(mouseWorldPos, currentItem);
         }
-
-        /// <summary>
-        /// 设置鼠标对应的图片
-        /// </summary>
-        /// <param name="itemDatails"></param>
-        /// <param name="isSelected"></param>
+        /// <summary> 设置鼠标对应的图片 </summary>
         private void OnItemSelectEvent(ItemDetails itemDatails, bool isSelected)
         {
             if (!isSelected)//如果不是选中的话
@@ -135,82 +130,76 @@ namespace ACFrameworkCore
             }
 
         }
-
-        private void OnAfterSceneLoadedEvent() 
-        {
-            currentGrid = Object.FindObjectOfType<Grid>();
-            cursorEnable = true;
-        }
-        private void OnBeforeSceneUnloadEvent()
-        {
-            cursorEnable = false;
-        }
-
-        private void SetCursorImage(Sprite sprite)
-        {
-            cursorImage.sprite = sprite;
-            cursorImage.color = new Color(1, 1, 1, 1);
-        }//设置鼠标图片
-        private void SetCursorValid()
-        {
-            cursorPositionValid = true;
-            cursorImage.color = new Color(1, 1, 1, 1);
-        }//设置鼠标可用
-        private void SetCursorInValid()
-        {
-            cursorPositionValid = false;
-            cursorImage.color = new Color(1, 0, 0, 0.4f);
-        }//设置鼠标不可用
-
-
-        /// <summary>
-        /// 是否与UI互动
-        /// </summary>
-        /// <returns></returns>
+        /// <summary> 是否与UI互动 </summary>
         private bool InteractwithUI()
         {
             return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         }
-
-        /// <summary>
-        /// 检查鼠标是否有效
-        /// </summary>
+        /// <summary> 检查鼠标是否有效 </summary>
         private void CheckCursorValid()
         {
             mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
             mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
-            Debug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
+            ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
 
             //判断在使用范围内
-            //var playerGridPos = currentGrid.WorldToCell(playerTransform.position);
-            //if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
-            //    || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
-            //{
-            //    SetCursorInValid();
-            //    return;
-            //}
+            Vector3Int playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+            if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
+                || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
+            {
+                SetCursorInValid();
+                return;
+            }
 
-            ////能否扔东西
-            //TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
-            //if (currentTile != null)
-            //{
-            //    switch ((EItemType)currentItem.itemType)
-            //    {
-            //        case EItemType.Commdity://商品的话
-            //            if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid(); else SetCursorInValid();
-            //            break;
-            //        case EItemType.HoeTool:
-            //            if (currentTile.canDig) SetCursorValid(); else SetCursorInValid();
-            //            break;
-            //        case EItemType.WaterTool:
-            //            if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
-            //            break;
-            //    }
-            //}
-            //else
-            //{
-            //    SetCursorInValid();
-            //}
+            //能否扔东西
+            TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
+            if (currentTile != null)
+            {
+                switch ((EItemType)currentItem.itemType)
+                {
+                    case EItemType.Commdity://商品的话
+                        if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid(); else SetCursorInValid();
+                        break;
+                    case EItemType.HoeTool:
+                        if (currentTile.canDig) SetCursorValid(); else SetCursorInValid();
+                        break;
+                    case EItemType.WaterTool:
+                        if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
+                        break;
+                }
+            }
+            else
+            {
+                SetCursorInValid();
+            }
+        }
+        /// <summary> 场景加载之后需要做的事 </summary>
+        private void OnAfterSceneLoadedEvent() 
+        {
+            currentGrid = Object.FindObjectOfType<Grid>();
+        }
+        /// <summary> 卸载场景前需要做的事情 </summary>
+        private void OnBeforeSceneUnloadEvent()
+        {
+            cursorEnable = false;
+        }
+        /// <summary> 设置鼠标图片 </summary>
+        private void SetCursorImage(Sprite sprite)
+        {
+            cursorImage.sprite = sprite;
+            cursorImage.color = new Color(1, 1, 1, 1);
+        }
+        /// <summary> 设置鼠标可用 </summary>
+        private void SetCursorValid()
+        {
+            cursorPositionValid = true;
+            cursorImage.color = new Color(1, 1, 1, 1);
+        }
+        /// <summary> 设置鼠标不可用 </summary>
+        private void SetCursorInValid()
+        {
+            cursorPositionValid = false;
+            cursorImage.color = new Color(1, 0, 0, 0.4f);
         }
     }
 }

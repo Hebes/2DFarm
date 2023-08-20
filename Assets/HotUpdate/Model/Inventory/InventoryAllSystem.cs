@@ -127,7 +127,8 @@ namespace ACFrameworkCore
         {
             ItemDicArray.Add(key, new InventoryItem[count]);
         }//创建
-        public bool RemoveItemDicArray(string key,int itemID ,int itemAmount)
+        /// <summary> 删除物品 </summary>
+        public bool RemoveItemDicArray(string key, int itemID, int itemAmount)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] inventoryItemArray);
             if (inventoryItemArray == null) return false;
@@ -137,13 +138,13 @@ namespace ACFrameworkCore
             else
             {
                 inventoryItemArray[index1].itemAmount -= itemAmount;
-                if (inventoryItemArray[index1].itemAmount==0)
+                if (inventoryItemArray[index1].itemAmount == 0)
                     inventoryItemArray[index1] = new InventoryItem();
             }
 
             key.EventTrigger(inventoryItemArray);
             return true;
-        }//删除
+        }
         public bool ChangeItemDicArray(string oldKey, string newKey, int oldIndex, int newIndex)
         {
             ItemDicArray.TryGetValue(oldKey, out InventoryItem[] oldInventoryItemArray);
@@ -210,12 +211,19 @@ namespace ACFrameworkCore
             return -1;
         }//检查空位
 
+        //获取格子的信息
+        public SlotUI GetSlotUIInfo(string key, int ID)
+        {
+            slotUIDic.TryGetValue(key, out List<SlotUI> slotUIs);
+            return slotUIs.Find((slotUI) => { return slotUI.itemDatails.itemID == ID; });
+        }
+
         //ItemDicList和ItemDicArray交换 TODO 需要编写代码 
         public bool ChangeItem(string oldKey, string newKey, int oldIndex, int newIndex)
         {
             //ItemDicArray交换
             bool ChangeItemDicArrayIsOk = ChangeItemDicArray(oldKey, newKey, oldIndex, newIndex);
-            if (ChangeItemDicArrayIsOk==false) { ACDebug.Log("temDicArray交换失败,进入ItemDicList交换."); }
+            if (ChangeItemDicArrayIsOk == false) { ACDebug.Log("temDicArray交换失败,进入ItemDicList交换."); }
             //TODO 后面继续写ItemDicList交换和上面差不多
             return ChangeItemDicArrayIsOk;
         }
@@ -253,7 +261,7 @@ namespace ACFrameworkCore
                 }
             }
         }//显示高亮
-        
+
         //获取物品信息
         public ItemDetails GetItem(int id)
         {

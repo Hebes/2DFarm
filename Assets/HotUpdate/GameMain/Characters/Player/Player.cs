@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     }
     private void OnMouseClickedEvent(Vector3 pos, ItemDetails itemDetails)
     {
-        ConfigEvent.PlayerExecuteActionAfterAnimation.EventTrigger(pos, itemDetails);
+        ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(pos, itemDetails);
     }
 
     private void PlayerInput()//ÕÊº“ ‰»Î

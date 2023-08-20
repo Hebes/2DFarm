@@ -30,9 +30,11 @@ namespace ACFrameworkCore
         {
             Instance = this;
             sceneItemDict = new Dictionary<string, List<SceneItem>>();
+            //加载预制体
+            bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePrefab).GetComponent<Item>();
             //初始化监听信息
             ConfigEvent.UIItemCreatOnWorld.AddEventListener<SlotUI, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3>(OnDropItemEvent);
+            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3>(OnDropItemEvent);//扔东西
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
             LoadInit().Forget();
@@ -44,42 +46,42 @@ namespace ACFrameworkCore
             itemPrefab = itemPrefabGo.GetComponent<Item>();
         }
 
+        /// <summary> 扔东西 </summary>
         private void OnDropItemEvent(int itemID, Vector3 mousePos)
         {
             Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
-            item.itemID = itemID;
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
-
-            //if (slotUI.itemDatails.canDropped == false)
-            //{
-            //    ACDebug.Log($"{slotUI.itemDatails.name}是不能被扔掉的");
-            //    return;
-            //}
-            ////屏幕坐标转成世界坐标 鼠标对应的世界坐标
-            //var pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z));
-            //ConfigEvent.UIItemCreatOnWorld.EventTrigger(slotUI, pos);//id 数量,坐标//创建世界物体
-            //InventoryAllSystem.Instance.RemoveItemDicArray(slotUI.configInventoryKey, slotUI.itemDatails.itemID, slotUI.itemAmount);//删除原先的
-            //slotUI.UpdateEmptySlot();
-        }        //扔东西
+            //获取数据
+            UIDragPanel  uIDragPanel =  UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
+            //设置数据
+            item.itemID = itemID;
+            item.itemAmount = uIDragPanel.itemAmount;
+            //移除物品
+            InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, uIDragPanel.itemAmount);
+        }
+        /// <summary> 查找玩家限定范围的组件场景加载之后 </summary>
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
             itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
             RecreateAllItems();
-        }                            //查找玩家 限定范围的组件  场景加载之后
+        }
+
+        /// <summary> 在世界地图生成物品 </summary>
         private void OnInstantiateItemScen(SlotUI slotUI, Vector3 pos)
         {
             Item item = GameObject.Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
             item.itemID = slotUI.itemDatails.itemID;
             item.itemAmount = slotUI.itemAmount;
-
-        }    //在世界地图生成物品
+        }
+        /// <summary> 保存场景item </summary>
         private void OnBeforeSceneUnloadEvent()
         {
             GetAllSceneItems();
-        }                           //保存场景item
+        }
+        /// <summary> 获取当前场景里面的所有的物品 </summary>
         private void GetAllSceneItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
@@ -88,7 +90,7 @@ namespace ACFrameworkCore
                 SceneItem sceneItem = new SceneItem
                 {
                     itemID = item.itemID,
-                    ItemAmount= item.itemAmount,
+                    ItemAmount = item.itemAmount,
                     position = new SerializableVector3(item.transform.position)
                 };
                 currentSceneItems.Add(sceneItem);
@@ -98,7 +100,8 @@ namespace ACFrameworkCore
                 else
                     sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
             }
-        }                                   //获取当前场景里面的所有的物品
+        }
+        /// <summary> 刷新重建当前场景物品 切换场景结束的时候 </summary>
         private void RecreateAllItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
@@ -109,12 +112,12 @@ namespace ACFrameworkCore
                 foreach (var item in Object.FindObjectsOfType<Item>())
                     GameObject.Destroy(item.gameObject);
                 //重新创建   
-                foreach (SceneItem  sceneItem in currentSceneItems)
+                foreach (SceneItem sceneItem in currentSceneItems)
                 {
                     Item newItem = GameObject.Instantiate(itemPrefab, sceneItem.position.ToVector3(), Quaternion.identity, itemParent);
                     newItem.Init(sceneItem.itemID, sceneItem.ItemAmount).Forget();
                 }
             }
-        }                                   //刷新重建当前场景物品 切换场景结束的时候
+        }
     }
 }

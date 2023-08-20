@@ -29,8 +29,8 @@ namespace ACFrameworkCore
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();//场景名字+坐标和对应的瓦片信息
         private Grid currentGrid;
 
-        private Tilemap digTilemap => GameObject.FindWithTag("Dig").GetComponent<Tilemap>();
-        private Tilemap waterTilemap => GameObject.FindWithTag("Water").GetComponent<Tilemap>();
+        private Tilemap digTilemap => GameObject.FindWithTag(ConfigTag.TagDig).GetComponent<Tilemap>();
+        private Tilemap waterTilemap => GameObject.FindWithTag(ConfigTag.TagWater).GetComponent<Tilemap>();
 
         private void Awake()
         {
@@ -52,10 +52,8 @@ namespace ACFrameworkCore
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
 
-        /// <summary>
-        /// 根据地图信息生成字典
-        /// </summary>
-        /// <param name="mapData">地图信息</param>
+
+        /// <summary> 根据地图信息生成字典 </summary>
         private void InitTileDetailsDict(MapData_SO mapData)
         {
             foreach (TileProperty tileProperty in mapData.tileProperties)
@@ -122,7 +120,7 @@ namespace ACFrameworkCore
                 switch ((EItemType)itemDetails.itemType)
                 {
                     case EItemType.Commdity:
-                        // EventHandler.CallDropItemEvent(itemDetails.itemID, mouseWorldPos);
+                        ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos);
                         break;
                     case EItemType.HoeTool:
                         SetDigGround(currentTile);
@@ -143,20 +141,16 @@ namespace ACFrameworkCore
         {
             currentGrid = Object.FindObjectOfType<Grid>();
         }
-        /// <summary>
-        /// 显示挖坑瓦片
-        /// </summary>
-        /// <param name="tile"></param>
+
+        /// <summary> 显示挖坑瓦片 </summary>
         private void SetDigGround(TileDetails tile)
         {
             Vector3Int pos = new Vector3Int(tile.girdX, tile.gridY, 0);
             if (digTilemap != null)
                 digTilemap.SetTile(pos, digTile);
         }
-        /// <summary>
-        /// 显示浇水瓦片
-        /// </summary>
-        /// <param name="tile"></param>
+
+        /// <summary> 显示浇水瓦片 </summary>
         private void SetWaterGround(TileDetails tile)
         {
             Vector3Int pos = new Vector3Int(tile.girdX, tile.gridY, 0);

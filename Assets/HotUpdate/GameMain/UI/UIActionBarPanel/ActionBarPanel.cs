@@ -40,15 +40,16 @@ namespace ACFrameworkCore
                 slotUI.configInventoryKey = ConfigInventory.ActionBar;//所属于的管理的Key
                 ActionBarSlotUIList.Add(slotUI);
             }
-            InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
 
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
-
             ButtonOnClickAddListener(T_BagButton.name, T_BagButtonListener);
 
+            InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
             InventoryAllSystem.Instance.ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[10]);
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1015, itemAmount = 300 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1006, itemAmount = 1 };
         }
-
         public override void UIOnEnable()
         {
             base.UIOnEnable();
@@ -68,6 +69,8 @@ namespace ACFrameworkCore
                 T_BagButtonListener(null);
         }
 
+
+        /// <summary> 背包按钮监听 </summary>
         private void T_BagButtonListener(GameObject go)
         {
             if (bagOpened)
@@ -80,7 +83,8 @@ namespace ACFrameworkCore
                 bagOpened = true;
                 CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPanel);
             }
-        }//背包按钮监听
+        }
+        /// <summary> 刷新界面 </summary>
         private void RefreshItem(InventoryItem[] obj)
         {
             for (int i = 0; i < obj?.Length; i++)
@@ -95,6 +99,6 @@ namespace ACFrameworkCore
                     ActionBarSlotUIList[i].UpdateEmptySlot();
                 }
             }
-        } //刷新界面
+        }
     }
 }

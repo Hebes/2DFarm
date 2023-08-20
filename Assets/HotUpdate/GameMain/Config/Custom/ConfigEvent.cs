@@ -9,7 +9,6 @@
         //玩家相关
         public const string PlayerHoldUpAnimations = "玩家的举起动画";
         public const string PlayerMouseClicked = "鼠标点击事件";
-        public const string PlayerExecuteActionAfterAnimation = "执行操作后的动画播放";
 
         //时间系统相关
         public const string GameDate = "显示日期和春夏秋冬";
@@ -25,6 +24,7 @@
         //UI界面相关
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";
         public const string UIItemCreatOnWorld = "在世界地图生成物品";
+
         public const string UIItemDropItem = "扔东西";
         public const string UIItemOnDrag = "物品拖拽中";
         public const string UIItemOnEndDrag = "物品拖拽结束";
@@ -36,8 +36,6 @@
 
         //鼠标相关
         public const string CursorItemSelect = "鼠标选择样式";
-        public const string CursorClicked = "鼠标点击事件";
         public const string ExecuteActionAfterAnimation = "执行操作后的动画播放";
-
     }
 }

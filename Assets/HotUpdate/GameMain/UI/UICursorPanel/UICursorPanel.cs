@@ -82,7 +82,7 @@ namespace ACFrameworkCore
         {
             //执行方法
             if (Input.GetMouseButtonDown(0) && cursorPositionValid)
-                ConfigEvent.CursorClicked.EventTrigger(mouseWorldPos, currentItem);
+                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
         }
         /// <summary> 设置鼠标对应的图片 </summary>
         private void OnItemSelectEvent(ItemDetails itemDatails, bool isSelected)
@@ -140,7 +140,7 @@ namespace ACFrameworkCore
         {
             mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
             mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
-            ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
+            //ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
 
             //判断在使用范围内
             Vector3Int playerGridPos = currentGrid.WorldToCell(playerTransform.position);

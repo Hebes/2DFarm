@@ -18,6 +18,9 @@ namespace ACFrameworkCore
     public class UIDragPanel : UIBase
     {
         public Image DragItemImage;
+        public string key;                     //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray的Key
+        public int itemAmount;                  //物品数量
+
 
         public override void UIAwake()
         {
@@ -37,8 +40,11 @@ namespace ACFrameworkCore
         {
             if (slotUI.itemDatails == null) return;
             slotUI.isSelected = !slotUI.isSelected;
-            //slotUI.slotHightLight.gameObject.SetActive(slotUI.isSelected);
             ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
+
+            itemAmount = slotUI.itemAmount;
+            key = slotUI.configInventoryKey;
+
             switch (slotUI.configInventoryKey)
             {
                 case ConfigInventory.PalayerBag:

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using YooAsset;
 
@@ -39,6 +40,15 @@ namespace ACFrameworkCore
             handle.WaitForAsyncComplete();
             return handle.Status == EOperationStatus.Succeed ? handle.AssetObject as T : null;
         }
+
+        public static async UniTask<T> YooaddetLoadAsyncUniTask<T>(this string assetName) where T : UnityEngine.Object
+        {
+            //TODO 后续要从配置中读取 或者直接配置
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
+            await handle.ToUniTask();
+            return handle.Status == EOperationStatus.Succeed ? handle.AssetObject as T : null;
+        }
         public static AssetOperationHandle YooaddetLoadAsync<T>(this string assetName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
@@ -58,12 +68,12 @@ namespace ACFrameworkCore
         }
 
         //同步加载资源拓展方法
-        public static GameObject YooaddetLoadSyncGO(this string GOName)
+        public static T YooaddetLoadSync<T>(this string GOName) where T : UnityEngine.Object
         {
             //TODO 后续要从配置中读取 或者直接配置
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AssetOperationHandle handle1 = package.LoadAssetSync<GameObject>(GOName);
-            return (GameObject)handle1.AssetObject;
+            AssetOperationHandle handle1 = package.LoadAssetSync<T>(GOName);
+            return (T)handle1.AssetObject;
         }
         public static AssetOperationHandle YooaddetLoadSyncAOH(this string GOName)
         {

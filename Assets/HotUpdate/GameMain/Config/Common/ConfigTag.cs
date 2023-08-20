@@ -11,5 +11,7 @@ namespace ACFrameworkCore
         public const string TagGameController = "GameController";
         public const string TagBoundsConfiner = "BoundsConfiner";
         public const string TagItemParent = "ItemParent";
+        public const string TagDig = "Dig";
+        public const string TagWater = "Water";
     }
 }

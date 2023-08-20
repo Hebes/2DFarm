@@ -7,22 +7,20 @@
 作者:
 	暗沉
 描述:
-    玩家拾取
+    玩家碰撞拾取
 
 -----------------------*/
 
 namespace ACFrameworkCore
 {
-    public class ItemPickUP :MonoBehaviour
+    public class ItemPickUP : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
             Item item = collision.GetComponent<Item>();
-            if (item != null)
-            {
-                if (item.itemDatails.canPickedup)
-                    InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar,item, true);//拾取物品到背包
-            }
+            if (item == null) return;
+            if (item.itemDatails.canPickedup)
+                InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar, item, true);//拾取物品到背包
         }
     }
 }

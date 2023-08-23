@@ -53,6 +53,18 @@ namespace ACFrameworkCore
             actions?.Invoke(obj, obj2, obj3);
         }
     }
+    public class EventInfo<T, K, V, N> : IEventInfo
+    {
+        public event Action<T, K, V, N> actions;
+        public EventInfo(Action<T, K, V, N> action)
+        {
+            actions += action;
+        }
+        public void Trigger(T obj, K obj2, V obj3, N obj4)
+        {
+            actions?.Invoke(obj, obj2, obj3, obj4);
+        }
+    }
     public class EventInfo<T, K, V, N, M> : IEventInfo
     {
         public event Action<T, K, V, N, M> actions;

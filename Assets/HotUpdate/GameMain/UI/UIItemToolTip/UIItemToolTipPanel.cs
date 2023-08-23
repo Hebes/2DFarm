@@ -80,7 +80,7 @@ namespace ACFrameworkCore
                 case EItemType.BreakTool:
                 case EItemType.ReapTool:
                 case EItemType.WaterTool:
-                case EItemType.ClooectTool:
+                case EItemType.CollectTool:
                 case EItemType.ReapableSceney:
                     bottomPart.SetActive(false);
                     break;
@@ -125,7 +125,7 @@ namespace ACFrameworkCore
                 EItemType.BreakTool => "砸石头工具",
                 EItemType.ReapTool => "割草工具",
                 EItemType.WaterTool => "浇水工具",
-                EItemType.ClooectTool => "收割工具",
+                EItemType.CollectTool => "收割工具",
                 EItemType.ReapableSceney => "杂草",
                 _ => "无"
             };

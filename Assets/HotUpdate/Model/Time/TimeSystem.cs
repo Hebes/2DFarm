@@ -17,7 +17,7 @@ namespace ACFrameworkCore
     public class TimeSystem : ICore
     {
         private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
-        private ESeason eGameSeason = ESeason.春天;
+        private ESeason gameSeason = ESeason.春天;
         private int monthInSeason = 3;  //每个季度有多少个月
         public bool gameCLockPause;     //时间的暂停
         private float tiktime;          //计时器
@@ -29,7 +29,7 @@ namespace ACFrameworkCore
             GameObject TimeGo = new GameObject("TimeGo");
 
             MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
-            ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, eGameSeason);
+            ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour);
         }
 
@@ -45,12 +45,21 @@ namespace ACFrameworkCore
                 }
             }
 
+            //时间增加
             if (Input.GetKey(KeyCode.T))
             {
                 for (int i = 0; i < 120; i++)
                 {
                     UpdateGameTime();
                 }
+            }
+
+            //日期增加
+            if (Input.GetKey(KeyCode.G))
+            {
+                gameDay++;
+                ConfigEvent.GameDay.EventTrigger(gameDay, gameSeason);
+                ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
         }
 
@@ -63,7 +72,7 @@ namespace ACFrameworkCore
             gameDay = 1;
             gameMonth = 1;
             gameYear = 2022;
-            eGameSeason = ESeason.春天;
+            gameSeason = ESeason.春天;
         }
         /// <summary>时间更新</summary>
         private void UpdateGameTime()
@@ -92,7 +101,7 @@ namespace ACFrameworkCore
                             monthInSeason--;
                             if (monthInSeason == 0)
                                 monthInSeason = 3;
-                            int seasonNumber = (int)eGameSeason;
+                            int seasonNumber = (int)gameSeason;
                             seasonNumber++;
 
                             if (seasonNumber > ConfigSettings.seasonHold)
@@ -100,16 +109,18 @@ namespace ACFrameworkCore
                                 seasonNumber = 0;
                                 gameYear++;
                             }
-                            eGameSeason = (ESeason)seasonNumber;
+                            gameSeason = (ESeason)seasonNumber;
 
                             if (gameYear > 9999)
                             {
                                 gameYear = 2022;
                             }
                         }
+                        //用来刷新地图和农作物生长
+                        ConfigEvent.GameDay.EventTrigger(gameDay, gameSeason);
                     }
                 }
-                ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, eGameSeason);
+                ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
             ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour);
             //Debug.Log("Second 秒：" + gameSecond + "Minute 分：" + gameMinute);

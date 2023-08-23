@@ -20,7 +20,10 @@ namespace ACFrameworkCore
             Item item = collision.GetComponent<Item>();
             if (item == null) return;
             if (item.itemDatails.canPickedup)
-                InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar, item, true);//拾取物品到背包
+            {
+                InventoryAllSystem.Instance.AddItemDicArray(ConfigInventory.ActionBar, item.itemID,item.itemAmount);//拾取物品到背包
+                GameObject.Destroy(item.gameObject);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
         //玩家相关
         public const string PlayerHoldUpAnimations = "玩家的举起动画";
         public const string PlayerMouseClicked = "鼠标点击事件";
+        public const string HarvestAtPlayerPosition = "在玩家位置收获";
 
         //时间系统相关
         public const string GameDate = "显示日期和春夏秋冬";
@@ -25,11 +26,13 @@
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";
         public const string UIItemCreatOnWorld = "在世界地图生成物品";
 
+        //物品相关
         public const string UIItemDropItem = "扔东西";
         public const string UIItemOnDrag = "物品拖拽中";
         public const string UIItemOnEndDrag = "物品拖拽结束";
         public const string UIItemOnBeginDrag = "物品拖拽开始";
         public const string UIItemOnPointerClick = "物品点击";
+        public const string InstantiateItemInScene = "生成物品在场景";
 
         //场景过度相关
         public const string UIFade = "场景过度";
@@ -37,5 +40,16 @@
         //鼠标相关
         public const string CursorItemSelect = "鼠标选择样式";
         public const string ExecuteActionAfterAnimation = "执行操作后的动画播放";
+
+        //地图数据刷新相关
+        public const string GameDay = "游戏一天需要做的(保存代码等)";
+        public const string PlantSeed = "种植种子";
+        public const string RefreshCurrentMap = "刷新档期那地图";
+
+        //特效相关
+        public const string ParticleEffect = "粒子效果";
+
+        //音乐相关
+        public const string PlaySound = "播放音乐";
     }
 }

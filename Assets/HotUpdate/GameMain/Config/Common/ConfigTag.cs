@@ -13,5 +13,6 @@ namespace ACFrameworkCore
         public const string TagItemParent = "ItemParent";
         public const string TagDig = "Dig";
         public const string TagWater = "Water";
+        public const string TagCropParent = "CropParent";
     }
 }

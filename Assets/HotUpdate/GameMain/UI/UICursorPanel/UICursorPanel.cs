@@ -107,7 +107,7 @@ namespace ACFrameworkCore
                     case EItemType.WaterTool:
                     case EItemType.ReapTool:
                     case EItemType.BreakTool:
-                    case EItemType.ClooectTool:
+                    case EItemType.CollectTool:
                     case EItemType.ReapableSceney:
                         currentSprite = tool;
                         break;
@@ -155,16 +155,56 @@ namespace ACFrameworkCore
             TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
             if (currentTile != null)
             {
+                CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
                 switch ((EItemType)currentItem.itemType)
                 {
-                    case EItemType.Commdity://商品的话
+                    case EItemType.Seed:
+                        if (currentTile.daysSinceDug > -1 && currentTile.seedItemID == -1) SetCursorValid(); else SetCursorInValid();
+                        break;
+                    case EItemType.Commdity:
                         if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid(); else SetCursorInValid();
+                        break;
+                    case EItemType.Furniture:
+                        //buildImage.gameObject.SetActive(true);
+                        //var bluePrintDetails = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(currentItem.itemID);
+
+                        //if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
+                        //    SetCursorValid();
+                        //else
+                        //    SetCursorInValid();
                         break;
                     case EItemType.HoeTool:
                         if (currentTile.canDig) SetCursorValid(); else SetCursorInValid();
                         break;
+                    case EItemType.ChopTool:
+                    case EItemType.BreakTool:
+                        //if (crop != null)
+                        //{
+                        //    if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
+                        //}
+                        //else SetCursorInValid();
+                        break;
+                    case EItemType.ReapTool:
+                        //if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
+                        break;
                     case EItemType.WaterTool:
                         if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();
+                        break;
+                    case EItemType.CollectTool:
+                        if (currentCrop != null)
+                        {
+                            //if (currentCrop.CheckToolAvailable(currentItem.itemID))
+                                if (currentTile.growthDays >= currentCrop.TotalGrowthDays) SetCursorValid(); else SetCursorInValid();
+                        }
+                        else
+                        {
+                            SetCursorInValid();
+                        }
+                        break;
+                    case EItemType.ReapableSceney:
+                        break;
+                    default:
+                        ACDebug.Error("没有这个工具的使用方法,工具使用失败");
                         break;
                 }
             }

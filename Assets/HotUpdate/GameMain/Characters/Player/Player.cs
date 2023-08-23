@@ -1,5 +1,8 @@
 using ACFrameworkCore;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Cysharp.Threading.Tasks;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +14,9 @@ public class Player : MonoBehaviour
     private bool isMoving;                  //是否在移动
     private bool InputDisable;              //玩家不能操作
     public float speed = 10f;               //移动速度
+    private float mouseX;                   //使用工具的动画X
+    private float mouseY;                   //使用工具的动画Y
+    private bool UseTool;                  //是否使用工具
 
     private void Awake()
     {
@@ -19,7 +25,7 @@ public class Player : MonoBehaviour
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
         ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
-        ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetails>(OnMouseClickedEvent);
+        ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetails>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
     }
     private void Update()
     {
@@ -47,10 +53,55 @@ public class Player : MonoBehaviour
     {
         transform.position = targetPosition;
     }
-    private void OnMouseClickedEvent(Vector3 pos, ItemDetails itemDetails)
+    private async UniTaskVoid OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
     {
-        ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(pos, itemDetails);
+        switch ((EItemType)itemDetails.itemType)
+        {
+            case EItemType.Seed:
+            case EItemType.Commdity:
+            case EItemType.Furniture:
+                ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(mouseWorldPos, itemDetails);
+                break;
+            case EItemType.HoeTool:
+            case EItemType.ChopTool:
+            case EItemType.BreakTool:
+            case EItemType.ReapTool:
+            case EItemType.WaterTool:
+            case EItemType.CollectTool:
+            case EItemType.ReapableSceney:
+                mouseX = mouseWorldPos.x - transform.position.x;
+                mouseY = mouseWorldPos.y - transform.position.y;
+                if (Mathf.Abs(mouseX) > Mathf.Abs(mouseY))
+                    mouseY = 0;
+                else
+                    mouseX = 0;
+                await UseToolRoutine(mouseWorldPos, itemDetails);
+                break;
+        }
+        
     }
+
+    private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetails itemDetails)
+    {
+        UseTool = true;
+        InputDisable = true;
+        await UniTask.Yield();
+        foreach (var anim in animators)
+        {
+            anim.SetTrigger("useTool");
+            //人物的面朝方向
+            anim.SetFloat("InputX", mouseX);
+            anim.SetFloat("InputY", mouseY);
+        }
+        await UniTask.Delay(TimeSpan.FromSeconds(0.45f), ignoreTimeScale: false);
+        ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(mouseWorldPos, itemDetails);
+        await UniTask.Delay(TimeSpan.FromSeconds(0.25f), ignoreTimeScale: false);
+
+        //等待动画结束
+        UseTool = false;
+        InputDisable = false;
+    }
+
 
     private void PlayerInput()//玩家输入
     {
@@ -90,6 +141,8 @@ public class Player : MonoBehaviour
         foreach (var anim in animators)
         {
             anim.SetBool("IsMoving", isMoving);//注意IsMoving要和动画那边的一样
+            anim.SetFloat("MouseX", mouseX);
+            anim.SetFloat("MouseY", mouseY);
             if (isMoving)
             {
                 anim.SetFloat("InputX", inputX);

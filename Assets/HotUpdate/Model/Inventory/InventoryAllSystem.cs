@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -36,6 +37,16 @@ namespace ACFrameworkCore
             //ConfigEvent.BeforeSceneUnloadEvent.AddEventListener<string,int>(UpdateSlotHightLight);//切换场景的时候触发下
 
             ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
+            ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string,int>(OnHarvestAtPlayerPosition);
+        }
+
+        //监听事件
+        private void OnHarvestAtPlayerPosition(string key, int ID)
+        {
+            bool AddOK = AddItemDicArray(key, ID, 1);
+
+            if (!AddOK)
+                ACDebug.Log($"添加失败");
         }
 
         //ItemDicList字典操作
@@ -97,7 +108,7 @@ namespace ACFrameworkCore
         }//检查空位
 
         //ItemDicArray字典操作
-        public bool AddItemDicArray(string key, Item item, bool toDestory = false)
+        public bool AddItemDicArray(string key,int itemID,int itemAmount)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] inventoryItemArray);
             if (inventoryItemArray == null)
@@ -106,19 +117,17 @@ namespace ACFrameworkCore
                 return false;
             }
 
-            int index1 = GetItemIndexArray(key, item.itemID);   //是否存在这个物品-1 没有 其他表示有
+            int index1 = GetItemIndexArray(key, itemID);   //是否存在这个物品-1 没有 其他表示有
             int index2 = CheckCapacityArray(key);               //是否有空位
             if (index1 == -1)//没有物品
             {
                 if (index2 == -1) return false;//-1没有空位
-                inventoryItemArray[index2] = new InventoryItem() { itemID = item.itemID, itemAmount = item.itemAmount };
+                inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };
             }
             else
             {
-                inventoryItemArray[index1].itemAmount += item.itemAmount;
+                inventoryItemArray[index1].itemAmount += itemAmount;
             }
-            if (toDestory)
-                GameObject.Destroy(item.gameObject);
             //更新物品UI 呼叫事件中心,执行委托的代码
             key.EventTrigger(ItemDicArray[key]);//这里的在比如背包页面那边开启的时候监听
             return true;
@@ -172,13 +181,6 @@ namespace ACFrameworkCore
                 oldInventoryItemArray[oldIndex] = targetItem;
                 newInventoryItemArray[newIndex] = currentItem;// new InventoryItem();
             }
-
-            //if (oldInventoryItemArray[oldIndex].itemID == newInventoryItemArray[newIndex].itemID)//说明拖拽放下的是同一个物体
-            //{
-            //    oldInventoryItemArray[oldIndex].itemAmount += newInventoryItemArray[newIndex].itemAmount;
-            //    newInventoryItemArray[newIndex].itemID = 0;
-            //    newInventoryItemArray[newIndex].itemAmount = 0;
-            //}
             oldKey.EventTrigger(ItemDicArray[oldKey]);//这里的在比如背包页面那边开启的时候监听
             newKey.EventTrigger(ItemDicArray[newKey]);//这里的在比如背包页面那边开启的时候监听
             return true;

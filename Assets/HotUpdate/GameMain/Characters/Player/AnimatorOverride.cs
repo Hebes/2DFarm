@@ -28,18 +28,59 @@ namespace ACFrameworkCore
             animators = GetComponentsInChildren<Animator>();
             foreach (var anim in animators)
                 animatorNameDic.Add(anim.name, anim);
+            //基本动画
+            //基本手臂动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.None,
                 ePartName = EPartName.Arm,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm),
             });
+            //举动西手臂动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Carry,
                 ePartName = EPartName.Arm,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Hold),
             });
+            //基本工具动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.None,
+                ePartName = EPartName.Tool,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool),
+            });
+            //工具动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Hoe,
+                ePartName = EPartName.Tool,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool_Hoe),
+            });
+
+            //采集动画
+            //手臂动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Collect,
+                ePartName = EPartName.Arm,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Collect),
+            });
+            //身体动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Collect,
+                ePartName = EPartName.Body,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsBody_Collect),
+            });
+            //头部动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Collect,
+                ePartName = EPartName.Hair,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsHair_Collect),
+            });
+
             holdItem = transform.GetChildComponent<SpriteRenderer>("HoldItem");
 
             ConfigEvent.PlayerHoldUpAnimations.AddEventListener<ItemDetails, bool>(OnItemSelectEvent);
@@ -63,14 +104,14 @@ namespace ACFrameworkCore
             {
                 case EItemType.Seed: currentType = EPartType.Carry; break;
                 case EItemType.Commdity: currentType = EPartType.Carry; break;
+                case EItemType.HoeTool: currentType = EPartType.Hoe; break;
                 //TODO 不同的工具返回不同的动画，在这里补全
-                case EItemType.Furniture:
-                case EItemType.HoeTool:
-                case EItemType.ChopTool:
-                case EItemType.BreakTool:
-                case EItemType.ReapTool:
-                case EItemType.WaterTool:
-                case EItemType.ClooectTool:
+                case EItemType.Furniture: currentType = EPartType.Hoe; break;
+                case EItemType.ChopTool: currentType = EPartType.Chop; break;
+                case EItemType.BreakTool: currentType = EPartType.Break; break;
+                case EItemType.ReapTool: currentType = EPartType.Reap; break; 
+                case EItemType.WaterTool: currentType = EPartType.Water; break;
+                case EItemType.CollectTool: currentType = EPartType.Collect; break;
                 case EItemType.ReapableSceney:
                 default: currentType = EPartType.None; break;
             }
@@ -102,6 +143,8 @@ namespace ACFrameworkCore
             foreach (var item in animatorTypes)
             {
                 if (item.ePartType == ePartType)
+                    animatorNameDic[item.ePartName.ToString()].runtimeAnimatorController = item.overrideController;
+                else if (item.ePartType == EPartType.None)
                     animatorNameDic[item.ePartName.ToString()].runtimeAnimatorController = item.overrideController;
             }
         }

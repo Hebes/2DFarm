@@ -34,7 +34,7 @@ namespace ACFrameworkCore
             bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePrefab).GetComponent<Item>();
             //初始化监听信息
             ConfigEvent.UIItemCreatOnWorld.AddEventListener<SlotUI, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3>(OnDropItemEvent);//扔东西
+            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
             LoadInit().Forget();
@@ -46,21 +46,26 @@ namespace ACFrameworkCore
             itemPrefab = itemPrefabGo.GetComponent<Item>();
         }
 
+
         /// <summary> 扔东西 </summary>
-        private void OnDropItemEvent(int itemID, Vector3 mousePos)
+        private void OnDropItemEvent(int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
+            if (itemType == EItemType.Seed) return;
             Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
             //获取数据
-            UIDragPanel  uIDragPanel =  UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
+            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
             //设置数据
             item.itemID = itemID;
-            item.itemAmount = uIDragPanel.itemAmount;
+            item.itemAmount = removeAmount;
+            if (removeAmount > item.itemAmount)
+                item.itemAmount = uIDragPanel.itemAmount;
             //移除物品
-            InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, uIDragPanel.itemAmount);
+            InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, item.itemAmount);
         }
+
         /// <summary> 查找玩家限定范围的组件场景加载之后 </summary>
         private void OnAfterSceneLoadedEvent()
         {

@@ -81,6 +81,18 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.EventTrigger<T, K, V>(name, t, k, v);
         }
+        public static void AddEventListener<T, K, V, N>(this string name, Action<T, K, V, N> action)
+        {
+            EventManager.Instance.AddEventListener<T, K, V, N>(name, action);
+        }
+        public static void RemoveEventListener<T, K, V, N>(this string name, Action<T, K, V, N> action)
+        {
+            EventManager.Instance.RemoveEventListener<T, K, V, N>(name, action);
+        }
+        public static void EventTrigger<T, K, V, N>(this string name, T t, K k, V v, N n)
+        {
+            EventManager.Instance.EventTrigger<T, K, V, N>(name, t, k, v, n);
+        }
         public static void AddEventListener<T, K, V, N, M>(this string name, Action<T, K, V, N, M> action)
         {
             EventManager.Instance.AddEventListener<T, K, V, N, M>(name, action);

@@ -129,8 +129,8 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/Animations/Player
-        CollectorGUID: 72b474274ab2e4867bba25e2250c3d69
+      - CollectPath: Assets/AssetsPackage/Animations
+        CollectorGUID: b814313a7e0453d45b0b80c207158bf2
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -249,6 +249,14 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/AssetsPackage/Animations/Player
         CollectorGUID: 72b474274ab2e4867bba25e2250c3d69
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Animations/Tool
+        CollectorGUID: b1981c20281824cbfadf243a6e4db103
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

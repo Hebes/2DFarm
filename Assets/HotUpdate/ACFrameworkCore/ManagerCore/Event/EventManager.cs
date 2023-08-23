@@ -99,6 +99,24 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K, V>).Trigger(t, k, v);
         }
+        public void AddEventListener<T, K, V, N>(string name, Action<T, K, V, N> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V, N>).actions += action;
+            else
+                eventDic.Add(name, new EventInfo<T, K, V, N>(action));
+        }
+        public void RemoveEventListener<T, K, V, N>(string name, Action<T, K, V, N> action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfo<T, K, V, N>).actions -= action;
+        }
+        public void EventTrigger<T, K, V, N>(string name, T t, K k, V v, N n)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
+            (eventDic[name] as EventInfo<T, K, V, N>).Trigger(t, k, v, n);
+        }
         public void AddEventListener<T, K, V, N, M>(string name, Action<T, K, V, N, M> action)
         {
             if (eventDic.ContainsKey(name))

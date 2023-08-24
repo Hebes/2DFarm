@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class ActionBarPanel : UIBase
+    public class UIActionBarPanel : UIBase
     {
         public GameObject T_BagButton;              //背包按钮
         public GameObject T_ActionBar;              //槽父物体
@@ -46,14 +46,18 @@ namespace ACFrameworkCore
 
             InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.ActionBar, ActionBarSlotUIList);
             InventoryAllSystem.Instance.ItemDicArray.Add(ConfigInventory.ActionBar, new InventoryItem[10]);
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1015, itemAmount = 300 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1006, itemAmount = 1 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][3] = new InventoryItem() { itemID = 1007, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][4] = new InventoryItem() { itemID = 1008, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][5] = new InventoryItem() { itemID = 1009, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][6] = new InventoryItem() { itemID = 1010, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][7] = new InventoryItem() { itemID = 1005, itemAmount = 1 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1015, itemAmount = 300 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1006, itemAmount = 1 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][3] = new InventoryItem() { itemID = 1007, itemAmount = 10 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][4] = new InventoryItem() { itemID = 1008, itemAmount = 10 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][5] = new InventoryItem() { itemID = 1009, itemAmount = 10 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][6] = new InventoryItem() { itemID = 1010, itemAmount = 10 };
+            //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][7] = new InventoryItem() { itemID = 1005, itemAmount = 1 };
+
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 1 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1016, itemAmount = 10 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1001, itemAmount = 1 };
         }
         public override void UIOnEnable()
         {

@@ -71,7 +71,7 @@ namespace ACFrameworkCore
                 //清空所有高亮
                 isSelected = false;
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                ConfigEvent.CursorItemSelect.EventTrigger(itemDatails, isSelected);
+                ConfigEvent.ItemSelectedEvent.EventTrigger(itemDatails, isSelected);
                 ConfigEvent.PlayerHoldUpAnimations.EventTrigger(itemDatails, isSelected);
             }
             itemDatails = null;

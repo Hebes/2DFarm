@@ -58,7 +58,7 @@ namespace ACFrameworkCore
                     }
                     else if (fi.FieldType == typeof(float))
                     {
-                        fi.SetValue(dataObj, BitConverter.ToInt32(bytes, pointer));
+                        fi.SetValue(dataObj, BitConverter.ToSingle(bytes, pointer));
                         pointer += 4;
                     }
                     else if (fi.FieldType == typeof(List<int>))

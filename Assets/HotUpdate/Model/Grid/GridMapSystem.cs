@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
@@ -48,11 +47,14 @@ namespace ACFrameworkCore
             ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetails>(OnExecuteActionAfterAnimation);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
+            ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
         }
         private void OnDisable()
         {
             ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetails>(OnExecuteActionAfterAnimation);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
+            ConfigEvent.RefreshCurrentMap.RemoveEventListener(RefreshMap);
         }
 
 
@@ -135,7 +137,7 @@ namespace ACFrameworkCore
                 case EItemType.Seed:
                     ConfigEvent.PlantSeed.EventTrigger(itemDetails.itemID, currentTile);
                     ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Seed,1);
-                    //EventHandler.CallPlaySoundEvent(SoundName.Plant);
+                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Plant);
                     break;
                 case EItemType.Commdity:
                     ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Commdity, 10000);
@@ -152,12 +154,12 @@ namespace ACFrameworkCore
                     currentTile.canDig = false;
                     currentTile.canDropItem = false;
                     //音效
-                    //EventHandler.CallPlaySoundEvent(SoundName.Hoe);
+                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Hoe);
                     break;
                 case EItemType.ChopTool:
                 case EItemType.BreakTool:
                     //执行收割方法
-                    //currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
+                    currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
                     break;
                 case EItemType.ReapTool:
                     //var reapCount = 0;
@@ -170,20 +172,19 @@ namespace ACFrameworkCore
                     //    if (reapCount >= Settings.reapAmount)
                     //        break;
                     //}
-                    //EventHandler.CallPlaySoundEvent(SoundName.Reap);
+                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Reap);
                     break;
                 case EItemType.WaterTool:
                     SetWaterGround(currentTile);
                     currentTile.daysSinceWatered = 0;
                     //音效
-                    //EventHandler.CallPlaySoundEvent(SoundName.Water);
+                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Water);
                     break;
                 case EItemType.CollectTool:
-                    // Crop currentCrop = GetCropObject(mouseWorldPos);
                     //执行收割方法
                     ACDebug.Log($"收获物品的信息是{currentCrop.cropDetails.producedItemID[0]}");
-                    currentCrop.ProcessToolAction(itemDetails, currentTile);
-                    //EventHandler.CallPlaySoundEvent(SoundName.Basket);
+                    currentCrop?.ProcessToolAction(itemDetails, currentTile);
+                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Basket);
                     break;
                 case EItemType.ReapableSceney:
                     break;
@@ -273,9 +274,7 @@ namespace ACFrameworkCore
                 waterTilemap.ClearAllTiles();
             //刷新植物的生长日期,显示植物对应的成长阶段
             foreach (Crop crop in FindObjectsOfType<Crop>())
-            {
                 Destroy(crop.gameObject);
-            }
 
             DisplayMap(SceneManager.GetActiveScene().name);
         }

@@ -47,14 +47,14 @@ namespace ACFrameworkCore
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            ConfigEvent.CursorItemSelect.AddEventListener<ItemDetails, bool>(OnItemSelectEvent);
+            ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetails, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
-            ConfigEvent.CursorItemSelect.RemoveEventListener<ItemDetails, bool>(OnItemSelectEvent);
+            ConfigEvent.ItemSelectedEvent.RemoveEventListener<ItemDetails, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
@@ -156,6 +156,7 @@ namespace ACFrameworkCore
             if (currentTile != null)
             {
                 CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
+                Crop crop = GridMapSystem.Instance.GetCropObject(mouseWorldPos);
                 switch ((EItemType)currentItem.itemType)
                 {
                     case EItemType.Seed:
@@ -178,11 +179,12 @@ namespace ACFrameworkCore
                         break;
                     case EItemType.ChopTool:
                     case EItemType.BreakTool:
-                        //if (crop != null)
-                        //{
-                        //    if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
-                        //}
-                        //else SetCursorInValid();
+                        if (crop != null)
+                        {
+                            if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
+                        }
+                        else 
+                            SetCursorInValid();
                         break;
                     case EItemType.ReapTool:
                         //if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
@@ -193,7 +195,7 @@ namespace ACFrameworkCore
                     case EItemType.CollectTool:
                         if (currentCrop != null)
                         {
-                            //if (currentCrop.CheckToolAvailable(currentItem.itemID))
+                            if (currentCrop.CheckToolAvailable(currentItem.itemID))
                                 if (currentTile.growthDays >= currentCrop.TotalGrowthDays) SetCursorValid(); else SetCursorInValid();
                         }
                         else
@@ -214,7 +216,7 @@ namespace ACFrameworkCore
             }
         }
         /// <summary> 场景加载之后需要做的事 </summary>
-        private void OnAfterSceneLoadedEvent() 
+        private void OnAfterSceneLoadedEvent()
         {
             currentGrid = Object.FindObjectOfType<Grid>();
         }

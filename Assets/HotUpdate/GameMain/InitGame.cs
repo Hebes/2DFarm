@@ -107,7 +107,7 @@ public class InitGame
     }
     private static void FSMInitUI()
     {
-        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<ActionBarPanel>();                           //显示快捷栏面板
+        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<UIActionBarPanel>();                           //显示快捷栏面板
         ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<UIItemToolTipPanel>();                     //显示物体信息描述面板
         ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
         ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板

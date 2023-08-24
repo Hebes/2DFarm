@@ -50,7 +50,7 @@ namespace ACFrameworkCore
                 case ConfigInventory.PalayerBag:
                 case ConfigInventory.ActionBar:
                     ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
-                    ConfigEvent.CursorItemSelect.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//切换鼠标样式
+                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//切换鼠标样式
                     break;
             }
         }

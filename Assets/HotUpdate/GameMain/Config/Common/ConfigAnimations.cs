@@ -12,6 +12,7 @@ namespace ACFrameworkCore
         public const string AnimationsHair = "Hair";
         public const string AnimationsHair_Collect = "Hair_Collect";
         public const string AnimationsTool = "Tool";
+        public const string AnimationsTool_Chop = "Tool_Chop";
         public const string AnimationsTool_Hoe = "Tool_Hoe";
     }
 }

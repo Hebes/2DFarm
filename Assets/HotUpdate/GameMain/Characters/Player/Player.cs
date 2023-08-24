@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
             case EItemType.CollectTool:
             case EItemType.ReapableSceney:
                 mouseX = mouseWorldPos.x - transform.position.x;
-                mouseY = mouseWorldPos.y - transform.position.y;
+                mouseY = mouseWorldPos.y - (transform.position.y + 0.85f);
                 if (Mathf.Abs(mouseX) > Mathf.Abs(mouseY))
                     mouseY = 0;
                 else
@@ -81,6 +81,12 @@ public class Player : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// 使用工具的动作
+    /// </summary>
+    /// <param name="mouseWorldPos"></param>
+    /// <param name="itemDetails"></param>
+    /// <returns></returns>
     private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetails itemDetails)
     {
         UseTool = true;

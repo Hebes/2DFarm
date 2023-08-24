@@ -43,19 +43,28 @@ namespace ACFrameworkCore
                 ePartName = EPartName.Arm,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Hold),
             });
-            //基本工具动画
+
+            //工具动画
+            //基本动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.None,
                 ePartName = EPartName.Tool,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool),
             });
-            //工具动画
+            //锄头动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Hoe,
                 ePartName = EPartName.Tool,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool_Hoe),
+            });
+            //斧头动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Chop,
+                ePartName = EPartName.Tool,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool_Chop),
             });
 
             //采集动画

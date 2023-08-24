@@ -19,11 +19,11 @@ namespace ACFrameworkCore
     public class InventoryWorldItemSystem : ICore
     {
         public static InventoryWorldItemSystem Instance;
-        public Item bounceItemPrefab;                               //抛投的物品模板
         private Dictionary<string, List<SceneItem>> sceneItemDict;  //世界场景的所有物体
         private Transform playerTransform;                          //玩家
         private Transform itemParent;                               //统一保存的父物体
 
+        public Item bounceItemPrefab;                               //抛投的物品模板
         public Item itemPrefab;
 
         public void ICroeInit()
@@ -33,7 +33,7 @@ namespace ACFrameworkCore
             //加载预制体
             bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePrefab).GetComponent<Item>();
             //初始化监听信息
-            ConfigEvent.UIItemCreatOnWorld.AddEventListener<SlotUI, Vector3>(OnInstantiateItemScen);
+            ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
             ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
@@ -50,7 +50,13 @@ namespace ACFrameworkCore
         /// <summary> 扔东西 </summary>
         private void OnDropItemEvent(int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
-            if (itemType == EItemType.Seed) return;
+            if (itemType == EItemType.Seed)
+            {
+                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
+                InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel1.key, itemID, removeAmount);
+                return;
+            }
+
             Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
@@ -75,11 +81,12 @@ namespace ACFrameworkCore
         }
 
         /// <summary> 在世界地图生成物品 </summary>
-        private void OnInstantiateItemScen(SlotUI slotUI, Vector3 pos)
+        private void OnInstantiateItemScen(int itemID, int itemAmount, Vector3 pos)
         {
-            Item item = GameObject.Instantiate(itemPrefab, pos, Quaternion.identity, itemParent);
-            item.itemID = slotUI.itemDatails.itemID;
-            item.itemAmount = slotUI.itemAmount;
+            Item item = GameObject.Instantiate(bounceItemPrefab, pos, Quaternion.identity, itemParent);
+            item.itemID = itemID;
+            item.itemAmount = itemAmount;
+            item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector3.up);
         }
         /// <summary> 保存场景item </summary>
         private void OnBeforeSceneUnloadEvent()

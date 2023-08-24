@@ -24,7 +24,7 @@
 
         //UI界面相关
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";
-        public const string UIItemCreatOnWorld = "在世界地图生成物品";
+        public const string UpdateGameStateEvent = "更新游戏状态事件";
 
         //物品相关
         public const string UIItemDropItem = "扔东西";
@@ -38,7 +38,7 @@
         public const string UIFade = "场景过度";
 
         //鼠标相关
-        public const string CursorItemSelect = "鼠标选择样式";
+        public const string ItemSelectedEvent = "鼠标选择样式";
         public const string ExecuteActionAfterAnimation = "执行操作后的动画播放";
 
         //地图数据刷新相关

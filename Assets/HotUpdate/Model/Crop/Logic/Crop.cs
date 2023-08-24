@@ -87,9 +87,7 @@ namespace ACFrameworkCore
             SpawnHarvestItems();
             //转换新物体
             if (cropDetails.transferItemID > 0)
-            {
                 CreateTransferCrop();
-            }
         }
 
         private void CreateTransferCrop()
@@ -133,7 +131,7 @@ namespace ACFrameworkCore
                         //一定范围内的随机
                         var spawnPos = new Vector3(transform.position.x + Random.Range(dirX, cropDetails.spawnRadius.x * dirX),
                         transform.position.y + Random.Range(-cropDetails.spawnRadius.y, cropDetails.spawnRadius.y), 0);
-                        ConfigEvent.InstantiateItemInScene.EventTrigger(cropDetails.producedItemID[i], spawnPos);
+                        ConfigEvent.InstantiateItemInScene.EventTrigger(cropDetails.producedItemID[i],1, spawnPos);
                     }
                 }
             }
@@ -153,7 +151,7 @@ namespace ACFrameworkCore
                 {
                     tileDetails.daysSinceLastHarvest = -1;
                     tileDetails.seedItemID = -1;
-                    //FIXME:自己设计
+                    //FIXME:自己设计 是否吧地直接设置需要挖坑 
                     // tileDetails.daysSinceDug = -1;
                 }
 

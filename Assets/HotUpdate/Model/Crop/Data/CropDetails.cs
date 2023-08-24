@@ -84,6 +84,7 @@ namespace ACFrameworkCore
                 if (harvestToolItemID[i] == toolID)
                     return requireActionCount[i];
             }
+            ACDebug.Log($"当前工具使用异常,请检查配置文件{toolID}");
             return -1;
         }
     }

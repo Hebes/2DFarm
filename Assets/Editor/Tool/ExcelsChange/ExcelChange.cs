@@ -72,8 +72,10 @@ namespace ACFrameworkCore
                 string[][] data = filePath.LoadExcel();
                 //生成C#文件
                 ClassData.CreateScript(filePath, data);
+                Debug.Log("C#文件生成完毕");
                 //生成二进制文件
                 BinaryData.CreateByte(filePath, data);
+                Debug.Log("二进制文件生成完毕");
             }
             //刷新Project窗口
             AssetDatabase.Refresh();

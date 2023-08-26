@@ -34,14 +34,14 @@ namespace ACFrameworkCore
             {
                 ePartType = EPartType.None,
                 ePartName = EPartName.Arm,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.ArmOverrideController),
             });
             //举动西手臂动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Carry,
                 ePartName = EPartName.Arm,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Hold),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Arm_HoldOverrideController),
             });
 
             //工具动画
@@ -50,21 +50,21 @@ namespace ACFrameworkCore
             {
                 ePartType = EPartType.None,
                 ePartName = EPartName.Tool,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.ToolOverrideController),
             });
             //锄头动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Hoe,
                 ePartName = EPartName.Tool,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool_Hoe),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Tool_HoeOverrideController),
             });
             //斧头动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Chop,
                 ePartName = EPartName.Tool,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsTool_Chop),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Tool_ChopOverrideController),
             });
 
             //采集动画
@@ -73,21 +73,21 @@ namespace ACFrameworkCore
             {
                 ePartType = EPartType.Collect,
                 ePartName = EPartName.Arm,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsArm_Collect),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Arm_CollectOverrideController),
             });
             //身体动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Collect,
                 ePartName = EPartName.Body,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsBody_Collect),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Body_CollectOverrideController),
             });
             //头部动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Collect,
                 ePartName = EPartName.Hair,
-                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.AnimationsHair_Collect),
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Hair_CollectOverrideController),
             });
 
             holdItem = transform.GetChildComponent<SpriteRenderer>("HoldItem");

@@ -97,6 +97,7 @@ public class InitGame
             new TimeSystem(),
             new SceneTransitionSystem(),
             new MouseSystem(),
+            new EffectsSystem(),
         };
         foreach (var init in _initHs)
         {
@@ -107,16 +108,16 @@ public class InitGame
     }
     private static void FSMInitUI()
     {
-        ConfigUIPanel.UIActionBarPanel.ShwoUIPanel<UIActionBarPanel>();                           //显示快捷栏面板
-        ConfigUIPanel.UIItemToolTipPanel.ShwoUIPanel<UIItemToolTipPanel>();                     //显示物体信息描述面板
-        ConfigUIPanel.UIPlayerBagPanel.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
-        ConfigUIPanel.UIDragPanelPanel.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
-        ConfigUIPanel.UIGameTimePanel.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
-        ConfigUIPanel.UIFadePanel.ShwoUIPanel<UIFadePanel>();                                   //显示时间面板
+        ConfigUIPanel.UIActionBarPrefab.ShwoUIPanel<UIActionBarPanel>();                           //显示快捷栏面板
+        ConfigUIPanel.UIItemToolTipPrefab.ShwoUIPanel<UIItemToolTipPanel>();                     //显示物体信息描述面板
+        ConfigUIPanel.UIPlayerBagPrefab.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
+        ConfigUIPanel.UIDragPanelPrefab.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
+        ConfigUIPanel.UIGameTimePrefab.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
+        ConfigUIPanel.UIFadePrefab.ShwoUIPanel<UIFadePanel>();                                   //显示时间面板
 
         ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();                                    //显隐界面
-        ConfigUIPanel.UIItemToolTipPanel.CloseUIPanel();                                        //关闭物体信息描述面板
-        ConfigUIPanel.UIPlayerBagPanel.CloseUIPanel();                                          //关闭玩家背包面板
+        ConfigUIPanel.UIItemToolTipPrefab.CloseUIPanel();                                        //关闭物体信息描述面板
+        ConfigUIPanel.UIPlayerBagPrefab.CloseUIPanel();                                          //关闭玩家背包面板
 
         SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
     }

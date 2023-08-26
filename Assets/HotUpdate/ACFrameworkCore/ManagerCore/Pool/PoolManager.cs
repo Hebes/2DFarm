@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Pool;
 using YooAsset;
 
 /*--------脚本描述-----------
@@ -24,7 +26,6 @@ namespace ACFrameworkCore
         public void ICroeInit()
         {
             Instance = this;
-            poolObj = new GameObject("Pool");
             poolDic = new Dictionary<string, PoolData>();
         }
 
@@ -60,7 +61,8 @@ namespace ACFrameworkCore
         /// </summary>
         public void PushObj(string name, GameObject obj)
         {
-            if (poolObj == null) 
+            if (poolObj == null)
+                poolObj = new GameObject("Pool");
             if (poolDic.ContainsKey(name))//里面有抽屉
                 poolDic[name].PushObj(obj);
             else//里面没有抽屉

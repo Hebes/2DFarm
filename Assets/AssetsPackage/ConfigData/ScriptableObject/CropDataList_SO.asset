@@ -159,11 +159,63 @@ MonoBehaviour:
     regrowTimes: 0
     generateAtPlayerPosition: 0
     hasAnimation: 1
+    hasParticalEffect: 1
+    effectType: 1
+    effectPos: {x: 0, y: 2.5, z: 0}
+    soundEffect: 0
+  - seedItemID: 1018
+    growthDays: 0100000002000000020000000300000003000000
+    growthPrefabs:
+    - {fileID: 3769466661009809022, guid: 4ee4822e79027594792666102eb0ae65, type: 3}
+    - {fileID: 3769466661009809022, guid: 4ee4822e79027594792666102eb0ae65, type: 3}
+    - {fileID: 3769466661009809022, guid: 4ee4822e79027594792666102eb0ae65, type: 3}
+    - {fileID: 3769466661009809022, guid: 4ee4822e79027594792666102eb0ae65, type: 3}
+    - {fileID: 4811078152435028307, guid: d933e46f5d9407a488c24f4c44de2a1b, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 83539708444bc497b8d9f5bba223cc6f, type: 3}
+    - {fileID: 21300000, guid: 309497be57b084f4da5b2c165ddceca7, type: 3}
+    - {fileID: 21300000, guid: 41bef8696d59f440aa1befb8b23dee5e, type: 3}
+    - {fileID: 21300000, guid: 0a4318b810b0f467fab50a11f472c746, type: 3}
+    - {fileID: 21300000, guid: a21492e2d90cf4f038c4b9ae2600c5ff, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: e9030000
+    requireActionCount: 05000000
+    transferItemID: 1019
+    producedItemID: f7030000fa030000
+    producedMinAmount: 0100000001000000
+    producedMaxAmount: 0200000005000000
+    spawnRadius: {x: 3.5, y: 1.2}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 1
+    hasParticalEffect: 1
+    effectType: 2
+    effectPos: {x: 0, y: 2.5, z: 0}
+    soundEffect: 0
+  - seedItemID: 1017
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 2521668144163329554, guid: 1b59a5d6a0b99ed45a8331429c1ffcfd, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: f92caccf9fb8e45bcb3b3b1116dcbf48, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: e9030000
+    requireActionCount: 05000000
+    transferItemID: 0
+    producedItemID: f7030000
+    producedMinAmount: 01000000
+    producedMaxAmount: 04000000
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
     hasParticalEffect: 0
     effectType: 0
     effectPos: {x: 0, y: 0, z: 0}
     soundEffect: 0
-  - seedItemID: 1017
+  - seedItemID: 1019
     growthDays: 00000000
     growthPrefabs:
     - {fileID: 2521668144163329554, guid: 1b59a5d6a0b99ed45a8331429c1ffcfd, type: 3}

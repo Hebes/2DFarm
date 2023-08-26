@@ -25,7 +25,7 @@ namespace ACFrameworkCore
             Instance = this;
             bytesDataDic = new Dictionary<string, List<IData>>();
             //加载数据
-            InitData<ItemDetails>(ConfigBytes.BytesItemDetails);
+            InitData<ItemDetails>(ConfigConfigData.ItemDetailsBytes);
             //InitData<TowerInfo>(ConfigBytes.BytesTowerInfo);
             Debug.Log("数据初始化完毕");
         }

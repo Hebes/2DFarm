@@ -34,10 +34,10 @@ namespace ACFrameworkCore
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");
             //加载UI图标
-            normal = ResourceExtension.Load<Sprite>(ConfigSprites.Spritescursor11);
-            tool = ResourceExtension.Load<Sprite>(ConfigSprites.Spritescursor8);
-            seed = ResourceExtension.Load<Sprite>(ConfigSprites.Spritescursor7);
-            item = ResourceExtension.Load<Sprite>(ConfigSprites.Spritescursor3);
+            normal = ResourceExtension.Load<Sprite>(ConfigSprites.cursor11Png);
+            tool = ResourceExtension.Load<Sprite>(ConfigSprites.cursor8Png);
+            seed = ResourceExtension.Load<Sprite>(ConfigSprites.cursor7Png);
+            item = ResourceExtension.Load<Sprite>(ConfigSprites.cursor3Png);
 
             //cursorCanvas = GameObject.FindGameObjectWithTag("CursorCanvas").GetComponent<RectTransform>();
             cursorImage = T_CursorImage.GetComponent<Image>();

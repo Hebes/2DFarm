@@ -1,14 +1,7 @@
 ﻿
 namespace ACFrameworkCore
 {
-    /// <summary>
-    /// 物品的位置
-    /// </summary>
-    public enum EInventoryLocation
-    {
-        Player = 1,
-        Box = 2,
-    }
+    
 
     /// <summary>
     /// 物体类型类型

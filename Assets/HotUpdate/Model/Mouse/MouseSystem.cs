@@ -25,7 +25,7 @@ namespace ACFrameworkCore
         {
             Instance = this;
             //打开UI界面
-            ConfigUIPanel.UICursorPanel.ShwoUIPanel<UICursorPanel>();
+            ConfigUIPanel.UICursorPrefab.ShwoUIPanel<UICursorPanel>();
         }
     }
 }

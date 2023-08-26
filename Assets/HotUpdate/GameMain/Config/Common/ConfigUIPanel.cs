@@ -2,22 +2,22 @@ namespace ACFrameworkCore
 {
     public class ConfigUIPanel
     {
-        public const string GlobalPanel = "Global";
-        public const string UILoadingPanel = "UILoading";
-        public const string AboutPanel = "About";
-        public const string CanvasPanel = "Canvas";
-        public const string InventoryPanel = "Inventory";
-        public const string MainCanvasPanel = "MainCanvas";
-        public const string PlayerBagPanel = "PlayerBag";
-        public const string SettingPanel = "Setting";
-        public const string StartPanel = "Start";
-        public const string Start1Panel = "Start1";
-        public const string UICursorPanel = "UICursor";
-        public const string UIDragPanelPanel = "UIDragPanel";
-        public const string UIFadePanel = "UIFade";
-        public const string UIGameTimePanel = "UIGameTime";
-        public const string UIItemToolTipPanel = "UIItemToolTip";
-        public const string UIPlayerBagPanel = "UIPlayerBag";
-        public const string UIActionBarPanel = "UIActionBar";
+        public const string GlobalPrefab = "Global";
+        public const string UILoadingPrefab = "UILoading";
+        public const string AboutPrefab = "About";
+        public const string CanvasPrefab = "Canvas";
+        public const string InventoryPrefab = "Inventory";
+        public const string MainCanvasPrefab = "MainCanvas";
+        public const string PlayerBagPrefab = "PlayerBag";
+        public const string SettingPrefab = "Setting";
+        public const string StartPrefab = "Start";
+        public const string Start1Prefab = "Start1";
+        public const string UICursorPrefab = "UICursor";
+        public const string UIDragPanelPrefab = "UIDragPanel";
+        public const string UIFadePrefab = "UIFade";
+        public const string UIGameTimePrefab = "UIGameTime";
+        public const string UIItemToolTipPrefab = "UIItemToolTip";
+        public const string UIPlayerBagPrefab = "UIPlayerBag";
+        public const string UIActionBarPrefab = "UIActionBar";
     }
 }

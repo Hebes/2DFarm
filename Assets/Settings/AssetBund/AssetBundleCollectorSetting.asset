@@ -137,6 +137,19 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Effects
+      GroupDesc: "\u7279\u6548"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetsPackage/Effects
+        CollectorGUID: def5287f49708ef408c5fda450fa5e49
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
   - PackageName: Android
     PackageDesc: "\u5B89\u5353\u5305"
     Groups:

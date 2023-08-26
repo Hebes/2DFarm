@@ -58,6 +58,7 @@ namespace ACFrameworkCore
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 1 };
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1016, itemAmount = 10 };
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1001, itemAmount = 1 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][3] = new InventoryItem() { itemID = 1018, itemAmount = 10 };
         }
         public override void UIOnEnable()
         {
@@ -85,12 +86,12 @@ namespace ACFrameworkCore
             if (bagOpened)
             {
                 bagOpened = false;
-                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBagPanel);
+                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBagPrefab);
             }
             else
             {
                 bagOpened = true;
-                CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPanel);
+                CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPrefab);
             }
         }
         /// <summary> 刷新界面 </summary>

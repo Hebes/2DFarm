@@ -2,17 +2,17 @@ namespace ACFrameworkCore
 {
     public class ConfigAnimations
     {
-        public const string AnimationsArm = "Arm";
-        public const string AnimationsArm_Collect = "Arm_Collect";
-        public const string AnimationsArm_Hold = "Arm_Hold";
-        public const string AnimationsArm_Water = "Arm_Water";
-        public const string AnimationsBody = "Body";
-        public const string AnimationsBody_Collect = "Body_Collect";
-        public const string AnimationsBody_Water = "Body_Water";
-        public const string AnimationsHair = "Hair";
-        public const string AnimationsHair_Collect = "Hair_Collect";
-        public const string AnimationsTool = "Tool";
-        public const string AnimationsTool_Chop = "Tool_Chop";
-        public const string AnimationsTool_Hoe = "Tool_Hoe";
+        public const string ArmOverrideController = "Arm";
+        public const string Arm_CollectOverrideController = "Arm_Collect";
+        public const string Arm_HoldOverrideController = "Arm_Hold";
+        public const string Arm_WaterOverrideController = "Arm_Water";
+        public const string BodyOverrideController = "Body";
+        public const string Body_CollectOverrideController = "Body_Collect";
+        public const string Body_WaterOverrideController = "Body_Water";
+        public const string HairOverrideController = "Hair";
+        public const string Hair_CollectOverrideController = "Hair_Collect";
+        public const string ToolOverrideController = "Tool";
+        public const string Tool_ChopOverrideController = "Tool_Chop";
+        public const string Tool_HoeOverrideController = "Tool_Hoe";
     }
 }

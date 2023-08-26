@@ -37,10 +37,10 @@ namespace ACFrameworkCore
             seasonImage = T_SeasonImage.GetComponent<Image>();
 
             seasonSprites = new Sprite[4];
-            seasonSprites[0] = await ConfigSprites.Spritesui_time_12.LoadAsyncUniTask<Sprite>();
-            seasonSprites[1] = await ConfigSprites.Spritesui_time_13.LoadAsyncUniTask<Sprite>();
-            seasonSprites[2] = await ConfigSprites.Spritesui_time_14.LoadAsyncUniTask<Sprite>();
-            seasonSprites[3] = await ConfigSprites.Spritesui_time_15.LoadAsyncUniTask<Sprite>();
+            seasonSprites[0] = await ConfigSprites.ui_time_12Png.LoadAsyncUniTask<Sprite>();
+            seasonSprites[1] = await ConfigSprites.ui_time_13Png.LoadAsyncUniTask<Sprite>();
+            seasonSprites[2] = await ConfigSprites.ui_time_14Png.LoadAsyncUniTask<Sprite>();
+            seasonSprites[3] = await ConfigSprites.ui_time_15Png.LoadAsyncUniTask<Sprite>();
 
             for (int i = 0; i < clockParent.childCount; i++)
             {

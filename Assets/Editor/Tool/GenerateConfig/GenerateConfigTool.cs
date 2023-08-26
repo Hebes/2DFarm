@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
@@ -28,72 +31,19 @@ namespace ACFrameworkCore
         [MenuItem("Tool/GenerateConfig/生成Prefab配置文件")]//#E
         public static void GeneratePrefabConfig()
         {
-            string Path = $"{CommonPath}Prefab\\";
-            string[] strings = Directory.GetFiles(Path, "*.prefab", SearchOption.AllDirectories);
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigPrefab\r\n    {");
-
-            foreach (string s in strings)
-            {
-                string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "");
-                sb.AppendLine($"        public const string {tempstr}Prefab = \"{tempstr}\";");
-            }
-            sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigPrefab.cs";
-            if (File.Exists(classPath))
-                File.Delete(classPath);
-            File.WriteAllText(classPath, sb.ToString());
-            AssetDatabase.Refresh();
+            WriteData("Prefab", ".prefab");
         }
 
         [MenuItem("Tool/GenerateConfig/生成UIPanel配置文件")]//#E
         public static void GenerateUIPanelConfig()
         {
-            string Path = $"{CommonPath}UIPanel/";
-            string[] strings = Directory.GetFiles(Path, "*.prefab", SearchOption.AllDirectories);
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigUIPanel\r\n    {");
-
-            foreach (string s in strings)
-            {
-                string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".prefab", "").Replace(" ","");
-                sb.AppendLine($"        public const string {tempstr}Panel = \"{tempstr}\";");
-            }
-            sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigUIPanel.cs";
-            if (File.Exists(classPath))
-                File.Delete(classPath);
-            File.WriteAllText(classPath, sb.ToString());
-            AssetDatabase.Refresh();
+            WriteData("UIPanel", ".prefab");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Scenes配置文件")]//#E
         public static void GenerateScenesConfig()
         {
-            string Path = $"{CommonPath}Scenes/";
-            string[] strings = Directory.GetFiles(Path, "*.unity", SearchOption.AllDirectories);
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigScenes\r\n    {");
-
-            foreach (string s in strings)
-            {
-                string tempstr = s.Replace(Path, "").Replace(".unity", "");
-                sb.AppendLine($"        public const string {tempstr}Scenes = \"{tempstr}\";");
-            }
-            sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigScenes.cs";
-            if (File.Exists(classPath))
-                File.Delete(classPath);
-            File.WriteAllText(classPath, sb.ToString());
-            AssetDatabase.Refresh();
+            WriteData("Scenes", ".unity");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Tag配置文件")]//#E
@@ -176,90 +126,84 @@ namespace ACFrameworkCore
         [MenuItem("Tool/GenerateConfig/生成bytes配置文件")]//#E
         public static void GeneratebytesConfig()
         {
-            string Path = $"{CommonPath}BinaryData/";
-            string[] strings = Directory.GetFiles(Path, "*.bytes", SearchOption.AllDirectories);
-
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigBytes\r\n    {");
-
-            foreach (string s in strings)
-            {
-                string tempstr = s.Replace(Path, "").Replace(".bytes", "");
-                sb.AppendLine($"        public const string Bytes{tempstr} = \"{tempstr}\";");
-            }
-            sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigBytes.cs";
-            if (File.Exists(classPath))
-            {
-                Debug.Log("文件存在开始删除!");
-                File.Delete(classPath);
-            }
-
-            File.WriteAllText(classPath, sb.ToString());
-            AssetDatabase.Refresh();
+            WriteData("ConfigData", ".bytes");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Sprites配置文件")]//#E
         public static void GenerateSpritesConfig()
         {
-            string Path = $"{CommonPath}Sprites/";
-            string[] strings = Directory.GetFiles(Path, "*.png", SearchOption.AllDirectories);
-
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigSprites\r\n    {");
-
-            foreach (string s in strings)
-            {
-                string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".png", "").Replace("@", "_").Replace("-", "_").Replace(" ", "").Replace("(","").Replace(")", "");
-                string tempstr1 = strPath[strPath.Length - 1].Replace(".png", "");
-                sb.AppendLine($"        public const string Sprites{tempstr} = \"{tempstr1}\";");
-            }
-            sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigSprites.cs";
-            if (File.Exists(classPath))
-            {
-                Debug.Log("文件存在开始删除!");
-                File.Delete(classPath);
-            }
-
-            File.WriteAllText(classPath, sb.ToString());
-            AssetDatabase.Refresh();
+            WriteData("Sprites", ".png");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Animations配置文件")]//#E
         public static void GenerateAnimationsConfig()
         {
-            string Path = $"{CommonPath}Animations/";
-            string[] strings = Directory.GetFiles(Path, "*.overrideController", SearchOption.AllDirectories);
+            WriteData("Animations", ".overrideController");
+        }
 
+        [MenuItem("Tool/GenerateConfig/生成Effects配置文件")]//#E
+        public static void GenerateEffectsConfig()
+        {
+            WriteData("Effects", ".prefab");
+        }
+
+        /// <summary>
+        /// 写入内容 
+        /// </summary>
+        /// <param name="dirName">文件夹名称兼文件名称</param>
+        /// <param name="filterSuffix">过滤后缀</param>
+        /// <param name="classPath"></param>
+        /// <param name="sb"></param>
+        private static void WriteData(string dirName, params string[] filterSuffix)
+        {
+            string Path = $"{CommonPath}{dirName}/";
+            List<string> stringsTemp = new List<string>();
+            foreach (var item in filterSuffix)
+            {
+                string[] strings = Directory.GetFiles(Path, searchPattern: $"*{item}", SearchOption.AllDirectories);
+                stringsTemp.AddRange(strings.ToList());
+            }
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("namespace ACFrameworkCore\r\n{");
-            sb.AppendLine("    public class ConfigAnimations\r\n    {");
-
-            foreach (string s in strings)
+            sb.AppendLine($"    public class Config{dirName}\r\n    {{");
+            foreach (string s in stringsTemp)
             {
-                string[] strPath = s.Split('\\');
-                string tempstr = strPath[strPath.Length - 1].Replace(".overrideController", "").Replace("@", "_").Replace("-", "_").Replace(" ", "");
-                string tempstr1 = strPath[strPath.Length - 1].Replace(".overrideController", "");
-                sb.AppendLine($"        public const string Animations{tempstr} = \"{tempstr1}\";");
+                string sTemp = s.Replace("\\", "/");
+                string[] strPath = sTemp.Split('/');
+                string[] fileNameTemp = strPath[strPath.Length - 1].Split('.');
+
+                //过滤文件名称的特殊符号和执行后缀名
+                string OldfileName = fileNameTemp[0].
+                    Replace($"*.{filterSuffix}", "");
+                string fileName = fileNameTemp[0].
+                    Replace($"*.{filterSuffix}", "").
+                    Replace("@", "_").
+                    Replace("(", "").
+                    Replace(")", "").
+                    Replace("-", "_").
+                    Replace(" ", "");
+
+                string fileSuffix = fileNameTemp[1];
+                //首字母大写
+                string fileSuffixTemp = $"{char.ToUpper(fileSuffix[0])}{fileSuffix.Substring(startIndex: 1, fileSuffix.Length - 1)}";
+
+                sb.AppendLine($"        public const string {fileName}{fileSuffixTemp} = \"{OldfileName}\";");
             }
             sb.AppendLine("    }\r\n}");
-            string classPath = $"{GenerateConfigPath}ConfigAnimations.cs";
+
+            string classPath = $"{Application.dataPath}/HotUpdate/GameMain/Config/Common/Config{dirName}.cs";
+            string classPathMeta = $"{Application.dataPath}/HotUpdate/GameMain/Config/Common/Config{dirName}{filterSuffix}.meta";
+
             if (File.Exists(classPath))
             {
                 Debug.Log("文件存在开始删除!");
                 File.Delete(classPath);
+                File.Delete(classPathMeta);
             }
 
             File.WriteAllText(classPath, sb.ToString());
             AssetDatabase.Refresh();
         }
-
     }
 }

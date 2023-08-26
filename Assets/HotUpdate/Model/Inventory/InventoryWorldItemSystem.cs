@@ -46,13 +46,18 @@ namespace ACFrameworkCore
             itemPrefab = itemPrefabGo.GetComponent<Item>();
         }
 
-
-        /// <summary> 扔东西 </summary>
+        /// <summary>
+        /// 扔东西
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <param name="mousePos"></param>
+        /// <param name="itemType"></param>
+        /// <param name="removeAmount"></param>
         private void OnDropItemEvent(int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
             if (itemType == EItemType.Seed)
             {
-                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
+                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPrefab);
                 InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel1.key, itemID, removeAmount);
                 return;
             }
@@ -62,7 +67,7 @@ namespace ACFrameworkCore
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
             //获取数据
-            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPanel);
+            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPrefab);
             //设置数据
             item.itemID = itemID;
             item.itemAmount = removeAmount;
@@ -72,7 +77,9 @@ namespace ACFrameworkCore
             InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, item.itemAmount);
         }
 
-        /// <summary> 查找玩家限定范围的组件场景加载之后 </summary>
+        /// <summary>
+        /// 查找玩家限定范围的组件场景加载之后
+        /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
@@ -80,7 +87,12 @@ namespace ACFrameworkCore
             RecreateAllItems();
         }
 
-        /// <summary> 在世界地图生成物品 </summary>
+        /// <summary>
+        /// 在世界地图生成物品
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <param name="itemAmount"></param>
+        /// <param name="pos"></param>
         private void OnInstantiateItemScen(int itemID, int itemAmount, Vector3 pos)
         {
             Item item = GameObject.Instantiate(bounceItemPrefab, pos, Quaternion.identity, itemParent);
@@ -88,12 +100,18 @@ namespace ACFrameworkCore
             item.itemAmount = itemAmount;
             item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector3.up);
         }
-        /// <summary> 保存场景item </summary>
+
+        /// <summary>
+        /// 保存场景item
+        /// </summary>
         private void OnBeforeSceneUnloadEvent()
         {
             GetAllSceneItems();
         }
-        /// <summary> 获取当前场景里面的所有的物品 </summary>
+
+        /// <summary>
+        /// 获取当前场景里面的所有的物品
+        /// </summary>
         private void GetAllSceneItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
@@ -113,7 +131,10 @@ namespace ACFrameworkCore
                     sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
             }
         }
-        /// <summary> 刷新重建当前场景物品 切换场景结束的时候 </summary>
+
+        /// <summary>
+        /// 刷新重建当前场景物品 切换场景结束的时候
+        /// </summary>
         private void RecreateAllItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
@@ -131,5 +152,6 @@ namespace ACFrameworkCore
                 }
             }
         }
+
     }
 }

@@ -17,9 +17,9 @@ namespace ACFrameworkCore
     /// </summary>
     public enum EPartName
     {
-        Body,
-        Hair,
-        Arm,
-        Tool,
+        Body = 1,
+        Hair = 2,
+        Arm = 3,
+        Tool = 4,
     }
 }

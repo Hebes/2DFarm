@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1310154973567080254}
   - component: {fileID: 146327108017335466}
-  - component: {fileID: -4514906727396992828}
+  - component: {fileID: 6710261261852057490}
   m_Layer: 0
   m_Name: CropBase
   m_TagString: Untagged
@@ -79,7 +79,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-4514906727396992828
+--- !u!114 &6710261261852057490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,6 +109,9 @@ MonoBehaviour:
     generateAtPlayerPosition: 0
     hasAnimation: 0
     hasParticalEffect: 0
+    effectType: 0
+    effectPos: {x: 0, y: 0, z: 0}
+    soundEffect: 0
   tileDetails:
     girdX: 0
     gridY: 0

@@ -17,8 +17,11 @@ namespace ACFrameworkCore
         Break = 3,
         /// <summary> 砍 </summary>
         Chop = 4,
+        /// <summary> 收割 </summary>
         Reap = 5,
+        /// <summary> 浇水 </summary>
         Water = 6,
+        /// <summary> 采集 </summary>
         Collect = 7,
     }
 }

@@ -15,38 +15,36 @@ namespace ACFrameworkCore
         {
             currentGrid = FindObjectOfType<Grid>();
         }
+        private void OnEnable()
+        {
+            ConfigEvent.GenerateCrop.AddEventListener(GenerateCrop);
+        }
+        private void OnDisable()
+        {
+            ConfigEvent.GenerateCrop.RemoveEventListener(GenerateCrop);
+        }
 
-        //private void OnEnable()
-        //{
-        //    EventHandler.GenerateCropEvent += GenerateCrop;
-        //}
+        private void GenerateCrop()
+        {
+            Vector3Int cropGridPos = currentGrid.WorldToCell(transform.position);
 
-        //private void OnDisable()
-        //{
-        //    EventHandler.GenerateCropEvent -= GenerateCrop;
-        //}
+            if (seedItemID != 0)
+            {
+                var tile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(cropGridPos);
 
-        //private void GenerateCrop()
-        //{
-        //    Vector3Int cropGridPos = currentGrid.WorldToCell(transform.position);
+                if (tile == null)
+                {
+                    tile = new TileDetails();
+                    tile.girdX = cropGridPos.x;
+                    tile.gridY = cropGridPos.y;
+                }
 
-        //    if (seedItemID != 0)
-        //    {
-        //        var tile = GridMapManager.Instance.GetTileDetailsOnMousePosition(cropGridPos);
+                tile.daysSinceWatered = -1;
+                tile.seedItemID = seedItemID;
+                tile.growthDays = growthDays;
 
-        //        if (tile == null)
-        //        {
-        //            tile = new TileDetails();
-        //            tile.girdX = cropGridPos.x;
-        //            tile.gridY = cropGridPos.y;
-        //        }
-
-        //        tile.daysSinceWatered = -1;
-        //        tile.seedItemID = seedItemID;
-        //        tile.growthDays = growthDays;
-
-        //        GridMapManager.Instance.UpdateTileDetails(tile);
-        //    }
-        //}
+                GridMapSystem.Instance.UpdateTileDetails(tile);
+            }
+        }
     }
 }

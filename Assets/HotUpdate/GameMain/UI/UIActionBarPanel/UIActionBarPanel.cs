@@ -59,6 +59,7 @@ namespace ACFrameworkCore
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1016, itemAmount = 10 };
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1001, itemAmount = 1 };
             InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][3] = new InventoryItem() { itemID = 1018, itemAmount = 10 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][4] = new InventoryItem() { itemID = 1003, itemAmount = 1 };
         }
         public override void UIOnEnable()
         {

@@ -36,7 +36,7 @@ namespace ACFrameworkCore
                 ePartName = EPartName.Arm,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.ArmOverrideController),
             });
-            //举动西手臂动画
+            //举东西手臂动画
             animatorTypes.Add(new AnimatorType()
             {
                 ePartType = EPartType.Carry,
@@ -66,6 +66,13 @@ namespace ACFrameworkCore
                 ePartName = EPartName.Tool,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Tool_ChopOverrideController),
             });
+            //十字镐动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Break,
+                ePartName = EPartName.Tool,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Tool_BreakOverrideController),
+            });
 
             //采集动画
             //手臂动画
@@ -88,6 +95,29 @@ namespace ACFrameworkCore
                 ePartType = EPartType.Collect,
                 ePartName = EPartName.Hair,
                 overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Hair_CollectOverrideController),
+            });
+
+            //浇水动画
+            //手臂动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Water,
+                ePartName = EPartName.Arm,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Arm_WaterOverrideController),
+            });
+            //身体动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Water,
+                ePartName = EPartName.Body,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Body_WaterOverrideController),
+            });
+            //头部动画
+            animatorTypes.Add(new AnimatorType()
+            {
+                ePartType = EPartType.Water,
+                ePartName = EPartName.Hair,
+                overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(ConfigAnimations.Hair_WaterOverrideController),
             });
 
             holdItem = transform.GetChildComponent<SpriteRenderer>("HoldItem");

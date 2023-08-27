@@ -54,7 +54,6 @@ namespace ACFrameworkCore
         public bool hasParticalEffect;
 
         public EParticleEffectType effectType;
-        //[Effects]public string effectType;
         public Vector3 effectPos;
         public ESoundName soundEffect;
 

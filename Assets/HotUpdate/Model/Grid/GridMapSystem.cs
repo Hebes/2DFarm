@@ -27,6 +27,7 @@ namespace ACFrameworkCore
         public List<MapData_SO> mapDataList;
 
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();//场景名字+坐标和对应的瓦片信息
+        private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();//场景是否第一次加载
         private Grid currentGrid;
 
         private Tilemap digTilemap;
@@ -40,7 +41,10 @@ namespace ACFrameworkCore
         private void Start()
         {
             foreach (MapData_SO mapData in mapDataList)
+            {
+                firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
+            }
         }
         private void OnEnable()
         {
@@ -193,12 +197,20 @@ namespace ACFrameworkCore
             }
             UpdateTileDetails(currentTile);
         }
+
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = Object.FindObjectOfType<Grid>();
             digTilemap = GameObject.FindWithTag(ConfigTag.TagDig).GetComponent<Tilemap>();
             waterTilemap = GameObject.FindWithTag(ConfigTag.TagWater).GetComponent<Tilemap>();
-            // DisplayMap(SceneManager.GetActiveScene().name);//显示地图数据
+
+            if (firstLoadDict[SceneManager.GetActiveScene().name])
+            {
+                //预先生成农作物
+                ConfigEvent.GenerateCrop.EventTrigger();
+                firstLoadDict[SceneManager.GetActiveScene().name] = false;
+            }
+
             RefreshMap();
         }
 
@@ -256,11 +268,13 @@ namespace ACFrameworkCore
         /// 更新瓦片信息
         /// </summary>
         /// <param name="tileDetails"></param>
-        private void UpdateTileDetails(TileDetails tileDetails)
+        public void UpdateTileDetails(TileDetails tileDetails)
         {
             string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
             if (tileDetailsDict.ContainsKey(key))
                 tileDetailsDict[key] = tileDetails;
+            else
+                tileDetailsDict.Add(key, tileDetails);
         }
 
         /// <summary>
@@ -352,5 +366,46 @@ namespace ACFrameworkCore
             return false;
         }
 
+        /// <summary>
+        /// 根据场景名字构建网格范围，输出范围和原点
+        /// </summary>
+        /// <param name="sceneName">场景名字</param>
+        /// <param name="gridDimensions">网格范围</param>
+        /// <param name="gridOrigin">网格原点</param>
+        /// <returns>是否有当前场景的信息</returns>
+        //public bool GetGridDimensions(string sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
+        //{
+        //    gridDimensions = Vector2Int.zero;
+        //    gridOrigin = Vector2Int.zero;
+
+        //    foreach (var mapData in mapDataList)
+        //    {
+        //        if (mapData.sceneName == sceneName)
+        //        {
+        //            gridDimensions.x = mapData.gridWidth;
+        //            gridDimensions.y = mapData.gridHeight;
+
+        //            gridOrigin.x = mapData.originX;
+        //            gridOrigin.y = mapData.originY;
+
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        //public GameSaveData GenerateSaveData()
+        //{
+        //    GameSaveData saveData = new GameSaveData();
+        //    saveData.tileDetailsDict = this.tileDetailsDict;
+        //    saveData.firstLoadDict = this.firstLoadDict;
+        //    return saveData;
+        //}
+
+        //public void RestoreData(GameSaveData saveData)
+        //{
+        //    this.tileDetailsDict = saveData.tileDetailsDict;
+        //    this.firstLoadDict = saveData.firstLoadDict;
+        //}
     }
 }

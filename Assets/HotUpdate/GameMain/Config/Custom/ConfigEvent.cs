@@ -21,6 +21,7 @@
         public const string PlayerMoveToPosition = "人物加载场景时候的坐标";
         public const string SceneBeforeUnload = "卸载场景之前需要做的事件";
         public const string SceneAfterLoaded = "加载场景之后需要做的事件";
+        public const string GenerateCrop = "生成农作物";
 
         //UI界面相关
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";

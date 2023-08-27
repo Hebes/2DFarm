@@ -38,7 +38,7 @@ namespace ACFrameworkCore
                         ReleaseRoutine(obj).Forget();
                     });
                     break;
-                case EParticleEffectType.Rock:
+                case EParticleEffectType.RockEffect:
                     break;
                 case EParticleEffectType.ReapableScenery:
                     break;

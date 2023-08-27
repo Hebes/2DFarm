@@ -126,12 +126,18 @@ public class InitGame
         await UniTask.DelayFrame(40);
         ACDebug.Log("开始游戏");
         await UniTask.Yield();
+        //显示图片
+        //Sprite sprite = await ConfigSprites.Turnip_growPng.LoadSubAssetsAsyncUniTask($"{ConfigSprites.Turnip_growPng}_0");
+        //GameObject test = new GameObject("test");
+        //SpriteRenderer spriteRenderer = test.AddComponent<SpriteRenderer>();
+        //spriteRenderer.sprite = sprite;
+
         //测试创建拾取的物体
         GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
 
         GameObject go1 = GameObject.Instantiate(gameObject);
         Item item = go1.GetComponent<Item>();
-        item.Init(1007,3).Forget();
+        item.Init(1007, 3).Forget();
 
         GameObject go2 = GameObject.Instantiate(gameObject);
         Item item2 = go2.GetComponent<Item>();

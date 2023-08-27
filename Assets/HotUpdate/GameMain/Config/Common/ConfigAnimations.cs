@@ -11,7 +11,9 @@ namespace ACFrameworkCore
         public const string Body_WaterOverrideController = "Body_Water";
         public const string HairOverrideController = "Hair";
         public const string Hair_CollectOverrideController = "Hair_Collect";
+        public const string Hair_WaterOverrideController = "Hair_Water";
         public const string ToolOverrideController = "Tool";
+        public const string Tool_BreakOverrideController = "Tool_Break";
         public const string Tool_ChopOverrideController = "Tool_Chop";
         public const string Tool_HoeOverrideController = "Tool_Hoe";
     }

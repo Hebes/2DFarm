@@ -40,7 +40,9 @@ namespace ACFrameworkCore
 #endif
         }
 
-        //更新瓦片信息
+        /// <summary>
+        /// 更新瓦片信息
+        /// </summary>
         private void UpdateTileProperties()
         {
             if (!Application.IsPlaying(this))

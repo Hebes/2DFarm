@@ -19,8 +19,8 @@ namespace ACFrameworkCore
     {
         None, 
         LeavesFalling01, 
-        LeavesFalling02, 
-        Rock, 
+        LeavesFalling02,
+        RockEffect,
         ReapableScenery
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using YooAsset;
+using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				
@@ -80,6 +81,16 @@ namespace ACFrameworkCore
             //TODO 后续要从配置中读取 或者直接配置
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             return package.LoadAssetSync<GameObject>(GOName);
+        }
+
+        //子对象加载
+        public static async UniTask<Sprite> LoadSubAssetsAsyncUniTask(this string assetName,string childAssetsName)
+        {
+            var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
+            SubAssetsOperationHandle handle = package.LoadSubAssetsAsync<Sprite>(assetName);
+            await handle.ToUniTask();
+            Sprite sprite = handle.GetSubAssetObject<Sprite>(childAssetsName);
+            return sprite != null ? sprite : null;
         }
     }
 }

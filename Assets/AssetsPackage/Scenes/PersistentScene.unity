@@ -574,6 +574,7 @@ MonoBehaviour:
   waterTile: {fileID: 11400000, guid: 8dbf3a6a83250ff4b8d12c077b5f6dd9, type: 2}
   mapDataList:
   - {fileID: 11400000, guid: d1656bef8c9e5414f8d7431f5141aa35, type: 2}
+  - {fileID: 11400000, guid: 88c41935083b12c4a9f6cbee2a4f1dc3, type: 2}
 --- !u!4 &633154892
 Transform:
   m_ObjectHideFlags: 0
@@ -813,7 +814,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.8125
+  orthographic size: 11.725
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

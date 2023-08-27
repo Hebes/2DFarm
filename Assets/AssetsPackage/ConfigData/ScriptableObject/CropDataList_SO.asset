@@ -218,9 +218,9 @@ MonoBehaviour:
   - seedItemID: 1019
     growthDays: 00000000
     growthPrefabs:
-    - {fileID: 2521668144163329554, guid: 1b59a5d6a0b99ed45a8331429c1ffcfd, type: 3}
+    - {fileID: 2521668144163329554, guid: ca6b594d5452e474a99dece1e349efb6, type: 3}
     growthSprites:
-    - {fileID: 21300000, guid: f92caccf9fb8e45bcb3b3b1116dcbf48, type: 3}
+    - {fileID: 21300000, guid: 774ad8d2636c5457e81a95a3e1f2352d, type: 3}
     seasons: 00000000010000000200000003000000
     harvestToolItemID: e9030000
     requireActionCount: 05000000
@@ -235,5 +235,49 @@ MonoBehaviour:
     hasAnimation: 0
     hasParticalEffect: 0
     effectType: 0
+    effectPos: {x: 0, y: 0, z: 0}
+    soundEffect: 0
+  - seedItemID: 1023
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 1224154678033736779, guid: 80108bf3d9300be4386110db1590c5e7, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: b40fde803efab463bbc950e4d29ee5ce, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: eb030000
+    requireActionCount: 03000000
+    transferItemID: 0
+    producedItemID: 02040000
+    producedMinAmount: 01000000
+    producedMaxAmount: 04000000
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
+    hasParticalEffect: 1
+    effectType: 3
+    effectPos: {x: 0, y: 0, z: 0}
+    soundEffect: 0
+  - seedItemID: 1025
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 1224154678033736779, guid: a7218b74d24e5354ba30400bcaf545e3, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 51532cbb9bf104839b6330f0a739b933, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: eb030000
+    requireActionCount: 03000000
+    transferItemID: 0
+    producedItemID: 02040000
+    producedMinAmount: 01000000
+    producedMaxAmount: 04000000
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
+    hasParticalEffect: 0
+    effectType: 3
     effectPos: {x: 0, y: 0, z: 0}
     soundEffect: 0

@@ -183,8 +183,10 @@ namespace ACFrameworkCore
                         {
                             if (crop.CanHarvest && crop.cropDetails.CheckToolAvailable(currentItem.itemID)) SetCursorValid(); else SetCursorInValid();
                         }
-                        else 
+                        else
+                        {
                             SetCursorInValid();
+                        }
                         break;
                     case EItemType.ReapTool:
                         //if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();

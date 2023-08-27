@@ -28,21 +28,18 @@ namespace ACFrameworkCore
         {
             switch (effectType)
             {
+                default:
                 case EParticleEffectType.None:
                     break;
                 case EParticleEffectType.LeavesFalling01:
                 case EParticleEffectType.LeavesFalling02:
+                case EParticleEffectType.RockEffect:
+                case EParticleEffectType.GrassEffect:
                     PoolManager.Instance.GetObj(effectType.ToString(), (obj) =>
                     {
                         obj.transform.position = pos;
                         ReleaseRoutine(obj).Forget();
                     });
-                    break;
-                case EParticleEffectType.RockEffect:
-                    break;
-                case EParticleEffectType.ReapableScenery:
-                    break;
-                default:
                     break;
             }
         }
@@ -50,7 +47,6 @@ namespace ACFrameworkCore
         private async UniTask ReleaseRoutine(GameObject obj)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1.5f), ignoreTimeScale: false);
-            //yield return new WaitForSeconds(seconds: 1.5f);
             ACDebug.Log($"当前物体名称是{obj.name}");
             PoolManager.Instance.PushObj(obj.name, obj);
         }

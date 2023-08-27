@@ -17,10 +17,14 @@ namespace ACFrameworkCore
     /// </summary>
     public enum EParticleEffectType
     {
-        None, 
-        LeavesFalling01, 
+        None,
+        /// <summary> 砍树特效1 </summary>
+        LeavesFalling01,
+        /// <summary> 砍树特效2 </summary>
         LeavesFalling02,
+        /// <summary> 敲岩石特效 </summary>
         RockEffect,
-        ReapableScenery
+        /// <summary> 杂草特效 </summary>
+        GrassEffect
     }
 }

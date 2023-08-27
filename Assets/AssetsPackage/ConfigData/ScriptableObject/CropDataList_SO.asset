@@ -281,3 +281,69 @@ MonoBehaviour:
     effectType: 3
     effectPos: {x: 0, y: 1.5, z: 0}
     soundEffect: 0
+  - seedItemID: 1027
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 1671905387827553667, guid: 82a21c7f2a75d3b44b5d93bcc53de91e, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 9ae5a331348064d73aa91a952b9e1a41, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: ec030000
+    requireActionCount: 03000000
+    transferItemID: 0
+    producedItemID: 
+    producedMinAmount: 
+    producedMaxAmount: 
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
+    hasParticalEffect: 1
+    effectType: 4
+    effectPos: {x: 0, y: 1, z: 0}
+    soundEffect: 0
+  - seedItemID: 1028
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 1671905387827553667, guid: 2735abe9961468445a314ef23ddf8211, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: e6647f7a307d24b65957f4ef34c39562, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: ec030000
+    requireActionCount: 03000000
+    transferItemID: 0
+    producedItemID: 
+    producedMinAmount: 
+    producedMaxAmount: 
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
+    hasParticalEffect: 1
+    effectType: 4
+    effectPos: {x: 0, y: 1, z: 0}
+    soundEffect: 0
+  - seedItemID: 1029
+    growthDays: 00000000
+    growthPrefabs:
+    - {fileID: 1671905387827553667, guid: 294fac9440188274eafa08b032a88f94, type: 3}
+    growthSprites:
+    - {fileID: 21300000, guid: 0c055f09a64a74805ad18c1f0b134fec, type: 3}
+    seasons: 00000000010000000200000003000000
+    harvestToolItemID: ec030000
+    requireActionCount: 03000000
+    transferItemID: 0
+    producedItemID: 06040000
+    producedMinAmount: 01000000
+    producedMaxAmount: 03000000
+    spawnRadius: {x: 0.5, y: 0.5}
+    daysToRegrow: 0
+    regrowTimes: 0
+    generateAtPlayerPosition: 0
+    hasAnimation: 0
+    hasParticalEffect: 1
+    effectType: 4
+    effectPos: {x: 0, y: 1, z: 0}
+    soundEffect: 0

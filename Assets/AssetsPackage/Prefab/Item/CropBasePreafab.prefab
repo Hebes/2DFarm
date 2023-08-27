@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 146327108017335466}
   - component: {fileID: 6710261261852057490}
   m_Layer: 0
-  m_Name: CropBase
+  m_Name: CropBasePreafab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

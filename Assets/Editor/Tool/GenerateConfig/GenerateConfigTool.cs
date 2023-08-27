@@ -17,6 +17,7 @@ using UnityEngine;
 	暗沉
 描述:
     生成配置文件
+    请遵守命名规范
 
 -----------------------*/
 
@@ -31,19 +32,19 @@ namespace ACFrameworkCore
         [MenuItem("Tool/GenerateConfig/生成Prefab配置文件")]//#E
         public static void GeneratePrefabConfig()
         {
-            WriteData("Prefab", ".prefab");
+            WriteData("Prefab", string.Empty, ".prefab");
         }
 
         [MenuItem("Tool/GenerateConfig/生成UIPanel配置文件")]//#E
         public static void GenerateUIPanelConfig()
         {
-            WriteData("UIPanel", ".prefab");
+            WriteData("UIPanel", string.Empty, ".prefab");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Scenes配置文件")]//#E
         public static void GenerateScenesConfig()
         {
-            WriteData("Scenes", ".unity");
+            WriteData("Scenes", string.Empty, ".unity");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Tag配置文件")]//#E
@@ -126,25 +127,25 @@ namespace ACFrameworkCore
         [MenuItem("Tool/GenerateConfig/生成bytes配置文件")]//#E
         public static void GeneratebytesConfig()
         {
-            WriteData("ConfigData", ".bytes");
+            WriteData("ConfigData", string.Empty, ".bytes");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Sprites配置文件")]//#E
         public static void GenerateSpritesConfig()
         {
-            WriteData("Sprites", ".png");
+            WriteData("Sprites", string.Empty, ".png");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Animations配置文件")]//#E
         public static void GenerateAnimationsConfig()
         {
-            WriteData("Animations", ".overrideController");
+            WriteData("Animations", string.Empty, ".overrideController");
         }
 
         [MenuItem("Tool/GenerateConfig/生成Effects配置文件")]//#E
         public static void GenerateEffectsConfig()
         {
-            WriteData("Effects", ".prefab");
+            WriteData("Effects",string.Empty, ".prefab");
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace ACFrameworkCore
         /// <param name="filterSuffix">过滤后缀</param>
         /// <param name="classPath"></param>
         /// <param name="sb"></param>
-        private static void WriteData(string dirName, params string[] filterSuffix)
+        private static void WriteData(string dirName,string ValueSuffix, params string[] filterSuffix)
         {
             string Path = $"{CommonPath}{dirName}/";
             List<string> stringsTemp = new List<string>();
@@ -186,9 +187,9 @@ namespace ACFrameworkCore
 
                 string fileSuffix = fileNameTemp[1];
                 //首字母大写
-                string fileSuffixTemp = $"{char.ToUpper(fileSuffix[0])}{fileSuffix.Substring(startIndex: 1, fileSuffix.Length - 1)}";
+                //string fileSuffixTemp = $"{char.ToUpper(fileSuffix[0])}{fileSuffix.Substring(startIndex: 1, fileSuffix.Length - 1)}";
 
-                sb.AppendLine($"        public const string {fileName}{fileSuffixTemp} = \"{OldfileName}\";");
+                sb.AppendLine($"        public const string {fileName}{ValueSuffix} = \"{OldfileName}\";");//{fileSuffixTemp}
             }
             sb.AppendLine("    }\r\n}");
 

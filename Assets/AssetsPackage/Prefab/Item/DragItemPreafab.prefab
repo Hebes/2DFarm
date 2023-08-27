@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8304569738658204214}
   - component: {fileID: 8304569738658204215}
   m_Layer: 5
-  m_Name: DragItem
+  m_Name: DragItemPreafab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

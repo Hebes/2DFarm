@@ -23,5 +23,23 @@ namespace ACFrameworkCore
         {
             return DataManager.Instance.GetDataList<T>();
         }
+
+        public static List<T> GetDataList<T>() where T : class, IData
+        {
+            List<T> list = new List<T>();
+            List<IData> tempList = DataManager.Instance.GetDataList<T>();
+            for (int i = 0; i < tempList.Count; i++)
+                list.Add(tempList[i] as T);
+            return list;
+        }
+
+        public static List<T> GetDataListT<T>(this object obj) where T : class, IData
+        {
+            List<T> list = new List<T>();
+            List<IData> tempList = DataManager.Instance.GetDataList<T>();
+            for (int i = 0; i < tempList.Count; i++)
+                list.Add(tempList[i] as T);
+            return list;
+        }
     }
 }

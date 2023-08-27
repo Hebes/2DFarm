@@ -26,6 +26,7 @@ namespace ACFrameworkCore
             bytesDataDic = new Dictionary<string, List<IData>>();
             //加载数据
             InitData<ItemDetails>(ConfigConfigData.ItemDetailsBytes);
+            InitData<PlayerAnimators>(ConfigConfigData.PlayerAnimatorsBytes);
             //InitData<TowerInfo>(ConfigBytes.BytesTowerInfo);
             Debug.Log("数据初始化完毕");
         }

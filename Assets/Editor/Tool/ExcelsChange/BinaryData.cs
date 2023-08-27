@@ -49,6 +49,8 @@ namespace ACFrameworkCore
                             //获取数据的bytes
                             Type typeTemp = types[j];
                             string dataTemp = data[i][j];
+                            if (string.IsNullOrEmpty(dataTemp))//跳过空的数据
+                                continue;
                             byte[] bytes = GetBasicField(typeTemp, dataTemp);
                             //写入数据
                             binaryWriter.Write(bytes);

@@ -133,7 +133,7 @@ public class InitGame
         //spriteRenderer.sprite = sprite;
 
         //测试创建拾取的物体
-        GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+        GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePreafab);
 
         GameObject go1 = GameObject.Instantiate(gameObject);
         Item item = go1.GetComponent<Item>();

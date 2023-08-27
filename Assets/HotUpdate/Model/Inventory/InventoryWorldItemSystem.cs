@@ -31,7 +31,7 @@ namespace ACFrameworkCore
             Instance = this;
             sceneItemDict = new Dictionary<string, List<SceneItem>>();
             //加载预制体
-            bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePrefab).GetComponent<Item>();
+            bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePreafab).GetComponent<Item>();
             //初始化监听信息
             ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
             ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
@@ -42,7 +42,7 @@ namespace ACFrameworkCore
 
         public async UniTaskVoid LoadInit()
         {
-            GameObject itemPrefabGo = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePrefab);
+            GameObject itemPrefabGo = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePreafab);
             itemPrefab = itemPrefabGo.GetComponent<Item>();
         }
 

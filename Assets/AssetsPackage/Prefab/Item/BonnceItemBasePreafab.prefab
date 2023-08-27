@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 8099633645268389533}
   - component: {fileID: -5605270300228476288}
   m_Layer: 0
-  m_Name: BonnceItemBase
+  m_Name: BonnceItemBasePreafab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

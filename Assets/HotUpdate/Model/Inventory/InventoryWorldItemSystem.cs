@@ -90,8 +90,8 @@ namespace ACFrameworkCore
         /// <summary>
         /// 在世界地图生成物品
         /// </summary>
-        /// <param name="itemID"></param>
-        /// <param name="itemAmount"></param>
+        /// <param name="itemID">物品ID</param>
+        /// <param name="itemAmount">物品数量</param>
         /// <param name="pos"></param>
         private void OnInstantiateItemScen(int itemID, int itemAmount, Vector3 pos)
         {

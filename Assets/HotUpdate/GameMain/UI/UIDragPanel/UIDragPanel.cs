@@ -36,6 +36,7 @@ namespace ACFrameworkCore
             ConfigEvent.UIItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
         }
 
+        //鼠标点击事件
         private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
         {
             if (slotUI.itemDatails == null) return;

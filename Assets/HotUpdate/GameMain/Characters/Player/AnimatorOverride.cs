@@ -155,7 +155,6 @@ namespace ACFrameworkCore
                 case EItemType.Seed: currentType = EPartType.Carry; break;
                 case EItemType.Commdity: currentType = EPartType.Carry; break;
                 case EItemType.HoeTool: currentType = EPartType.Hoe; break;
-                //TODO 不同的工具返回不同的动画，在这里补全
                 case EItemType.Furniture: currentType = EPartType.Hoe; break;
                 case EItemType.ChopTool: currentType = EPartType.Chop; break;
                 case EItemType.BreakTool: currentType = EPartType.Break; break;

@@ -1,5 +1,6 @@
 ﻿
 
+using dnlib;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,6 +29,7 @@ namespace ACFrameworkCore
 
         private Dictionary<string, TileDetails> tileDetailsDict = new Dictionary<string, TileDetails>();//场景名字+坐标和对应的瓦片信息
         private Dictionary<string, bool> firstLoadDict = new Dictionary<string, bool>();//场景是否第一次加载
+        private List<ReapItem> itemsInRadius;//杂草列表
         private Grid currentGrid;
 
         private Tilemap digTilemap;
@@ -150,7 +152,7 @@ namespace ACFrameworkCore
                     //在地图上生成物品 ItemManager
                     //移除当前物品（图纸）InventoryManager
                     //移除资源物品 InventoryManger
-                    //EventHandler.CallBuildFurnitureEvent(itemDetails.itemID, mouseWorldPos);
+                    ConfigEvent.BuildFurniture.EventTrigger(itemDetails.itemID, mouseWorldPos);
                     break;
                 case EItemType.HoeTool:
                     SetDigGround(currentTile);
@@ -166,16 +168,16 @@ namespace ACFrameworkCore
                     currentCrop?.ProcessToolAction(itemDetails, currentCrop.tileDetails);
                     break;
                 case EItemType.ReapTool:
-                    //var reapCount = 0;
-                    //for (int i = 0; i < itemsInRadius.Count; i++)
-                    //{
-                    //    EventHandler.CallParticleEffectEvent(ParticleEffectType.ReapableScenery, itemsInRadius[i].transform.position + Vector3.up);
-                    //    itemsInRadius[i].SpawnHarvestItems();
-                    //    Destroy(itemsInRadius[i].gameObject);
-                    //    reapCount++;
-                    //    if (reapCount >= Settings.reapAmount)
-                    //        break;
-                    //}
+                    var reapCount = 0;
+                    for (int i = 0; i < itemsInRadius.Count; i++)
+                    {
+                        ConfigEvent.ParticleEffect.EventTrigger(EParticleEffectType.GrassEffect, itemsInRadius[i].transform.position + Vector3.up);
+                        itemsInRadius[i].SpawnHarvestItems();
+                        Destroy(itemsInRadius[i].gameObject);
+                        reapCount++;
+                        if (reapCount >= ConfigSettings.reapAmount)//限制销毁杂草收割的数量
+                            break;
+                    }
                     ConfigEvent.PlaySound.EventTrigger(ESoundName.Reap);
                     break;
                 case EItemType.WaterTool:
@@ -198,6 +200,9 @@ namespace ACFrameworkCore
             UpdateTileDetails(currentTile);
         }
 
+        /// <summary>
+        /// 场景加载之后需要执行的方法
+        /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = Object.FindObjectOfType<Grid>();
@@ -342,28 +347,26 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public bool HaveReapableItemsInRadius(Vector3 mouseWorldPos, ItemDetails tool)
         {
-            //itemsInRadius = new List<ReapItem>();
+            itemsInRadius = new List<ReapItem>();
+            //射线检测
+            Collider2D[] colliders = new Collider2D[20];
+            Physics2D.OverlapCircleNonAlloc(mouseWorldPos, tool.itemUseRadiue, colliders);
 
-            //Collider2D[] colliders = new Collider2D[20];
-
-            //Physics2D.OverlapCircleNonAlloc(mouseWorldPos, tool.itemUseRadius, colliders);
-
-            //if (colliders.Length > 0)
-            //{
-            //    for (int i = 0; i < colliders.Length; i++)
-            //    {
-            //        if (colliders[i] != null)
-            //        {
-            //            if (colliders[i].GetComponent<ReapItem>())
-            //            {
-            //                var item = colliders[i].GetComponent<ReapItem>();
-            //                itemsInRadius.Add(item);
-            //            }
-            //        }
-            //    }
-            //}
-            //return itemsInRadius.Count > 0;
-            return false;
+            if (colliders.Length > 0)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i] != null)
+                    {
+                        if (colliders[i].GetComponent<ReapItem>())
+                        {
+                            var item = colliders[i].GetComponent<ReapItem>();
+                            itemsInRadius.Add(item);
+                        }
+                    }
+                }
+            }
+            return itemsInRadius.Count > 0;
         }
 
         /// <summary>

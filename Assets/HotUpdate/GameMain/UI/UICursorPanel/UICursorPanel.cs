@@ -189,7 +189,7 @@ namespace ACFrameworkCore
                         }
                         break;
                     case EItemType.ReapTool:
-                        //if (GridMapManager.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
+                        if (GridMapSystem.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
                         break;
                     case EItemType.WaterTool:
                         if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();

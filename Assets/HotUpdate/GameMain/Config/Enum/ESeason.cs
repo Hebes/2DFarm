@@ -1,8 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    季节
+
+-----------------------*/
 
 namespace ACFrameworkCore
 {
@@ -11,9 +17,9 @@ namespace ACFrameworkCore
     /// </summary>
     public enum ESeason
     {
-        春天,
-        夏天,
-        秋天,
-        冬天
+        春天=1,
+        夏天=2,
+        秋天=3,
+        冬天=4,
     }
 }

@@ -52,5 +52,9 @@
 
         //音乐相关
         public const string PlaySound = "播放音乐";
+
+        //建造相关
+        public const string BuildFurniture = "建造家具";
+
     }
 }

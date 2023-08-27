@@ -18,7 +18,7 @@ namespace ACFrameworkCore
     {
         public int itemID;
         public int itemAmount;//默认数量是2
-        public ItemDetails itemDatails;
+        public ItemDetails itemDetails;
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;
@@ -42,17 +42,24 @@ namespace ACFrameworkCore
         public async UniTask Init(int ID,int itemAmount)
         {
             this.itemID = ID;
-            this.itemDatails = InventoryAllSystem.Instance.GetItem(ID);
+            this.itemDetails = InventoryAllSystem.Instance.GetItem(ID);
             this.itemAmount = itemAmount;
-            if (itemDatails != null)
+            if (itemDetails != null)
             {
                 //加载图片
-                string icon = !string.IsNullOrEmpty(itemDatails.itemOnWorldSprite) ? itemDatails.itemOnWorldSprite : itemDatails.itemIcon;
+                string icon = !string.IsNullOrEmpty(itemDetails.itemOnWorldSprite) ? itemDetails.itemOnWorldSprite : itemDetails.itemIcon;
                 spriteRenderer.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(icon);
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);
                 coll.size = newSize;//设置尺寸
                 coll.offset = new Vector2(0, spriteRenderer.sprite.bounds.center.y);//设置他的偏移，根据中心点
+            }
+
+            if ((EItemType)itemDetails.itemType == EItemType.ReapableSceney)
+            {
+                gameObject.AddComponent<ReapItem>();
+                gameObject.GetComponent<ReapItem>().InitCropData(itemDetails.itemID);
+                gameObject.AddComponent<ItemInteractive>();
             }
         }
     }

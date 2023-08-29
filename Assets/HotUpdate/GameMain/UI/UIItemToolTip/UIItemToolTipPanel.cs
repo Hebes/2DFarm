@@ -17,12 +17,12 @@ namespace ACFrameworkCore
 {
     public class UIItemToolTipPanel : UIBase
     {
-        private TextMeshProUGUI nameText;//名称
-        private TextMeshProUGUI typeText;//类型
-        private TextMeshProUGUI descriptionText;//描述
-        private Text valueText;//价格
-        private GameObject bottomPart;//底部
-        private Transform itemToolTip;//底部
+        private TextMeshProUGUI nameText;           //名称
+        private TextMeshProUGUI typeText;           //类型
+        private TextMeshProUGUI descriptionText;    //描述
+        private Text valueText;                     //价格
+        private GameObject bottomPart;              //底部
+        private Transform itemToolTip;              //底部
 
         public override void UIAwake()
         {
@@ -41,16 +41,14 @@ namespace ACFrameworkCore
             GameObject T_Name = UIComponent.Get<GameObject>("T_Name");
             nameText = T_Name.GetComponent<TextMeshProUGUI>();
             itemToolTip = panelGameObject.transform.Find("ItemToolTip");
-            
+
             ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetailsData, string, Vector3>(SetupTooltip);
-            ConfigEvent.ItemToolTipClose.AddEventListener(ItemToolTipClose);
+            ConfigEvent.ItemToolTipClose.AddEventListener(CloseUIForm);
         }
 
-        private void ItemToolTipClose()
-        {
-            CloseUIForm();
-        }
 
+
+        #region 事件监听
         /// <summary>
         /// 设置提示工具信息
         /// </summary>
@@ -59,7 +57,6 @@ namespace ACFrameworkCore
         /// <param name="vector3"></param>
         public void SetupTooltip(ItemDetailsData itemDatails, string configInventoryKey, Vector3 vector3)
         {
-            //ACDebug.Log("进入了设置提示工具信息");
             OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTipPrefab);
             itemToolTip.GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);//设置锚点
             itemToolTip.position = vector3 + Vector3.up * 30;//设置距离
@@ -88,6 +85,10 @@ namespace ACFrameworkCore
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(panelGameObject.transform as RectTransform);//强制刷新,防止descriptionText描述延迟
         }
+        #endregion
+
+
+
 
         /// <summary>
         /// 设置出售价格

@@ -40,21 +40,20 @@ namespace ACFrameworkCore
                 playerBagSlotList.Add(slotUI);
             }
             InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.PalayerBag, playerBagSlotList);
+            ConfigInventory.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
         }
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            ConfigInventory.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
             InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigInventory.PalayerBag);
-            RefreshItem(playerBagItems);
-        }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-            ConfigInventory.PalayerBag.RemoveEventListener<InventoryItem[]>(RefreshItem);
+            ConfigInventory.PalayerBag.EventTrigger(playerBagItems);
         }
 
-        //刷新界面
+
+        /// <summary>
+        /// 刷新界面
+        /// </summary>
+        /// <param name="obj"></param>
         private void RefreshItem(InventoryItem[] obj)
         {
             for (int i = 0; i < obj?.Length; i++)

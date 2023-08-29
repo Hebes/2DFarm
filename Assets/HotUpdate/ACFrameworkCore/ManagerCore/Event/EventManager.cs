@@ -206,6 +206,11 @@ namespace ACFrameworkCore
                 throw e;
             }
         }
+        public void RemoveEventListenerUniTask<T>(string name, EventInfoUniTask<T>.ActionUniTaskEvent action)
+        {
+            if (eventDic.ContainsKey(name))
+                (eventDic[name] as EventInfoUniTask<T>).actionUniTaskEvent -= action;
+        }
         public async UniTask EventTriggerUniTask<T>(string name, T t)
         {
             if (!eventDic.ContainsKey(name)) return;

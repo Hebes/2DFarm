@@ -1,8 +1,7 @@
 using ACFrameworkCore;
-using UnityEngine;
-using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -18,6 +17,9 @@ public class Player : MonoBehaviour
     private float mouseY;                   //使用工具的动画Y
     private bool UseTool;                  //是否使用工具
 
+
+
+    #region 生命周期
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -40,7 +42,11 @@ public class Player : MonoBehaviour
         if (!InputDisable)
             Movement();
     }
+    #endregion
 
+
+
+    #region 事件监听
     private void OnBeforeSceneUnloadEvent()
     {
         InputDisable = true;
@@ -80,6 +86,9 @@ public class Player : MonoBehaviour
         }
         
     }
+    #endregion
+
+
 
     /// <summary>
     /// 使用工具的动作
@@ -108,8 +117,10 @@ public class Player : MonoBehaviour
         InputDisable = false;
     }
 
-
-    private void PlayerInput()//玩家输入
+    /// <summary>
+    /// 玩家输入
+    /// </summary>
+    private void PlayerInput()
     {
         //用于只能横着走或者竖着走
         //if (inputY == 0)
@@ -138,11 +149,19 @@ public class Player : MonoBehaviour
 
         isMoving = movementInput != Vector2.zero;//判断是否在移动
     }
-    private void Movement()//玩家移动
+
+    /// <summary>
+    /// 玩家移动
+    /// </summary>
+    private void Movement()
     {
         rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
     }
-    private void SwitchAnimation()//播放动画
+
+    /// <summary>
+    /// 播放动画
+    /// </summary>
+    private void SwitchAnimation()
     {
         foreach (var anim in animators)
         {

@@ -13,8 +13,19 @@ namespace ACFrameworkCore
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
             fadeCanvasGroup = panelGameObject.GetComponent<CanvasGroup>();
+        }
+        public override void UIOnEnable()
+        {
+            base.UIOnEnable();  
             ConfigEvent.UIFade.AddEventListenerUniTask<float>(Fade);
         }
+        public override void UIOnDisable()
+        {
+            base.UIOnDisable(); 
+            ConfigEvent.UIFade.RemoveEventListenerUniTask<float>(Fade);
+        }
+
+
 
         /// <summary>loading画面淡入淡出场景</summary>
         /// <param name="targetAlpha">1是黑 0是透明</param>

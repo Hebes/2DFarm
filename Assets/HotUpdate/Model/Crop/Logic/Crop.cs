@@ -20,11 +20,14 @@ namespace ACFrameworkCore
         public CropDetails cropDetails;
         public TileDetails tileDetails;
         private int harvestActionCount;
-        public bool CanHarvest => tileDetails.growthDays >= cropDetails.TotalGrowthDays;
-
         private Animator anim;
 
-        private Transform PlayerTransform => FindObjectOfType<Player>().transform;
+
+
+        public bool CanHarvest => tileDetails.growthDays >= cropDetails.TotalGrowthDays;
+        private Transform PlayerTransform => CommonManagerSystem.Instance.playerTransform;
+
+
 
         public void ProcessToolAction(ItemDetailsData tool, TileDetails tile)
         {
@@ -76,7 +79,6 @@ namespace ACFrameworkCore
                 }
             }
         }
-
         private IEnumerator HarvestAfterAnimation()
         {
             while (!anim.GetCurrentAnimatorStateInfo(0).IsName("END"))
@@ -89,7 +91,6 @@ namespace ACFrameworkCore
             if (cropDetails.transferItemID > 0)
                 CreateTransferCrop();
         }
-
         private void CreateTransferCrop()
         {
             tileDetails.seedItemID = cropDetails.transferItemID;

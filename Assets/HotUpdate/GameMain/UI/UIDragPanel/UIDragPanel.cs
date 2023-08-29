@@ -22,6 +22,8 @@ namespace ACFrameworkCore
         public int itemAmount;                  //物品数量
 
 
+
+        #region 生命周期
         public override void UIAwake()
         {
             base.UIAwake();
@@ -35,24 +37,25 @@ namespace ACFrameworkCore
             ConfigEvent.UIItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
             ConfigEvent.UIItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
         }
+        #endregion
 
-        //鼠标点击事件
-        private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
+
+
+        #region 事件监听
+        private void ItemDrag(Vector3 obj)
         {
-            if (slotUI.itemDatails == null) return;
-            slotUI.isSelected = !slotUI.isSelected;
-            ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
-
-            itemAmount = slotUI.itemAmount;
-            key = slotUI.configInventoryKey;
-
-            switch (slotUI.configInventoryKey)
+            DragItemImage.transform.position = obj;
+        }
+        private void ItemOnBeginDrag(PointerEventData eventData, SlotUI slotUI)
+        {
+            if (slotUI.itemAmount != 0)
             {
-                case ConfigInventory.PalayerBag:
-                case ConfigInventory.ActionBar:
-                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
-                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//切换鼠标样式
-                    break;
+                DragItemImage.enabled = true;//启用拖拽的物体
+                DragItemImage.sprite = slotUI.slotImage.sprite;//设置拖拽物体的图片
+                DragItemImage.color = new Color(DragItemImage.color.r, DragItemImage.color.g, DragItemImage.color.b, .5f);
+                DragItemImage.SetNativeSize();
+                slotUI.isSelected = true;
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
             }
         }
         private void ItemOnEndDrag(PointerEventData eventData, SlotUI slotUI)
@@ -73,21 +76,24 @@ namespace ACFrameworkCore
             //清空所有高亮
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
         }
-        private void ItemOnBeginDrag(PointerEventData eventData, SlotUI slotUI)
+        private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
         {
-            if (slotUI.itemAmount != 0)
+            if (slotUI.itemDatails == null) return;
+            slotUI.isSelected = !slotUI.isSelected;
+            ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
+
+            itemAmount = slotUI.itemAmount;
+            key = slotUI.configInventoryKey;
+
+            switch (slotUI.configInventoryKey)
             {
-                DragItemImage.enabled = true;//启用拖拽的物体
-                DragItemImage.sprite = slotUI.slotImage.sprite;//设置拖拽物体的图片
-                DragItemImage.color = new Color(DragItemImage.color.r, DragItemImage.color.g, DragItemImage.color.b, .5f);
-                DragItemImage.SetNativeSize();
-                slotUI.isSelected = true;
-                ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
+                case ConfigInventory.PalayerBag:
+                case ConfigInventory.ActionBar:
+                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
+                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//切换鼠标样式
+                    break;
             }
         }
-        private void ItemDrag(Vector3 obj)
-        {
-            DragItemImage.transform.position = obj;
-        }
+        #endregion
     }
 }

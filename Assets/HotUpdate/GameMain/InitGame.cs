@@ -13,7 +13,7 @@ public enum EInitGameProcess
     /// <summary> 初始化框架管理核心 </summary>
     FSMInitManagerCore,
     /// <summary> 初始化数据 </summary>
-    FSMInitData,
+    FSMInitModel,
     /// <summary> 初始化UI </summary>
     FSMInitUI,
     /// <summary> 加载保存的数据 </summary>
@@ -35,7 +35,7 @@ public class InitGame
             case EInitGameProcess.FSMInitBaseCore: await FSMInitBaseCore(); break;
             case EInitGameProcess.FSMInitManagerCore: await FSMInitManagerCore(); break;
             case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
-            case EInitGameProcess.FSMInitData: await FSMInitData(); break;
+            case EInitGameProcess.FSMInitModel: await FSMInitModel(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
             case EInitGameProcess.FSMEnterGame: await FSMEnterGame(); break;
         }
@@ -85,9 +85,9 @@ public class InitGame
         //    init.ICroeInit();
         //    await UniTask.Yield();
         //}
-        SwitchInitGameProcess(EInitGameProcess.FSMInitData).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitModel).Forget();
     }
-    private static async UniTask FSMInitData()
+    private static async UniTask FSMInitModel()
     {
         List<ICore> _initHs = new List<ICore>()
         {
@@ -97,6 +97,7 @@ public class InitGame
             new SceneTransitionSystem(),
             new MouseSystem(),
             new EffectsSystem(),
+            new CommonManagerSystem(),
         };
         foreach (var init in _initHs)
         {

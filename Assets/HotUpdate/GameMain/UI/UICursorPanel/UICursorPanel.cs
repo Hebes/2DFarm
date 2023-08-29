@@ -15,17 +15,17 @@ namespace ACFrameworkCore
         private ItemDetailsData currentItem;        //当前鼠标图标
         private Sprite currentSprite;           //存储当前鼠标图片
         private Image cursorImage;              //当前鼠标图片
-        private RectTransform cursorCanvas;     //当前渲染
         private Grid currentGrid;               //当前地板
         private Vector3 mouseWorldPos;          //鼠标是世界位置
         private Vector3Int mouseGridPos;        //鼠标在地图位置
         private bool cursorEnable;              //场景加载之前鼠标不可用
         private bool cursorPositionValid;       //鼠标是否可点按
 
-        private Camera mainCamera => Camera.main;                                           //主摄像机
-        private Transform playerTransform => Object.FindObjectOfType<Player>().transform;   //玩家
+        private Camera mainCamera => CommonManagerSystem.Instance.mainCamera;              //主摄像机
 
 
+
+        #region 生命周期
         public override void UIAwake()
         {
             base.UIAwake();
@@ -39,7 +39,6 @@ namespace ACFrameworkCore
             seed = ResourceExtension.Load<Sprite>(ConfigSprites.cursor7Png);
             item = ResourceExtension.Load<Sprite>(ConfigSprites.cursor3Png);
 
-            //cursorCanvas = GameObject.FindGameObjectWithTag("CursorCanvas").GetComponent<RectTransform>();
             cursorImage = T_CursorImage.GetComponent<Image>();
             currentSprite = normal;
             SetCursorImage(normal);
@@ -75,16 +74,16 @@ namespace ACFrameworkCore
                 SetCursorImage(normal);
             }
         }
+        #endregion
 
 
-        /// <summary> 检查玩家输入 </summary>
-        private void CheckPlayerInput()
-        {
-            //执行方法
-            if (Input.GetMouseButtonDown(0) && cursorPositionValid)
-                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
-        }
-        /// <summary> 设置鼠标对应的图片 </summary>
+
+        #region 事件监听
+        /// <summary>
+        /// 设置鼠标对应的图片
+        /// </summary>
+        /// <param name="itemDatails"></param>
+        /// <param name="isSelected"></param>
         private void OnItemSelectEvent(ItemDetailsData itemDatails, bool isSelected)
         {
             if (!isSelected)//如果不是选中的话
@@ -130,6 +129,33 @@ namespace ACFrameworkCore
             }
 
         }
+
+        /// <summary>
+        /// 卸载场景前需要做的事情
+        /// </summary>
+        private void OnBeforeSceneUnloadEvent()
+        {
+            cursorEnable = false;
+        }
+
+        /// <summary>
+        /// 场景加载之后需要做的事
+        /// </summary>
+        private void OnAfterSceneLoadedEvent()
+        {
+            currentGrid = Object.FindObjectOfType<Grid>();
+        }
+        #endregion
+
+
+
+        /// <summary> 检查玩家输入 </summary>
+        private void CheckPlayerInput()
+        {
+            //执行方法
+            if (Input.GetMouseButtonDown(0) && cursorPositionValid)
+                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
+        }
         /// <summary> 是否与UI互动 </summary>
         private bool InteractwithUI()
         {
@@ -143,7 +169,7 @@ namespace ACFrameworkCore
             //ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
 
             //判断在使用范围内
-            Vector3Int playerGridPos = currentGrid.WorldToCell(playerTransform.position);
+            Vector3Int playerGridPos = currentGrid.WorldToCell(CommonManagerSystem.Instance.playerTransform.position);
             if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
                 || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
             {
@@ -216,16 +242,6 @@ namespace ACFrameworkCore
             {
                 SetCursorInValid();
             }
-        }
-        /// <summary> 场景加载之后需要做的事 </summary>
-        private void OnAfterSceneLoadedEvent()
-        {
-            currentGrid = Object.FindObjectOfType<Grid>();
-        }
-        /// <summary> 卸载场景前需要做的事情 </summary>
-        private void OnBeforeSceneUnloadEvent()
-        {
-            cursorEnable = false;
         }
         /// <summary> 设置鼠标图片 </summary>
         private void SetCursorImage(Sprite sprite)

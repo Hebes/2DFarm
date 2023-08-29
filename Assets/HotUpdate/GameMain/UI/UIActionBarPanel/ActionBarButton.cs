@@ -39,19 +39,20 @@ namespace ACFrameworkCore
             canUse = gameState == EGameState.Gameplay;
         }
 
+        /// <summary>
+        /// 快捷键
+        /// </summary>
         private void Update()
         {
             if (Input.GetKeyDown(key) && canUse)
             {
-                if (slotUI.itemDatails != null)
-                {
-                    slotUI.isSelected = !slotUI.isSelected;
-                    if (slotUI.isSelected)
-                        ConfigEvent.UIDisplayHighlighting.EventTrigger(ConfigInventory.ActionBar, slotUI.slotIndex);//显示高亮
-                    else
-                        ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
-                }
+                if (slotUI.itemDatails == null) return;
+                slotUI.isSelected = !slotUI.isSelected;
+                if (slotUI.isSelected)
+                    ConfigEvent.UIDisplayHighlighting.EventTrigger(ConfigInventory.ActionBar, slotUI.slotIndex);//显示高亮
+                else
+                    ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
+                ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
             }
         }
     }

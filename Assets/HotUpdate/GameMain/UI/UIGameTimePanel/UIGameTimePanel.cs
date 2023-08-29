@@ -4,6 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    时间显示
+
+-----------------------*/
+
 namespace ACFrameworkCore
 {
     public class UIGameTimePanel : UIBase
@@ -53,13 +64,13 @@ namespace ACFrameworkCore
         {
             base.UIOnEnable();
             ConfigEvent.GameDate.AddEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.AddEventListener<int, int,int, ESeason>(OnGameMinuteEvent);
+            ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
             ConfigEvent.GameDate.RemoveEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.RemoveEventListener<int, int,int, ESeason>(OnGameMinuteEvent);
+            ConfigEvent.GameMinute.RemoveEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
         }
 
         /// <summary>
@@ -69,7 +80,7 @@ namespace ACFrameworkCore
         /// <param name="hour"></param>
         private void OnGameMinuteEvent(int minute, int hour, int day, ESeason season)
         {
-            timeText.text = $"{hour.ToString("00")}:{minute.ToString( "00")}";
+            timeText.text = $"{hour.ToString("00")}:{minute.ToString("00")}";
         }
 
         /// <summary>
@@ -99,12 +110,10 @@ namespace ACFrameworkCore
             {
                 foreach (var item in clockBlocks)
                     item.SetActive(false);
+                return;
             }
-            else
-            {
-                for (int i = 0; i < clockBlocks.Count; i++)
-                    clockBlocks[i].SetActive(i < index + 1);
-            }
+            for (int i = 0; i < clockBlocks.Count; i++)
+                clockBlocks[i].SetActive(i < index + 1);
         }
 
         /// <summary>

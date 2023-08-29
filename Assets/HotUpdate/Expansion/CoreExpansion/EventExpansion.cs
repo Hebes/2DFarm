@@ -111,6 +111,10 @@ namespace ACFrameworkCore
         {
             EventManager.Instance.AddEventListenerUniTask<T>(eventName, action);
         }
+        public static void RemoveEventListenerUniTask<T>(this string eventName, EventInfoUniTask<T>.ActionUniTaskEvent action)
+        {
+            EventManager.Instance.RemoveEventListenerUniTask<T>(eventName, action);
+        }
         public static async UniTask EventTriggerUniTask<T>(this string eventName, T info)
         {
             await EventManager.Instance.EventTriggerUniTask<T>(eventName, info);

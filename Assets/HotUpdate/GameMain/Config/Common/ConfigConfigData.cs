@@ -2,8 +2,8 @@ namespace ACFrameworkCore
 {
     public class ConfigConfigData
     {
-        public const string CropDetailsBytes = "CropDetails";
-        public const string ItemDetailsBytes = "ItemDetails";
-        public const string PlayerAnimatorsBytes = "PlayerAnimators";
+        public const string ItemDetailsData = "ItemDetailsData";
+        public const string PlayerAnimatorsData = "PlayerAnimatorsData";
+        public const string ScheduleDetailsData = "ScheduleDetailsData";
     }
 }

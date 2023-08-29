@@ -26,7 +26,7 @@ namespace ACFrameworkCore
 
         private Transform PlayerTransform => FindObjectOfType<Player>().transform;
 
-        public void ProcessToolAction(ItemDetails tool, TileDetails tile)
+        public void ProcessToolAction(ItemDetailsData tool, TileDetails tile)
         {
             tileDetails = tile;
 

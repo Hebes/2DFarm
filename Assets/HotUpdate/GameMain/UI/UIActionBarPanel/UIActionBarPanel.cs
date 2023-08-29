@@ -102,7 +102,7 @@ namespace ACFrameworkCore
             {
                 if (obj[i].itemAmount > 0)//有物品
                 {
-                    ItemDetails item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
+                    ItemDetailsData item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
                     ActionBarSlotUIList[i].UpdateSlot(item, obj[i].itemAmount).Forget();
                 }
                 else

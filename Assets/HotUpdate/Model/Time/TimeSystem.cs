@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -16,26 +17,29 @@ namespace ACFrameworkCore
 
     public class TimeSystem : ICore
     {
+        public static TimeSystem Instance;
         private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
         private ESeason gameSeason = ESeason.春天;
         private int monthInSeason = 3;  //每个季度有多少个月
-        public bool gameCLockPause;     //时间的暂停
+        public bool gameClockPause;     //时间的暂停
         private float tiktime;          //计时器
+        private float timeDifference;   //灯光时间差
+
+        public TimeSpan GameTime => new TimeSpan(gameHour, gameMinute, gameSecond);
 
         public void ICroeInit()
         {
+            Instance = this;
             NewGameTime();
-
-            GameObject TimeGo = new GameObject("TimeGo");
 
             MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
             ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
-            ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour);
+            ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour, gameDay, gameSeason);
         }
 
         private void OnUpdate()
         {
-            if (!gameCLockPause)
+            if (!gameClockPause)
             {
                 tiktime += Time.deltaTime;
                 if (tiktime >= ConfigSettings.secondThreshold)
@@ -122,7 +126,7 @@ namespace ACFrameworkCore
                 }
                 ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
-            ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour);
+            ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour, gameDay, gameSeason);
             //Debug.Log("Second 秒：" + gameSecond + "Minute 分：" + gameMinute);
         }
     }

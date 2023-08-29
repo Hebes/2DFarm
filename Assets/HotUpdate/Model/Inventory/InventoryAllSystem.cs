@@ -202,9 +202,9 @@ namespace ACFrameworkCore
         }//显示高亮
 
         //获取物品信息
-        public ItemDetails GetItem(int id)
+        public ItemDetailsData GetItem(int id)
         {
-            return DataManager.Instance.GetDataOne<ItemDetails>(id);
+            return DataManager.Instance.GetDataOne<ItemDetailsData>(id);
         }
     }
 }

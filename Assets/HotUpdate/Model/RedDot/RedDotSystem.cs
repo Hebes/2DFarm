@@ -17,7 +17,7 @@ using System.Text;
 
 namespace ACFrameworkCore
 {
-    public class RedDotSystem : Singleton<RedDotSystem>
+    public class RedDotSystem : SingletonBase<RedDotSystem>
     {
         private Dictionary<string, TreeNode> m_AllNodes;                    //所有节点集合
         private HashSet<TreeNode> m_DirtyNodes;                             //脏节点集合

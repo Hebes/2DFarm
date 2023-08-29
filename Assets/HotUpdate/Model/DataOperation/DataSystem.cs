@@ -25,7 +25,7 @@ namespace ACFrameworkCore
         /// <summary> XML </summary>
         XML,
     }
-    public class DataSystem : Singleton<DataSystem>
+    public class DataSystem : SingletonBase<DataSystem>
     {
 
         #region  Type type参数

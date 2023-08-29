@@ -25,10 +25,13 @@ namespace ACFrameworkCore
             Instance = this;
             bytesDataDic = new Dictionary<string, List<IData>>();
             //加载数据
-            InitData<ItemDetails>(ConfigConfigData.ItemDetailsBytes);
-            InitData<PlayerAnimators>(ConfigConfigData.PlayerAnimatorsBytes);
-            //InitData<TowerInfo>(ConfigBytes.BytesTowerInfo);
+            InitData<ItemDetailsData>(ConfigConfigData.ItemDetailsData);
+            InitData<PlayerAnimatorsData>(ConfigConfigData.PlayerAnimatorsData);
+            InitData<ScheduleDetailsData>(ConfigConfigData.ScheduleDetailsData);
             Debug.Log("数据初始化完毕");
+            GameObject gameObject = new GameObject("DataManager");
+            gameObject.AddComponent<ShowDataManager>();
+            GameObject.DontDestroyOnLoad(gameObject);
         }
 
         public void InitData<T>(string fileName) where T : IData

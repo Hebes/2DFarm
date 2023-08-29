@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
         ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
-        ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetails>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
+        ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
     }
     private void Update()
     {
@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
     {
         transform.position = targetPosition;
     }
-    private async UniTaskVoid OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetails itemDetails)
+    private async UniTaskVoid OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
     {
         switch ((EItemType)itemDetails.itemType)
         {
@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
     /// <param name="mouseWorldPos"></param>
     /// <param name="itemDetails"></param>
     /// <returns></returns>
-    private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetails itemDetails)
+    private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
     {
         UseTool = true;
         InputDisable = true;

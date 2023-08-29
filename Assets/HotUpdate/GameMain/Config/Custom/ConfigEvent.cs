@@ -56,5 +56,9 @@
         //建造相关
         public const string BuildFurniture = "建造家具";
 
+        //游戏相关
+        public const string EndGame = "结束游戏";
+        public const string StartNewGame = "开始新的游戏";
+
     }
 }

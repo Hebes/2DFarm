@@ -50,14 +50,14 @@ namespace ACFrameworkCore
         }
         private void OnEnable()
         {
-            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetails>(OnExecuteActionAfterAnimation);
+            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
         }
         private void OnDisable()
         {
-            ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetails>(OnExecuteActionAfterAnimation);
+            ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.RemoveEventListener(RefreshMap);
@@ -105,7 +105,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="key">x+y+地图名字</param>
         /// <returns></returns>
-        private TileDetails GetTileDetails(string key)
+        public TileDetails GetTileDetails(string key)
         {
             return tileDetailsDict.ContainsKey(key) ? tileDetailsDict[key] : null;
         }
@@ -126,7 +126,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="mouseWorldPos">鼠标坐标</param>
         /// <param name="itemDetails">物品信息</param>
-        private void OnExecuteActionAfterAnimation(Vector3 mouseWorldPos, ItemDetails itemDetails)
+        private void OnExecuteActionAfterAnimation(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
         {
             Vector3Int mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//格子的坐标
             TileDetails currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
@@ -345,7 +345,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="tool">物品信息</param>
         /// <returns></returns>
-        public bool HaveReapableItemsInRadius(Vector3 mouseWorldPos, ItemDetails tool)
+        public bool HaveReapableItemsInRadius(Vector3 mouseWorldPos, ItemDetailsData tool)
         {
             itemsInRadius = new List<ReapItem>();
             //射线检测
@@ -376,39 +376,39 @@ namespace ACFrameworkCore
         /// <param name="gridDimensions">网格范围</param>
         /// <param name="gridOrigin">网格原点</param>
         /// <returns>是否有当前场景的信息</returns>
-        //public bool GetGridDimensions(string sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
-        //{
-        //    gridDimensions = Vector2Int.zero;
-        //    gridOrigin = Vector2Int.zero;
+        public bool GetGridDimensions(string sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
+        {
+            gridDimensions = Vector2Int.zero;
+            gridOrigin = Vector2Int.zero;
 
-        //    foreach (var mapData in mapDataList)
-        //    {
-        //        if (mapData.sceneName == sceneName)
-        //        {
-        //            gridDimensions.x = mapData.gridWidth;
-        //            gridDimensions.y = mapData.gridHeight;
+            foreach (var mapData in mapDataList)
+            {
+                if (mapData.sceneName == sceneName)
+                {
+                    gridDimensions.x = mapData.gridWidth;
+                    gridDimensions.y = mapData.gridHeight;
 
-        //            gridOrigin.x = mapData.originX;
-        //            gridOrigin.y = mapData.originY;
+                    gridOrigin.x = mapData.originX;
+                    gridOrigin.y = mapData.originY;
 
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        //public GameSaveData GenerateSaveData()
-        //{
-        //    GameSaveData saveData = new GameSaveData();
-        //    saveData.tileDetailsDict = this.tileDetailsDict;
-        //    saveData.firstLoadDict = this.firstLoadDict;
-        //    return saveData;
-        //}
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.tileDetailsDict = this.tileDetailsDict;
+            saveData.firstLoadDict = this.firstLoadDict;
+            return saveData;
+        }
 
-        //public void RestoreData(GameSaveData saveData)
-        //{
-        //    this.tileDetailsDict = saveData.tileDetailsDict;
-        //    this.firstLoadDict = saveData.firstLoadDict;
-        //}
+        public void RestoreData(GameSaveData saveData)
+        {
+            this.tileDetailsDict = saveData.tileDetailsDict;
+            this.firstLoadDict = saveData.firstLoadDict;
+        }
     }
 }

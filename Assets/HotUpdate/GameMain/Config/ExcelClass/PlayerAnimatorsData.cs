@@ -3,7 +3,7 @@ using ACFrameworkCore;
 using System;
 	
 [Serializable]
-public class PlayerAnimators : IData
+public class PlayerAnimatorsData : IData
 {
 	public int       	AnimatorID;
 	public string    	AnimatorDes;

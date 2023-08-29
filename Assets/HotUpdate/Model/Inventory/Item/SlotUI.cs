@@ -26,7 +26,7 @@ namespace ACFrameworkCore
         public Image slotHightLight;        //高亮
 
         public bool isSelected;             //是否启用高亮
-        public ItemDetails itemDatails;     //物品信息
+        public ItemDetailsData itemDatails;     //物品信息
         public int itemAmount;              //物品数量
         public int slotIndex;               //格子序列号
         public string configInventoryKey;   //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray的Key
@@ -51,7 +51,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="item"></param>
         /// <param name="Amount"></param>
-        public async UniTask UpdateSlot(ItemDetails item, int Amount)
+        public async UniTask UpdateSlot(ItemDetailsData item, int Amount)
         {
             itemDatails = item;
             slotImage.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(item.itemIcon);

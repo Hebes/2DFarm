@@ -13,7 +13,7 @@ namespace ACFrameworkCore
         English = 1,
     }
 
-    public class LanaguageSystem : Singleton<LanaguageSystem>
+    public class LanaguageSystem : SingletonBase<LanaguageSystem>
     {
         private Dictionary<string, string> LanguageTextKeyDic;//语言字典
         public event Action OnLanguageChangeEvt;//回调事件

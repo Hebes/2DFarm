@@ -42,7 +42,7 @@ namespace ACFrameworkCore
             nameText = T_Name.GetComponent<TextMeshProUGUI>();
             itemToolTip = panelGameObject.transform.Find("ItemToolTip");
             
-            ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetails, string, Vector3>(SetupTooltip);
+            ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetailsData, string, Vector3>(SetupTooltip);
             ConfigEvent.ItemToolTipClose.AddEventListener(ItemToolTipClose);
         }
 
@@ -57,7 +57,7 @@ namespace ACFrameworkCore
         /// <param name="itemDatails"></param>
         /// <param name="configInventoryKey"></param>
         /// <param name="vector3"></param>
-        public void SetupTooltip(ItemDetails itemDatails, string configInventoryKey, Vector3 vector3)
+        public void SetupTooltip(ItemDetailsData itemDatails, string configInventoryKey, Vector3 vector3)
         {
             //ACDebug.Log("进入了设置提示工具信息");
             OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTipPrefab);
@@ -95,7 +95,7 @@ namespace ACFrameworkCore
         /// <param name="itemDatails"></param>
         /// <param name="configInventoryKey"></param>
         /// <returns></returns>
-        private int SetSellPrice(ItemDetails itemDatails, string configInventoryKey)
+        private int SetSellPrice(ItemDetailsData itemDatails, string configInventoryKey)
         {
             int price = itemDatails.itemPrice;
             switch (configInventoryKey)

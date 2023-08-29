@@ -53,13 +53,13 @@ namespace ACFrameworkCore
         {
             base.UIOnEnable();
             ConfigEvent.GameDate.AddEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.AddEventListener<int, int>(OnGameMinuteEvent);
+            ConfigEvent.GameMinute.AddEventListener<int, int,int, ESeason>(OnGameMinuteEvent);
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
             ConfigEvent.GameDate.RemoveEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.RemoveEventListener<int, int>(OnGameMinuteEvent);
+            ConfigEvent.GameMinute.RemoveEventListener<int, int,int, ESeason>(OnGameMinuteEvent);
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="minute"></param>
         /// <param name="hour"></param>
-        private void OnGameMinuteEvent(int minute, int hour)
+        private void OnGameMinuteEvent(int minute, int hour, int day, ESeason season)
         {
-            timeText.text = $"{hour.ToString("00")}:{minute.ToString("00")}";
+            timeText.text = $"{hour.ToString("00")}:{minute.ToString( "00")}";
         }
 
         /// <summary>

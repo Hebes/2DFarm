@@ -611,3 +611,7 @@ MonoBehaviour:
   - tileCoordinate: {x: 5, y: 2}
     gridType: 1
     boolTypeValue: 1
+  gridWidth: 28
+  gridHeight: 20
+  originX: -20
+  originY: -10

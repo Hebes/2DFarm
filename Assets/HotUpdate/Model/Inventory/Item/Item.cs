@@ -18,7 +18,7 @@ namespace ACFrameworkCore
     {
         public int itemID;
         public int itemAmount;//默认数量是2
-        public ItemDetails itemDetails;
+        public ItemDetailsData itemDetails;
 
         private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;

@@ -2,7 +2,8 @@
 
 namespace ACFrameworkCore
 {
-    public class SingletonInit<T> where T : ICore, new()
+    //内存中的
+    public class SingletonBaseInit<T> where T : ICore, new()
     {
         private static T instance;
         public static T Instance
@@ -18,7 +19,7 @@ namespace ACFrameworkCore
             }
         }
     }
-    public class Singleton<T> where T :  new()
+    public class SingletonBase<T> where T :  new()
     {
         private static T instance;
         public static T Instance
@@ -32,8 +33,8 @@ namespace ACFrameworkCore
         }
     }
 
-
-    public class MonoSingletonInit<T> : MonoBehaviour where T : MonoBehaviour, ICore
+    //通过new物体创建的
+    public class SingletonNewMonoInit<T> : MonoBehaviour where T : MonoBehaviour, ICore
     {
         private static T instance;
         public static T Instance
@@ -53,7 +54,7 @@ namespace ACFrameworkCore
             }
         }
     }
-    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class SingletonNewMono<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T instance;
         public static T Instance
@@ -71,5 +72,26 @@ namespace ACFrameworkCore
                 return instance;
             }
         }
+    }
+
+    //已有物体创建的
+    public class SinglentMono<T> : MonoBehaviour where T : SinglentMono<T>
+    {
+        private static T instance;
+        public static T Instance => instance;
+        protected virtual void Awake()
+        {
+            if (instance != null)
+                Destroy(gameObject);
+            else
+                instance = (T)this;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (instance == this)
+                instance = null;
+        }
+
     }
 }

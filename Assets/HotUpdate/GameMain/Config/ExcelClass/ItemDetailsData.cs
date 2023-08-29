@@ -3,14 +3,14 @@ using ACFrameworkCore;
 using System;
 	
 [Serializable]
-public class CropDetails : IData
+public class ItemDetailsData : IData
 {
 	public int       	itemID;
 	public string    	name;
-	public List<int> 	GrowthDays;
-	public List<string>	GrowthPrefab;
+	public int       	itemType;
+	public string    	itemIcon;
 	public string    	itemOnWorldSprite;
-	public List<int> 	Seasons;
+	public string    	itemDescription;
 	public int       	itemUseRadiue;
 	public bool      	canPickedup;
 	public bool      	canDropped;

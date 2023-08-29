@@ -12,7 +12,7 @@ namespace ACFrameworkCore
         public Sprite tool;                     //工具图标
         public Sprite seed;                     //种子
         public Sprite item;                     //物品图标
-        private ItemDetails currentItem;        //当前鼠标图标
+        private ItemDetailsData currentItem;        //当前鼠标图标
         private Sprite currentSprite;           //存储当前鼠标图片
         private Image cursorImage;              //当前鼠标图片
         private RectTransform cursorCanvas;     //当前渲染
@@ -47,14 +47,14 @@ namespace ACFrameworkCore
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetails, bool>(OnItemSelectEvent);
+            ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
-            ConfigEvent.ItemSelectedEvent.RemoveEventListener<ItemDetails, bool>(OnItemSelectEvent);
+            ConfigEvent.ItemSelectedEvent.RemoveEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
@@ -85,7 +85,7 @@ namespace ACFrameworkCore
                 ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
         }
         /// <summary> 设置鼠标对应的图片 </summary>
-        private void OnItemSelectEvent(ItemDetails itemDatails, bool isSelected)
+        private void OnItemSelectEvent(ItemDetailsData itemDatails, bool isSelected)
         {
             if (!isSelected)//如果不是选中的话
             {

@@ -49,7 +49,7 @@ namespace ACFrameworkCore
                 NPCPosition nPCPosition = new NPCPosition();
                 nPCPosition.npc = NPC.transform;
                 nPCPosition.position = new Vector3(-2f, -1.4f, 0);
-                nPCPosition.startScene = ConfigScenes.FieldScenes;
+                nPCPosition.startScene = ConfigScenes.Field;
                 npcPositionList.Add(nPCPosition);
             }
         }

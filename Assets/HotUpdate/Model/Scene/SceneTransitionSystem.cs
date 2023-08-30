@@ -25,7 +25,7 @@ namespace ACFrameworkCore
         public void ICroeInit()
         {
             Instance = this;
-            currentceneName = ConfigScenes.FieldScenes;
+            currentceneName = ConfigScenes.Field;
             ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
             //ConfigEvent.SceneTransition.AddEventListener<string, Vector3>((arg2, pos) => { SceneTransition(arg2, pos).Forget(); });
             CreatScene().Forget();
@@ -33,7 +33,7 @@ namespace ACFrameworkCore
 
         private async UniTaskVoid CreatScene()
         {
-            await ConfigScenes.PersistentSceneScenes.LoadSceneAsyncUnitask(LoadSceneMode.Single);
+            await ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single);
             await currentceneName.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
             currentceneName.SetActivateScene();//设置为激活场景
             ConfigEvent.SwichConfinerShape.EventTrigger();//切换场景边界

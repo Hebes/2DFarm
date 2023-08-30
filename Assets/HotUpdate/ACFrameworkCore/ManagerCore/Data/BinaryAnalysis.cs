@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System;
+using UnityEngine.InputSystem;
 
 namespace ACFrameworkCore
 {
@@ -192,6 +193,11 @@ namespace ACFrameworkCore
                 data.Add((T)dataObj);
             }
             return data;
+        }
+
+        private static  void NullPointerException()
+        {
+
         }
     }
 }

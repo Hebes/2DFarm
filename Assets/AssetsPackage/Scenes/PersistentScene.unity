@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -575,6 +575,7 @@ MonoBehaviour:
   mapDataList:
   - {fileID: 11400000, guid: d1656bef8c9e5414f8d7431f5141aa35, type: 2}
   - {fileID: 11400000, guid: 88c41935083b12c4a9f6cbee2a4f1dc3, type: 2}
+  - {fileID: 11400000, guid: 8552cd5786f8093478bdf8ec25381002, type: 2}
 --- !u!4 &633154892
 Transform:
   m_ObjectHideFlags: 0
@@ -1951,7 +1952,7 @@ Animator:
   m_GameObject: {fileID: 1831269662}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 97877f70c77da7243b12a2e1e755355b, type: 2}
+  m_Controller: {fileID: 9100000, guid: b7c4e6ede7ae00f40ac4cdda088421b7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2075,7 +2076,7 @@ SpriteRenderer:
   m_SortingLayerID: -329533277
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1007033402911347040, guid: 48c266ae0734348198694bc6282c5264, type: 3}
+  m_Sprite: {fileID: 14502509, guid: 85f3f75b0912741b0bc48e7f38554cd2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -12,8 +12,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3f1e0fb64b909469dc0773691be8d2, type: 3}
   m_Name: MapData_SO_03Market
   m_EditorClassIdentifier: 
-  sceneName: Init
-  tileProperties: []
+  sceneName: 03Market
+  tileProperties:
+  - tileCoordinate: {x: -2, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: -2, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: -2, y: 10}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: -2, y: 11}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: -1, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: -1, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 0, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 1, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 2, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 3, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 3, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 4, y: 7}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 4, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 4, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 4, y: 10}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 4, y: 11}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 5, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 5, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 5, y: 10}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 5, y: 11}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 6, y: 8}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 6, y: 9}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 6, y: 10}
+    gridType: 3
+    boolTypeValue: 1
+  - tileCoordinate: {x: 6, y: 11}
+    gridType: 3
+    boolTypeValue: 1
   gridWidth: 0
   gridHeight: 0
   originX: 0

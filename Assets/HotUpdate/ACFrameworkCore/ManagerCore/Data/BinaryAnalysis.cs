@@ -67,6 +67,7 @@ namespace ACFrameworkCore
                         int length = BitConverter.ToInt32(bytes, pointer);
                         pointer += 4;
                         string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        str = str.Replace("'", "");
                         pointer += length;
                         string[] dataArray = str.Split('|');
                         List<int> intList = new List<int>();
@@ -80,6 +81,7 @@ namespace ACFrameworkCore
                         int length = BitConverter.ToInt32(bytes, pointer);
                         pointer += 4;
                         string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        str =str.Replace("'", "");
                         pointer += length;
                         string[] dataArray = str.Split('|');
                         List<string> stringList = new List<string>();
@@ -93,6 +95,7 @@ namespace ACFrameworkCore
                         int length = BitConverter.ToInt32(bytes, pointer);
                         pointer += 4;
                         string str = Encoding.UTF8.GetString(bytes, pointer, length);
+                        str = str.Replace("'", "");
                         pointer += length;
                         string[] dataArray = str.Split('|');
                         List<float> floatList = new List<float>();

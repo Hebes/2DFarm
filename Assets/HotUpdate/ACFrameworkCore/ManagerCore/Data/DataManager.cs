@@ -28,12 +28,14 @@ namespace ACFrameworkCore
             InitData<ItemDetailsData>(ConfigConfigData.ItemDetailsData);
             InitData<PlayerAnimatorsData>(ConfigConfigData.PlayerAnimatorsData);
             InitData<ScheduleDetailsData>(ConfigConfigData.ScheduleDetailsData);
+            InitData<SceneRouteDetailsData>(ConfigConfigData.SceneRouteDetailsData);
             Debug.Log("数据初始化完毕");
             GameObject gameObject = new GameObject("DataManager");
             gameObject.AddComponent<ShowDataManager>();
             GameObject.DontDestroyOnLoad(gameObject);
         }
 
+        //初始化数据
         public void InitData<T>(string fileName) where T : IData
         {
             RawFileOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadRawFileAsync(fileName);
@@ -44,16 +46,26 @@ namespace ACFrameworkCore
             bytesDataDic.Add(typeof(T).FullName, itemDetailsList);
         }
 
-
+        //获取数据
         public T GetDataOne<T>(int id) where T : class, IData
         {
-            if (!bytesDataDic.ContainsKey(typeof(T).FullName)) return null;
+            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
+            {
+                ACDebug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
+                return null;
+            }
+
             IData data = bytesDataDic[typeof(T).FullName].Find(data => { return data.GetId() == id; });
             return data == null ? null : data as T;
         }
         public List<IData> GetDataList<T>() where T : class, IData
         {
-            if (!bytesDataDic.ContainsKey(typeof(T).FullName)) return null;
+            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
+            {
+                ACDebug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
+                return null;
+            }
+
             List<IData> dataListTemp = bytesDataDic[typeof(T).FullName];
             return dataListTemp;
         }

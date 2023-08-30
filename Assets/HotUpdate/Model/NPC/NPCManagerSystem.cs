@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /*--------脚本描述-----------
 
@@ -20,34 +17,14 @@ namespace ACFrameworkCore
     public class NPCManagerSystem : SingletonNewMono<NPCManagerSystem>
     {
         public List<NPCPosition> npcPositionList;       //NPC列表
-        //public SceneRouteDataList_SO sceneRouteDate;
-
-        //private Dictionary<string, SceneRoute> sceneRouteDict = new Dictionary<string, SceneRoute>();
+        private Dictionary<string, SceneRoute> sceneRouteDict = new Dictionary<string, SceneRoute>();
 
 
         protected void Awake()
         {
-            //初始化NPC列表
-            npcPositionList = new List<NPCPosition>();
-            GameObject[] NPCS = GameObject.FindGameObjectsWithTag(ConfigTag.TagNPC);
-            foreach (GameObject NPC in NPCS)
-            {
-                NPCPosition nPCPosition = new NPCPosition();
-                nPCPosition.npc = NPC.transform;
-                nPCPosition.position = new Vector3(-2f, -1.4f,0);
-                nPCPosition.startScene = ConfigScenes.FieldScenes;
-                npcPositionList.Add(nPCPosition);
-            }
-
-            //InitSceneRouteDict();
-        }
-        private void OnEnable()
-        {
+            InitNPCPositionList();
+            InitSceneRouteDict();
             ConfigEvent.StartNewGame.AddEventListener<int>(OnStartNewGameEvent);
-        }
-        private void OnDisable()
-        {
-            ConfigEvent.StartNewGame.RemoveEventListener<int>(OnStartNewGameEvent);
         }
 
         private void OnStartNewGameEvent(int obj)
@@ -60,23 +37,51 @@ namespace ACFrameworkCore
         }
 
         /// <summary>
+        /// 初始化NPC列表
+        /// </summary>
+        private void InitNPCPositionList()
+        {
+            //初始化NPC列表
+            npcPositionList = new List<NPCPosition>();
+            GameObject[] NPCS = GameObject.FindGameObjectsWithTag(ConfigTag.TagNPC);
+            foreach (GameObject NPC in NPCS)
+            {
+                NPCPosition nPCPosition = new NPCPosition();
+                nPCPosition.npc = NPC.transform;
+                nPCPosition.position = new Vector3(-2f, -1.4f, 0);
+                nPCPosition.startScene = ConfigScenes.FieldScenes;
+                npcPositionList.Add(nPCPosition);
+            }
+        }
+
+        /// <summary>
         /// 初始化路径字典
         /// </summary>
-        //private void InitSceneRouteDict()
-        //{
-        //    if (sceneRouteDate.sceneRouteList.Count > 0)
-        //    {
-        //        foreach (SceneRoute route in sceneRouteDate.sceneRouteList)
-        //        {
-        //            var key = route.fromSceneName + route.gotoSceneName;
-
-        //            if (sceneRouteDict.ContainsKey(key))
-        //                continue;
-
-        //            sceneRouteDict.Add(key, route);
-        //        }
-        //    }
-        //}
+        private void InitSceneRouteDict()
+        {
+            List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataListT<SceneRouteDetailsData>();
+            if (sceneRouteDetailsDataList.Count == 0)
+                return;
+            foreach (SceneRouteDetailsData route in sceneRouteDetailsDataList)
+            {
+                var key = route.fromSceneName + route.gotoSceneName;
+                if (sceneRouteDict.ContainsKey(key))
+                    continue;
+                SceneRoute sceneRoute = new SceneRoute();
+                sceneRoute.fromSceneName= route.fromSceneName;
+                sceneRoute.gotoSceneName = route.gotoSceneName;
+                sceneRoute.scenePathList = new List<ScenePath>();
+                for (int i = 0; i < route.gotoGridCellX.Count; i++)
+                {
+                    ScenePath scenePath = new ScenePath();
+                    scenePath.sceneName = route.sceneName[i];
+                    scenePath.fromGridCell = new Vector2Int(route.fromGridCellX[i], route.fromGridCellY[i]);
+                    scenePath.gotoGridCell = new Vector2Int(route.gotoGridCellX[i], route.gotoGridCellY[i]);
+                    sceneRoute.scenePathList.Add(scenePath);
+                }
+                sceneRouteDict.Add(key, sceneRoute);
+            }
+        }
 
         /// <summary>
         /// 获得两个场景间的路径
@@ -84,9 +89,9 @@ namespace ACFrameworkCore
         /// <param name="fromSceneName">起始场景</param>
         /// <param name="gotoSceneName">目标场景</param>
         /// <returns></returns>
-        //public SceneRoute GetSceneRoute(string fromSceneName, string gotoSceneName)
-        //{
-        //    return sceneRouteDict[fromSceneName + gotoSceneName];
-        //}
+        public SceneRoute GetSceneRoute(string fromSceneName, string gotoSceneName)
+        {
+            return sceneRouteDict[fromSceneName + gotoSceneName];
+        }
     }
 }

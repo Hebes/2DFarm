@@ -326,39 +326,24 @@ namespace ACFrameworkCore
             {
                 AStar.Instance.BuildPath(schedule.targetScene, (Vector2Int)currentGridPosition, schedule.targetGridPosition, movementSteps);
             }
-            //else if (schedule.targetScene != currentScene)
-            //{
-            //    SceneRoute sceneRoute = NPCManager.Instance.GetSceneRoute(currentScene, schedule.targetScene);
+            else if (schedule.targetScene != currentScene)//跨场景移动
+            {
+                SceneRoute sceneRoute = NPCManagerSystem.Instance.GetSceneRoute(currentScene, schedule.targetScene);
 
-            //    if (sceneRoute != null)
-            //    {
-            //        for (int i = 0; i < sceneRoute.scenePathList.Count; i++)
-            //        {
-            //            Vector2Int fromPos, gotoPos;
-            //            ScenePath path = sceneRoute.scenePathList[i];
+                if (sceneRoute != null)
+                {
+                    for (int i = 0; i < sceneRoute.scenePathList.Count; i++)
+                    {
+                        Vector2Int fromPos, gotoPos;
+                        ScenePath path = sceneRoute.scenePathList[i];
 
-            //            if (path.fromGridCell.x >= Settings.maxGridSize)
-            //            {
-            //                fromPos = (Vector2Int)currentGridPosition;
-            //            }
-            //            else
-            //            {
-            //                fromPos = path.fromGridCell;
-            //            }
+                        fromPos = path.fromGridCell.x >= ConfigSettings.maxGridSize ? (Vector2Int)currentGridPosition : path.fromGridCell;
+                        gotoPos = path.gotoGridCell.x >= ConfigSettings.maxGridSize ? schedule.targetGridPosition : path.gotoGridCell;
 
-            //            if (path.gotoGridCell.x >= Settings.maxGridSize)
-            //            {
-            //                gotoPos = schedule.targetGridPosition;
-            //            }
-            //            else
-            //            {
-            //                gotoPos = path.gotoGridCell;
-            //            }
-
-            //            AStar.Instance.BuildPath(path.sceneName, fromPos, gotoPos, movementSteps);
-            //        }
-            //    }
-            //}
+                        AStar.Instance.BuildPath(path.sceneName, fromPos, gotoPos, movementSteps);
+                    }
+                }
+            }
 
             if (movementSteps.Count > 1)
             {

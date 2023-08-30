@@ -53,7 +53,7 @@ namespace ACFrameworkCore
             {
                 return gridNode[xPos, yPos];
             }
-            Debug.Log("超出网格范围");
+            Debug.LogError("超出网格范围");
             return null;
         }
     }

@@ -31,12 +31,17 @@ namespace ACFrameworkCore
 
             if (GenerateGridNodes(sceneName, startPos, endPos))
             {
+                ACDebug.Log($"构建网格信息成功红");
                 //查找最短路径
                 if (FindShortestPath())
                 {
                     //构建NPC移动路径
                     UpdatePathOnMovementStepStack(sceneName, npcMovementStack);
                 }
+            }
+            else
+            {
+                ACDebug.Error($"构建网格信息失败");
             }
         }
 

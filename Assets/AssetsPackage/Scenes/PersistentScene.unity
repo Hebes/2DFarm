@@ -1372,12 +1372,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672789422}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2101027246}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1672789424
 MonoBehaviour:
@@ -1412,7 +1412,7 @@ MonoBehaviour:
   npcMovement: {fileID: 1749910473}
   moveNPC: 0
   targetScene: 01Field
-  targetPos: {x: 8, y: -2}
+  targetPos: {x: 5, y: -5}
   stopClip: {fileID: 7400000, guid: db32c3897ab64466f86a8993b8e48f9e, type: 2}
 --- !u!1 &1692345794
 GameObject:
@@ -2020,7 +2020,6 @@ Transform:
   m_Children:
   - {fileID: 633154892}
   - {fileID: 560897828}
-  - {fileID: 1672789423}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
@@ -2031,6 +2030,7 @@ SceneRoots:
   - {fileID: 1160234427}
   - {fileID: 243587518}
   - {fileID: 708197210}
+  - {fileID: 1672789423}
   - {fileID: 2101027246}
   - {fileID: 1730644761}
   - {fileID: 1692345795}

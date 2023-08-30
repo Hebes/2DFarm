@@ -20,12 +20,14 @@ namespace ACFrameworkCore
         public List<ItemDetailsData> ItemDetailsDataList;
         public List<PlayerAnimatorsData> PlayerAnimatorsDataList;
         public List<ScheduleDetailsData> ScheduleDetailsDataList;
+        public List<SceneRouteDetailsData> SceneRouteDetailsDataList;
 
         private void Awake()
         {
-            ItemDetailsDataList = DataExpansion.GetDataList<ItemDetailsData>();
-            PlayerAnimatorsDataList = DataExpansion.GetDataList<PlayerAnimatorsData>();
-            ScheduleDetailsDataList = DataExpansion.GetDataList<ScheduleDetailsData>();
+            ItemDetailsDataList = this.GetDataListT<ItemDetailsData>();
+            PlayerAnimatorsDataList = this.GetDataListT<PlayerAnimatorsData>();
+            ScheduleDetailsDataList = this.GetDataListT<ScheduleDetailsData>();
+            SceneRouteDetailsDataList = this.GetDataListT<SceneRouteDetailsData>();
         }
     }
 }

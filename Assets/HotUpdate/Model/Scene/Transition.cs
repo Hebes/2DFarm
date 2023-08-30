@@ -24,5 +24,5 @@ namespace ACFrameworkCore
             if (other.CompareTag(ConfigTag.TagPlayer))
                 ConfigEvent.SceneTransition.EventTriggerUniTask(sceneToGo, positionTpGo).Forget();
         }
-    }
+    }   
 }

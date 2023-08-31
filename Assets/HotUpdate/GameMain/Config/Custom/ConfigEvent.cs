@@ -26,6 +26,7 @@
         //UI界面相关
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";
         public const string UpdateGameStateEvent = "更新游戏状态事件";
+        public const string ShowDialogue = "显示对话";
 
         //物品相关
         public const string UIItemDropItem = "扔东西";
@@ -59,6 +60,10 @@
         //游戏相关
         public const string EndGame = "结束游戏";
         public const string StartNewGame = "开始新的游戏";
+        public const string UpdateGameState = "更新游戏状态";
+
+        //对话相关
+        public const string OnFinishEvent = "对话完成事件触发的监听函数";
 
     }
 }

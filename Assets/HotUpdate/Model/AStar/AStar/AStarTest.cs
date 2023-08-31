@@ -62,7 +62,7 @@ namespace ACFrameworkCore
 
                 if (displayPath)
                 {
-                    var sceneName = SceneManager.GetActiveScene().name;
+                    var sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
                     aStar.BuildPath(sceneName, startPos, finishPos, npcMovmentStepStack);
 

@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     public float speed = 10f;               //移动速度
     private float mouseX;                   //使用工具的动画X
     private float mouseY;                   //使用工具的动画Y
-    private bool UseTool;                  //是否使用工具
+    private bool UseTool;                   //是否使用工具
 
 
 

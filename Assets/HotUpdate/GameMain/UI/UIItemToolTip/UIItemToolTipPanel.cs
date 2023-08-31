@@ -57,7 +57,7 @@ namespace ACFrameworkCore
         /// <param name="vector3"></param>
         public void SetupTooltip(ItemDetailsData itemDatails, string configInventoryKey, Vector3 vector3)
         {
-            OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTipPrefab);
+            OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTip);
             itemToolTip.GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);//设置锚点
             itemToolTip.position = vector3 + Vector3.up * 30;//设置距离
 

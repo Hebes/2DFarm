@@ -117,7 +117,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public TileDetails GetTileDetailsOnMousePosition(Vector3Int mouseGridPos)
         {
-            string key = mouseGridPos.x + "x" + mouseGridPos.y + "y" + SceneManager.GetActiveScene().name;
+            string key = mouseGridPos.x + "x" + mouseGridPos.y + "y" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             return GetTileDetails(key);
         }
 
@@ -209,11 +209,11 @@ namespace ACFrameworkCore
             digTilemap = GameObject.FindWithTag(ConfigTag.TagDig).GetComponent<Tilemap>();
             waterTilemap = GameObject.FindWithTag(ConfigTag.TagWater).GetComponent<Tilemap>();
 
-            if (firstLoadDict[SceneManager.GetActiveScene().name])
+            if (firstLoadDict[UnityEngine.SceneManagement.SceneManager.GetActiveScene().name])
             {
                 //预先生成农作物
                 ConfigEvent.GenerateCrop.EventTrigger();
-                firstLoadDict[SceneManager.GetActiveScene().name] = false;
+                firstLoadDict[UnityEngine.SceneManagement.SceneManager.GetActiveScene().name] = false;
             }
 
             RefreshMap();
@@ -275,7 +275,7 @@ namespace ACFrameworkCore
         /// <param name="tileDetails"></param>
         public void UpdateTileDetails(TileDetails tileDetails)
         {
-            string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + SceneManager.GetActiveScene().name;
+            string key = tileDetails.girdX + "x" + tileDetails.gridY + "y" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             if (tileDetailsDict.ContainsKey(key))
                 tileDetailsDict[key] = tileDetails;
             else
@@ -295,7 +295,7 @@ namespace ACFrameworkCore
             foreach (Crop crop in FindObjectsOfType<Crop>())
                 Destroy(crop.gameObject);
 
-            DisplayMap(SceneManager.GetActiveScene().name);
+            DisplayMap(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
 
         /// <summary>

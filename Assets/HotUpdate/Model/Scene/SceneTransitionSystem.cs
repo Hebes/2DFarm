@@ -27,11 +27,9 @@ namespace ACFrameworkCore
             Instance = this;
             currentceneName = ConfigScenes.Field;
             ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
-            //ConfigEvent.SceneTransition.AddEventListener<string, Vector3>((arg2, pos) => { SceneTransition(arg2, pos).Forget(); });
-            CreatScene().Forget();
         }
 
-        private async UniTaskVoid CreatScene()
+        public async UniTask CreatScene()
         {
             await ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single);
             await currentceneName.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
@@ -53,9 +51,9 @@ namespace ACFrameworkCore
                 currentceneName.UnloadAsync();                                  //卸载原来的场景
                 currentceneName = targetScene;                                  //变换当前场景的名称
                 ConfigEvent.PlayerMoveToPosition.EventTrigger(targetPosition);  //移动人物坐标
-                ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
                 await UniTask.DelayFrame(40);
+                ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
                 ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
                 await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
                 isFade = false;

@@ -59,7 +59,7 @@ namespace ACFrameworkCore
         /// </summary>
         private void InitSceneRouteDict()
         {
-            List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataListT<SceneRouteDetailsData>();
+            List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
             if (sceneRouteDetailsDataList.Count == 0)
                 return;
             foreach (SceneRouteDetailsData route in sceneRouteDetailsDataList)

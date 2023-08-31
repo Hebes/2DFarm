@@ -87,12 +87,12 @@ namespace ACFrameworkCore
             if (bagOpened)
             {
                 bagOpened = false;
-                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBagPrefab);
+                OpenUIForm<PlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
             }
             else
             {
                 bagOpened = true;
-                CloseOtherUIForm(ConfigUIPanel.UIPlayerBagPrefab);
+                CloseOtherUIForm(ConfigUIPanel.UIPlayerBag);
             }
         }
         /// <summary> 刷新界面 </summary>

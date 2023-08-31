@@ -26,13 +26,13 @@ namespace ACFrameworkCore
         private ScheduleDetails currentSchedule;                //当前的Schedule
 
         //临时存储信息
-        public string NPCName;                      //NPC名称(这个从Excel复制)
-        public string currentScene;                 //当前场景
-        private string targetScene;                 //目标场景
-        private Vector3Int currentGridPosition;     //当前场景位置
-        private Vector3Int tragetGridPosition;      //目标场景位置
-        private Vector3Int nextGridPosition;        //下一个位置
-        private Vector3 nextWorldPosition;          //下一个世界坐标位置
+        public string NPCName;                                  //NPC名称(这个从Excel复制)
+        public string currentScene;                             //当前场景
+        private string targetScene;                             //目标场景
+        private Vector3Int currentGridPosition;                 //当前场景位置
+        private Vector3Int tragetGridPosition;                  //目标场景位置
+        private Vector3Int nextGridPosition;                    //下一个位置
+        private Vector3 nextWorldPosition;                      //下一个世界坐标位置
 
         public string StartScene { set => currentScene = value; }
 
@@ -52,12 +52,12 @@ namespace ACFrameworkCore
         private Stack<MovementStep> movementSteps;
         private Coroutine npcMoveRoutine;
 
-        private bool isInitialised;
-        private bool npcMove;
-        private bool sceneLoaded;               //场景是否加载完毕,加载完毕后NPC才能移动
-        public bool interactable;
-        public bool isFirstLoad;
-        private ESeason currentSeason;
+        private bool isInitialised;                             //是否初始化
+        private bool npcMove;                                   //NPC是否移动
+        private bool sceneLoaded;                               //场景是否加载完毕,加载完毕后NPC才能移动
+        public bool interactable;                               //是否可交互
+        public bool isFirstLoad;                                //是否是第一次加载
+        private ESeason currentSeason;                          //当前季节
         //动画计时器
         private float animationBreakTime;
         private bool canPlayStopAnimaiton;
@@ -227,7 +227,7 @@ namespace ACFrameworkCore
         /// </summary>
         private void CheckVisiable()
         {
-            SetActiveInScene(currentScene == SceneManager.GetActiveScene().name);
+            SetActiveInScene(currentScene == UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
         /// <summary>
         /// 设置NPC显示情况

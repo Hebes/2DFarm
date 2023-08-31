@@ -29,7 +29,7 @@ namespace ACFrameworkCore
             foreach (var anim in animators)
                 animatorNameDic.Add(anim.name, anim);
             //添加动画
-            List<PlayerAnimatorsData> playerAnimatorsList = this.GetDataListT<PlayerAnimatorsData>();
+            List<PlayerAnimatorsData> playerAnimatorsList = this.GetDataListThis<PlayerAnimatorsData>();
             for (int i = 0; i < playerAnimatorsList.Count; i++)
             {
                 AnimatorType animatorType=new AnimatorType();

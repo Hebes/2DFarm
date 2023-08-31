@@ -56,6 +56,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo).Trigger();
         }
+
+
         public void AddEventListener<T>(string name, Action<T> action)
         {
             try
@@ -82,6 +84,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T>).Trigger(t);
         }
+
+
         public void AddEventListener<T, K>(string name, Action<T, K> action)
         {
             try
@@ -108,6 +112,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K>).Trigger(t, k);
         }
+
+
         public void AddEventListener<T, K, V>(string name, Action<T, K, V> action)
         {
             try
@@ -135,6 +141,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K, V>).Trigger(t, k, v);
         }
+
+
         public void AddEventListener<T, K, V, N>(string name, Action<T, K, V, N> action)
         {
             try
@@ -161,6 +169,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             (eventDic[name] as EventInfo<T, K, V, N>).Trigger(t, k, v, n);
         }
+
+
         public void AddEventListener<T, K, V, N, M>(string name, Action<T, K, V, N, M> action)
         {
             try
@@ -191,6 +201,29 @@ namespace ACFrameworkCore
         }
 
         //等待
+        public void AddEventListenerUniTask(string name, EventInfoUniTask.ActionUniTaskEvent action)
+        {
+            try
+            {
+                if (eventDic.ContainsKey(name))
+                    (eventDic[name] as EventInfoUniTask).actionUniTaskEvent += action;
+                else
+                    eventDic.Add(name, new EventInfoUniTask(action));
+            }
+            catch (Exception e)
+            {
+                ACDebug.Error($"监听的参数异常请检查{e}");
+                throw e;
+            }
+        }
+        public async UniTask EventTriggerUniTask(string name)
+        {
+            if (!eventDic.ContainsKey(name)) return;
+            //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
+            await (eventDic[name] as EventInfoUniTask).TriggerUniTask();
+        }
+
+
         public void AddEventListenerUniTask<T>(string name, EventInfoUniTask<T>.ActionUniTaskEvent action)
         {
             try
@@ -217,6 +250,8 @@ namespace ACFrameworkCore
             //如果显示空指针异常,请检查监听的参数和触发的参数是否一致
             await (eventDic[name] as EventInfoUniTask<T>).TriggerUniTask(t);
         }
+
+
         public void AddEventListenerUniTask<T, K>(string name, EventInfoUniTask<T, K>.ActionUniTaskEvent action)
         {
             try

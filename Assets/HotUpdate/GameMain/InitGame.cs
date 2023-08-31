@@ -45,8 +45,8 @@ public class InitGame
     {
         List<ICore> _initHs = new List<ICore>()
         {
-            new DebugManager(),
-            new MonoManager(),
+            new DebugManager(), //日志管理
+            new MonoManager(),  //mono管理
         };
         foreach (var init in _initHs)
         {
@@ -59,13 +59,13 @@ public class InitGame
     {
         List<ICore> _initHs = new List<ICore>()
         {
-            new AduioManager(),
-            new EventManager(),
-            new DataManager(),
-            new PoolManager(),
-            new ResourceManager(),
-            new ManagerScene(),
-            new UIManager(),
+            new AduioManager(),     //音频管理
+            new EventManager(),     //事件管理
+            new DataManager(),      //数据管理
+            new PoolManager(),      //对象池管理
+            new ResourceManager(),  //加载管理
+            new SceneManager(),     //场景管理
+            new UIManager(),        //UI管理
         };
         foreach (var init in _initHs)
         {
@@ -91,13 +91,15 @@ public class InitGame
     {
         List<ICore> _initHs = new List<ICore>()
         {
-            new InventoryAllSystem(),
-            new InventoryWorldItemSystem(),
-            new TimeSystem(),
-            new SceneTransitionSystem(),
-            new MouseSystem(),
-            new EffectsSystem(),
-            new CommonManagerSystem(),
+            new InventoryAllSystem(),           //背包系统
+            new InventoryWorldItemSystem(),     //物品在世界系统
+            new TimeSystem(),                   //时间系统
+            new CursorManagerSystem(),                  //鼠标系统
+            new EffectsSystem(),                //特效系统
+            new CommonManagerSystem(),          //常用物体管理系统
+            new DialogueManagerSystem(),        //对话系统
+            new SceneTransitionSystem(),        //场景过渡系统
+            new AnimatorManagerSystem(),        //场景过渡系统
         };
         foreach (var init in _initHs)
         {
@@ -108,16 +110,19 @@ public class InitGame
     }
     private static void FSMInitUI()
     {
-        ConfigUIPanel.UIActionBarPrefab.ShwoUIPanel<UIActionBarPanel>();                           //显示快捷栏面板
-        ConfigUIPanel.UIItemToolTipPrefab.ShwoUIPanel<UIItemToolTipPanel>();                     //显示物体信息描述面板
-        ConfigUIPanel.UIPlayerBagPrefab.ShwoUIPanel<PlayerBagPanel>();                           //显示玩家背包面板
-        ConfigUIPanel.UIDragPanelPrefab.ShwoUIPanel<UIDragPanel>();                              //显示拖拽面板
-        ConfigUIPanel.UIGameTimePrefab.ShwoUIPanel<UIGameTimePanel>();                           //显示时间面板
-        ConfigUIPanel.UIFadePrefab.ShwoUIPanel<UIFadePanel>();                                   //显示时间面板
+        ConfigUIPanel.UIActionBar.ShwoUIPanel<UIActionBarPanel>();       //显示快捷栏面板
+        ConfigUIPanel.UIItemToolTip.ShwoUIPanel<UIItemToolTipPanel>();   //显示物体信息描述面板
+        ConfigUIPanel.UIPlayerBag.ShwoUIPanel<PlayerBagPanel>();         //显示玩家背包面板
+        ConfigUIPanel.UIDragPanel.ShwoUIPanel<UIDragPanel>();            //显示拖拽面板
+        ConfigUIPanel.UIGameTime.ShwoUIPanel<UIGameTimePanel>();         //显示时间面板
+        ConfigUIPanel.UIFade.ShwoUIPanel<UIFadePanel>();                 //显示时间面板
+        ConfigUIPanel.UIDialogue.ShwoUIPanel<UIDialoguePanel>();         //显示对话面板
+        ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
 
-        ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();                                    //显隐界面
-        ConfigUIPanel.UIItemToolTipPrefab.CloseUIPanel();                                        //关闭物体信息描述面板
-        ConfigUIPanel.UIPlayerBagPrefab.CloseUIPanel();                                          //关闭玩家背包面板
+        ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();        //显隐界面
+        ConfigUIPanel.UIItemToolTip.CloseUIPanel();                      //关闭物体信息描述面板
+        ConfigUIPanel.UIPlayerBag.CloseUIPanel();                        //关闭玩家背包面板
+        ConfigUIPanel.UIDialogue.CloseUIPanel();                         //关闭对话面板
 
         SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
     }
@@ -126,6 +131,7 @@ public class InitGame
         await UniTask.DelayFrame(40);
         ACDebug.Log("开始游戏");
         await UniTask.Yield();
+        await SceneTransitionSystem.Instance.CreatScene();
         //显示图片
         //Sprite sprite = await ConfigSprites.Turnip_growPng.LoadSubAssetsAsyncUniTask($"{ConfigSprites.Turnip_growPng}_0");
         //GameObject test = new GameObject("test");
@@ -133,7 +139,7 @@ public class InitGame
         //spriteRenderer.sprite = sprite;
 
         //测试创建拾取的物体
-        //GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePreafab);
+        //GameObject gameObject = await ResourceExtension.LoadAsyncUniTask<GameObject>(Config.ItemBasePreafab);
 
         //GameObject go1 = GameObject.Instantiate(gameObject);
         //Item item = go1.GetComponent<Item>();

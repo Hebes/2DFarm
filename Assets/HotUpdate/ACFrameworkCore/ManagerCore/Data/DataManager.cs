@@ -29,6 +29,7 @@ namespace ACFrameworkCore
             InitData<PlayerAnimatorsData>(ConfigConfigData.PlayerAnimatorsData);
             InitData<ScheduleDetailsData>(ConfigConfigData.ScheduleDetailsData);
             InitData<SceneRouteDetailsData>(ConfigConfigData.SceneRouteDetailsData);
+            InitData<DialogueDetailsData>();
             Debug.Log("数据初始化完毕");
             GameObject gameObject = new GameObject("DataManager");
             gameObject.AddComponent<ShowDataManager>();
@@ -45,6 +46,16 @@ namespace ACFrameworkCore
                 bytesDataDic[typeof(T).FullName] = itemDetailsList;
             bytesDataDic.Add(typeof(T).FullName, itemDetailsList);
         }
+        public void InitData<T>() where T : IData
+        {
+            RawFileOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadRawFileAsync(typeof(T).FullName);
+            byte[] fileData = handle.GetRawFileData();
+            List<IData> itemDetailsList = BinaryAnalysis.GetData<T>(fileData);
+            if (bytesDataDic.ContainsKey(typeof(T).FullName))
+                bytesDataDic[typeof(T).FullName] = itemDetailsList;
+            bytesDataDic.Add(typeof(T).FullName, itemDetailsList);
+        }
+
 
         //获取数据
         public T GetDataOne<T>(int id) where T : class, IData

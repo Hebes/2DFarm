@@ -18,14 +18,12 @@ namespace ACFrameworkCore
         Cilck = 1,//点击
     }
 
-    public class MouseSystem : ICore
+    public class CursorManagerSystem : ICore
     {
-        public static MouseSystem Instance;
+        public static CursorManagerSystem Instance;
         public void ICroeInit()
         {
             Instance = this;
-            //打开UI界面
-            ConfigUIPanel.UICursorPrefab.ShwoUIPanel<UICursorPanel>();
         }
     }
 }

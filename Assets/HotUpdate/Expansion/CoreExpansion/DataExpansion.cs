@@ -33,7 +33,7 @@ namespace ACFrameworkCore
             return list;
         }
 
-        public static List<T> GetDataListT<T>(this object obj) where T : class, IData
+        public static List<T> GetDataListThis<T>(this object obj) where T : class, IData
         {
             List<T> list = new List<T>();
             List<IData> tempList = DataManager.Instance.GetDataList<T>();

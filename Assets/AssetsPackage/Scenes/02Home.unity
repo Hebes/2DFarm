@@ -14767,7 +14767,7 @@ GameObject:
   - component: {fileID: 3683340533971493290}
   - component: {fileID: 3683340533971493291}
   m_Layer: 0
-  m_Name: Bounds
+  m_Name: Bounds02Home
   m_TagString: BoundsConfiner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

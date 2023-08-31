@@ -46,7 +46,7 @@ namespace ACFrameworkCore
         //初始化
         private void InitRoot()
         {
-            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync<GameObject>(ConfigUIPanel.GlobalPrefab);
+            AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadAsync<GameObject>(ConfigUIPanel.Global);
             GameObject gameObject = handle.InstantiateSync();
             //实例化
             CanvasTransfrom = gameObject.transform;

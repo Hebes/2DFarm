@@ -57,7 +57,7 @@ namespace ACFrameworkCore
         {
             if (itemType == EItemType.Seed)
             {
-                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPrefab);
+                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
                 InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel1.key, itemID, removeAmount);
                 return;
             }
@@ -67,7 +67,7 @@ namespace ACFrameworkCore
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
             //获取数据
-            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanelPrefab);
+            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
             //设置数据
             item.itemID = itemID;
             item.itemAmount = removeAmount;
@@ -125,10 +125,10 @@ namespace ACFrameworkCore
                 };
                 currentSceneItems.Add(sceneItem);
 
-                if (sceneItemDict.ContainsKey(SceneManager.GetActiveScene().name))
-                    sceneItemDict[SceneManager.GetActiveScene().name] = currentSceneItems;//找剄数据就更新tem数据列表
+                if (sceneItemDict.ContainsKey(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name))
+                    sceneItemDict[UnityEngine.SceneManagement.SceneManager.GetActiveScene().name] = currentSceneItems;//找剄数据就更新tem数据列表
                 else
-                    sceneItemDict.Add(SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
+                    sceneItemDict.Add(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
             }
         }
 
@@ -138,7 +138,7 @@ namespace ACFrameworkCore
         private void RecreateAllItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
-            if (sceneItemDict.TryGetValue(SceneManager.GetActiveScene().name, out currentSceneItems))
+            if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out currentSceneItems))
             {
                 if (currentSceneItems == null) return;
                 //清场

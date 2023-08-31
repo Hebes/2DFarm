@@ -107,6 +107,14 @@ namespace ACFrameworkCore
         }
 
         //等待
+        public static void AddEventListenerUniTask(this string eventName, EventInfoUniTask.ActionUniTaskEvent action)
+        {
+            EventManager.Instance.AddEventListenerUniTask(eventName, action);
+        }
+        public static async UniTask EventTriggerUniTask(this string eventName)
+        {
+            await EventManager.Instance.EventTriggerUniTask(eventName);
+        }
         public static void AddEventListenerUniTask<T>(this string eventName, EventInfoUniTask<T>.ActionUniTaskEvent action)
         {
             EventManager.Instance.AddEventListenerUniTask<T>(eventName, action);

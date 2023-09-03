@@ -135,9 +135,9 @@ GameObject:
   - component: {fileID: 243587519}
   - component: {fileID: 243587520}
   - component: {fileID: 243587521}
-  - component: {fileID: 243587522}
   - component: {fileID: 243587523}
   - component: {fileID: 243587524}
+  - component: {fileID: 243587526}
   - component: {fileID: 243587525}
   m_Layer: 0
   m_Name: Player
@@ -155,7 +155,7 @@ Transform:
   m_GameObject: {fileID: 243587517}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.84, y: -0.8, z: 0}
+  m_LocalPosition: {x: 2.67, y: -1.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -251,19 +251,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &243587522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243587517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e7524a1847f16a40b13aade4571700f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
 --- !u!114 &243587523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,11 +284,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 243587517}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e274d48c5f56b744c8ede64583eec37f, type: 3}
+  m_Script: {fileID: 11500000, guid: d3aa11aa981d01043aa653e402ca706d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   holdItem: {fileID: 0}
   animatorTypes: []
+--- !u!114 &243587526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243587517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef37da7d2de17ba41ac2425d4d1288f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
 --- !u!1 &251924158
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,7 +659,7 @@ Transform:
   m_GameObject: {fileID: 708197208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.8400006, y: -0.7999998, z: -10}
+  m_LocalPosition: {x: 2.6699996, y: -1.4899998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1030,7 +1030,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.8400006, y: -0.7999998, z: -10}
+  m_LocalPosition: {x: 2.6699996, y: -1.4899998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1986,7 +1986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scheduleList: []
-  NPCName: NPC_Mayar
+  NPCName: Andy
   currentScene: 01Field
   normalSpeed: 2
   isMoving: 0
@@ -2009,6 +2009,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   dialogueList: []
+  dialogueStartNumber: 0
 --- !u!1 &1815945420
 GameObject:
   m_ObjectHideFlags: 0
@@ -2129,8 +2130,10 @@ GameObject:
   - component: {fileID: 1831269666}
   - component: {fileID: 1831269665}
   - component: {fileID: 1831269664}
+  - component: {fileID: 1831269670}
+  - component: {fileID: 1831269669}
   m_Layer: 0
-  m_Name: NPC_Girl01
+  m_Name: NPC_Mira
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2166,7 +2169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scheduleList: []
-  NPCName: NPC_Girl01
+  NPCName: Mira
   currentScene: 01Field
   normalSpeed: 2
   isMoving: 0
@@ -2253,7 +2256,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0019314289, y: 0.13092667}
+  m_Offset: {x: 0.0019314289, y: -0.6107911}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -2264,7 +2267,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9686005, y: 0.663597}
+  m_Size: {x: 0.9686005, y: 2.1470327}
   m_EdgeRadius: 0
 --- !u!212 &1831269668
 SpriteRenderer:
@@ -2318,6 +2321,48 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &1831269669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831269662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd40ef02a3060b4c96c3346527e8257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NPCName: Mira
+--- !u!114 &1831269670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831269662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a1bc45673b536a409b0cc43cbd90592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnFinishEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1831269669}
+        m_TargetAssemblyTypeName: ACFrameworkCore.NPCFunction, HotUpdate
+        m_MethodName: OpenShop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  dialogueList: []
+  dialogueStartNumber: 2
 --- !u!1 &2066845089
 GameObject:
   m_ObjectHideFlags: 0

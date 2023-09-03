@@ -27,5 +27,6 @@ namespace ACFrameworkCore
         public bool hasToPause;
         [HideInInspector] public bool isDone;//是否结束
         public UnityEvent OnFinishEvent;    //每个对话完成后触发的事件
+        public int nextDialogue;//下一个对话的ID
     }
 }

@@ -37,6 +37,8 @@ namespace ACFrameworkCore
         {
             List<T> list = new List<T>();
             List<IData> tempList = DataManager.Instance.GetDataList<T>();
+            if (tempList == null || tempList.Count == 0)
+                ACDebug.Error($"请先初始化数据{typeof(T).FullName}");
             for (int i = 0; i < tempList.Count; i++)
                 list.Add(tempList[i] as T);
             return list;

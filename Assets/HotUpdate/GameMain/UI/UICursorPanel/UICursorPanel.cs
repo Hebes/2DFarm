@@ -6,8 +6,6 @@ namespace ACFrameworkCore
 {
     public class UICursorPanel : UIBase
     {
-        public GameObject T_CursorImage;
-
         public Sprite normal;                   //默认图标
         public Sprite tool;                     //工具图标
         public Sprite seed;                     //种子
@@ -15,6 +13,7 @@ namespace ACFrameworkCore
         private ItemDetailsData currentItem;        //当前鼠标图标
         private Sprite currentSprite;           //存储当前鼠标图片
         private Image cursorImage;              //当前鼠标图片
+        private Image buildImage;              //建造图片
         private Grid currentGrid;               //当前地板
         private Vector3 mouseWorldPos;          //鼠标是世界位置
         private Vector3Int mouseGridPos;        //鼠标在地图位置
@@ -25,21 +24,25 @@ namespace ACFrameworkCore
 
 
 
-        #region 生命周期
+        //生命周期
         public override void UIAwake()
         {
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
             //获取组件
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
-            T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");
+            GameObject T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");
+            GameObject T_BuildImage = UIComponent.Get<GameObject>("T_BuildImage");
             //加载UI图标
             normal = ResourceExtension.Load<Sprite>(ConfigSprites.cursor11Png);
             tool = ResourceExtension.Load<Sprite>(ConfigSprites.cursor8Png);
             seed = ResourceExtension.Load<Sprite>(ConfigSprites.cursor7Png);
             item = ResourceExtension.Load<Sprite>(ConfigSprites.cursor3Png);
 
-            cursorImage = T_CursorImage.GetComponent<Image>();
+            cursorImage = T_CursorImage.GetImage();
+            buildImage = T_BuildImage.GetImage();
+
+            buildImage.gameObject.SetActive(false);
             currentSprite = normal;
             SetCursorImage(normal);
         }
@@ -74,11 +77,10 @@ namespace ACFrameworkCore
                 SetCursorImage(normal);
             }
         }
-        #endregion
 
 
 
-        #region 事件监听
+        //事件监听
         /// <summary>
         /// 设置鼠标对应的图片
         /// </summary>
@@ -86,34 +88,31 @@ namespace ACFrameworkCore
         /// <param name="isSelected"></param>
         private void OnItemSelectEvent(ItemDetailsData itemDatails, bool isSelected)
         {
-            if (!isSelected)//如果不是选中的话
+            switch ((EItemType)itemDatails.itemType)
             {
-                currentSprite = normal;
-            }
-            else
-            {
-                switch ((EItemType)itemDatails.itemType)
-                {
-                    case EItemType.Seed:
-                        currentSprite = seed;
-                        break;
-                    case EItemType.Commdity:
-                        currentSprite = item;
-                        break;
-                    case EItemType.Furniture:
-                    case EItemType.HoeTool:
-                    case EItemType.ChopTool:
-                    case EItemType.WaterTool:
-                    case EItemType.ReapTool:
-                    case EItemType.BreakTool:
-                    case EItemType.CollectTool:
-                    case EItemType.ReapableSceney:
-                        currentSprite = tool;
-                        break;
-                    default:
-                        currentSprite = normal;
-                        break;
-                }
+                case EItemType.Seed:
+                    currentSprite = seed;
+                    break;
+                case EItemType.Commdity:
+                    currentSprite = item;
+                    break;
+                case EItemType.Furniture:
+                    buildImage.gameObject.SetActive(true);
+                    buildImage.sprite = ResourceExtension.LoadSub<Sprite>(itemDatails.iconPackage, itemDatails.itemOnWorldSprite);
+                    buildImage.SetNativeSize();
+                    break;
+                case EItemType.HoeTool:
+                case EItemType.ChopTool:
+                case EItemType.WaterTool:
+                case EItemType.ReapTool:
+                case EItemType.BreakTool:
+                case EItemType.CollectTool:
+                case EItemType.ReapableSceney:
+                    currentSprite = tool;
+                    break;
+                default:
+                    currentSprite = normal;
+                    break;
             }
 
             if (!isSelected)
@@ -121,13 +120,13 @@ namespace ACFrameworkCore
                 currentItem = null;
                 cursorEnable = false;
                 currentSprite = normal;
+                buildImage.gameObject.SetActive(false);
             }
             else
             {
                 cursorEnable = true;
                 currentItem = itemDatails;
             }
-
         }
 
         /// <summary>
@@ -145,10 +144,10 @@ namespace ACFrameworkCore
         {
             currentGrid = Object.FindObjectOfType<Grid>();
         }
-        #endregion
 
 
 
+        //其他
         /// <summary> 检查玩家输入 </summary>
         private void CheckPlayerInput()
         {
@@ -161,7 +160,9 @@ namespace ACFrameworkCore
         {
             return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         }
-        /// <summary> 检查鼠标是否有效 </summary>
+        /// <summary>
+        /// 检查鼠标是否有效
+        /// </summary>
         private void CheckCursorValid()
         {
             mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
@@ -192,13 +193,13 @@ namespace ACFrameworkCore
                         if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid(); else SetCursorInValid();
                         break;
                     case EItemType.Furniture:
-                        //buildImage.gameObject.SetActive(true);
-                        //var bluePrintDetails = InventoryManager.Instance.bluePrintData.GetBluePrintDetails(currentItem.itemID);
+                        buildImage.gameObject.SetActive(true);
+                        var bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
 
-                        //if (currentTile.canPlaceFurniture && InventoryManager.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
-                        //    SetCursorValid();
-                        //else
-                        //    SetCursorInValid();
+                        if (currentTile.canPlaceFurniture && BuildManagerSystem.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
+                            SetCursorValid();
+                        else
+                            SetCursorInValid();
                         break;
                     case EItemType.HoeTool:
                         if (currentTile.canDig) SetCursorValid(); else SetCursorInValid();
@@ -260,6 +261,23 @@ namespace ACFrameworkCore
         {
             cursorPositionValid = false;
             cursorImage.color = new Color(1, 0, 0, 0.4f);
+        }
+
+        /// <summary>
+        /// 家具是否在半径范围内
+        /// </summary>
+        /// <param name="bluePrintDetails"></param>
+        /// <returns></returns>
+        private bool HaveFurnitureInRadius(BluePrintDetails bluePrintDetails)
+        {
+            var buildItem = bluePrintDetails.buildPrefab;
+            Vector2 point = mouseWorldPos;
+            var size = buildItem.GetComponent<BoxCollider2D>().size;
+
+            var otherColl = Physics2D.OverlapBox(point, size, 0);
+            if (otherColl != null)
+                return otherColl.GetComponent<Furniture>();
+            return false;
         }
     }
 }

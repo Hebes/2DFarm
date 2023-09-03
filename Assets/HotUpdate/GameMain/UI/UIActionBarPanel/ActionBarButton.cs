@@ -24,14 +24,7 @@ namespace ACFrameworkCore
         private void Awake()
         {
             slotUI = GetComponent<SlotUI>();
-        }
-        private void OnEnable()
-        {
-            ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
-        }
-        private void OnDisable()
-        {
-            ConfigEvent.UpdateGameStateEvent.RemoveEventListener<EGameState>(OnUpdateGameStateEvent);
+            ConfigEvent.UpdateGameState.AddEventListener<EGameState>(OnUpdateGameStateEvent);
         }
 
         private void OnUpdateGameStateEvent(EGameState gameState)

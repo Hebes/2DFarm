@@ -94,12 +94,13 @@ public class InitGame
             new InventoryAllSystem(),           //背包系统
             new InventoryWorldItemSystem(),     //物品在世界系统
             new TimeSystem(),                   //时间系统
-            new CursorManagerSystem(),                  //鼠标系统
+            new CursorManagerSystem(),          //鼠标系统
             new EffectsSystem(),                //特效系统
             new CommonManagerSystem(),          //常用物体管理系统
             new DialogueManagerSystem(),        //对话系统
             new SceneTransitionSystem(),        //场景过渡系统
-            new AnimatorManagerSystem(),        //场景过渡系统
+            new AnimatorManagerSystem(),        //动画系统
+            new BuildManagerSystem(),           //建造系统
         };
         foreach (var init in _initHs)
         {
@@ -112,17 +113,21 @@ public class InitGame
     {
         ConfigUIPanel.UIActionBar.ShwoUIPanel<UIActionBarPanel>();       //显示快捷栏面板
         ConfigUIPanel.UIItemToolTip.ShwoUIPanel<UIItemToolTipPanel>();   //显示物体信息描述面板
-        ConfigUIPanel.UIPlayerBag.ShwoUIPanel<PlayerBagPanel>();         //显示玩家背包面板
+        ConfigUIPanel.UIPlayerBag.ShwoUIPanel<UIPlayerBagPanel>();       //显示玩家背包面板
         ConfigUIPanel.UIDragPanel.ShwoUIPanel<UIDragPanel>();            //显示拖拽面板
         ConfigUIPanel.UIGameTime.ShwoUIPanel<UIGameTimePanel>();         //显示时间面板
         ConfigUIPanel.UIFade.ShwoUIPanel<UIFadePanel>();                 //显示时间面板
         ConfigUIPanel.UIDialogue.ShwoUIPanel<UIDialoguePanel>();         //显示对话面板
         ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
+        ConfigUIPanel.UIBagBase.ShwoUIPanel<UIBagBasePanel>();           //显示商店箱子面板
+        ConfigUIPanel.UITrade.ShwoUIPanel<UITradePanel>();               //显示购买数量面板
 
         ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();        //显隐界面
         ConfigUIPanel.UIItemToolTip.CloseUIPanel();                      //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBag.CloseUIPanel();                        //关闭玩家背包面板
         ConfigUIPanel.UIDialogue.CloseUIPanel();                         //关闭对话面板
+        ConfigUIPanel.UIBagBase.CloseUIPanel();                          //关闭商店箱子面板
+        ConfigUIPanel.UITrade.CloseUIPanel();                            //关闭购买数量面板
 
         SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
     }

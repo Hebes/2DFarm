@@ -34,7 +34,6 @@ namespace ACFrameworkCore
             iload = new YooAssetResLoad();
         }
 
-        //加载资源
         public T Load<T>(string ResName) where T : UnityEngine.Object
         {
             return iload.Load<T>(ResName);

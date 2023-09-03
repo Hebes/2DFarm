@@ -31,7 +31,7 @@ namespace ACFrameworkCore
 
             if (GenerateGridNodes(sceneName, startPos, endPos))
             {
-                ACDebug.Log($"构建网格信息成功红");
+                //ACDebug.Log($"构建网格信息成功红");
                 //查找最短路径
                 if (FindShortestPath())
                 {

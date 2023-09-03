@@ -30,6 +30,8 @@ namespace ACFrameworkCore
             InitData<ScheduleDetailsData>(ConfigConfigData.ScheduleDetailsData);
             InitData<SceneRouteDetailsData>(ConfigConfigData.SceneRouteDetailsData);
             InitData<DialogueDetailsData>();
+            InitData<ShopDetailsData>();
+            InitData<BluePrintDetailsData>();
             Debug.Log("数据初始化完毕");
             GameObject gameObject = new GameObject("DataManager");
             gameObject.AddComponent<ShowDataManager>();

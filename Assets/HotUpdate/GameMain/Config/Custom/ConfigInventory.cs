@@ -13,7 +13,10 @@ namespace ACFrameworkCore
 {
     public class ConfigInventory
     {
-        public const string PalayerBag = "PalayerBag";//玩家背包
-        public const string ActionBar = "ActionBar";//快捷键
+        public const string PalayerBag = "玩家背包";//玩家背包
+        public const string ActionBar = "快捷键";//快捷键
+        public const string Shop = "商店";//快捷键
+        public const string Box = "箱子";//快捷键
+        public const string Mira = "Mira";//快捷键
     }
 }

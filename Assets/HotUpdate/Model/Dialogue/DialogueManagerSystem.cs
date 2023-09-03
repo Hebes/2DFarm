@@ -17,13 +17,20 @@ namespace ACFrameworkCore
     public class DialogueManagerSystem : ICore
     {
         public static DialogueManagerSystem Instance;
-        public List<DialoguePiece> dialogueList;                    //对话内容
-        private Stack<DialoguePiece> dailogueStack;                 //对话堆栈
+        public List<DialoguePiece> allDialogueList;                    //所有对话内容
 
         public void ICroeInit()
         {
             Instance = this;
-            dialogueList = new List<DialoguePiece>();
+            InitDialogueData();
+        }
+
+        /// <summary>
+        /// 初始化对话数据
+        /// </summary>
+        private void InitDialogueData()
+        {
+            allDialogueList = new List<DialoguePiece>();
             List<DialogueDetailsData> dialogueDetailsDataList = DataExpansion.GetDataList<DialogueDetailsData>();
             foreach (DialogueDetailsData dialogueDetailsData in dialogueDetailsDataList)
             {
@@ -34,8 +41,22 @@ namespace ACFrameworkCore
                 dialoguePieceTemp.dialogueText = dialogueDetailsData.dialogueText;
                 dialoguePieceTemp.hasToPause = dialogueDetailsData.hasToPause;
                 dialoguePieceTemp.isDone = dialogueDetailsData.isDone;
-                dialogueList.Add(dialoguePieceTemp);
+                dialoguePieceTemp.nextDialogue = dialogueDetailsData.nextDialogue;
+                allDialogueList.Add(dialoguePieceTemp);
             }
+        }
+
+        /// <summary>
+        /// 获取需要对话的数据
+        /// </summary>
+        /// <param name="startNumber"></param>
+        public void GetDialogueData(int startNumber,ref List<DialoguePiece> dialoguePieces)
+        {
+            //添加对话内容
+            dialoguePieces.Add(allDialogueList[startNumber]);
+            int nextDialogue = allDialogueList[startNumber].nextDialogue;
+            if (nextDialogue != -1)
+                GetDialogueData(nextDialogue, ref dialoguePieces);
         }
     }
 }

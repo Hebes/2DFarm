@@ -38,10 +38,10 @@ namespace ACFrameworkCore
 
         private void OnTriggerExit2D(Collider2D other)
         {
+            //TODO 玩家和NPC场景不同 NPC 触发时才会报错
             if (!isAnimating)
             {
                 if (other.transform.position.x > transform.position.x)
-                   
                     StartCoroutine(RotateRight()); //对方在左侧 向右摇晃
                 else
                     StartCoroutine(RotateLeft());//对方在右侧 向左摇晃

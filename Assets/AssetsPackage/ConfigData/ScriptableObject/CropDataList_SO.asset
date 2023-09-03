@@ -181,7 +181,7 @@ MonoBehaviour:
     harvestToolItemID: e9030000
     requireActionCount: 05000000
     transferItemID: 1019
-    producedItemID: f7030000fa030000
+    producedItemID: 07040000fa030000
     producedMinAmount: 0100000001000000
     producedMaxAmount: 0200000005000000
     spawnRadius: {x: 3.5, y: 1.2}

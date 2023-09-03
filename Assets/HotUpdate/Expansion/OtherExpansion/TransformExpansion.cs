@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 /*--------脚本描述-----------
 				
@@ -90,6 +92,48 @@ namespace ACFrameworkCore
             child.localPosition = Vector3.zero;
             child.localScale = Vector3.one;
             child.localEulerAngles = Vector3.zero;
+        }
+
+        //快捷获取
+        public static Image GetImage(this GameObject gameObject)
+        {
+           return gameObject.GetComponent<Image>();
+        }
+        public static Image GetImage(this Transform transform)
+        {
+            return transform.GetComponent<Image>();
+        }
+        public static Text GetText(this GameObject gameObject)
+        {
+            return gameObject.GetComponent<Text>();
+        }
+        public static Text GetText(this Transform transform)
+        {
+            return transform.GetComponent<Text>();
+        }
+        public static TextMeshProUGUI GetTextMeshPro(this GameObject gameObject)
+        {
+            return gameObject.GetComponent<TextMeshProUGUI>();
+        }
+        public static TextMeshProUGUI GetTextMeshPro(this Transform transform)
+        {
+            return transform.GetComponent<TextMeshProUGUI>();
+        }
+        public static InputField GetInputField(this GameObject gameObject)
+        {
+            return gameObject.GetComponent<InputField>();
+        }
+        public static InputField GetInputField(this Transform transform)
+        {
+            return transform.GetComponent<InputField>();
+        }
+        public static Button GetButton(this GameObject gameObject)
+        {
+            return gameObject.GetComponent<Button>();
+        }
+        public static Button GetButton(this Transform transform)
+        {
+            return transform.GetComponent<Button>();
         }
     }
 }

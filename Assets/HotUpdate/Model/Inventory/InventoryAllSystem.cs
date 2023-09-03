@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /*--------脚本描述-----------
@@ -32,7 +34,28 @@ namespace ACFrameworkCore
             //ConfigEvent.BeforeSceneUnloadEvent.AddEventListener<string,int>(UpdateSlotHightLight);//切换场景的时候触发下
 
             ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
-            ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string,int>(OnHarvestAtPlayerPosition);
+            ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string, int>(OnHarvestAtPlayerPosition);
+
+
+            //初始化数据(商店和箱子)
+            List<ShopDetailsData> shopDetailsDatasList = this.GetDataListThis<ShopDetailsData>();
+            foreach (ShopDetailsData shopDetailsData in shopDetailsDatasList)
+            {
+                InventoryItem inventoryItem = new InventoryItem();
+                inventoryItem.itemID = shopDetailsData.itemID;
+                inventoryItem.itemAmount = shopDetailsData.itemAmount;
+                if (ItemDicArray.ContainsKey(shopDetailsData.shopkeeperName))
+                {
+                    List<InventoryItem> inventoryItems = ItemDicArray[shopDetailsData.shopkeeperName].ToList();
+                    inventoryItems.Add(inventoryItem);
+                    ItemDicArray[shopDetailsData.shopkeeperName] = inventoryItems.ToArray();
+                }
+                else
+                {
+                    ItemDicArray.Add(shopDetailsData.shopkeeperName, new InventoryItem[1]);
+                    ItemDicArray[shopDetailsData.shopkeeperName][0] = inventoryItem;
+                }
+            }
         }
 
         //监听事件
@@ -45,7 +68,7 @@ namespace ACFrameworkCore
         }
 
         //ItemDicArray字典操作
-        public bool AddItemDicArray(string key,int itemID,int itemAmount)
+        public bool AddItemDicArray(string key, int itemID, int itemAmount)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] inventoryItemArray);
             if (inventoryItemArray == null)
@@ -59,7 +82,7 @@ namespace ACFrameworkCore
             if (index1 == -1)//没有物品
             {
                 if (index2 == -1) return false;//-1没有空位
-                inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };
+                inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             }
             else
             {
@@ -150,6 +173,18 @@ namespace ACFrameworkCore
             return -1;
         }//检查空位
 
+        public InventoryItem GetData(string key, int ID)
+        {
+            ItemDicArray.TryGetValue(key, out InventoryItem[] itemList);
+            for (int i = 0; i < itemList?.Length; i++)
+            {
+                InventoryItem inventoryItem = itemList[i];
+                if (inventoryItem.itemID == ID)
+                    return inventoryItem;
+            }
+            return default;
+        }
+
         //获取格子的信息
         public SlotUI GetSlotUIInfo(string key, int ID)
         {
@@ -205,6 +240,42 @@ namespace ACFrameworkCore
         public ItemDetailsData GetItem(int id)
         {
             return DataManager.Instance.GetDataOne<ItemDetailsData>(id);
+        }
+
+        /// <summary>
+        /// 交易物品
+        /// </summary>
+        /// <param name="itemDetails">物品信息</param>
+        /// <param name="amount">交易数量</param>
+        /// <param name="isSellTrade">是否卖东西</param>
+        public void TradeItem(string oldKey,string newKey, ItemDetailsData itemDetails, int amount, bool isSellTrade)
+        {
+            int cost = itemDetails.itemPrice * amount;//一共价格
+            //获得物品位置
+            int index = GetItemIndexArray(oldKey, itemDetails.itemID);
+
+            if (isSellTrade)    //卖
+            {
+                ItemDicArray.TryGetValue(oldKey, out InventoryItem[] inventoryItems);
+                if (inventoryItems[index].itemAmount >= amount)
+                {
+                    RemoveItemDicArray(oldKey, itemDetails.itemID, amount);
+                    //卖出总价
+                    cost = (int)(cost * itemDetails.sellPercentage);
+                    CommonManagerSystem.Instance.playerMoney += cost;
+                }
+            }
+            else if (CommonManagerSystem.Instance.playerMoney - cost >= 0)   //买
+            {
+                int indexTemp = CheckCapacityArray(newKey);
+                if (indexTemp != -1)
+                    AddItemDicArray(newKey, itemDetails.itemID, amount);
+                CommonManagerSystem.Instance.playerMoney -= cost;
+            }
+            //刷新UI,添加的时候已经刷新了
+
+            //刷新钱
+            ConfigEvent.MoneyShow.EventTrigger(CommonManagerSystem.Instance.playerMoney);
         }
     }
 }

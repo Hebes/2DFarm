@@ -16,15 +16,17 @@ namespace ACFrameworkCore
 {
     public class CommonManagerSystem : ICore
     {
-        public static CommonManagerSystem Instance;
-        private Player player;                      //玩家
-        private Camera camera;                      //主摄像机
 
+        public static CommonManagerSystem Instance;
         public void ICroeInit()
         {
             Instance = this;
         }
 
+        //玩家
+        private Player player;                      //玩家
+        private Camera camera;                      //主摄像机
+        private int money = 1000;                    //玩家金币
         public Camera mainCamera
         {
             get
@@ -43,5 +45,12 @@ namespace ACFrameworkCore
                 return player.transform;
             }
         }
+        public int playerMoney
+        {
+            get => money;
+            set => money = value;
+        }
+
+        //其他
     }
 }

@@ -65,5 +65,13 @@
         //对话相关
         public const string OnFinishEvent = "对话完成事件触发的监听函数";
 
+        //UI商店
+        public const string BaseBagOpen = "商店面板打开";
+        public const string BaseBagClose = "商店面板关闭";
+        public const string ShowTradeUI = "显示贸易UI界面";
+
+        //其他
+        public const string MoneyShow = "显示金币";
+
     }
 }

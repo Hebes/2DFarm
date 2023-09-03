@@ -22,6 +22,8 @@ namespace ACFrameworkCore
         public List<ScheduleDetailsData> ScheduleDetailsDataList;
         public List<SceneRouteDetailsData> SceneRouteDetailsDataList;
         public List<DialogueDetailsData> DialogueDetailsDataList;
+        public List<ShopDetailsData> ShopDetailsDataList;
+        public List<BluePrintDetailsData> BluePrintDetailsDataList;
 
         private void Awake()
         {
@@ -30,6 +32,8 @@ namespace ACFrameworkCore
             ScheduleDetailsDataList = this.GetDataListThis<ScheduleDetailsData>();
             SceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
             DialogueDetailsDataList = this.GetDataListThis<DialogueDetailsData>();
+            ShopDetailsDataList = this.GetDataListThis<ShopDetailsData>();
+            BluePrintDetailsDataList = this.GetDataListThis<BluePrintDetailsData>();
         }
     }
 }

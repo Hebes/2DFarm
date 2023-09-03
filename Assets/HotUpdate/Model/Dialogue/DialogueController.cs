@@ -13,21 +13,20 @@ namespace ACFrameworkCore
         private NPCMovement npc;            //NPC移动组件
         public UnityEvent OnFinishEvent;    //对话完成后触发的事件
         public List<DialoguePiece> dialogueList;
-
         private Stack<DialoguePiece> dailogueStack;//后进先出
-
         private bool canTalk;   //能否对话
         private bool isTalking; //正在说话
         private GameObject uiSign;//交互组件
+        public int dialogueStartNumber = 1;//对话开始的序列号
 
 
 
         private void Awake()
         {
-            dialogueList = DialogueManagerSystem.Instance.dialogueList;
             npc = GetComponent<NPCMovement>();
             uiSign = transform.GetChildComponent<Transform>("uiSign").gameObject;
             ConfigEvent.OnFinishEvent.AddEventListener<UnityEvent>(AddOnFinishEvent);
+            DialogueManagerSystem.Instance.GetDialogueData(dialogueStartNumber, ref dialogueList);
             FillDialogueStack();
         }
         private void OnTriggerEnter2D(Collider2D other)

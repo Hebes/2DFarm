@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     private float inputY;                   //输入Y
     private Vector2 movementInput;          //移动的输入
     private bool isMoving;                  //是否在移动
-    private bool InputDisable;              //玩家不能操作
+    private bool inputDisable;              //玩家不能操作
     public float speed = 10f;               //移动速度
     private float mouseX;                   //使用工具的动画X
     private float mouseY;                   //使用工具的动画Y
@@ -19,19 +19,21 @@ public class Player : MonoBehaviour
 
 
 
-    #region 生命周期
+    //生命周期
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
-        ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
         ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+        ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
+        ConfigEvent.UpdateGameState.AddEventListener<EGameState>(OnUpdateGameStateEvent);
+
     }
     private void Update()
     {
-        if (InputDisable == false)
+        if (inputDisable == false)
             PlayerInput();
         else
             isMoving = false;
@@ -39,21 +41,20 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (!InputDisable)
+        if (!inputDisable)
             Movement();
     }
-    #endregion
 
 
 
-    #region 事件监听
+    //事件监听
     private void OnBeforeSceneUnloadEvent()
     {
-        InputDisable = true;
+        inputDisable = true;
     }
     private void OnAfterSceneLoadedEvent()
     {
-        InputDisable = false;
+        inputDisable = false;
     }
     private void OnMoveToPosition(Vector3 targetPosition)
     {
@@ -84,10 +85,19 @@ public class Player : MonoBehaviour
                 await UseToolRoutine(mouseWorldPos, itemDetails);
                 break;
         }
-        
     }
-    #endregion
-
+    private void OnUpdateGameStateEvent(EGameState gameState)
+    {
+        switch (gameState)
+        {
+            case EGameState.Gameplay:
+                inputDisable = false;
+                break;
+            case EGameState.Pause:
+                inputDisable = true;
+                break;
+        }
+    }
 
 
     /// <summary>
@@ -99,7 +109,7 @@ public class Player : MonoBehaviour
     private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
     {
         UseTool = true;
-        InputDisable = true;
+        inputDisable = true;
         await UniTask.Yield();
         foreach (var anim in animators)
         {
@@ -114,7 +124,7 @@ public class Player : MonoBehaviour
 
         //等待动画结束
         UseTool = false;
-        InputDisable = false;
+        inputDisable = false;
     }
 
     /// <summary>

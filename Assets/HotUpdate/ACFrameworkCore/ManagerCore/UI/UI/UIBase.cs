@@ -71,12 +71,13 @@ namespace ACFrameworkCore
         {
             UIManager.Instance.ShwoUIPanel<T>(uiFormName);
         }
-        protected void GetUIForm<T>(string uiFormName) where T : UIBase, new()
+        protected T GetUIForm<T>(string uiFormName) where T : UIBase, new()
         {
-            UIManager.Instance.GetUIPanl<T>(uiFormName);
+           return UIManager.Instance.GetUIPanl<T>(uiFormName);
         }
         protected void CloseUIForm()
         {
+            //ACDebug.Log($"关闭的界面名称是:{UIName}");
             int intPosition = -1;
             string strUIFromName = UIName;  // GetType().ToString().Replace("Panel","");             //命名空间+类名 //处理后的UIFrom 名称
             intPosition = strUIFromName.IndexOf('.');

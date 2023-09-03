@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Graphs;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				
@@ -23,7 +25,6 @@ namespace ACFrameworkCore
 
 
 
-        #region 生命周期
         public override void UIAwake()
         {
             base.UIAwake();
@@ -37,11 +38,10 @@ namespace ACFrameworkCore
             ConfigEvent.UIItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
             ConfigEvent.UIItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
         }
-        #endregion
 
 
 
-        #region 事件监听
+        //事件监听
         private void ItemDrag(Vector3 obj)
         {
             DragItemImage.transform.position = obj;
@@ -60,18 +60,47 @@ namespace ACFrameworkCore
         }
         private void ItemOnEndDrag(PointerEventData eventData, SlotUI slotUI)
         {
+            key = slotUI.configInventoryKey;
             DragItemImage.enabled = false;
             if (eventData.pointerCurrentRaycast.gameObject != null)
             {
                 //物品交换
                 if (eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>() == null) return;
                 var targetSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>();//如果是存在SlotUI组件的话
-
-                //物品交换
-                //ACDebug.Log($"当前的{slotUI.key}{slotUI.slotIndex},目标的是{targetSlot.key}{targetSlot.slotIndex}");
-                //ACDebug.Log($"鼠标指针的射线检测到的物体: {eventData.pointerCurrentRaycast.gameObject}");
-                InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
-                slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
+                if (key == ConfigInventory.PalayerBag && targetSlot.configInventoryKey == ConfigInventory.PalayerBag)//两个都是背包的话就是交换
+                {
+                    ACDebug.Log($"背包数据交换");
+                    //物品交换
+                    InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
+                    slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
+                }
+                else if (key == ConfigInventory.Mira && targetSlot.configInventoryKey == ConfigInventory.PalayerBag)//买
+                {
+                    ACDebug.Log($"买东西");
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.configInventoryKey, slotUI.itemDatails, false);
+                }
+                else if (key == ConfigInventory.PalayerBag && targetSlot.configInventoryKey == ConfigInventory.Mira)//卖
+                {
+                    ACDebug.Log($"卖东西");
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.configInventoryKey, slotUI.itemDatails, true);
+                }
+                else if (key == ConfigInventory.Shop && targetSlot.configInventoryKey == ConfigInventory.PalayerBag)//买
+                {
+                    ACDebug.Log($"买东西");
+                    ConfigEvent.ShowTradeUI.EventTrigger(key,slotUI.itemDatails, false);
+                }
+                else if (key == ConfigInventory.PalayerBag && targetSlot.configInventoryKey == ConfigInventory.Shop)//卖
+                {
+                    ACDebug.Log($"卖东西");
+                    ConfigEvent.ShowTradeUI.EventTrigger(key,slotUI.itemDatails, true);
+                }
+                else if (key != ConfigInventory.Shop && targetSlot.configInventoryKey != ConfigInventory.Shop && key != targetSlot.configInventoryKey)
+                {
+                    ACDebug.Log($"跨背包数据交换物品");
+                    //跨背包数据交换物品
+                    //InventoryAllSystem.Instance.SwapItem(Location, slotIndex, targetSlot.Location, targetSlot.slotIndex);
+                    InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
+                }
             }
             //清空所有高亮
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
@@ -94,6 +123,5 @@ namespace ACFrameworkCore
                     break;
             }
         }
-        #endregion
     }
 }

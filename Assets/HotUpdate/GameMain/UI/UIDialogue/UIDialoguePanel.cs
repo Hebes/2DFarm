@@ -57,11 +57,6 @@ namespace ACFrameworkCore
             ConfigEvent.ShowDialogue.AddEventListener<DialoguePiece>(OnShowDailogueEvent);
         }
 
-        //private async UniTask OnShowDailogueEvent(DialoguePiece piece)
-        //{
-        //    await ShowDialogue(piece);
-        //}
-
         private void OnShowDailogueEvent(DialoguePiece piece)
         {
             MonoManager.Instance.StartCoroutine(ShowDialogue(piece));

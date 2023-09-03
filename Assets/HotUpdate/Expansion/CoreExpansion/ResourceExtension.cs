@@ -15,16 +15,24 @@ namespace ACFrameworkCore
 {
     public static class ResourceExtension
     {
-        //同步加载
         public static T Load<T>(this string assetName) where T : UnityEngine.Object
         {
             return ResourceManager.Instance.Load<T>(assetName);
         }
-
-        //异步加载
         public static UniTask<T> LoadAsyncUniTask<T>(this string assetName) where T : UnityEngine.Object
         {
             return ResourceManager.Instance.LoadAsyncUniTack<T>(assetName);
+        }
+        public static T LoadSub<T>(string location, string ResName) where T : UnityEngine.Object
+        {
+            return ResourceManager.Instance.LoadSub<T>(location, ResName);
+        }
+
+        public static T LoadOrSub<T>(string assetName, string ResName = null) where T : UnityEngine.Object
+        {
+            if (ResName == null || ConfigExcelCommon.Null.Equals(assetName))
+                return Load<T>(ResName);
+            return LoadSub<T>(assetName, ResName);
         }
 
         //资源释放

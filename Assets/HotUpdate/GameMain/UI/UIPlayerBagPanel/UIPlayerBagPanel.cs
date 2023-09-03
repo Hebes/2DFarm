@@ -15,9 +15,9 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class PlayerBagPanel : UIBase
+    public class UIPlayerBagPanel : UIBase
     {
-        public GameObject T_SlotHolder;
+        //public GameObject T_SlotHolder;
         public GameObject T_MoneyText;
         private List<SlotUI> playerBagSlotList;//背包的格子
 
@@ -27,7 +27,7 @@ namespace ACFrameworkCore
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
-            T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
+            GameObject T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
             T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
 
             InventoryAllSystem.Instance.ItemDicArray.Add(ConfigInventory.PalayerBag, new InventoryItem[16]);
@@ -41,12 +41,25 @@ namespace ACFrameworkCore
             }
             InventoryAllSystem.Instance.AddSlotUIList(ConfigInventory.PalayerBag, playerBagSlotList);
             ConfigInventory.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
+            ConfigEvent.MoneyShow.AddEventListener<int>(ShowMoney);
+
+            //添加测试数据
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.PalayerBag][0] = new InventoryItem() { itemID = 1015, itemAmount = 80 };
+            InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.PalayerBag][1] = new InventoryItem() { itemID = 1014, itemAmount = 80 };
         }
         public override void UIOnEnable()
         {
             base.UIOnEnable();
             InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigInventory.PalayerBag);
             ConfigInventory.PalayerBag.EventTrigger(playerBagItems);
+
+            //刷新金币显示
+            ConfigEvent.MoneyShow.EventTrigger(CommonManagerSystem.Instance.playerMoney);
+        }
+
+        private void ShowMoney(int money)
+        {
+            T_MoneyText.GetTextMeshPro().text = money.ToString();
         }
 
 

@@ -23,6 +23,8 @@ namespace ACFrameworkCore
         private Text valueText;                     //价格
         private GameObject bottomPart;              //底部
         private Transform itemToolTip;              //底部
+        private GameObject resourcesPanel;          //资源面板
+        private GameObject resourcesItem;           //资源预制体
 
         public override void UIAwake()
         {
@@ -30,17 +32,24 @@ namespace ACFrameworkCore
             InitUIBase(EUIType.Mobile, EUIMode.Normal, EUILucenyType.Pentrate);
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+
+            GameObject T_ItemToolTip = UIComponent.Get<GameObject>("T_ItemToolTip");
+            GameObject T_ResourcesPanel = UIComponent.Get<GameObject>("T_ResourcesPanel");
             GameObject T_Value = UIComponent.Get<GameObject>("T_Value");
-            valueText = T_Value.GetComponent<Text>();
             GameObject T_Bottom = UIComponent.Get<GameObject>("T_Bottom");
-            bottomPart = T_Bottom.gameObject;
             GameObject T_Description = UIComponent.Get<GameObject>("T_Description");
-            descriptionText = T_Description.GetComponent<TextMeshProUGUI>();
             GameObject T_Type = UIComponent.Get<GameObject>("T_Type");
-            typeText = T_Type.GetComponent<TextMeshProUGUI>();
             GameObject T_Name = UIComponent.Get<GameObject>("T_Name");
-            nameText = T_Name.GetComponent<TextMeshProUGUI>();
-            itemToolTip = panelGameObject.transform.Find("ItemToolTip");
+            GameObject T_ResourcesItem = UIComponent.Get<GameObject>("T_ResourcesItem");
+
+            nameText = T_Name.GetTextMeshPro();
+            itemToolTip = T_ItemToolTip.transform;
+            typeText = T_Type.GetTextMeshPro();
+            descriptionText = T_Description.GetTextMeshPro();
+            bottomPart = T_Bottom.gameObject;
+            valueText = T_Value.GetText();
+            resourcesPanel = T_ResourcesPanel;
+            resourcesItem = T_ResourcesItem;
 
             ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetailsData, string, Vector3>(SetupTooltip);
             ConfigEvent.ItemToolTipClose.AddEventListener(CloseUIForm);
@@ -48,16 +57,17 @@ namespace ACFrameworkCore
 
 
 
-        #region 事件监听
         /// <summary>
         /// 设置提示工具信息
         /// </summary>
         /// <param name="itemDatails"></param>
         /// <param name="configInventoryKey"></param>
         /// <param name="vector3"></param>
-        public void SetupTooltip(ItemDetailsData itemDatails, string configInventoryKey, Vector3 vector3)
+        private void SetupTooltip(ItemDetailsData itemDatails, string configInventoryKey, Vector3 vector3)
         {
+
             OpenUIForm<UIItemToolTipPanel>(ConfigUIPanel.UIItemToolTip);
+            resourcesPanel.SetActive(false);
             itemToolTip.GetComponent<RectTransform>().pivot = new Vector2(0f, 0f);//设置锚点
             itemToolTip.position = vector3 + Vector3.up * 30;//设置距离
 
@@ -68,9 +78,13 @@ namespace ACFrameworkCore
             {
                 case EItemType.Seed:
                 case EItemType.Commdity:
+                    bottomPart.SetActive(true);
+                    valueText.text = SetSellPrice(itemDatails, configInventoryKey).ToString();
+                    break;
                 case EItemType.Furniture:
                     bottomPart.SetActive(true);
                     valueText.text = SetSellPrice(itemDatails, configInventoryKey).ToString();
+                    ShowResourcesPanel(itemDatails.itemID);
                     break;
                 case EItemType.HoeTool:
                 case EItemType.ChopTool:
@@ -85,9 +99,31 @@ namespace ACFrameworkCore
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(panelGameObject.transform as RectTransform);//强制刷新,防止descriptionText描述延迟
         }
-        #endregion
 
-
+        /// <summary>
+        /// 显示资源面板
+        /// </summary>
+        private void ShowResourcesPanel(int id)
+        {
+            //获取数据
+            BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(id);
+            resourcesPanel.SetActive(bluePrintDetails != null);
+            for (int i = 0; i < resourcesPanel.transform.childCount; i++)
+            {
+                bool isInData = bluePrintDetails.resourceItem.Length > i;               //在数据中
+                GameObject childGo = resourcesPanel.transform.GetChild(i).gameObject;   //子物体
+                childGo.SetActive(isInData);                                            //设置子物体是否关闭和开启
+                if (isInData)
+                {
+                    resourcesPanel.transform.GetChild(i).gameObject.SetActive(true);
+                    //设置resourcesPanel子物体的数据
+                    InventoryItem item = bluePrintDetails.resourceItem[i];
+                    ItemDetailsData itemDetailsData = DataExpansion.GetDataOne<ItemDetailsData>(item.itemID);
+                    childGo.GetImage().sprite = ResourceExtension.LoadOrSub<Sprite>(itemDetailsData.iconPackage, itemDetailsData.itemIcon);
+                    childGo.GetChildComponent<TextMeshProUGUI>("ResourcesItemCount").text= item.itemAmount.ToString();
+                }
+            }
+        }
 
 
         /// <summary>
@@ -101,10 +137,10 @@ namespace ACFrameworkCore
             int price = itemDatails.itemPrice;
             switch (configInventoryKey)
             {
-                case ConfigInventory.ActionBar: 
-                case ConfigInventory.PalayerBag: 
+                case ConfigInventory.ActionBar:
+                case ConfigInventory.PalayerBag:
                     return (int)(price * itemDatails.sellPercentage);
-                default: 
+                default:
                     return price;
             }
         }

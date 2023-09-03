@@ -64,6 +64,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/AssetsPackage/Prefab/Furniture
+        CollectorGUID: f909736c62507c34fbb382ccb6d27e16
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: UIPanel
       GroupDesc: "UI\u9762\u677F"
       AssetTags: 

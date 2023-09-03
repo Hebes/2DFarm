@@ -89,7 +89,7 @@ namespace ACFrameworkCore
             {
                 if (!item.NPCName.Equals(NPCName)) continue;
                 Vector2Int vector2IntTemp = new Vector2Int(item.targetGridPositionX, item.targetGridPositionY);
-                AnimationClip animationClipTemp = YooAssetLoadExpsion.YooaddetLoadSync<AnimationClip>(item.clipAtStop);
+                AnimationClip animationClipTemp = item.clipAtStop.Equals("null")? null: YooAssetLoadExpsion.YooaddetLoadSync<AnimationClip>(item.clipAtStop);
                 ScheduleDetails scheduleDetails = new ScheduleDetails(
                     item.hour,
                     item.minute,
@@ -102,7 +102,6 @@ namespace ACFrameworkCore
                     item.interactable);
 
                 scheduleSet.Add(scheduleDetails);
-
             }
         }
         private void OnEnable()

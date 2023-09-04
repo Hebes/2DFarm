@@ -64,7 +64,7 @@ public class InitGame
             new DataManager(),      //数据管理
             new PoolManager(),      //对象池管理
             new ResourceManager(),  //加载管理
-            new SceneManager(),     //场景管理
+            new ACSceneManager(),     //场景管理
             new UIManager(),        //UI管理
         };
         foreach (var init in _initHs)

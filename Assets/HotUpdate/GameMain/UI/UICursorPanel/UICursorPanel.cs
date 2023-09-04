@@ -75,6 +75,7 @@ namespace ACFrameworkCore
             else
             {
                 SetCursorImage(normal);
+                buildImage.gameObject.SetActive(false);
             }
         }
 
@@ -168,9 +169,10 @@ namespace ACFrameworkCore
             mouseWorldPos = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));//屏幕转世界坐标
             mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
             //ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
-
             //判断在使用范围内
             Vector3Int playerGridPos = currentGrid.WorldToCell(CommonManagerSystem.Instance.playerTransform.position);
+            //建造图片跟随移动
+            buildImage.rectTransform.position = Input.mousePosition;
             if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
                 || Mathf.Abs(mouseGridPos.y - playerGridPos.y) > currentItem.itemUseRadiue)
             {
@@ -194,7 +196,7 @@ namespace ACFrameworkCore
                         break;
                     case EItemType.Furniture:
                         buildImage.gameObject.SetActive(true);
-                        var bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
+                        var bluePrintDetails = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(currentItem.itemID);
 
                         if (currentTile.canPlaceFurniture && BuildManagerSystem.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
                             SetCursorValid();
@@ -255,12 +257,14 @@ namespace ACFrameworkCore
         {
             cursorPositionValid = true;
             cursorImage.color = new Color(1, 1, 1, 1);
+            buildImage.color = new Color(1, 1, 1, .5f);
         }
         /// <summary> 设置鼠标不可用 </summary>
         private void SetCursorInValid()
         {
             cursorPositionValid = false;
             cursorImage.color = new Color(1, 0, 0, 0.4f);
+            buildImage.color = new Color(1, 0, 0, .5f);
         }
 
         /// <summary>

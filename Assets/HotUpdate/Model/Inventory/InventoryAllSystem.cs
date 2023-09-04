@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -35,6 +36,7 @@ namespace ACFrameworkCore
 
             ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
             ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string, int>(OnHarvestAtPlayerPosition);
+            ConfigEvent.BuildFurniture.AddEventListener<int, Vector3>(OnBuildFurnitureEvent);
 
 
             //初始化数据(商店和箱子)
@@ -66,6 +68,18 @@ namespace ACFrameworkCore
             if (!AddOK)
                 ACDebug.Log($"添加失败");
         }
+        private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
+        {
+            //删除图纸
+            RemoveItemDicArray(ConfigInventory.ActionBar, ID, 1);
+            //获取建造蓝图数据
+            BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(ID);
+            foreach (var item in bluePrint.resourceItem)
+            {
+                //删除资源
+                RemoveItemDicArray(ConfigInventory.PalayerBag, item.itemID, item.itemAmount);
+            }
+        }
 
         //ItemDicArray字典操作
         public bool AddItemDicArray(string key, int itemID, int itemAmount)
@@ -82,7 +96,7 @@ namespace ACFrameworkCore
             if (index1 == -1)//没有物品
             {
                 if (index2 == -1) return false;//-1没有空位
-                inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };
             }
             else
             {
@@ -248,7 +262,7 @@ namespace ACFrameworkCore
         /// <param name="itemDetails">物品信息</param>
         /// <param name="amount">交易数量</param>
         /// <param name="isSellTrade">是否卖东西</param>
-        public void TradeItem(string oldKey,string newKey, ItemDetailsData itemDetails, int amount, bool isSellTrade)
+        public void TradeItem(string oldKey, string newKey, ItemDetailsData itemDetails, int amount, bool isSellTrade)
         {
             int cost = itemDetails.itemPrice * amount;//一共价格
             //获得物品位置

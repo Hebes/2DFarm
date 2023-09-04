@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{157CAF75-2D47-4902-4EA3-ED20F65C0DEF}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotUpdate", "HotUpdate.csproj", "{47F0D523-38A2-0CF2-1D65-FACA7B0453B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono", "Mono.csproj", "{1AC3964E-5AC5-269B-1195-CE72E5BCF6CA}"
@@ -19,6 +21,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{157CAF75-2D47-4902-4EA3-ED20F65C0DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157CAF75-2D47-4902-4EA3-ED20F65C0DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157CAF75-2D47-4902-4EA3-ED20F65C0DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157CAF75-2D47-4902-4EA3-ED20F65C0DEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47F0D523-38A2-0CF2-1D65-FACA7B0453B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47F0D523-38A2-0CF2-1D65-FACA7B0453B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47F0D523-38A2-0CF2-1D65-FACA7B0453B6}.Release|Any CPU.ActiveCfg = Release|Any CPU

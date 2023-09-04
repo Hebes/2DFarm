@@ -6,9 +6,9 @@ using YooAsset;
 
 namespace ACFrameworkCore
 {
-    public class SceneManager : ICore
+    public class ACSceneManager : ICore
     {
-        public static SceneManager Instance;
+        public static ACSceneManager Instance;
         private ISceneLoad sceneLoad;
         public void ICroeInit()
         {

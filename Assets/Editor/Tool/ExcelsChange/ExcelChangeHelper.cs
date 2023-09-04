@@ -1,7 +1,8 @@
-﻿using Excel;
+﻿//using Excel;
 using System.Data;
 using System.IO;
 using UnityEditor;
+using ExcelDataReader;
 
 /*--------脚本描述-----------
 				

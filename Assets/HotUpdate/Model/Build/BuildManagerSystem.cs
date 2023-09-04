@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /*--------脚本描述-----------
 
@@ -17,13 +18,16 @@ namespace ACFrameworkCore
     public class BuildManagerSystem : ICore
     {
         public static BuildManagerSystem Instance;
-        private List<BluePrintDetails> bluePrintDataList;//建造数据
+        private List<BluePrintDetails> bluePrintDataList;                       //建造的图纸数据
+        private Transform itemParent;                                           //存放的父物体
 
         public void ICroeInit()
         {
             Instance = this;
             bluePrintDataList = new List<BluePrintDetails>();
+            new BuildInWorld();
             ChangeData();
+            ConfigEvent.BuildFurniture.AddEventListener<int, Vector3>(OnBuildFurnitureEvent);
         }
 
         /// <summary>
@@ -53,11 +57,11 @@ namespace ACFrameworkCore
         }
 
         /// <summary>
-        /// 获取一条数据
+        /// 获取建造蓝图的一条数据
         /// </summary>
         /// <param name="id">id</param>
         /// <returns></returns>
-        public BluePrintDetails GetDataOne(int id)
+        public BluePrintDetails GetBuildFurnitureDataOne(int id)
         {
             BluePrintDetails bluePrintDetails = bluePrintDataList.Find((BluePrintDetails data) => { return data.ID == id; });
             return bluePrintDetails;
@@ -70,7 +74,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public bool CheckStock(int ID)
         {
-            var bluePrintDetails = GetDataOne(ID);
+            var bluePrintDetails = GetBuildFurnitureDataOne(ID);
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
@@ -86,6 +90,25 @@ namespace ACFrameworkCore
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// 建造家具的事件
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="mousePos"></param>
+        private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
+        {
+            if (itemParent == null)
+                itemParent = GameObject.FindWithTag(ConfigTag.TagItemParent).transform;
+            //获取建造蓝图数据
+            BluePrintDetails bluePrint = GetBuildFurnitureDataOne(ID);
+            var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);
+            //if (buildItem.GetComponent<Box>())
+            //{
+            //    buildItem.GetComponent<Box>().index = InventoryAllSystem.Instance.BoxDataAmount;
+            //    buildItem.GetComponent<Box>().InitBox(buildItem.GetComponent<Box>().index);
+            //}
         }
     }
 }

@@ -22,15 +22,15 @@ namespace ACFrameworkCore
         public static async UniTask<SceneOperationHandle> LoadSceneAsyncUnitask(this string SceneName, 
             LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
         {
-            return await SceneManager.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
+            return await ACSceneManager.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
         }
         public static  void UnloadAsync(this string scnenName)
         {
-            SceneManager.Instance.UnloadAsync(scnenName);
+            ACSceneManager.Instance.UnloadAsync(scnenName);
         }
         public static void SetActivateScene(this string scnenName)
         {
-            SceneManager.Instance.SetActivateScene(scnenName);
+            ACSceneManager.Instance.SetActivateScene(scnenName);
         }
     }
 }

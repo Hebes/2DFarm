@@ -27,9 +27,8 @@ namespace ACFrameworkCore
         private GameObject shopSlotPrefab;                                      //商品的预制体
         private List<SlotUI> baseBagSlots;                                      //正在出售的列表
         private Transform slotHolder;                                           //子物体生成后挂在的父物体
-
-
         public GameObject boxSlotPrefab;
+        private string InventoryKey;                                            //存储物品Key
         public override void UIAwake()
         {
             base.UIAwake();
@@ -48,16 +47,29 @@ namespace ACFrameworkCore
             ConfigEvent.BaseBagClose.AddEventListener<string, string>(OnBaseBagCloseEvent);
         }
 
+        public override void UIOnEnable()
+        {
+            base.UIOnEnable();
+            
+        }
+        public override void UIOnDisable()
+        {
+            base.UIOnDisable();
+            
+        }
+
         /// <summary>
         /// 打开通用包裹UI事件
         /// </summary>
-        /// <param name="Name">NPC或者玩家的名称</param>
+        /// <param name="Name">NPC或者玩家的名称，里面的数据</param>
         /// <param name="slotType"></param>
         private void OnBaseBagOpenEvent(string Name, string slotType)
         {
+            Name.AddEventListener<InventoryItem[]>(OnUpdateInventoryUI);
             GameObject prefab = null;
             switch (slotType)
             {
+                default:
                 case ConfigInventory.Shop: prefab = shopSlotPrefab; break;
                 case ConfigInventory.Box: prefab = boxSlotPrefab; break;
             }
@@ -66,6 +78,7 @@ namespace ACFrameworkCore
             OpenUIForm<UIBagBasePanel>(ConfigUIPanel.UIBagBase);
 
             baseBagSlots = new List<SlotUI>();
+            //从仓管系统获取数据，请先提前吧仓管里面的数据初始化完毕!
             InventoryAllSystem.Instance.ItemDicArray.TryGetValue(Name, out InventoryItem[] shopDetailsDatasList);
             if (shopDetailsDatasList != null)
             {
@@ -89,11 +102,9 @@ namespace ACFrameworkCore
                     //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f,0);
                     uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f, 0.0f);
                     uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(130f, 0.0f);
-
-                    //bagOpened = true;
                 }
                 //刷新UI数据
-                OnUpdateInventoryUI(slotType, shopDetailsDatasList.ToList());   
+                OnUpdateInventoryUI(shopDetailsDatasList);
             }
         }
 
@@ -102,59 +113,21 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="location">库存位置</param>
         /// <param name="list">数据列表</param>
-        private void OnUpdateInventoryUI(string location, List<InventoryItem> InventoryItemList)
+        private void OnUpdateInventoryUI(InventoryItem[] InventoryItemList)
         {
-            switch (location)
+            //更新打卡物体信息
+            for (int i = 0; i < baseBagSlots.Count; i++)
             {
-                case ConfigInventory.Shop://如果是商店的格子
-                    for (int i = 0; i < baseBagSlots.Count; i++)
-                    {
-                        if (InventoryItemList[i].itemAmount > 0)
-                        {
-                            ItemDetailsData item = InventoryAllSystem.Instance.GetItem(InventoryItemList[i].itemID);
-                            baseBagSlots[i].UpdateSlot(item, InventoryItemList[i].itemAmount).Forget();
-                        }
-                        else
-                        {
-                            baseBagSlots[i].UpdateEmptySlot();
-                        }
-                    }
-                    break;
+                if (InventoryItemList[i].itemAmount > 0)
+                {
+                    ItemDetailsData item = InventoryAllSystem.Instance.GetItem(InventoryItemList[i].itemID);
+                    baseBagSlots[i].UpdateSlot(item, InventoryItemList[i].itemAmount).Forget();
+                }
+                else
+                {
+                    baseBagSlots[i].UpdateEmptySlot();
+                }
             }
-            //ConfigInventory.PalayerBag.EventTrigger()
-            //switch (location)
-            //{
-            //    case ConfigInventory.PalayerBag:
-            //        for (int i = 0; i < playerSlots.Length; i++)
-            //        {
-            //            if (list[i].itemAmount > 0)
-            //            {
-            //                var item = InventoryManager.Instance.GetItemDetails(list[i].itemID);
-            //                playerSlots[i].UpdateSlot(item, list[i].itemAmount);
-            //            }
-            //            else
-            //            {
-            //                playerSlots[i].UpdateEmptySlot();
-            //            }
-            //        }
-            //        break;
-            //    case InventoryLocation.Box:
-            //        for (int i = 0; i < baseBagSlots.Count; i++)
-            //        {
-            //            if (list[i].itemAmount > 0)
-            //            {
-            //                var item = InventoryManager.Instance.GetItemDetails(list[i].itemID);
-            //                baseBagSlots[i].UpdateSlot(item, list[i].itemAmount);
-            //            }
-            //            else
-            //            {
-            //                baseBagSlots[i].UpdateEmptySlot();
-            //            }
-            //        }
-            //        break;
-            //}
-
-            //playerMoneyText.text = InventoryManager.Instance.playerMoney.ToString();
         }
 
         /// <summary>
@@ -164,6 +137,7 @@ namespace ACFrameworkCore
         /// <param name="bagData"></param>
         private void OnBaseBagCloseEvent(string Name, string slotType)
         {
+            Name.RemoveEventListener<InventoryItem[]>(OnUpdateInventoryUI);
             CloseUIForm();
             CloseOtherUIForm(ConfigUIPanel.UIItemToolTip);
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
@@ -179,7 +153,6 @@ namespace ACFrameworkCore
                 //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
                 uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0.0f, 0.0f);
                 uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(0.0f, 0.0f);
-                //bagOpened = false;
             }
         }
     }

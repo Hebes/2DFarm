@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using ACFarm;
 
 /// <summary>
 /// 游戏流程
@@ -102,6 +103,7 @@ public class InitGame
             new AnimatorManagerSystem(),        //动画系统
             new BuildManagerSystem(),           //建造系统
             new LightManagerSystem(),           //灯光系统
+            new AudioManagerSystem(),           //音效系统
         };
         foreach (var init in _initHs)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
@@ -66,6 +67,11 @@ namespace ACFrameworkCore
             monoController.StopCoroutine(methodName);
         }
         public void MonoStopCoroutine(IEnumerator routine)
+        {
+            monoController.StopCoroutine(routine);
+        }
+
+        public void MonoStopCoroutine(Coroutine routine)
         {
             monoController.StopCoroutine(routine);
         }

@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ACFrameworkCore;
+using UnityEngine;
 
-namespace Assets.HotUpdate.Model.Audio
+namespace ACFarm
 {
-    internal class Sound
+    [RequireComponent(typeof(AudioSource))]
+    public class Sound : MonoBehaviour
     {
+        [SerializeField] private AudioSource audioSource;
+
+        public void SetSound(SoundDetails soundDetails)
+        {
+            audioSource.clip = soundDetails.soundClip;
+            audioSource.volume = soundDetails.soundVolume;
+            audioSource.pitch = Random.Range(soundDetails.soundPitchMin, soundDetails.soundPitchMax);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -16,31 +17,16 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class AudioManagerSystem : ICore
     {
         public static AudioManagerSystem Instance;
-        public List<SceneSoundItem> soundDetailsData; //音乐数据库
-        public List<SoundDetails> sceneSoundData; //音乐数据库
+        public List<SceneSoundItem> sceneSoundDataList;   //场景音乐数据
+        public List<SoundDetails> soundDetailsDataList;       //音乐数据
 
-        public void ICroeInit()
-        {
-            Instance = this;
-            soundDetailsData = new List<SceneSoundItem>();
-            sceneSoundData = new List<SoundDetails>();
-
-            //初始化数据
-
-
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.PlaySoundEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
-        }
-
-        [Header("Audio Source")]
-        public AudioSource ambientSource;
-        public AudioSource gameSource;
+        public AudioSource ambientSource;       //环境音乐
+        public AudioSource gameSource;          //游戏音乐
 
         private Coroutine soundRoutine;
 
@@ -53,41 +39,115 @@ namespace ACFrameworkCore
         public AudioMixerSnapshot muteSnapShot;
         private float musicTransitionSecond = 8f;
 
+        public float MusicStartSecond
+        {
+            get
+            {
+                return Random.Range(5f, 15f);
+            }
+        }
 
-        public float MusicStartSecond => Random.Range(5f, 15f);
+
+        public void ICroeInit()
+        {
+            Instance = this;
+            GameObject gameObject = new GameObject("AudioManagerSystem");
+            ambientSource = gameObject.AddComponent<AudioSource>();
+            gameSource = gameObject.AddComponent<AudioSource>();
+            sceneSoundDataList = new List<SceneSoundItem>();
+            soundDetailsDataList = new List<SoundDetails>();
+
+            //初始化数据
+            List<SceneSoundItemDetailsData> sceneSoundItemDetailsDataTemp = this.GetDataListThis<SceneSoundItemDetailsData>();
+            foreach (SceneSoundItemDetailsData sceneSoundItemDetailsData in sceneSoundItemDetailsDataTemp)
+            {
+                SceneSoundItem sceneSoundItem = new SceneSoundItem();
+                sceneSoundItem.sceneName = sceneSoundItemDetailsData.sceneName;
+                sceneSoundItem.ambient = sceneSoundItemDetailsData.ambient;
+                sceneSoundItem.music = sceneSoundItemDetailsData.music;
+                sceneSoundDataList.Add(sceneSoundItem);
+            }
+            List<SoundDetailsData> soundDetailsDataTemp = this.GetDataListThis<SoundDetailsData>();
+            foreach (SoundDetailsData soundDetailsData in soundDetailsDataTemp)
+            {
+                SoundDetails soundDetails = new SoundDetails();
+                soundDetails.soundName = soundDetailsData.soundName;
+                soundDetails.soundClip = ResourceExtension.Load<AudioClip>(soundDetailsData.soundName);
+                soundDetails.soundPitchMin = soundDetailsData.soundPitchMin;
+                soundDetails.soundPitchMax = soundDetailsData.soundPitchMax;
+                soundDetails.soundVolume = soundDetailsData.soundVolume;
+                soundDetailsDataList.Add(soundDetails);
+            }
+
+
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            //ConfigEvent.PlaySoundEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            //ConfigEvent.InitSoundEffect.AddEventListener(InitSoundEffect);
+            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+
+            OnAfterSceneLoadedEvent();
+        }
+
+
+        private SceneSoundItem GetSceneSoundData(string sceneName)
+        {
+            return sceneSoundDataList.Find(p => { return p.sceneName == sceneName; });
+        }
+        private SoundDetails GetSoundDetailsData(string soundName)
+        {
+            return soundDetailsDataList.Find(p => { return p.soundName == soundName; });
+        }
+        private float ConvertSoundVolume(float amount)
+        {
+            return (amount * 100 - 80);
+        }
+        public void SetMasterVolume(float value)
+        {
+            audioMixer.SetFloat("MasterVolume", (value * 100 - 80));
+        }
+
+
+        private void InitSoundEffect(SoundDetails soundDetails)
+        {
+            GameObject obj = new GameObject("music");
+            obj.AddComponent<Sound>().SetSound(soundDetails);
+            MonoManager.Instance.StartCoroutine(DisableSound(obj, soundDetails.soundClip.length));
+        }
+
+        private IEnumerator DisableSound(GameObject obj, float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            GameObject.Destroy(obj);
+        }
 
 
         private void OnEndGameEvent()
         {
             if (soundRoutine != null)
-                StopCoroutine(soundRoutine);
-            muteSnapShot.TransitionTo(1f);
+                MonoManager.Instance.MonoStopCoroutine(soundRoutine);
+            muteSnapShot.TransitionTo(timeToReach: 1f);
         }
-
-        private void OnPlaySoundEvent(SoundName soundName)
+        private void OnPlaySoundEvent(string soundName)
         {
-            var soundDetails = soundDetailsData.GetSoundDetails(soundName);
+            SoundDetails soundDetails = GetSoundDetailsData(soundName);
             if (soundDetails != null)
-                EventHandler.CallInitSoundEffect(soundDetails);
+                ConfigEvent.InitSoundEffect.EventTrigger(soundDetails);
         }
-
         private void OnAfterSceneLoadedEvent()
         {
             string currentScene = SceneManager.GetActiveScene().name;
 
-            SceneSoundItem sceneSound = sceneSoundData.GetSceneSoundItem(currentScene);
+            SceneSoundItem sceneSound = GetSceneSoundData(currentScene);
             if (sceneSound == null)
                 return;
 
-            SoundDetails ambient = soundDetailsData.GetSoundDetails(sceneSound.ambient);
-            SoundDetails music = soundDetailsData.GetSoundDetails(sceneSound.music);
+            SoundDetails ambient = GetSoundDetailsData(sceneSound.ambient);
+            SoundDetails music = GetSoundDetailsData(sceneSound.music);
 
             if (soundRoutine != null)
-                StopCoroutine(soundRoutine);
-            soundRoutine = StartCoroutine(PlaySoundRoutine(music, ambient));
+                MonoManager.Instance.MonoStopCoroutine(soundRoutine);
+            soundRoutine = MonoManager.Instance.StartCoroutine(PlaySoundRoutine(music, ambient));
         }
-
-
         private IEnumerator PlaySoundRoutine(SoundDetails music, SoundDetails ambient)
         {
             if (music != null && ambient != null)
@@ -97,6 +157,8 @@ namespace ACFrameworkCore
                 PlayMusicClip(music, musicTransitionSecond);
             }
         }
+
+
 
         /// <summary>
         /// 播放背景音乐
@@ -125,17 +187,6 @@ namespace ACFrameworkCore
                 ambientSource.Play();
 
             ambientSnapShot.TransitionTo(transitionTime);
-        }
-
-
-        private float ConvertSoundVolume(float amount)
-        {
-            return (amount * 100 - 80);
-        }
-
-        public void SetMasterVolume(float value)
-        {
-            audioMixer.SetFloat("MasterVolume", (value * 100 - 80));
         }
     }
 }

@@ -25,6 +25,8 @@ namespace ACFrameworkCore
         public List<ShopDetailsData> ShopDetailsDataList;
         public List<BluePrintDetailsData> BluePrintDetailsDataList;
         public List<LightDetailsData> LightDetailsDataList;
+        public List<SceneSoundItemDetailsData> SceneSoundItemDetailsDataList;
+        public List<SoundDetailsData> SoundDetailsDataList;
 
         private void Awake()
         {
@@ -36,6 +38,8 @@ namespace ACFrameworkCore
             ShopDetailsDataList = this.GetDataListThis<ShopDetailsData>();
             BluePrintDetailsDataList = this.GetDataListThis<BluePrintDetailsData>();
             LightDetailsDataList = this.GetDataListThis<LightDetailsData>();
+            SceneSoundItemDetailsDataList = this.GetDataListThis<SceneSoundItemDetailsData>();
+            SoundDetailsDataList = this.GetDataListThis<SoundDetailsData>();
         }
     }
 }

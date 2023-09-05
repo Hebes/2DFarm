@@ -53,6 +53,7 @@
 
         //音乐相关
         public const string PlaySoundEvent = "播放音乐";
+        public const string InitSoundEffect = "初始音效";
 
         //建造相关
         public const string BuildFurniture = "建造家具";

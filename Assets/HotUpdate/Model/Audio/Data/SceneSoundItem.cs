@@ -10,7 +10,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     [System.Serializable]
     public class SceneSoundItem

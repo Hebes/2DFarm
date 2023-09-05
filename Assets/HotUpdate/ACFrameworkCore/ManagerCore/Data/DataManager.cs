@@ -23,6 +23,24 @@ namespace ACFrameworkCore
         public void ICroeInit()
         {
             Instance = this;
+            bytesDataDic= new Dictionary<string, List<IData>>();
+
+            //加载数据
+            InitData<ItemDetailsData>();                //物品数据
+            InitData<PlayerAnimatorsData>();            //玩家动画数据
+            InitData<ScheduleDetailsData>();            //计划详细信息
+            InitData<SceneRouteDetailsData>();          //场景路径数据
+            InitData<DialogueDetailsData>();            //对话数据
+            InitData<ShopDetailsData>();                //商店数据
+            InitData<BluePrintDetailsData>();           //建造数据
+            InitData<LightDetailsData>();               //灯光数据
+            InitData<SceneSoundItemDetailsData>();      //场景音乐数据
+            InitData<SoundDetailsData>();               //音乐数据               
+
+            Debug.Log("数据初始化完毕");
+            GameObject gameObject = new GameObject("DataManager");
+            gameObject.AddComponent<ShowDataManager>();
+            GameObject.DontDestroyOnLoad(gameObject);
         }
 
         //初始化数据

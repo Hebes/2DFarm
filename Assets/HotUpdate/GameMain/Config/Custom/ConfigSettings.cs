@@ -26,7 +26,7 @@ namespace ACFrameworkCore
         public const int hourHold = 23;                     //一天多少小时
         public const int dayHold = 30;                      //一个月有多少时间
         public const int seasonHold = 3;                    //季节
-        public const float fadeDuretion = 1f;             //Loading画面的结束需要的时间
+        public const float fadeDuretion = 1f;               //Loading画面的结束需要的时间
 
         //割草数量限制
         public const int reapAmount = 2;
@@ -39,11 +39,11 @@ namespace ACFrameworkCore
         public const int maxGridSize = 9999;
 
         //灯光
-        public const float lightChangeDuration = 25f;
-        public static TimeSpan morningTime = new TimeSpan(5, 0, 0);
-        public static TimeSpan nightTime = new TimeSpan(19, 0, 0);
+        public const float lightChangeDuration = 25f;                                           //光变化持续时间
+        public static TimeSpan morningTime = new TimeSpan(5, 0, 0);         //生成一个时间戳早上5点
+        public static TimeSpan nightTime = new TimeSpan(19, 0, 0);          //晚上7点
 
-        public static Vector3 playerStartPos = new Vector3(-1.7f, -5f, 0);
-        public const int playerStartMoney = 100;
+        public static Vector3 playerStartPos = new Vector3(-1.7f, -5f, 0);              //玩家的初始位置
+        public const int playerStartMoney = 100;                                                //玩家初始金币
     }
 }

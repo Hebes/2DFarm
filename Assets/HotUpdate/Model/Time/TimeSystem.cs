@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*--------脚本描述-----------
 				
@@ -81,53 +83,110 @@ namespace ACFrameworkCore
         /// <summary>时间更新</summary>
         private void UpdateGameTime()
         {
-            gameSecond++;//秒钟++
+            gameSecond++;
             if (gameSecond > ConfigSettings.secondHold)
             {
-                gameMinute++;//分
-
+                gameMinute++;
                 gameSecond = 0;
+
                 if (gameMinute > ConfigSettings.minuteHold)
                 {
-                    gameHour++;//小时
+                    gameHour++;
                     gameMinute = 0;
+
                     if (gameHour > ConfigSettings.hourHold)
                     {
                         gameDay++;
                         gameHour = 0;
+
                         if (gameDay > ConfigSettings.dayHold)
                         {
                             gameDay = 1;
                             gameMonth++;
+
                             if (gameMonth > 12)
                                 gameMonth = 1;
 
                             monthInSeason--;
                             if (monthInSeason == 0)
+                            {
                                 monthInSeason = 3;
-                            int seasonNumber = (int)gameSeason;
-                            seasonNumber++;
 
-                            if (seasonNumber > ConfigSettings.seasonHold)
-                            {
-                                seasonNumber = 0;
-                                gameYear++;
-                            }
-                            gameSeason = (ESeason)seasonNumber;
+                                int seasonNumber = (int)gameSeason;
+                                seasonNumber++;
 
-                            if (gameYear > 9999)
-                            {
-                                gameYear = 2022;
+                                if (seasonNumber > ConfigSettings.seasonHold)
+                                {
+                                    seasonNumber = 0;
+                                    gameYear++;
+                                }
+
+                                gameSeason = (ESeason)seasonNumber;
+
+                                if (gameYear > 9999)
+                                {
+                                    gameYear = 2022;
+                                }
                             }
+                            //用来刷新地图和农作物生长
+                            ConfigEvent.GameDay.EventTrigger(gameDay, gameSeason);
                         }
-                        //用来刷新地图和农作物生长
-                        ConfigEvent.GameDay.EventTrigger(gameDay, gameSeason);
                     }
+                    ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
                 }
-                ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
+                ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour, gameDay, gameSeason);
+                ConfigEvent.LightShiftChangeEvent.EventTrigger(gameSeason, GetCurrentLightShift(), timeDifference);//切换灯光
             }
-            ConfigEvent.GameMinute.EventTrigger(gameMinute, gameHour, gameDay, gameSeason);
             //Debug.Log("Second 秒：" + gameSecond + "Minute 分：" + gameMinute);
+        }
+
+
+        /// <summary>
+        /// 返回lightshift同时计算时间差
+        /// </summary>
+        /// <returns></returns>
+        private LightShift GetCurrentLightShift()
+        {
+            if (GameTime >= ConfigSettings.morningTime && GameTime < ConfigSettings.nightTime)
+            {
+                timeDifference = (float)(GameTime - ConfigSettings.morningTime).TotalMinutes;
+                return LightShift.Morning;
+            }
+
+            if (GameTime < ConfigSettings.morningTime || GameTime >= ConfigSettings.nightTime)
+            {
+                timeDifference = Mathf.Abs((float)(GameTime - ConfigSettings.nightTime).TotalMinutes);
+                // Debug.Log(timeDifference);
+                return LightShift.Night;
+            }
+
+            return LightShift.Morning;
+        }
+
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.timeDict = new Dictionary<string, int>();
+            saveData.timeDict.Add("gameYear", gameYear);
+            saveData.timeDict.Add("gameSeason", (int)gameSeason);
+            saveData.timeDict.Add("gameMonth", gameMonth);
+            saveData.timeDict.Add("gameDay", gameDay);
+            saveData.timeDict.Add("gameHour", gameHour);
+            saveData.timeDict.Add("gameMinute", gameMinute);
+            saveData.timeDict.Add("gameSecond", gameSecond);
+
+            return saveData;
+        }
+
+        public void RestoreData(GameSaveData saveData)
+        {
+            gameYear = saveData.timeDict["gameYear"];
+            gameSeason = (ESeason)saveData.timeDict["gameSeason"];
+            gameMonth = saveData.timeDict["gameMonth"];
+            gameDay = saveData.timeDict["gameDay"];
+            gameHour = saveData.timeDict["gameHour"];
+            gameMinute = saveData.timeDict["gameMinute"];
+            gameSecond = saveData.timeDict["gameSecond"];
         }
     }
 }

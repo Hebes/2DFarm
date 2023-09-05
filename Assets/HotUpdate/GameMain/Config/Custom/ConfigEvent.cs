@@ -20,7 +20,7 @@
         public const string SceneTransition = "场景传送";
         public const string PlayerMoveToPosition = "人物加载场景时候的坐标";
         public const string SceneBeforeUnload = "卸载场景之前需要做的事件";
-        public const string SceneAfterLoaded = "加载场景之后需要做的事件";
+        public const string SceneAfterLoadedEvent = "加载场景之后需要做的事件";
         public const string GenerateCrop = "生成农作物";
 
         //UI界面相关
@@ -52,14 +52,14 @@
         public const string ParticleEffect = "粒子效果";
 
         //音乐相关
-        public const string PlaySound = "播放音乐";
+        public const string PlaySoundEvent = "播放音乐";
 
         //建造相关
         public const string BuildFurniture = "建造家具";
 
         //游戏相关
-        public const string EndGame = "结束游戏";
-        public const string StartNewGame = "开始新的游戏";
+        public const string EndGameEvent = "结束游戏";
+        public const string StartNewGameEvent = "开始新的游戏";
         public const string UpdateGameState = "更新游戏状态";
 
         //对话相关
@@ -72,6 +72,9 @@
 
         //其他
         public const string MoneyShow = "显示金币";
+
+        //灯光相关
+        public const string LightShiftChangeEvent = "光移变化";
 
     }
 }

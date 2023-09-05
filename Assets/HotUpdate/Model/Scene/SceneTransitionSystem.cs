@@ -35,7 +35,7 @@ namespace ACFrameworkCore
             await currentceneName.LoadSceneAsyncUnitask(LoadSceneMode.Additive);
             currentceneName.SetActivateScene();//设置为激活场景
             ConfigEvent.SwichConfinerShape.EventTrigger();//切换场景边界
-            ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
+            ConfigEvent.SceneAfterLoadedEvent.EventTrigger();                    //加载场景之后需要做的事情
         }
 
         //切换场景
@@ -54,7 +54,7 @@ namespace ACFrameworkCore
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
                 await UniTask.DelayFrame(40);
                 ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
-                ConfigEvent.SceneAfterLoaded.EventTrigger();                    //加载场景之后需要做的事情
+                ConfigEvent.SceneAfterLoadedEvent.EventTrigger();                    //加载场景之后需要做的事情
                 await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
                 isFade = false;
             }

@@ -28,7 +28,7 @@ namespace ACFrameworkCore
             Instance = this;
             sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
             ConfigEvent.SceneBeforeUnload.AddEventListener(SceneBeforeUnload);
-            ConfigEvent.SceneAfterLoaded.AddEventListener(SceneAfterLoaded);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(SceneAfterLoaded);
         }
 
         private void SceneBeforeUnload()

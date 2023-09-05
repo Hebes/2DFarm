@@ -101,6 +101,7 @@ public class InitGame
             new SceneTransitionSystem(),        //场景过渡系统
             new AnimatorManagerSystem(),        //动画系统
             new BuildManagerSystem(),           //建造系统
+            new LightManagerSystem(),           //灯光系统
         };
         foreach (var init in _initHs)
         {

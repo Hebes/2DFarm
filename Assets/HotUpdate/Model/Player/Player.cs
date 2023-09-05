@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
         ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-        ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+        ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
         ConfigEvent.UpdateGameState.AddEventListener<EGameState>(OnUpdateGameStateEvent);

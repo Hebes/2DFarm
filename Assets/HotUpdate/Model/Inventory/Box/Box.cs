@@ -92,7 +92,7 @@ namespace ACFrameworkCore
         {
             index = boxIndex;
             var key = this.name + index;
-            if (InventoryAllSystem.Instance.ItemDicArray.ContainsKey(name))  //刷新地图读取数据
+            if (InventoryAllSystem.Instance.ItemDicArray.ContainsKey(boxName))  //刷新地图读取数据
             {
                 boxBagData = InventoryAllSystem.Instance.GetItemListArray(boxName).ToList();
             }

@@ -106,21 +106,21 @@ namespace ACFrameworkCore
         }
         private void OnEnable()
         {
-            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
 
             ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
-            ConfigEvent.EndGame.AddEventListener(OnEndGameEvent);
-            ConfigEvent.StartNewGame.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
         }
         private void OnDisable()
         {
-            ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
 
             ConfigEvent.GameMinute.RemoveEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
-            ConfigEvent.EndGame.RemoveEventListener(OnEndGameEvent);
-            ConfigEvent.StartNewGame.RemoveEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.RemoveEventListener(OnEndGameEvent);
+            ConfigEvent.StartNewGameEvent.RemoveEventListener<int>(OnStartNewGameEvent);
         }
         private void Start()
         {

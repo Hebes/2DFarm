@@ -51,14 +51,14 @@ namespace ACFrameworkCore
             base.UIOnEnable();
             ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
             ConfigEvent.ItemSelectedEvent.RemoveEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
             ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
         }
         public override void UIUpdate()
         {

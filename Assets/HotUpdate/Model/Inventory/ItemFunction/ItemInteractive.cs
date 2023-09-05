@@ -32,7 +32,7 @@ namespace ACFrameworkCore
                     StartCoroutine(RotateRight());//对方在左侧 向右摇晃
                 else
                     StartCoroutine(RotateLeft());//对方在右侧 向左摇晃
-                ConfigEvent.PlaySound.EventTrigger(ESoundName.Rustle);
+                ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Rustle);
             }
         }
 
@@ -45,7 +45,7 @@ namespace ACFrameworkCore
                     StartCoroutine(RotateRight()); //对方在左侧 向右摇晃
                 else
                     StartCoroutine(RotateLeft());//对方在右侧 向左摇晃
-                ConfigEvent.PlaySound.EventTrigger(ESoundName.Rustle);
+                ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Rustle);
             }
         }
 

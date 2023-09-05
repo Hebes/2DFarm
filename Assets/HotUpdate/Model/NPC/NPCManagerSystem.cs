@@ -24,7 +24,7 @@ namespace ACFrameworkCore
         {
             InitNPCPositionList();
             InitSceneRouteDict();
-            ConfigEvent.StartNewGame.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
         }
 
         private void OnStartNewGameEvent(int obj)

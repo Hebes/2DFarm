@@ -148,6 +148,12 @@ namespace ACFrameworkCore
             WriteData("Effects",string.Empty, ".prefab");
         }
 
+        [MenuItem("Tool/GenerateConfig/生成Sound配置文件")]//#E
+        public static void GenerateSoundConfig()
+        {
+            WriteData("Sound", string.Empty, ".wav", ".ogg");
+        }
+
         /// <summary>
         /// 写入内容 
         /// </summary>

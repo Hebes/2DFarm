@@ -63,7 +63,7 @@ namespace ACFrameworkCore
                 case EItemType.Seed: currentType = EPartType.Carry; break;
                 case EItemType.Commdity: currentType = EPartType.Carry; break;
                 case EItemType.HoeTool: currentType = EPartType.Hoe; break;
-                case EItemType.Furniture: currentType = EPartType.Hoe; break;
+                case EItemType.Furniture: currentType = EPartType.Carry; break;
                 case EItemType.ChopTool: currentType = EPartType.Chop; break;
                 case EItemType.BreakTool: currentType = EPartType.Break; break;
                 case EItemType.ReapTool: currentType = EPartType.Reap; break; 

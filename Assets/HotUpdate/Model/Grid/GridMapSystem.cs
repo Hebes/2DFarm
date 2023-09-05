@@ -51,14 +51,14 @@ namespace ACFrameworkCore
         private void OnEnable()
         {
             ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
-            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
         }
         private void OnDisable()
         {
             ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
-            ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.RemoveEventListener(RefreshMap);
         }
@@ -143,7 +143,7 @@ namespace ACFrameworkCore
                 case EItemType.Seed:
                     ConfigEvent.PlantSeed.EventTrigger(itemDetails.itemID, currentTile);
                     ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Seed,1);
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Plant);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Plant);
                     break;
                 case EItemType.Commdity:
                     ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Commdity, 10000);
@@ -160,7 +160,7 @@ namespace ACFrameworkCore
                     currentTile.canDig = false;
                     currentTile.canDropItem = false;
                     //音效
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Hoe);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Hoe);
                     break;
                 case EItemType.ChopTool:
                 case EItemType.BreakTool:
@@ -178,19 +178,19 @@ namespace ACFrameworkCore
                         if (reapCount >= ConfigSettings.reapAmount)//限制销毁杂草收割的数量
                             break;
                     }
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Reap);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Reap);
                     break;
                 case EItemType.WaterTool:
                     SetWaterGround(currentTile);
                     currentTile.daysSinceWatered = 0;
                     //音效
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Water);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Water);
                     break;
                 case EItemType.CollectTool:
                     //执行收割方法
                     ACDebug.Log($"收获物品的信息是{currentCrop.cropDetails.producedItemID[0]}");
                     currentCrop?.ProcessToolAction(itemDetails, currentTile);
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.Basket);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Basket);
                     break;
                 case EItemType.ReapableSceney:
                     break;

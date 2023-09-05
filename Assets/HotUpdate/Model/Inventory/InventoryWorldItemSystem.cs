@@ -36,7 +36,7 @@ namespace ACFrameworkCore
             ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
             ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
             ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             LoadInit().Forget();
         }
 

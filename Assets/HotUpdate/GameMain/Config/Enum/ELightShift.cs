@@ -16,8 +16,8 @@ namespace ACFrameworkCore
     public enum LightShift
     {
         /// <summary> 早晨 </summary>
-        Morning,
+        Morning = 1,
         /// <summary> 晚上 </summary>
-        Night
+        Night = 2,
     }
 }

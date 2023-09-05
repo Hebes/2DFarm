@@ -57,7 +57,7 @@ namespace ACFrameworkCore
                     ConfigEvent.ParticleEffect.EventTrigger(cropDetails.effectType, transform.position + cropDetails.effectPos);
                 //播放声音
                 if (cropDetails.soundEffect != ESoundName.none)
-                    ConfigEvent.PlaySound.EventTrigger(cropDetails.soundEffect);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(cropDetails.soundEffect);
             }
 
             if (harvestActionCount >= requireActionCount)
@@ -74,7 +74,7 @@ namespace ACFrameworkCore
                         anim.SetTrigger("FallingRight");
                     else
                         anim.SetTrigger("FallingLeft");
-                    ConfigEvent.PlaySound.EventTrigger(ESoundName.TreeFalling);
+                    ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.TreeFalling);
                     StartCoroutine(HarvestAfterAnimation());
                 }
             }

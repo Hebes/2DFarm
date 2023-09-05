@@ -17,13 +17,13 @@ namespace ACFrameworkCore
         private void OnEnable()
         {
             ConfigEvent.PlantSeed.AddEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.SceneAfterLoaded.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
         }
         private void OnDisable()
         {
             ConfigEvent.PlantSeed.RemoveEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.SceneAfterLoaded.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
         }
 

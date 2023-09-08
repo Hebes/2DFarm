@@ -838,10 +838,9 @@ GameObject:
   m_Component:
   - component: {fileID: 550424054828149772}
   - component: {fileID: 921546104478467335}
-  - component: {fileID: 3842875156443354354}
   - component: {fileID: 7249228443007738613}
   m_Layer: 5
-  m_Name: UIIntro
+  m_Name: UIIntro1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -875,27 +874,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5216981576943603794}
   m_CullTransparentMesh: 1
---- !u!320 &3842875156443354354
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5216981576943603794}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 09aeb5d2bd02a004c9d054c2c86de83d, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: -1558951512954031355, guid: 09aeb5d2bd02a004c9d054c2c86de83d, type: 2}
-    value: {fileID: 7249228443007738613}
-  - key: {fileID: 718106994193275382, guid: 09aeb5d2bd02a004c9d054c2c86de83d, type: 2}
-    value: {fileID: 0}
-  m_ExposedReferences:
-    m_References: []
 --- !u!95 &7249228443007738613
 Animator:
   serializedVersion: 5

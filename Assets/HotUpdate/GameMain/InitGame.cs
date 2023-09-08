@@ -1,8 +1,7 @@
-﻿using ACFrameworkCore;
+﻿using ACFarm;
+using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using UnityEngine;
-using ACFarm;
 
 /// <summary>
 /// 游戏流程
@@ -24,11 +23,11 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
-
     public static void Init()
     {
         SwitchInitGameProcess(EInitGameProcess.FSMInitBaseCore).Forget();
     }
+
     private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
@@ -94,7 +93,7 @@ public class InitGame
         {
             new InventoryAllSystem(),           //背包系统
             new InventoryWorldItemSystem(),     //物品在世界系统
-            new TimeSystem(),                   //时间系统
+            new TimeManagerSystem(),                   //时间系统
             new CursorManagerSystem(),          //鼠标系统
             new EffectsSystem(),                //特效系统
             new CommonManagerSystem(),          //常用物体管理系统
@@ -104,6 +103,7 @@ public class InitGame
             new BuildManagerSystem(),           //建造系统
             new LightManagerSystem(),           //灯光系统
             new AudioManagerSystem(),           //音效系统
+            new TimelineManagerSystem(),        //动画系统
         };
         foreach (var init in _initHs)
         {
@@ -124,6 +124,7 @@ public class InitGame
         ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
         ConfigUIPanel.UIBagBase.ShwoUIPanel<UIBagBasePanel>();           //显示商店箱子面板
         ConfigUIPanel.UITrade.ShwoUIPanel<UITradePanel>();               //显示购买数量面板
+        ConfigUIPanel.UIMenu.ShwoUIPanel<UIMenuPanel>();                //显示菜单界面
 
         ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();        //显隐界面
         ConfigUIPanel.UIItemToolTip.CloseUIPanel();                      //关闭物体信息描述面板
@@ -137,9 +138,10 @@ public class InitGame
     private static async UniTask FSMEnterGame()
     {
         await UniTask.DelayFrame(40);
-        ACDebug.Log("开始游戏");
         await UniTask.Yield();
-        await SceneTransitionSystem.Instance.CreatScene();
+        
+        //await SceneTransitionSystem.Instance.CreatScene();
+
         //显示图片
         //Sprite sprite = await ConfigSprites.Turnip_growPng.LoadSubAssetsAsyncUniTask($"{ConfigSprites.Turnip_growPng}_0");
         //GameObject test = new GameObject("test");

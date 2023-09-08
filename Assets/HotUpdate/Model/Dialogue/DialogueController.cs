@@ -75,15 +75,15 @@ namespace ACFrameworkCore
             if (dailogueStack.TryPop(out DialoguePiece result))
             {
                 //传到UI显示对话
-                ConfigEvent.ShowDialogue.EventTrigger(result);
-                ConfigEvent.UpdateGameState.EventTrigger(EGameState.Pause);
+                ConfigEvent.ShowDialogueEvent.EventTrigger(result);
+                ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Pause);
                 yield return new WaitUntil(() => result.isDone);
                 isTalking = false;
             }
             else
             {
-                ConfigEvent.UpdateGameState.EventTrigger(EGameState.Gameplay);
-                ConfigEvent.ShowDialogue.EventTrigger<DialoguePiece>(null);
+                ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
+                ConfigEvent.ShowDialogueEvent.EventTrigger<DialoguePiece>(null);
                 FillDialogueStack();
                 isTalking = false;
 

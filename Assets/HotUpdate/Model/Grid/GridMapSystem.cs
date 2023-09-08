@@ -51,14 +51,14 @@ namespace ACFrameworkCore
         private void OnEnable()
         {
             ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
         }
         private void OnDisable()
         {
             ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
-            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.RemoveEventListener(RefreshMap);
         }

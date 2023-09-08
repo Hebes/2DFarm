@@ -80,7 +80,7 @@ namespace ACFarm
             }
 
 
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             //ConfigEvent.PlaySoundEvent.AddEventListener(OnAfterSceneLoadedEvent);
             //ConfigEvent.InitSoundEffect.AddEventListener(InitSoundEffect);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
@@ -166,12 +166,13 @@ namespace ACFarm
         /// <param name="soundDetails"></param>
         private void PlayMusicClip(SoundDetails soundDetails, float transitionTime)
         {
-            audioMixer.SetFloat("MusicVolume", ConvertSoundVolume(soundDetails.soundVolume));
-            gameSource.clip = soundDetails.soundClip;
-            if (gameSource.isActiveAndEnabled)
-                gameSource.Play();
+            //TODO 准备自己重写
+            //audioMixer.SetFloat("MusicVolume", ConvertSoundVolume(soundDetails.soundVolume));
+            //gameSource.clip = soundDetails.soundClip;
+            //if (gameSource.isActiveAndEnabled)
+            //    gameSource.Play();
 
-            normalSnapShot.TransitionTo(transitionTime);
+            //normalSnapShot.TransitionTo(transitionTime);
         }
 
 
@@ -181,12 +182,12 @@ namespace ACFarm
         /// <param name="soundDetails"></param>
         private void PlayAmbientClip(SoundDetails soundDetails, float transitionTime)
         {
-            audioMixer.SetFloat("AmbientVolume", ConvertSoundVolume(soundDetails.soundVolume));
-            ambientSource.clip = soundDetails.soundClip;
-            if (ambientSource.isActiveAndEnabled)
-                ambientSource.Play();
+            //audioMixer.SetFloat("AmbientVolume", ConvertSoundVolume(soundDetails.soundVolume));
+            //ambientSource.clip = soundDetails.soundClip;
+            //if (ambientSource.isActiveAndEnabled)
+            //    ambientSource.Play();
 
-            ambientSnapShot.TransitionTo(transitionTime);
+            //ambientSnapShot.TransitionTo(transitionTime);
         }
     }
 }

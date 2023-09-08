@@ -71,13 +71,13 @@ namespace ACFrameworkCore
         private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
         {
             //删除图纸
-            RemoveItemDicArray(ConfigInventory.ActionBar, ID, 1);
+            RemoveItemDicArray(ConfigEvent.ActionBar, ID, 1);
             //获取建造蓝图数据
             BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(ID);
             foreach (var item in bluePrint.resourceItem)
             {
                 //删除资源
-                RemoveItemDicArray(ConfigInventory.PalayerBag, item.itemID, item.itemAmount);
+                RemoveItemDicArray(ConfigEvent.PalayerBag, item.itemID, item.itemAmount);
             }
         }
 

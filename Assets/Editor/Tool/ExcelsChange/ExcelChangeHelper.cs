@@ -41,6 +41,7 @@ namespace ACFrameworkCore
                     columnArray[j] = rows[i].ItemArray[j].ToString();
                 data[i] = columnArray;
             }
+            stream.Close();
 
             return data;
         }

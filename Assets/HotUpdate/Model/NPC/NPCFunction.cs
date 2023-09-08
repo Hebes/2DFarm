@@ -38,8 +38,8 @@ namespace ACFrameworkCore
         public void OpenShop()
         {
             isOpen = true;
-            ConfigEvent.BaseBagOpen.EventTrigger(NPCName,ConfigInventory.Shop);
-            ConfigEvent.UpdateGameState.EventTrigger(EGameState.Pause);
+            ConfigEvent.BaseBagOpen.EventTrigger(NPCName,ConfigEvent.Shop);
+            ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Pause);
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace ACFrameworkCore
         public void CloseShop()
         {
             isOpen = false;
-            ConfigEvent.BaseBagClose.EventTrigger(ConfigInventory.Shop, NPCName);
-            ConfigEvent.UpdateGameState.EventTrigger(EGameState.Gameplay);
+            ConfigEvent.BaseBagClose.EventTrigger(ConfigEvent.Shop, NPCName);
+            ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
         }
     }
 }

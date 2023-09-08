@@ -65,7 +65,7 @@ namespace ACFrameworkCore
         public AnimationClip blankAnimationClip;
         private AnimatorOverrideController animOverride;
 
-        private TimeSpan GameTime => TimeSystem.Instance.GameTime;
+        private TimeSpan GameTime => TimeManagerSystem.Instance.GameTime;
 
         public string GUID => GetComponent<DataGUID>().guid;
 
@@ -106,8 +106,8 @@ namespace ACFrameworkCore
         }
         private void OnEnable()
         {
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
 
             ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
@@ -115,8 +115,8 @@ namespace ACFrameworkCore
         }
         private void OnDisable()
         {
-            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.SceneBeforeUnload.RemoveEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.RemoveEventListener(OnBeforeSceneUnloadEvent);
 
             ConfigEvent.GameMinute.RemoveEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
             ConfigEvent.EndGameEvent.RemoveEventListener(OnEndGameEvent);

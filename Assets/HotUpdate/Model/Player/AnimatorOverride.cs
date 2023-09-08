@@ -42,7 +42,7 @@ namespace ACFrameworkCore
             holdItem = transform.GetChildComponent<SpriteRenderer>(childName: "HoldItem");
 
             ConfigEvent.PlayerHoldUpAnimations.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
-            ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
         }
 
         private void OnBeforeSceneUnloadEvent()

@@ -1,5 +1,16 @@
 using UnityEngine;
 
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    庄稼管理
+
+-----------------------*/
+
 namespace ACFrameworkCore
 {
     public class CropManager : MonoBehaviour
@@ -17,13 +28,13 @@ namespace ACFrameworkCore
         private void OnEnable()
         {
             ConfigEvent.PlantSeed.AddEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
         }
         private void OnDisable()
         {
             ConfigEvent.PlantSeed.RemoveEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.SceneAfterLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
         }
 
@@ -34,7 +45,8 @@ namespace ACFrameworkCore
         private void OnAfterSceneLoadedEvent()
         {
             currentGrid = FindObjectOfType<Grid>();
-            cropParent = GameObject.FindWithTag(ConfigTag.TagCropParent).transform;
+            //cropParent = GameObject.FindWithTag(ConfigTag.TagCropParent).transform;
+            cropParent = SceneTransitionSystem.GetCropParent;// new GameObject(ConfigTag.TagCropParent).transform;
         }
         private void OnPlantSeedEvent(int ID, TileDetails tileDetails)
         {

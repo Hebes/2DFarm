@@ -18,7 +18,9 @@ namespace ACFrameworkCore
         public const string UIDragPanel = "UIDragPanel";
         public const string UIFade = "UIFade";
         public const string UIGameTime = "UIGameTime";
+        public const string UIIntro = "UIIntro";
         public const string UIItemToolTip = "UIItemToolTip";
+        public const string UIMenu = "UIMenu";
         public const string UIPlayerBag = "UIPlayerBag";
         public const string UITrade = "UITrade";
         public const string UIActionBar = "UIActionBar";

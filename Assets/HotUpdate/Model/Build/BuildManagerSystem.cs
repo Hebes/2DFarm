@@ -78,7 +78,7 @@ namespace ACFrameworkCore
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
-                var itemStock = InventoryAllSystem.Instance.GetData(ConfigInventory.PalayerBag, resourceItem.itemID);
+                var itemStock = InventoryAllSystem.Instance.GetData(ConfigEvent.PalayerBag, resourceItem.itemID);
                 if (itemStock.itemAmount >= resourceItem.itemAmount)
                 {
                     continue;
@@ -100,7 +100,7 @@ namespace ACFrameworkCore
         private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
         {
             if (itemParent == null)
-                itemParent = GameObject.FindWithTag(ConfigTag.TagItemParent).transform;
+                itemParent = SceneTransitionSystem.GetitemParent;// GameObject.FindWithTag(ConfigTag.TagItemParent).transform;
             //获取建造蓝图数据
             BluePrintDetails bluePrint = GetBuildFurnitureDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);

@@ -17,23 +17,21 @@ public class Player : MonoBehaviour
     private float mouseY;                   //使用工具的动画Y
     private bool UseTool;                   //是否使用工具
 
-
-
     //生命周期
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animators = GetComponentsInChildren<Animator>();
-        ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-        ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+        ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
+        ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
-        ConfigEvent.UpdateGameState.AddEventListener<EGameState>(OnUpdateGameStateEvent);
+        ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
 
     }
     private void Update()
     {
-        if (inputDisable == false)
+        if (!inputDisable)
             PlayerInput();
         else
             isMoving = false;
@@ -62,6 +60,7 @@ public class Player : MonoBehaviour
     }
     private async UniTaskVoid OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
     {
+        if (UseTool) return;
         switch ((EItemType)itemDetails.itemType)
         {
             case EItemType.Seed:
@@ -88,6 +87,7 @@ public class Player : MonoBehaviour
     }
     private void OnUpdateGameStateEvent(EGameState gameState)
     {
+        //玩家移动
         switch (gameState)
         {
             case EGameState.Gameplay:

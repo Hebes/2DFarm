@@ -123,7 +123,7 @@ namespace ACFrameworkCore
                 {
                     if (cropDetails.generateAtPlayerPosition)
                     {
-                        ConfigEvent.HarvestAtPlayerPosition.EventTrigger(ConfigInventory.ActionBar, cropDetails.producedItemID[i]);
+                        ConfigEvent.HarvestAtPlayerPosition.EventTrigger(ConfigEvent.ActionBar, cropDetails.producedItemID[i]);
                     }
                     else    //世界地图上生成物品
                     {

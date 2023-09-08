@@ -19,14 +19,13 @@
         public const string SwichConfinerShape = "切换场景边界";
         public const string SceneTransition = "场景传送";
         public const string PlayerMoveToPosition = "人物加载场景时候的坐标";
-        public const string SceneBeforeUnload = "卸载场景之前需要做的事件";
-        public const string SceneAfterLoadedEvent = "加载场景之后需要做的事件";
+        public const string BeforeSceneUnloadEvent = "卸载场景之前需要做的事件";
+        public const string AfterSceneLoadedEvent = "加载场景之后需要做的事件";
         public const string GenerateCrop = "生成农作物";
 
         //UI界面相关
         public const string UIDisplayHighlighting = "UI界面显示选中物体高亮";
-        public const string UpdateGameStateEvent = "更新游戏状态事件";
-        public const string ShowDialogue = "显示对话";
+        public const string ShowDialogueEvent = "显示对话";
 
         //物品相关
         public const string UIItemDropItem = "扔东西";
@@ -59,9 +58,9 @@
         public const string BuildFurniture = "建造家具";
 
         //游戏相关
+        public const string UpdateGameStateEvent = "更新游戏状态事件";
         public const string EndGameEvent = "结束游戏";
         public const string StartNewGameEvent = "开始新的游戏";
-        public const string UpdateGameState = "更新游戏状态";
 
         //对话相关
         public const string OnFinishEvent = "对话完成事件触发的监听函数";
@@ -77,5 +76,11 @@
         //灯光相关
         public const string LightShiftChangeEvent = "光移变化";
 
+        //物品库存相关
+        public const string PalayerBag = "玩家背包";//玩家背包
+        public const string ActionBar = "快捷键";//快捷键
+        public const string Shop = "商店";//快捷键
+        public const string Box = "箱子";//快捷键
+        public const string Mira = "Mira";//快捷键
     }
 }

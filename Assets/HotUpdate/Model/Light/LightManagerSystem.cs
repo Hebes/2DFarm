@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -44,7 +45,7 @@ namespace ACFrameworkCore
                 lightPattenList.Add(lightDetails);
             }
 
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.LightShiftChangeEvent.AddEventListener<ESeason, LightShift, float>(OnLightShiftChangeEvent);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
         }
@@ -94,9 +95,13 @@ namespace ACFrameworkCore
             {
                 currentLightShift = lightShift;
 
-                //lightcontrol 改变灯光的方法
-                foreach (LightControl light in sceneLights)
-                    light.ChangeLightShift(currentSeason, currentLightShift, timeDifference);
+                if (sceneLights!=null)
+                {
+                    //TODO 本来sceneLights!=null是没有的
+                    //lightcontrol 改变灯光的方法
+                    foreach (LightControl light in sceneLights)
+                        light.ChangeLightShift(currentSeason, currentLightShift, timeDifference);
+                }
             }
         }
     }

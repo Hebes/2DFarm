@@ -35,8 +35,8 @@ namespace ACFrameworkCore
             //初始化监听信息
             ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
             ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
-            ConfigEvent.SceneBeforeUnload.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             LoadInit().Forget();
         }
 
@@ -83,7 +83,7 @@ namespace ACFrameworkCore
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
-            itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
+            itemParent = SceneTransitionSystem.GetitemParent;
             RecreateAllItems();
         }
 

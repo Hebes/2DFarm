@@ -27,8 +27,8 @@ namespace ACFrameworkCore
         {
             Instance = this;
             sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
-            ConfigEvent.SceneBeforeUnload.AddEventListener(SceneBeforeUnload);
-            ConfigEvent.SceneAfterLoadedEvent.AddEventListener(SceneAfterLoaded);
+            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(SceneBeforeUnload);
+            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(SceneAfterLoaded);
         }
 
         private void SceneBeforeUnload()
@@ -37,7 +37,9 @@ namespace ACFrameworkCore
         }
         private void SceneAfterLoaded()
         {
-            itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
+            //itemParent =new GameObject(ConfigTag.TagItemParent).transform;
+            //itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
+            itemParent = SceneTransitionSystem.GetitemParent;
             RebuildFurniture();
         }
 

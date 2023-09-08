@@ -18,6 +18,7 @@ namespace ACFrameworkCore
     {
 
         public static CommonManagerSystem Instance;
+        
         public void ICroeInit()
         {
             Instance = this;

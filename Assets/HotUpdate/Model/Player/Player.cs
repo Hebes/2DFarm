@@ -1,9 +1,12 @@
+using ACFarm;
 using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISaveable
 {
     private Rigidbody2D rb;                 //玩家的碰撞体
     private Animator[] animators;           //玩家的动画组件
@@ -27,7 +30,11 @@ public class Player : MonoBehaviour
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
         ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
-
+    }
+    private void Start()
+    {
+        ISaveable saveable = this;
+        saveable.RegisterSaveable();
     }
     private void Update()
     {
@@ -100,6 +107,7 @@ public class Player : MonoBehaviour
     }
 
 
+
     /// <summary>
     /// 使用工具的动作
     /// </summary>
@@ -126,7 +134,6 @@ public class Player : MonoBehaviour
         UseTool = false;
         inputDisable = false;
     }
-
     /// <summary>
     /// 玩家输入
     /// </summary>
@@ -159,7 +166,6 @@ public class Player : MonoBehaviour
 
         isMoving = movementInput != Vector2.zero;//判断是否在移动
     }
-
     /// <summary>
     /// 玩家移动
     /// </summary>
@@ -167,7 +173,6 @@ public class Player : MonoBehaviour
     {
         rb.MovePosition(rb.position + (speed * Time.fixedDeltaTime * movementInput));
     }
-
     /// <summary>
     /// 播放动画
     /// </summary>
@@ -184,5 +189,22 @@ public class Player : MonoBehaviour
                 anim.SetFloat("InputY", inputY);
             }
         }
+    }
+
+
+
+    //保存数据
+    public string GUID => GetComponent<DataGUID>().guid;
+    public GameSaveData GenerateSaveData()
+    {
+        GameSaveData saveData = new GameSaveData();
+        saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
+        saveData.characterPosDict.Add(this.name, new SerializableVector3(transform.position));
+        return saveData;
+    }
+    public void RestoreData(GameSaveData saveData)
+    {
+        var targetPosition = saveData.characterPosDict[this.name].ToVector3();
+        transform.position = targetPosition;
     }
 }

@@ -46,7 +46,7 @@ namespace ACFrameworkCore
         {
             currentGrid = FindObjectOfType<Grid>();
             //cropParent = GameObject.FindWithTag(ConfigTag.TagCropParent).transform;
-            cropParent = SceneTransitionSystem.GetCropParent;// new GameObject(ConfigTag.TagCropParent).transform;
+            cropParent = SceneTransitionSystem.Instance.cropParent;// new GameObject(ConfigTag.TagCropParent).transform;
         }
         private void OnPlantSeedEvent(int ID, TileDetails tileDetails)
         {

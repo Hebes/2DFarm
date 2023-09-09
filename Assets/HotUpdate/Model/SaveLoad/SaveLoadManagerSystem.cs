@@ -21,11 +21,11 @@ namespace ACFarm
     public class SaveLoadManagerSystem : ICore
     {
         public static SaveLoadManagerSystem Instance;
-        
+
 
         private List<ISaveable> saveableList = new List<ISaveable>();
 
-        public List<DataSlot> dataSlots = new List<DataSlot>(new DataSlot[3]);
+        public List<DataSlot> dataSlots;
 
         private string jsonFolder;
         private int currentDataIndex;
@@ -33,11 +33,13 @@ namespace ACFarm
         public void ICroeInit()
         {
             Instance = this;
+            dataSlots = new List<DataSlot>(new DataSlot[3]);
             jsonFolder = Application.persistentDataPath + "/SAVE DATA/";
             ReadSaveData();
 
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            MonoManager.Instance.OnAddUpdateEvent(Update);
         }
 
         private void Update()
@@ -84,39 +86,26 @@ namespace ACFarm
         private void Save(int index)
         {
             DataSlot data = new DataSlot();
-
-            foreach (var saveable in saveableList)
-            {
+            foreach (ISaveable saveable in saveableList)
                 data.dataDict.Add(saveable.GUID, saveable.GenerateSaveData());
-            }
             dataSlots[index] = data;
-
-            var resultPath = jsonFolder + "data" + index + ".json";
-
-            var jsonData = JsonConvert.SerializeObject(dataSlots[index], Formatting.Indented);
-
+            string resultPath = jsonFolder + "data" + index + ".json";
+            string jsonData = JsonConvert.SerializeObject(dataSlots[index], Formatting.Indented);
             if (!File.Exists(resultPath))
-            {
                 Directory.CreateDirectory(jsonFolder);
-            }
-            Debug.Log("DATA" + index + "SAVED!");
             File.WriteAllText(resultPath, jsonData);
+            ACDebug.Log($"数据{index}保存成功");
         }
 
         public void Load(int index)
         {
-            //currentDataIndex = index;
-
-            //var resultPath = jsonFolder + "data" + index + ".json";
-
-            //var stringData = File.ReadAllText(resultPath);
-
-            //var jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
-
-            //foreach (var saveable in saveableList)
-            //{
-            //    saveable.RestoreData(jsonData.dataDict[saveable.GUID]);
-            //}
+            ACDebug.Log($"数据{index}加载成功");
+            currentDataIndex = index;
+            var resultPath = jsonFolder + "data" + index + ".json";
+            var stringData = File.ReadAllText(resultPath);
+            var jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
+            foreach (var saveable in saveableList)
+                saveable.RestoreData(jsonData.dataDict[saveable.GUID]);
         }
     }
 }

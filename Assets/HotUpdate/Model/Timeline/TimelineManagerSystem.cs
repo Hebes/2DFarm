@@ -78,7 +78,7 @@ namespace ACFarm
             Test();
             if (currentDirector != null)
                 currentDirector.Play();
-            if (!startDirector.isActiveAndEnabled)
+            if (startDirector != null && !startDirector.isActiveAndEnabled)
                 ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
         }
         //在停止中

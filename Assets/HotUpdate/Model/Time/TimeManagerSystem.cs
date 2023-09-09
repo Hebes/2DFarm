@@ -1,7 +1,7 @@
+using ACFarm;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /*--------脚本描述-----------
 				
@@ -17,7 +17,7 @@ using UnityEngine.InputSystem;
 namespace ACFrameworkCore
 {
 
-    public class TimeManagerSystem : ICore
+    public class TimeManagerSystem   : ICore//, ISaveable
     {
         public static TimeManagerSystem Instance;
         private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
@@ -33,25 +33,25 @@ namespace ACFrameworkCore
         {
             Instance = this;
 
-            MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
-
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+
+            MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
         }
 
+
+        //事件监听
         private void OnBeforeSceneUnloadEvent()
         {
             // gameClockPause = true;
         }
-
         private void OnUpdateGameStateEvent(EGameState gameState)
         {
             gameClockPause = gameState == EGameState.Pause;
         }
-
         private void OnAfterSceneLoadedEvent()
         {
             // gameClockPause = false;
@@ -65,7 +65,6 @@ namespace ACFrameworkCore
             NewGameTime();
             // gameClockPause = false;
         }
-        
         private void OnEndGameEvent()
         {
             gameClockPause = true;
@@ -100,18 +99,6 @@ namespace ACFrameworkCore
                 ConfigEvent.GameDay.EventTrigger(gameDay, gameSeason);
                 ConfigEvent.GameDate.EventTrigger(gameHour, gameDay, gameMonth, gameYear, gameSeason);
             }
-        }
-
-        /// <summary>用于初始化时间</summary>
-        private void NewGameTime()
-        {
-            gameSecond = 0;
-            gameMinute = 0;
-            gameHour = 7;
-            gameDay = 1;
-            gameMonth = 1;
-            gameYear = 2022;
-            gameSeason = ESeason.春天;
         }
         /// <summary>时间更新</summary>
         private void UpdateGameTime()
@@ -173,6 +160,18 @@ namespace ACFrameworkCore
             //Debug.Log("Second 秒：" + gameSecond + "Minute 分：" + gameMinute);
         }
 
+        /// <summary>用于初始化时间</summary>
+        private void NewGameTime()
+        {
+            gameSecond = 0;
+            gameMinute = 0;
+            gameHour = 7;
+            gameDay = 1;
+            gameMonth = 1;
+            gameYear = 2022;
+            gameSeason = ESeason.春天;
+        }
+
 
         /// <summary>
         /// 返回lightshift同时计算时间差
@@ -196,6 +195,9 @@ namespace ACFrameworkCore
             return LightShift.Morning;
         }
 
+
+        //保存数据
+        //public string GUID =>
         public GameSaveData GenerateSaveData()
         {
             GameSaveData saveData = new GameSaveData();
@@ -210,7 +212,6 @@ namespace ACFrameworkCore
 
             return saveData;
         }
-
         public void RestoreData(GameSaveData saveData)
         {
             gameYear = saveData.timeDict["gameYear"];

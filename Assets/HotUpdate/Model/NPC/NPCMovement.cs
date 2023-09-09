@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ACFrameworkCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /*--------脚本描述-----------
 
@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Animator))]
@@ -33,8 +33,6 @@ namespace ACFrameworkCore
         private Vector3Int tragetGridPosition;                  //目标场景位置
         private Vector3Int nextGridPosition;                    //下一个位置
         private Vector3 nextWorldPosition;                      //下一个世界坐标位置
-
-        public string StartScene { set => currentScene = value; }
 
         [Header("移动属性")]
         public float normalSpeed = 2f;
@@ -70,7 +68,7 @@ namespace ACFrameworkCore
         public string GUID => GetComponent<DataGUID>().guid;
 
 
-        #region 生命周期
+        //生命周期
         private void Awake()
         {
             //获取组件
@@ -89,7 +87,7 @@ namespace ACFrameworkCore
             {
                 if (!item.NPCName.Equals(NPCName)) continue;
                 Vector2Int vector2IntTemp = new Vector2Int(item.targetGridPositionX, item.targetGridPositionY);
-                AnimationClip animationClipTemp = item.clipAtStop.Equals("null")? null: YooAssetLoadExpsion.YooaddetLoadSync<AnimationClip>(item.clipAtStop);
+                AnimationClip animationClipTemp = item.clipAtStop.Equals("null") ? null : YooAssetLoadExpsion.YooaddetLoadSync<AnimationClip>(item.clipAtStop);
                 ScheduleDetails scheduleDetails = new ScheduleDetails(
                     item.hour,
                     item.minute,
@@ -141,10 +139,10 @@ namespace ACFrameworkCore
             if (sceneLoaded)
                 Movement();
         }
-        #endregion
 
 
-        #region 事件监听
+
+        //事件监听
         private void OnBeforeSceneUnloadEvent()
         {
             sceneLoaded = false;
@@ -206,7 +204,6 @@ namespace ACFrameworkCore
             isInitialised = false;
             isFirstLoad = true;
         }
-        #endregion
 
         private void InitNPC()
         {
@@ -220,7 +217,7 @@ namespace ACFrameworkCore
         }
 
 
-        #region NPC是否看的见
+        //NPC是否看的见
         /// <summary>
         /// 检查NPC是否看的见
         /// </summary>
@@ -239,8 +236,6 @@ namespace ACFrameworkCore
 
             transform.GetChild(0).gameObject.SetActive(isActive);
         }
-        #endregion
-
 
         /// <summary>
         /// 主要移动方法
@@ -251,6 +246,7 @@ namespace ACFrameworkCore
             if (movementSteps.Count > 0)
             {
                 MovementStep step = movementSteps.Pop();
+
 
                 currentScene = step.sceneName;
 
@@ -327,20 +323,17 @@ namespace ACFrameworkCore
             }
             else if (schedule.targetScene != currentScene)//跨场景移动
             {
-                SceneRoute sceneRoute = NPCManagerSystem.Instance.GetSceneRoute(currentScene, schedule.targetScene);
+                SceneRoute sceneRoute = NPCManagerSystem.Instance.GetSceneRoute(currentScene, schedule.targetScene);//获得两个场景间的路径
 
-                if (sceneRoute != null)
+                for (int i = 0; i < sceneRoute?.scenePathList.Count; i++)
                 {
-                    for (int i = 0; i < sceneRoute.scenePathList.Count; i++)
-                    {
-                        Vector2Int fromPos, gotoPos;
-                        ScenePath path = sceneRoute.scenePathList[i];
+                    Vector2Int fromPos, gotoPos;
+                    ScenePath path = sceneRoute.scenePathList[i];
 
-                        fromPos = path.fromGridCell.x >= ConfigSettings.maxGridSize ? (Vector2Int)currentGridPosition : path.fromGridCell;
-                        gotoPos = path.gotoGridCell.x >= ConfigSettings.maxGridSize ? schedule.targetGridPosition : path.gotoGridCell;
+                    fromPos = path.fromGridCell.x >= ConfigSettings.maxGridSize ? (Vector2Int)currentGridPosition : path.fromGridCell;
+                    gotoPos = path.gotoGridCell.x >= ConfigSettings.maxGridSize ? schedule.targetGridPosition : path.gotoGridCell;
 
-                        AStar.Instance.BuildPath(path.sceneName, fromPos, gotoPos, movementSteps);
-                    }
+                    AStar.Instance.BuildPath(path.sceneName, fromPos, gotoPos, movementSteps);
                 }
             }
 
@@ -450,43 +443,43 @@ namespace ACFrameworkCore
 
         public GameSaveData GenerateSaveData()
         {
-            GameSaveData saveData = new GameSaveData();
-            saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
-            saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(tragetGridPosition));
-            saveData.characterPosDict.Add("currentPosition", new SerializableVector3(transform.position));
-            saveData.dataSceneName = currentScene;
-            saveData.targetScene = this.targetScene;
-            if (stopAnimationClip != null)
-            {
-                saveData.animationInstanceID = stopAnimationClip.GetInstanceID();
-            }
-            saveData.interactable = this.interactable;
-            saveData.timeDict = new Dictionary<string, int>();
-            saveData.timeDict.Add("currentSeason", (int)currentSeason);
-            return saveData;
+            //GameSaveData saveData = new GameSaveData();
+            //saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
+            //saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(tragetGridPosition));
+            //saveData.characterPosDict.Add("currentPosition", new SerializableVector3(transform.position));
+            //saveData.dataSceneName = currentScene;
+            //saveData.targetScene = this.targetScene;
+            //if (stopAnimationClip != null)
+            //{
+            //    saveData.animationInstanceID = stopAnimationClip.GetInstanceID();
+            //}
+            //saveData.interactable = this.interactable;
+            //saveData.timeDict = new Dictionary<string, int>();
+            //saveData.timeDict.Add("currentSeason", (int)currentSeason);
+            return null;// saveData;
         }
 
         public void RestoreData(GameSaveData saveData)
         {
-            isInitialised = true;
-            isFirstLoad = false;
+            //isInitialised = true;
+            //isFirstLoad = false;
 
-            currentScene = saveData.dataSceneName;
-            targetScene = saveData.targetScene;
+            //currentScene = saveData.dataSceneName;
+            //targetScene = saveData.targetScene;
 
-            Vector3 pos = saveData.characterPosDict["currentPosition"].ToVector3();
-            Vector3Int gridPos = (Vector3Int)saveData.characterPosDict["targetGridPosition"].ToVector2Int();
+            //Vector3 pos = saveData.characterPosDict["currentPosition"].ToVector3();
+            //Vector3Int gridPos = (Vector3Int)saveData.characterPosDict["targetGridPosition"].ToVector2Int();
 
-            transform.position = pos;
-            tragetGridPosition = gridPos;
+            //transform.position = pos;
+            //tragetGridPosition = gridPos;
 
-            if (saveData.animationInstanceID != 0)
-            {
-                this.stopAnimationClip = Resources.InstanceIDToObject(saveData.animationInstanceID) as AnimationClip;
-            }
+            //if (saveData.animationInstanceID != 0)
+            //{
+            //    this.stopAnimationClip = Resources.InstanceIDToObject(saveData.animationInstanceID) as AnimationClip;
+            //}
 
-            this.interactable = saveData.interactable;
-            this.currentSeason = (ESeason)saveData.timeDict["currentSeason"];
+            //this.interactable = saveData.interactable;
+            //this.currentSeason = (ESeason)saveData.timeDict["currentSeason"];
         }
 
     }

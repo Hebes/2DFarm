@@ -17,14 +17,13 @@ namespace ACFrameworkCore
 {
     public class UIItemToolTipPanel : UIBase
     {
-        private TextMeshProUGUI nameText;           //名称
-        private TextMeshProUGUI typeText;           //类型
-        private TextMeshProUGUI descriptionText;    //描述
+        private Text nameText;           //名称
+        private Text typeText;           //类型
+        private Text descriptionText;    //描述
         private Text valueText;                     //价格
         private GameObject bottomPart;              //底部
         private Transform itemToolTip;              //底部
         private GameObject resourcesPanel;          //资源面板
-        private GameObject resourcesItem;           //资源预制体
 
         public override void UIAwake()
         {
@@ -40,16 +39,14 @@ namespace ACFrameworkCore
             GameObject T_Description = UIComponent.Get<GameObject>("T_Description");
             GameObject T_Type = UIComponent.Get<GameObject>("T_Type");
             GameObject T_Name = UIComponent.Get<GameObject>("T_Name");
-            GameObject T_ResourcesItem = UIComponent.Get<GameObject>("T_ResourcesItem");
 
-            nameText = T_Name.GetTextMeshPro();
+            nameText = T_Name.GetText();
             itemToolTip = T_ItemToolTip.transform;
-            typeText = T_Type.GetTextMeshPro();
-            descriptionText = T_Description.GetTextMeshPro();
+            typeText = T_Type.GetText();
+            descriptionText = T_Description.GetText();
             bottomPart = T_Bottom.gameObject;
             valueText = T_Value.GetText();
             resourcesPanel = T_ResourcesPanel;
-            resourcesItem = T_ResourcesItem;
 
             ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetailsData, string, Vector3>(SetupTooltip);
             ConfigEvent.ItemToolTipClose.AddEventListener(CloseUIForm);
@@ -119,7 +116,7 @@ namespace ACFrameworkCore
                     //设置resourcesPanel子物体的数据
                     InventoryItem item = bluePrintDetails.resourceItem[i];
                     ItemDetailsData itemDetailsData = DataExpansion.GetDataOne<ItemDetailsData>(item.itemID);
-                    childGo.GetImage().sprite = ResourceExtension.LoadOrSub<Sprite>(itemDetailsData.iconPackage, itemDetailsData.itemIcon);
+                    childGo.GetImage().sprite = ResourceExtension.LoadOrSub<Sprite>(itemDetailsData.itemIconPackage, itemDetailsData.itemIcon);
                     childGo.GetChildComponent<TextMeshProUGUI>("ResourcesItemCount").text= item.itemAmount.ToString();
                 }
             }

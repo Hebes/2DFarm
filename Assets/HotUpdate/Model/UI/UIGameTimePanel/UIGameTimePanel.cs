@@ -1,8 +1,9 @@
-﻿using DG.Tweening;
+﻿using ACFarm;
+using DG.Tweening;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ACFrameworkCore;
 
 /*--------脚本描述-----------
 
@@ -15,14 +16,14 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIGameTimePanel : UIBase
     {
         private RectTransform dayNightImage; //日月转换的
         private RectTransform clockParent;   //时间
-        private TextMeshProUGUI dateText;    //显示日期
-        private TextMeshProUGUI timeText;    //显示12:12
+        private Text dateText;    //显示日期
+        private Text timeText;    //显示12:12
         private Image seasonImage;           //季节的图标
         private Sprite[] seasonSprites;      //季节的图片
         private List<GameObject> clockBlocks;//小时的格子
@@ -43,9 +44,9 @@ namespace ACFrameworkCore
 
             dayNightImage = (RectTransform)T_DayNightImage.transform;
             clockParent = (RectTransform)T_Clock.transform;
-            dateText = T_GameDate.GetComponent<TextMeshProUGUI>();
-            timeText = T_TimeText.GetComponent<TextMeshProUGUI>();
-            seasonImage = T_SeasonImage.GetComponent<Image>();
+            dateText = T_GameDate.GetText();
+            timeText = T_TimeText.GetText();
+            seasonImage = T_SeasonImage.GetImage();
 
             seasonSprites = new Sprite[4];
             seasonSprites[0] = await ConfigSprites.ui_time_12Png.LoadAsyncUniTask<Sprite>();
@@ -56,21 +57,13 @@ namespace ACFrameworkCore
             for (int i = 0; i < clockParent.childCount; i++)
             {
                 clockBlocks.Add(clockParent.GetChild(i).gameObject);
-                clockParent.GetChild(i).gameObject.SetActive(false);
+                clockParent.GetChild(i).SetActive(false);
             }
-        }
 
-        public override void UIOnEnable()
-        {
-            base.UIOnEnable();
+            ButtonOnClickAddListener(T_StopTime.name, p => { ConfigUIPanel.UISettingPanel.ShwoUIPanel<UISettingPanel>(); });
+
             ConfigEvent.GameDate.AddEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
             ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
-        }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-            ConfigEvent.GameDate.RemoveEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.RemoveEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
         }
 
         /// <summary>
@@ -112,6 +105,7 @@ namespace ACFrameworkCore
                     item.SetActive(false);
                 return;
             }
+
             for (int i = 0; i < clockBlocks.Count; i++)
                 clockBlocks[i].SetActive(i < index + 1);
         }

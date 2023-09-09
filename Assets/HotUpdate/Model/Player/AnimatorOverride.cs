@@ -32,7 +32,7 @@ namespace ACFrameworkCore
             List<PlayerAnimatorsData> playerAnimatorsList = this.GetDataListThis<PlayerAnimatorsData>();
             for (int i = 0; i < playerAnimatorsList.Count; i++)
             {
-                AnimatorType animatorType=new AnimatorType();
+                AnimatorType animatorType = new AnimatorType();
                 animatorType.ePartType = (EPartType)playerAnimatorsList[i].PartType;
                 animatorType.ePartName = (EPartName)playerAnimatorsList[i].PartName;
                 animatorType.overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(playerAnimatorsList[i].AnimatorName);
@@ -51,8 +51,11 @@ namespace ACFrameworkCore
             SwitchAnimator(EPartType.None);
         }
 
-        /// <summary>物品选中类型播放对应动画</summary>
-        /// <param name="itemDatails"></param><param name="idSelect">是否选中</param>
+        /// <summary>
+        /// 物品选中类型播放对应动画
+        /// </summary>
+        /// <param name="itemDatails"></param>
+        /// <param name="idSelect">是否被选中</param>
         private void OnItemSelectEvent(ItemDetailsData itemDatails, bool idSelect)
         {
             //WORKFLOW:不同的工具返回不同的动画，在这里补全
@@ -66,7 +69,7 @@ namespace ACFrameworkCore
                 case EItemType.Furniture: currentType = EPartType.Carry; break;
                 case EItemType.ChopTool: currentType = EPartType.Chop; break;
                 case EItemType.BreakTool: currentType = EPartType.Break; break;
-                case EItemType.ReapTool: currentType = EPartType.Reap; break; 
+                case EItemType.ReapTool: currentType = EPartType.Reap; break;
                 case EItemType.WaterTool: currentType = EPartType.Water; break;
                 case EItemType.CollectTool: currentType = EPartType.Collect; break;
                 case EItemType.ReapableSceney:
@@ -83,7 +86,7 @@ namespace ACFrameworkCore
                 if (currentType == EPartType.Carry)
                 {
                     holdItem.enabled = true;
-                    holdItem.sprite = ResourceExtension.Load<Sprite>(itemDatails.itemOnWorldSprite);
+                    holdItem.sprite = ResourceExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
                 }
                 else
                 {

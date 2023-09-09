@@ -29,14 +29,13 @@ namespace ACFrameworkCore
         private string Message = string.Empty;
 
 
-        [MenuItem("Tool/编辑Excel")]//#E
+        [MenuItem("Tool/编辑Excel#E #E")]
         public static void BuildPackageVersions()
         {
-            GetWindow(typeof(ExcelWrite), false, "Excel数据填充").Show();
-        }
-        private void Awake()
-        {
-
+            if (!EditorWindow.HasOpenInstances<ExcelWrite>())
+                GetWindow(typeof(ExcelWrite), false, "Excel数据填充").Show();
+            else
+                GetWindow(typeof(ExcelWrite)).Close();
         }
 
         private void OnGUI()
@@ -125,6 +124,16 @@ namespace ACFrameworkCore
             if (GUILayout.Button("清除消息", GUILayout.Width(80f)))
             {
                 Message = string.Empty;
+            }
+            //其他功能
+            if (GUILayout.Button("Excel转换", GUILayout.Width(80f)))
+            {
+                ExcelChange.GenerateExcelInfo();
+                Message = "转换成功";
+            }
+            if (GUILayout.Button("打开Excel", GUILayout.Width(80f)))
+            {
+                Application.OpenURL(NewLoadExcelPath);
             }
             EditorGUILayout.LabelField("消息提示:", GUILayout.Width(80f));
             EditorGUILayout.LabelField(Message, EditorStyles.label);

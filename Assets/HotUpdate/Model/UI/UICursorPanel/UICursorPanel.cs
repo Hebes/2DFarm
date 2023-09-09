@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using ACFrameworkCore;
+using Microsoft.SqlServer.Server;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UICursorPanel : UIBase
     {
-        public Sprite normal;                   //默认图标
-        public Sprite tool;                     //工具图标
-        public Sprite seed;                     //种子
-        public Sprite item;                     //物品图标
         private ItemDetailsData currentItem;        //当前鼠标图标
         private Sprite currentSprite;           //存储当前鼠标图片
+
         private Image cursorImage;              //当前鼠标图片
         private Image buildImage;              //建造图片
         private Grid currentGrid;               //当前地板
@@ -23,49 +22,31 @@ namespace ACFrameworkCore
         private Camera mainCamera => CommonManagerSystem.Instance.mainCamera;              //主摄像机
 
 
-
         //生命周期
         public override void UIAwake()
         {
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
-            //获取组件
+
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             GameObject T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");
             GameObject T_BuildImage = UIComponent.Get<GameObject>("T_BuildImage");
-            //加载UI图标
-            normal = ResourceExtension.Load<Sprite>(ConfigSprites.cursor11Png);
-            tool = ResourceExtension.Load<Sprite>(ConfigSprites.cursor8Png);
-            seed = ResourceExtension.Load<Sprite>(ConfigSprites.cursor7Png);
-            item = ResourceExtension.Load<Sprite>(ConfigSprites.cursor3Png);
 
             cursorImage = T_CursorImage.GetImage();
             buildImage = T_BuildImage.GetImage();
+            buildImage.SetActive(false);
+            currentSprite = ChangeMouseType(EMouseType.Normal);
+            SetCursorImage(ChangeMouseType(EMouseType.Normal));
+            Cursor.visible = false;
 
-            buildImage.gameObject.SetActive(false);
-            currentSprite = normal;
-            SetCursorImage(normal);
-        }
-        public override void UIOnEnable()
-        {
-            base.UIOnEnable();
             ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
         }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-            ConfigEvent.ItemSelectedEvent.RemoveEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
-            ConfigEvent.BeforeSceneUnloadEvent.RemoveEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
-        }
         public override void UIUpdate()
         {
             base.UIUpdate();
-            //if (cursorCanvas == null) return;
             cursorImage.transform.position = Input.mousePosition;
-            //ACDebug.Log($"当前bool:{!InteractwithUI()}{cursorEnable}");
             if (!InteractwithUI() && cursorEnable)
             {
                 SetCursorImage(currentSprite);
@@ -74,11 +55,25 @@ namespace ACFrameworkCore
             }
             else
             {
-                SetCursorImage(normal);
-                buildImage.gameObject.SetActive(false);
+                SetCursorImage(ChangeMouseType(EMouseType.Normal));
+                buildImage.SetActive(false);
             }
         }
 
+        /// <summary>
+        /// 切换鼠标样式
+        /// </summary>
+        private Sprite ChangeMouseType(EMouseType mouseType)
+        {
+            switch (mouseType)
+            {
+                default:
+                case EMouseType.Normal: return ConfigSprites.cursor11Png.GetMouseSprite();
+                case EMouseType.Tool: return ConfigSprites.cursor8Png.GetMouseSprite();
+                case EMouseType.Seed: return ConfigSprites.cursor7Png.GetMouseSprite();
+                case EMouseType.Item: return ConfigSprites.cursor3Png.GetMouseSprite();
+            }
+        }
 
 
         //事件监听
@@ -86,47 +81,38 @@ namespace ACFrameworkCore
         /// 设置鼠标对应的图片
         /// </summary>
         /// <param name="itemDatails"></param>
-        /// <param name="isSelected"></param>
+        /// <param name="isSelected">是否是选中状态</param>
         private void OnItemSelectEvent(ItemDetailsData itemDatails, bool isSelected)
         {
+
+            if (!isSelected)//不是选中状态
+            {
+                currentItem = null;
+                cursorEnable = false;
+                currentSprite = ChangeMouseType(EMouseType.Normal);
+                buildImage.SetActive(false);
+                return;
+            }
+
+            cursorEnable = true;
+            currentItem = itemDatails;
             switch ((EItemType)itemDatails.itemType)
             {
-                case EItemType.Seed:
-                    currentSprite = seed;
-                    break;
-                case EItemType.Commdity:
-                    currentSprite = item;
-                    break;
-                case EItemType.Furniture:
-                    buildImage.gameObject.SetActive(true);
-                    buildImage.sprite = ResourceExtension.LoadSub<Sprite>(itemDatails.iconPackage, itemDatails.itemOnWorldSprite);
-                    buildImage.SetNativeSize();
-                    break;
+                default: currentSprite = ChangeMouseType(EMouseType.Normal); break;
+                case EItemType.Seed: currentSprite = ChangeMouseType(EMouseType.Seed); break;
+                case EItemType.Commdity: currentSprite = ChangeMouseType(EMouseType.Item); break;
                 case EItemType.HoeTool:
                 case EItemType.ChopTool:
                 case EItemType.WaterTool:
                 case EItemType.ReapTool:
                 case EItemType.BreakTool:
                 case EItemType.CollectTool:
-                case EItemType.ReapableSceney:
-                    currentSprite = tool;
+                case EItemType.ReapableSceney: currentSprite = ChangeMouseType(EMouseType.Tool); break;
+                case EItemType.Furniture://家具建造
+                    buildImage.SetActive(true);
+                    buildImage.sprite = ResourceExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
+                    buildImage.SetNativeSize();
                     break;
-                default:
-                    currentSprite = normal;
-                    break;
-            }
-
-            if (!isSelected)
-            {
-                currentItem = null;
-                cursorEnable = false;
-                currentSprite = normal;
-                buildImage.gameObject.SetActive(false);
-            }
-            else
-            {
-                cursorEnable = true;
-                currentItem = itemDatails;
             }
         }
 
@@ -146,21 +132,6 @@ namespace ACFrameworkCore
             currentGrid = Object.FindObjectOfType<Grid>();
         }
 
-
-
-        //其他
-        /// <summary> 检查玩家输入 </summary>
-        private void CheckPlayerInput()
-        {
-            //执行方法
-            if (Input.GetMouseButtonDown(0) && cursorPositionValid)
-                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
-        }
-        /// <summary> 是否与UI互动 </summary>
-        private bool InteractwithUI()
-        {
-            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
-        }
         /// <summary>
         /// 检查鼠标是否有效
         /// </summary>
@@ -246,20 +217,54 @@ namespace ACFrameworkCore
                 SetCursorInValid();
             }
         }
-        /// <summary> 设置鼠标图片 </summary>
+
+
+
+        //其他
+        /// <summary>
+        /// 检查玩家输入
+        /// </summary>
+        private void CheckPlayerInput()
+        {
+            //执行方法
+            if (Input.GetMouseButtonDown(0) && cursorPositionValid)
+                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
+        }
+
+        /// <summary>
+        /// 是否与UI互动
+        /// </summary>
+        /// <returns></returns>
+        private bool InteractwithUI()
+        {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// 设置鼠标图片
+        /// </summary>
+        /// <param name="sprite"></param>
         private void SetCursorImage(Sprite sprite)
         {
             cursorImage.sprite = sprite;
             cursorImage.color = new Color(1, 1, 1, 1);
         }
-        /// <summary> 设置鼠标可用 </summary>
+
+        /// <summary>
+        /// 设置鼠标可用
+        /// </summary>
         private void SetCursorValid()
         {
             cursorPositionValid = true;
             cursorImage.color = new Color(1, 1, 1, 1);
             buildImage.color = new Color(1, 1, 1, .5f);
         }
-        /// <summary> 设置鼠标不可用 </summary>
+
+        /// <summary>
+        /// 设置鼠标不可用
+        /// </summary>
         private void SetCursorInValid()
         {
             cursorPositionValid = false;

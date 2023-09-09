@@ -22,8 +22,8 @@ namespace ACFrameworkCore
         public string currentceneName = string.Empty;//当前的场景,如果从记录中加载的场景可以在这里设置
         private bool isFade;//是否切换场景
 
-        private Transform cropParent;       //庄家的父物体，都放在这个下面不会看上去太乱
-        private Transform itemParent;
+        public Transform cropParent;       //庄家的父物体，都放在这个下面不会看上去太乱
+        public Transform itemParent;
 
         //public string GUID => GetComponent<DataGUID>().guid;
 
@@ -31,6 +31,7 @@ namespace ACFrameworkCore
         {
             Instance = this;
             currentceneName = ConfigScenes.Beach;
+            //currentceneName = ConfigScenes.Field;
             ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
         }
 
@@ -68,60 +69,5 @@ namespace ACFrameworkCore
                 isFade = false;
             }
         }
-
-        public static Transform GetCropParent
-        {
-            get
-            {
-                return Instance.cropParent;
-            }
-        }
-
-        public static Transform GetitemParent
-        {
-            get
-            {
-                return Instance.itemParent;
-            }
-        }
-
-        /// <summary>
-        /// 黑幕淡入
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="curtain"></param>
-        /// <param name="speed"></param>
-        /// <returns></returns>
-        //public static IEnumerator Fadein(this UIMateLoadingComponent self, GameObject curtain, float speed)
-        //{
-        //    curtain.SetActive(true);
-        //    Image image;
-        //    image = curtain.GetComponent<Image>();
-        //    while (image.color.a >= 0.1f)
-        //    {
-        //        image.color = Color.Lerp(image.color, Color.clear, speed * Time.deltaTime);
-        //        yield return null;
-        //    }
-        //    curtain.SetActive(false);
-        //}
-
-        /// <summary>
-        /// 黑幕淡出
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="curtain"></param>
-        /// <param name="speed"></param>
-        /// <returns></returns>
-        //public static IEnumerator Fadeout(this UIMateLoadingComponent self, float speed)
-        //{
-        //    self.Curtain.SetActive(true);
-        //    Image image;
-        //    image = self.Curtain.GetComponent<Image>();
-        //    while (image.color.a <= 0.999f)
-        //    {
-        //        image.color = Color.Lerp(image.color, Color.black, speed * Time.deltaTime);
-        //        yield return null;
-        //    }
-        //}
     }
 }

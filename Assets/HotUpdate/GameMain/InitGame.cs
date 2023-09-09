@@ -47,6 +47,7 @@ public class InitGame
         {
             new DebugManager(), //日志管理
             new MonoManager(),  //mono管理
+            new EventManager(),     //事件管理
         };
         foreach (var init in _initHs)
         {
@@ -60,7 +61,6 @@ public class InitGame
         List<ICore> _initHs = new List<ICore>()
         {
             new AduioManager(),     //音频管理
-            new EventManager(),     //事件管理
             new DataManager(),      //数据管理
             new PoolManager(),      //对象池管理
             new ResourceManager(),  //加载管理
@@ -91,10 +91,12 @@ public class InitGame
     {
         List<ICore> _initHs = new List<ICore>()
         {
+            //不依靠其他系统的可以先初始化
+            new AudioManagerSystem(),           //音效系统
             new InventoryAllSystem(),           //背包系统
             new InventoryWorldItemSystem(),     //物品在世界系统
             new TimeManagerSystem(),                   //时间系统
-            new CursorManagerSystem(),          //鼠标系统
+            new MouseManagerSystem(),          //鼠标系统
             new EffectsSystem(),                //特效系统
             new CommonManagerSystem(),          //常用物体管理系统
             new DialogueManagerSystem(),        //对话系统
@@ -102,8 +104,8 @@ public class InitGame
             new AnimatorManagerSystem(),        //动画系统
             new BuildManagerSystem(),           //建造系统
             new LightManagerSystem(),           //灯光系统
-            new AudioManagerSystem(),           //音效系统
             new TimelineManagerSystem(),        //动画系统
+            new SaveLoadManagerSystem(),        //数据保存系统
         };
         foreach (var init in _initHs)
         {
@@ -139,7 +141,6 @@ public class InitGame
     {
         await UniTask.DelayFrame(40);
         await UniTask.Yield();
-        
         //await SceneTransitionSystem.Instance.CreatScene();
 
         //显示图片

@@ -2,8 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class AStarTest : MonoBehaviour
     {

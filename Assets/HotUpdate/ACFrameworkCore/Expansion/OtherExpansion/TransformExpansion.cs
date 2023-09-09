@@ -139,5 +139,16 @@ namespace ACFrameworkCore
         {
             return transform.GetComponent<Button>();
         }
+
+
+        //关闭显示
+        public static void SetActive(this Image image,bool value)
+        {
+            image.gameObject.SetActive(value);
+        }
+        public static void SetActive(this Transform transform, bool value)
+        {
+            transform.gameObject.SetActive(value);
+        }
     }
 }

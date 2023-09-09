@@ -22,6 +22,7 @@ namespace ACFrameworkCore
         public const string UIItemToolTip = "UIItemToolTip";
         public const string UIMenu = "UIMenu";
         public const string UIPlayerBag = "UIPlayerBag";
+        public const string UISettingPanel = "UISettingPanel";
         public const string UITrade = "UITrade";
         public const string UIActionBar = "UIActionBar";
         public const string Solt_ShopPreafab = "Solt_ShopPreafab";

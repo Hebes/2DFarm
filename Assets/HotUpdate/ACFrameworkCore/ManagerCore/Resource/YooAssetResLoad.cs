@@ -27,14 +27,9 @@ namespace ACFrameworkCore
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
             AssetOperationHandle handle = package.LoadAssetSync<T>(AssetName);
             if (handle.Status == EOperationStatus.Succeed)
-            {
                 return handle.AssetObject as T;
-            }
             else
-            {
-                ACDebug.Error($"资源加载失败,请检查资源名称:{AssetName}");
                 return null;
-            }
         }
         public async UniTask<T> LoadAsyncUniTack<T>(string AssetName) where T : UnityEngine.Object
         {

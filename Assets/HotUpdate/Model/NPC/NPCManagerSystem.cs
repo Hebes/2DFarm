@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ACFrameworkCore;
 
 /*--------脚本描述-----------
 
@@ -12,13 +13,12 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class NPCManagerSystem : SingletonNewMono<NPCManagerSystem>
     {
         public List<NPCPosition> npcPositionList;       //NPC列表
         private Dictionary<string, SceneRoute> sceneRouteDict = new Dictionary<string, SceneRoute>();
-
 
         protected void Awake()
         {
@@ -48,8 +48,8 @@ namespace ACFrameworkCore
             {
                 NPCPosition nPCPosition = new NPCPosition();
                 nPCPosition.npc = NPC.transform;
-                nPCPosition.position = new Vector3(-2f, -1.4f, 0);
-                nPCPosition.startScene = ConfigScenes.Field;
+                nPCPosition.position =  new Vector3(-2f, -1.4f, 0);
+                nPCPosition.startScene = NPC.GetComponent<NPCMovement>().currentScene; //ConfigScenes.Field;
                 npcPositionList.Add(nPCPosition);
             }
         }
@@ -68,7 +68,7 @@ namespace ACFrameworkCore
                 if (sceneRouteDict.ContainsKey(key))
                     continue;
                 SceneRoute sceneRoute = new SceneRoute();
-                sceneRoute.fromSceneName= route.fromSceneName;
+                sceneRoute.fromSceneName = route.fromSceneName;
                 sceneRoute.gotoSceneName = route.gotoSceneName;
                 sceneRoute.scenePathList = new List<ScenePath>();
                 for (int i = 0; i < route.gotoGridCellX.Count; i++)
@@ -91,6 +91,8 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public SceneRoute GetSceneRoute(string fromSceneName, string gotoSceneName)
         {
+            if (!sceneRouteDict.ContainsKey(fromSceneName + gotoSceneName))
+                ACDebug.Error($"配置文件SceneRouteDetailsData未配置{fromSceneName}{gotoSceneName}");
             return sceneRouteDict[fromSceneName + gotoSceneName];
         }
     }

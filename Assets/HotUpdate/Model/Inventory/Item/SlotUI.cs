@@ -51,13 +51,10 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="item"></param>
         /// <param name="Amount"></param>
-        public async UniTask UpdateSlot(ItemDetailsData item, int Amount)
+        public void UpdateSlot(ItemDetailsData item, int Amount)
         {
             itemDatails = item;
-            if (item.iconPackage.Equals(ConfigExcelCommon.Null))
-                slotImage.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(item.itemIcon);
-            else
-                slotImage.sprite = ResourceExtension.LoadSub<Sprite>(item.iconPackage, item.itemIcon);
+            slotImage.sprite = ResourceExtension.LoadOrSub<Sprite>(item.itemIconPackage, item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;

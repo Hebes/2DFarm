@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /*--------脚本描述-----------
 				
@@ -82,8 +81,8 @@ namespace ACFrameworkCore
         /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
-            playerTransform = GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
-            itemParent = SceneTransitionSystem.GetitemParent;
+            playerTransform = CommonManagerSystem.Instance.playerTransform;// GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
+            itemParent = SceneTransitionSystem.Instance.itemParent;
             RecreateAllItems();
         }
 

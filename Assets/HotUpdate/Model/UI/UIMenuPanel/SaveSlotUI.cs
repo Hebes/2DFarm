@@ -1,5 +1,4 @@
 ﻿using ACFrameworkCore;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,31 +39,32 @@ namespace ACFarm
 
         private void SetupSlotUI()
         {
-            //currentData = SaveLoadManagerSystem.Instance.dataSlots[Index];
+            currentData = SaveLoadManagerSystem.Instance.dataSlots[Index];
 
-            //if (currentData != null)
-            //{
-            //    dataTime.text = currentData.DataTime;
-            //    dataScene.text = currentData.DataScene;
-            //}
-            //else
-            //{
-            //    dataTime.text = "这个世界还没开始";
-            //    dataScene.text = "梦还没开始";
-            //}
+            if (currentData != null)
+            {
+                dataTime.text = currentData.DataTime;
+                dataScene.text = currentData.DataScene;
+            }
+            else
+            {
+                dataTime.text = "这个世界还没开始";
+                dataScene.text = "梦还没开始";
+            }
         }
 
         private void LoadGameData()
         {
-            //if (currentData != null)
-            //{
-            //    SaveLoadManagerSystem.Instance.Load(Index);
-            //}
-            //else
-            //{
-            //    Debug.Log("新游戏");
-            //    EventHandler.CallStartNewGameEvent(Index);
-            //}
+            ACDebug.Log($"需要打印的消息{Index}");
+            if (currentData != null)
+            {
+                SaveLoadManagerSystem.Instance.Load(Index);
+            }
+            else
+            {
+                Debug.Log("新游戏");
+                ConfigEvent.StartNewGameEvent.EventTrigger(Index);
+            }
         }
     }
 }

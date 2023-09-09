@@ -103,12 +103,36 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/Sprites
-        CollectorGUID: a2659aa8297a5404b9d93a1cb7413d46
+      - CollectPath: Assets/AssetsPackage/Sprites/Art
+        CollectorGUID: f62e5b420a2a148b0b210c96fc278f2c
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectSprite
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Sprites/Characters
+        CollectorGUID: 1e07644e5615d40719c1021593f797a0
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Sprites/Items
+        CollectorGUID: addc087f5bf104d479d0ebd13b271555
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/Sprites/Mouse
+        CollectorGUID: 61a5d849219ba1d4c90da6127387a0dd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
     - GroupName: ConfigData

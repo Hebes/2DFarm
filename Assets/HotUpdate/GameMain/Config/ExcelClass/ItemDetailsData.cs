@@ -8,8 +8,9 @@ public class ItemDetailsData : IData
 	public int       	itemID;
 	public string    	name;
 	public int       	itemType;
-	public string    	iconPackage;
+	public string    	itemIconPackage;
 	public string    	itemIcon;
+	public string    	itemOnWorldPackage;
 	public string    	itemOnWorldSprite;
 	public string    	itemDescription;
 	public int       	itemUseRadiue;

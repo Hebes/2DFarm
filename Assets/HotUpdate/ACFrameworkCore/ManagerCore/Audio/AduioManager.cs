@@ -18,25 +18,25 @@ namespace ACFrameworkCore
     public class AduioManager : ICore
     {
         public static AduioManager Instance;
-        private Dictionary<string, AudioClip> AudioClipDic; //音效列表
         private GameObject soundObj = null;                 //音效依附对象
         private float bkValue = 1;                          //背景音乐大小
         public AudioSource bkMusic;                         //背景音乐组件
         private float soundValue = 1;                       //音效大小
         private List<AudioSource> soundList;                //音效列表
+        private Dictionary<string, AudioClip> AudioClipDic; //音效列表
 
         public void ICroeInit()
         {
             Instance = this;
-            AudioClipDic = new Dictionary<string, AudioClip>();
-            soundList = new List<AudioSource>();
+            //AudioClipDic = new Dictionary<string, AudioClip>();
+            //soundList = new List<AudioSource>();
 
-            if (soundObj != null)
-            {
-                soundObj = new GameObject();
-                soundObj.name = "Aduio";
-                bkMusic = soundObj.AddComponent<AudioSource>();
-            }
+            //if (soundObj != null)
+            //{
+            //    soundObj = new GameObject();
+            //    soundObj.name = "Aduio";
+            //    bkMusic = soundObj.AddComponent<AudioSource>();
+            //}
             ACDebug.Log("音频模块初始化成功!");
         }
 
@@ -48,7 +48,6 @@ namespace ACFrameworkCore
         {
             this.bkValue = bkValue;
             this.soundValue = soundValue;
-            //PlayBkMusic()
         }
 
         /// <summary>
@@ -71,10 +70,10 @@ namespace ACFrameworkCore
         /// 播放背景音乐
         /// </summary>
         /// <param name="name"></param>
-        public void PlayBkMusic(string name, AudioClip clip)
+        public void PlayBkMusic(string name, AudioClip clip, bool isLoop = true)
         {
             bkMusic.clip = clip;
-            bkMusic.loop = true;
+            bkMusic.loop = isLoop;
             bkMusic.volume = bkValue;
             bkMusic.Play();
         }
@@ -115,7 +114,7 @@ namespace ACFrameworkCore
         /// <param name="name"></param>
         /// <param name="isLoop"></param>
         /// <param name="clip"></param>
-        public void PlaySound(string name, bool isLoop, AudioClip clip)
+        public void PlaySound(string name, AudioClip clip, bool isLoop = false)
         {
             AudioSource source = soundObj.AddComponent<AudioSource>();
             source.clip = clip;

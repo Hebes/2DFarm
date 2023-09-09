@@ -15,12 +15,23 @@ namespace ACFarm
 {
     public interface ISaveable
     {
-        string GUID { get; }
-        void RegisterSaveable()
+        public string GUID { get; }
+        /// <summary>
+        /// 注册保存
+        /// </summary>
+        public void RegisterSaveable()
         {
             SaveLoadManagerSystem.Instance.RegisterSaveable(this);
         }
-        GameSaveData GenerateSaveData();
-        void RestoreData(GameSaveData saveData);
+        /// <summary>
+        /// 生成数据
+        /// </summary>
+        /// <returns></returns>
+        public GameSaveData GenerateSaveData();
+        /// <summary>
+        /// 回复数据
+        /// </summary>
+        /// <param name="saveData"></param>
+        public void RestoreData(GameSaveData saveData);
     }
 }

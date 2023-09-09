@@ -1,10 +1,16 @@
 ﻿using ACFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
+
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    数据槽位
+
+-----------------------*/
 
 namespace ACFarm
 {
@@ -15,12 +21,12 @@ namespace ACFarm
         /// </summary>
         public Dictionary<string, GameSaveData> dataDict = new Dictionary<string, GameSaveData>();
 
-        #region 用来UI显示进度详情
+        //用来UI显示进度详情
         public string DataTime
         {
             get
             {
-                var key = TimeManager.Instance.GUID;
+                var key = string.Empty;// TimeManagerSystem.Instance.GUID;
 
                 if (dataDict.ContainsKey(key))
                 {
@@ -35,7 +41,8 @@ namespace ACFarm
         {
             get
             {
-                var key = SceneTransitionSystem.Instance.GUID;
+                var key = string.Empty;// TimeManagerSystem.Instance.GUID;
+                //var key = SceneTransitionSystem.Instance.GUID;
                 if (dataDict.ContainsKey(key))
                 {
                     var transitionData = dataDict[key];
@@ -53,6 +60,5 @@ namespace ACFarm
                 else return string.Empty;
             }
         }
-        #endregion
     }
 }

@@ -10,6 +10,7 @@
 -----------------------*/
 
 using Cysharp.Threading.Tasks;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace ACFrameworkCore
 {
@@ -28,17 +29,24 @@ namespace ACFrameworkCore
             return ResourceManager.Instance.LoadSub<T>(location, ResName);
         }
 
-        public static T LoadOrSub<T>(string assetName, string ResName = null) where T : UnityEngine.Object
-        {
-            if (ResName == null || ConfigExcelCommon.Null.Equals(assetName))
-                return Load<T>(ResName);
-            return LoadSub<T>(assetName, ResName);
-        }
-
         //资源释放
         public static void UnloadAssets()
         {
             ResourceManager.Instance.UnloadAssets();
+        }
+
+
+        //特殊封装
+        public static T LoadOrSub<T>(string assetName, string ResName) where T : UnityEngine.Object
+        {
+            T t = null;
+            if (assetName.Equals("null"))
+                t = Load<T>(ResName);
+            else
+                t = LoadSub<T>(assetName, ResName);
+            if (t == null)
+                ACDebug.Error($"没有资源请检查yooasset{ResName}");
+            return t;
         }
     }
 }

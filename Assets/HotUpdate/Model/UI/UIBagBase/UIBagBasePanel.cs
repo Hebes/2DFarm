@@ -97,9 +97,6 @@ namespace ACFrameworkCore
                 {
                     OpenUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
                     UIPlayerBagPanel uIPlayerBagPanel = GetUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
-                    //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().pivot = new Vector2(-1, 0.5f);
-                    //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f,0);
-                    //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f,0);
                     uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f, 0.0f);
                     uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(130f, 0.0f);
                 }
@@ -121,7 +118,7 @@ namespace ACFrameworkCore
                 if (InventoryItemList[i].itemAmount > 0)
                 {
                     ItemDetailsData item = InventoryAllSystem.Instance.GetItem(InventoryItemList[i].itemID);
-                    baseBagSlots[i].UpdateSlot(item, InventoryItemList[i].itemAmount).Forget();
+                    baseBagSlots[i].UpdateSlot(item, InventoryItemList[i].itemAmount);
                 }
                 else
                 {
@@ -150,7 +147,6 @@ namespace ACFrameworkCore
             {
                 CloseOtherUIForm(ConfigUIPanel.UIPlayerBag);
                 UIPlayerBagPanel uIPlayerBagPanel = GetUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
-                //uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
                 uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(0.0f, 0.0f);
                 uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(0.0f, 0.0f);
             }

@@ -39,7 +39,7 @@ namespace ACFrameworkCore
         {
             //itemParent =new GameObject(ConfigTag.TagItemParent).transform;
             //itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
-            itemParent = SceneTransitionSystem.GetitemParent;
+            itemParent = SceneTransitionSystem.Instance.itemParent;
             RebuildFurniture();
         }
 

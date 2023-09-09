@@ -103,7 +103,7 @@ namespace ACFrameworkCore
         private void ShowResourcesPanel(int id)
         {
             //获取数据
-            BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(id);
+            BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(id);
             resourcesPanel.SetActive(bluePrintDetails != null);
             for (int i = 0; i < resourcesPanel.transform.childCount; i++)
             {

@@ -279,7 +279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 121.5, y: -117.5}
+  m_AnchoredPosition: {x: 121.5, y: -80.5}
   m_SizeDelta: {x: 160, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066847299
@@ -662,15 +662,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6044849887750396967, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80.5
+      value: -117.5
       objectReference: {fileID: 0}
     - target: {fileID: 6950188667050567013, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7105970744984245204, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7639077775261442420, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
       propertyPath: m_AnchorMax.y
@@ -717,7 +717,7 @@ PrefabInstance:
     - {fileID: 5930900259367685851, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3493855139398800299, guid: 6498494e7a6c68741bdd974037642aca, type: 3}
-      insertIndex: 2
+      insertIndex: -1
       addedObject: {fileID: 1066847298}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6498494e7a6c68741bdd974037642aca, type: 3}

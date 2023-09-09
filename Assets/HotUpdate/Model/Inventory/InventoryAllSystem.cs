@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ACFarm;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /*--------脚本描述-----------
 				
@@ -17,47 +16,32 @@ using UnityEngine.UI;
 
 namespace ACFrameworkCore
 {
-    public class InventoryAllSystem : ICore
+    public class InventoryAllSystem : ICore, ISaveable
     {
         //注意:SlotUI指的都是例如ItemDicArray或者ItemDicList的key
         public static InventoryAllSystem Instance;
         public Dictionary<string, InventoryItem[]> ItemDicArray; //物品字典列表   两本字典的KEY请不要重复
-        public Dictionary<string, List<SlotUI>> slotUIDic;       //所有的高亮的格子
+        private Dictionary<string, List<SlotUI>> slotUIDic;       //所有的高亮的格子
+        private string SaveKey = "物品总管理系统";
 
-        public Image dragItem;//拖拽的物体
+
 
         public void ICroeInit()
         {
             Instance = this;
             ItemDicArray = new Dictionary<string, InventoryItem[]>();
             slotUIDic = new Dictionary<string, List<SlotUI>>();
-            //TODO 这里可以编写从保存的数据中加载的数据用于给ItemDicArray和ItemDicList赋值,保证后面UI界面信息可以有数据初始化
-            //ConfigEvent.BeforeSceneUnloadEvent.AddEventListener<string,int>(UpdateSlotHightLight);//切换场景的时候触发下
 
             ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
             ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string, int>(OnHarvestAtPlayerPosition);
             ConfigEvent.BuildFurniture.AddEventListener<int, Vector3>(OnBuildFurnitureEvent);
 
 
-            //初始化数据(商店和箱子)
-            List<ShopDetailsData> shopDetailsDatasList = this.GetDataListThis<ShopDetailsData>();
-            foreach (ShopDetailsData shopDetailsData in shopDetailsDatasList)
-            {
-                InventoryItem inventoryItem = new InventoryItem();
-                inventoryItem.itemID = shopDetailsData.itemID;
-                inventoryItem.itemAmount = shopDetailsData.itemAmount;
-                if (ItemDicArray.ContainsKey(shopDetailsData.shopkeeperName))
-                {
-                    List<InventoryItem> inventoryItems = ItemDicArray[shopDetailsData.shopkeeperName].ToList();
-                    inventoryItems.Add(inventoryItem);
-                    ItemDicArray[shopDetailsData.shopkeeperName] = inventoryItems.ToArray();
-                }
-                else
-                {
-                    ItemDicArray.Add(shopDetailsData.shopkeeperName, new InventoryItem[1]);
-                    ItemDicArray[shopDetailsData.shopkeeperName][0] = inventoryItem;
-                }
-            }
+            
+
+            //注册保存事件
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
         //监听事件
@@ -73,13 +57,15 @@ namespace ACFrameworkCore
             //删除图纸
             RemoveItemDicArray(ConfigEvent.ActionBar, ID, 1);
             //获取建造蓝图数据
-            BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(ID);
+            BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(ID);
             foreach (var item in bluePrint.resourceItem)
             {
                 //删除资源
                 RemoveItemDicArray(ConfigEvent.PalayerBag, item.itemID, item.itemAmount);
             }
         }
+
+
 
         //ItemDicArray字典操作
         public bool AddItemDicArray(string key, int itemID, int itemAmount)
@@ -109,8 +95,12 @@ namespace ACFrameworkCore
         public void CreatItemDicArrayRecord(string key, int count)
         {
             ItemDicArray.Add(key, new InventoryItem[count]);
-        }//创建
-        /// <summary> 删除物品 </summary>
+        }
+        public void RefreshItemDic(string key)
+        {
+            //更新物品UI 呼叫事件中心,执行委托的代码
+            key.EventTrigger(ItemDicArray[key]);//这里的在比如背包页面那边开启的时候监听
+        }
         public bool RemoveItemDicArray(string key, int itemID, int itemAmount)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] inventoryItemArray);
@@ -187,6 +177,8 @@ namespace ACFrameworkCore
             return -1;
         }//检查空位
 
+
+
         public InventoryItem GetData(string key, int ID)
         {
             ItemDicArray.TryGetValue(key, out InventoryItem[] itemList);
@@ -205,7 +197,6 @@ namespace ACFrameworkCore
             slotUIDic.TryGetValue(key, out List<SlotUI> slotUIs);
             return slotUIs.Find((slotUI) => { return slotUI.itemDatails.itemID == ID; });
         }
-
         //ItemDicList和ItemDicArray交换 TODO 需要编写代码 
         public bool ChangeItem(string oldKey, string newKey, int oldIndex, int newIndex)
         {
@@ -223,7 +214,8 @@ namespace ACFrameworkCore
             else
                 slotUIDic.Add(key, slotUIs);
         }
-        private void UpdateSlotHightLight(string key = "", int index = -1)//-1全都不显示
+        //显示高亮（-1全都不显示）
+        private void UpdateSlotHightLight(string key = "", int index = -1)
         {
             //关闭所有的
             foreach (KeyValuePair<string, List<SlotUI>> slotUI in slotUIDic)
@@ -248,14 +240,12 @@ namespace ACFrameworkCore
                     slotUI.Value.ForEach(slot => { slot.isSelected = false; slot.slotHightLight.gameObject.SetActive(false); });
                 }
             }
-        }//显示高亮
-
+        }
         //获取物品信息
         public ItemDetailsData GetItem(int id)
         {
             return DataManager.Instance.GetDataOne<ItemDetailsData>(id);
         }
-
         /// <summary>
         /// 交易物品
         /// </summary>
@@ -290,6 +280,27 @@ namespace ACFrameworkCore
 
             //刷新钱
             ConfigEvent.MoneyShow.EventTrigger(CommonManagerSystem.Instance.playerMoney);
+        }
+
+
+
+        //保存数据
+        public string GUID => SaveKey;
+        public GameSaveData GenerateSaveData()
+        {
+            GameSaveData saveData = new GameSaveData();
+            saveData.playerMoney = CommonManagerSystem.Instance.playerMoney;
+            saveData.ItemDicArray = ItemDicArray;
+            return saveData;
+        }
+        public void RestoreData(GameSaveData saveData)
+        {
+            CommonManagerSystem.Instance.playerMoney = saveData.playerMoney;
+            if (ItemDicArray == null)
+                ItemDicArray = new Dictionary<string, InventoryItem[]>();
+            ItemDicArray = saveData.ItemDicArray;
+            foreach (string key in ItemDicArray.Keys)
+                RefreshItemDic(key);
         }
     }
 }

@@ -167,7 +167,7 @@ namespace ACFarm
                         break;
                     case EItemType.Furniture:
                         buildImage.gameObject.SetActive(true);
-                        var bluePrintDetails = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(currentItem.itemID);
+                        var bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
 
                         if (currentTile.canPlaceFurniture && BuildManagerSystem.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
                             SetCursorValid();

@@ -19,6 +19,7 @@ public class Player : MonoBehaviour, ISaveable
     private float mouseX;                   //使用工具的动画X
     private float mouseY;                   //使用工具的动画Y
     private bool UseTool;                   //是否使用工具
+    private string SaveKey = "Player数据保存";        //保存的Key,一般都是名字
 
     //生命周期
     private void Awake()
@@ -30,9 +31,8 @@ public class Player : MonoBehaviour, ISaveable
         ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
         ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
         ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
-    }
-    private void Start()
-    {
+
+        //注册保存事件
         ISaveable saveable = this;
         saveable.RegisterSaveable();
     }
@@ -194,7 +194,7 @@ public class Player : MonoBehaviour, ISaveable
 
 
     //保存数据
-    public string GUID => GetComponent<DataGUID>().guid;
+    public string GUID => SaveKey;
     public GameSaveData GenerateSaveData()
     {
         GameSaveData saveData = new GameSaveData();

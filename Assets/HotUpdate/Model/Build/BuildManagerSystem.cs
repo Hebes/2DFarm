@@ -61,7 +61,7 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="id">id</param>
         /// <returns></returns>
-        public BluePrintDetails GetBuildFurnitureDataOne(int id)
+        public BluePrintDetails GetDataOne(int id)
         {
             BluePrintDetails bluePrintDetails = bluePrintDataList.Find((BluePrintDetails data) => { return data.ID == id; });
             return bluePrintDetails;
@@ -74,7 +74,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public bool CheckStock(int ID)
         {
-            var bluePrintDetails = GetBuildFurnitureDataOne(ID);
+            var bluePrintDetails = GetDataOne(ID);
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
@@ -102,7 +102,7 @@ namespace ACFrameworkCore
             if (itemParent == null)
                 itemParent = itemParent = SceneTransitionSystem.Instance.itemParent;
             //获取建造蓝图数据
-            BluePrintDetails bluePrint = GetBuildFurnitureDataOne(ID);
+            BluePrintDetails bluePrint = GetDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);
             //if (buildItem.GetComponent<Box>())
             //{

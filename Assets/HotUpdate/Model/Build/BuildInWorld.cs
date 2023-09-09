@@ -89,7 +89,7 @@ namespace ACFrameworkCore
                 {
                     foreach (SceneFurniture sceneFurniture in currentSceneFurniture)
                     {
-                        BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetBuildFurnitureDataOne(sceneFurniture.itemID);
+                        BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(sceneFurniture.itemID);
                         var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, sceneFurniture.position.ToVector3(), Quaternion.identity, itemParent);
                         //if (buildItem.GetComponent<Box>())
                         //{

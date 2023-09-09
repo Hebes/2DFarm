@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using ACFarm;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,12 +51,12 @@ namespace ACFrameworkCore
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            
+
         }
         public override void UIOnDisable()
         {
             base.UIOnDisable();
-            
+
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace ACFrameworkCore
 
             baseBagSlots = new List<SlotUI>();
             //从仓管系统获取数据，请先提前吧仓管里面的数据初始化完毕!
-            InventoryAllSystem.Instance.ItemDicArray.TryGetValue(Name, out InventoryItem[] shopDetailsDatasList);
+            InventoryItem[] shopDetailsDatasList = ShopManagerSystemExpansion.GetShopData(Name);
             if (shopDetailsDatasList != null)
             {
                 for (int i = 0; i < shopDetailsDatasList.ToList().Count; i++)

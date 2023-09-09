@@ -1,6 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using ACFarm;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*--------脚本描述-----------
 				
@@ -15,20 +17,24 @@ using UnityEngine;
 
 namespace ACFrameworkCore
 {
-    public class InventoryWorldItemSystem : ICore
+    public class InventoryWorldItemSystem : ICore, ISaveable
     {
         public static InventoryWorldItemSystem Instance;
-        private Dictionary<string, List<SceneItem>> sceneItemDict;  //世界场景的所有物体
         private Transform playerTransform;                          //玩家
         private Transform itemParent;                               //统一保存的父物体
-
         public Item bounceItemPrefab;                               //抛投的物品模板
         public Item itemPrefab;
+        private string SaveKey = "世界地图上的物品管理";
+
+        private Dictionary<string, List<SceneFurniture>> sceneFurnitureDict;    //记录场景家具
+        private Dictionary<string, List<SceneItem>> sceneItemDict;              //世界场景的所有物体
+
 
         public void ICroeInit()
         {
             Instance = this;
             sceneItemDict = new Dictionary<string, List<SceneItem>>();
+            sceneFurnitureDict = new Dictionary<string, List<SceneFurniture>>();
             //加载预制体
             bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePreafab).GetComponent<Item>();
             //初始化监听信息
@@ -36,22 +42,27 @@ namespace ACFrameworkCore
             ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             LoadInit().Forget();
-        }
 
+            //注册保存事件
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
+        }
         public async UniTaskVoid LoadInit()
         {
             GameObject itemPrefabGo = await ResourceExtension.LoadAsyncUniTask<GameObject>(ConfigPrefab.ItemBasePreafab);
             itemPrefab = itemPrefabGo.GetComponent<Item>();
         }
 
-        /// <summary>
-        /// 扔东西
-        /// </summary>
-        /// <param name="itemID"></param>
-        /// <param name="mousePos"></param>
-        /// <param name="itemType"></param>
-        /// <param name="removeAmount"></param>
+
+
+        //事件监听
+        private void OnStartNewGameEvent(int obj)
+        {
+            sceneItemDict.Clear();
+            sceneFurnitureDict.Clear();
+        }
         private void OnDropItemEvent(int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
             if (itemType == EItemType.Seed)
@@ -75,23 +86,13 @@ namespace ACFrameworkCore
             //移除物品
             InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, item.itemAmount);
         }
-
-        /// <summary>
-        /// 查找玩家限定范围的组件场景加载之后
-        /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = CommonManagerSystem.Instance.playerTransform;// GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
             itemParent = SceneTransitionSystem.Instance.itemParent;
             RecreateAllItems();
+            RebuildFurniture();
         }
-
-        /// <summary>
-        /// 在世界地图生成物品
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <param name="itemAmount">物品数量</param>
-        /// <param name="pos"></param>
         private void OnInstantiateItemScen(int itemID, int itemAmount, Vector3 pos)
         {
             Item item = GameObject.Instantiate(bounceItemPrefab, pos, Quaternion.identity, itemParent);
@@ -99,15 +100,15 @@ namespace ACFrameworkCore
             item.itemAmount = itemAmount;
             item.GetComponent<ItemBounce>().InitBounceItem(pos, Vector3.up);
         }
-
-        /// <summary>
-        /// 保存场景item
-        /// </summary>
         private void OnBeforeSceneUnloadEvent()
         {
             GetAllSceneItems();
+            GetAllSceneFurniture();
         }
 
+
+
+        //保存场景数据
         /// <summary>
         /// 获取当前场景里面的所有的物品
         /// </summary>
@@ -130,14 +131,13 @@ namespace ACFrameworkCore
                     sceneItemDict.Add(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
             }
         }
-
         /// <summary>
         /// 刷新重建当前场景物品 切换场景结束的时候
         /// </summary>
         private void RecreateAllItems()
         {
-            List<SceneItem> currentSceneItems = new List<SceneItem>();
-            if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out currentSceneItems))
+            //List<SceneItem> currentSceneItems = new List<SceneItem>();
+            if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out List<SceneItem> currentSceneItems))
             {
                 if (currentSceneItems == null) return;
                 //清场
@@ -151,6 +151,81 @@ namespace ACFrameworkCore
                 }
             }
         }
+        /// <summary>
+        /// 获得场景所有家具
+        /// </summary>
+        private void GetAllSceneFurniture()
+        {
+            List<SceneFurniture> currentSceneFurniture = new List<SceneFurniture>();
 
+            foreach (var item in GameObject.FindObjectsOfType<Furniture>())
+            {
+                SceneFurniture sceneFurniture = new SceneFurniture
+                {
+                    itemID = item.itemID,
+                    position = new SerializableVector3(item.transform.position)
+                };
+                if (item.GetComponent<Box>())
+                    sceneFurniture.boxIndex = item.GetComponent<Box>().index;
+
+                currentSceneFurniture.Add(sceneFurniture);
+            }
+
+            if (sceneFurnitureDict.ContainsKey(SceneManager.GetActiveScene().name))
+            {
+                //找到数据就更新item数据列表
+                sceneFurnitureDict[SceneManager.GetActiveScene().name] = currentSceneFurniture;
+            }
+            else    //如果是新场景
+            {
+                sceneFurnitureDict.Add(SceneManager.GetActiveScene().name, currentSceneFurniture);
+            }
+        }
+
+        /// <summary>
+        /// 重建当前场景家具
+        /// </summary>
+        private void RebuildFurniture()
+        {
+            //List<SceneFurniture> currentSceneFurniture = new List<SceneFurniture>();
+
+            if (sceneFurnitureDict.TryGetValue(SceneManager.GetActiveScene().name, out List<SceneFurniture> currentSceneFurniture))
+            {
+                if (currentSceneFurniture == null) return;
+                foreach (SceneFurniture sceneFurniture in currentSceneFurniture)
+                {
+                    BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(sceneFurniture.itemID);
+                    var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, sceneFurniture.position.ToVector3(), Quaternion.identity, itemParent);
+                    if (buildItem.GetComponent<Box>())
+                    {
+                        buildItem.GetComponent<Box>().InitBox(sceneFurniture.boxIndex);
+                    }
+                }
+            }
+        }
+
+
+
+        //保存数据
+        public string GUID => SaveKey;
+        public GameSaveData GenerateSaveData()
+        {
+            GetAllSceneItems();
+            GetAllSceneFurniture();
+
+            GameSaveData saveData = new GameSaveData();
+            saveData.sceneItemDict = sceneItemDict;
+            saveData.sceneFurnitureDict = sceneFurnitureDict;
+
+            return saveData;
+        }
+        public void RestoreData(GameSaveData saveData)
+        {
+            sceneItemDict = saveData.sceneItemDict;
+            sceneFurnitureDict = saveData.sceneFurnitureDict;
+
+            RecreateAllItems();
+            RebuildFurniture();
+        }
     }
 }

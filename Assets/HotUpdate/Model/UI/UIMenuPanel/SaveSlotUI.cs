@@ -1,4 +1,5 @@
 ﻿using ACFrameworkCore;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,25 +21,40 @@ namespace ACFarm
         public Text dataTime, dataScene;
         private Button currentButton;
         private DataSlot currentData;
+        private string DataPath;
 
         private int Index => transform.GetSiblingIndex();
 
         private void Awake()
         {
+            DataPath= Application.persistentDataPath + "/SAVE DATA/" + "data" + Index + ".json";
             dataTime = transform.GetChildComponent<Text>("Time");
             dataScene = transform.GetChildComponent<Text>("Scene");
 
             currentButton = GetComponent<Button>();
             currentButton.onClick.AddListener(LoadGameData);
+
+            SetupSlotUI();
+            transform.GetChildComponent<Button>("Delete").onClick.AddListener(RemoveData);
         }
 
-        private void OnEnable()
+
+
+        private void RemoveData()
         {
+            File.Delete(DataPath);
+            SaveLoadManagerSystem.Instance.ReadSaveData();
             SetupSlotUI();
         }
 
+       
+
         private void SetupSlotUI()
         {
+            if (true)
+            {
+
+            }
             currentData = SaveLoadManagerSystem.Instance.dataSlots[Index];
 
             if (currentData != null)
@@ -55,6 +71,7 @@ namespace ACFarm
 
         private void LoadGameData()
         {
+
             if (currentData != null)
             {
                 ACDebug.Log($"加载进度{Index}");

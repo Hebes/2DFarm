@@ -66,8 +66,11 @@ namespace ACFarm
         }
 
         //数据保存和读取
-        private void ReadSaveData()
+        public void ReadSaveData()
         {
+            for (int i = 0; i < dataSlots.Count; i++)
+                dataSlots[i] = null;
+
             if (Directory.Exists(jsonFolder))
             {
                 for (int i = 0; i < dataSlots.Count; i++)

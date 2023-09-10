@@ -31,7 +31,7 @@ namespace ACFarm
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             GameObject T_StartPanel = UIComponent.Get<GameObject>("T_StartPanel");
-            GameObject T_SavePanel = UIComponent.Get<GameObject>("T_SavePanel");
+            GameObject T_SavePanel = UIComponent.Get<GameObject>("T_InfoPanel");
             GameObject T_TitlePanel = UIComponent.Get<GameObject>("T_TitlePanel");
 
             panels = new GameObject[3];
@@ -40,7 +40,7 @@ namespace ACFarm
             panels[2] = T_TitlePanel;
 
             ButtonOnClickAddListener("StartBtn", p => { SwitchPanel(0); });
-            ButtonOnClickAddListener("SaveBtn", p => { SwitchPanel(1); });
+            ButtonOnClickAddListener("InfoBtn", p => { SwitchPanel(1); });
             ButtonOnClickAddListener("ExitBtn", p => { SwitchPanel(2); });
         }
 

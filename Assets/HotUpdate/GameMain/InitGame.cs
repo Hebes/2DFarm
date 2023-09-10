@@ -16,8 +16,6 @@ public enum EInitGameProcess
     FSMInitModel,
     /// <summary> 初始化UI </summary>
     FSMInitUI,
-    /// <summary> 加载保存的数据 </summary>
-    FSMInitSaveDataLoad,
     /// <summary> 进入游戏 </summary>
     FSMEnterGame,
 }
@@ -34,7 +32,6 @@ public class InitGame
         {
             case EInitGameProcess.FSMInitBaseCore: await FSMInitBaseCore(); break;
             case EInitGameProcess.FSMInitManagerCore: await FSMInitManagerCore(); break;
-            case EInitGameProcess.FSMInitSaveDataLoad: FSMInitSaveDataLoad().Forget(); break;
             case EInitGameProcess.FSMInitModel: await FSMInitModel(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
             case EInitGameProcess.FSMEnterGame: await FSMEnterGame(); break;
@@ -72,40 +69,29 @@ public class InitGame
             init.ICroeInit();
             await UniTask.Yield();
         }
-        SwitchInitGameProcess(EInitGameProcess.FSMInitSaveDataLoad).Forget();
-    }
-    private static async UniTask FSMInitSaveDataLoad()
-    {
-        await UniTask.Yield();
-        //List<ICore> _initHs = new List<ICore>()
-        //{
-        //};
-        //foreach (var init in _initHs)
-        //{
-        //    init.ICroeInit();
-        //    await UniTask.Yield();
-        //}
         SwitchInitGameProcess(EInitGameProcess.FSMInitModel).Forget();
     }
+    
     private static async UniTask FSMInitModel()
     {
         List<ICore> _initHs = new List<ICore>()
         {
             //不依靠其他系统的可以先初始化
+            new SaveLoadManagerSystem(),        //数据保存系统
             new AudioManagerSystem(),           //音效系统
+            new CropManagerSystem(),           //庄稼系统
             new InventoryAllSystem(),           //背包系统
-            new InventoryWorldItemSystem(),     //物品在世界系统
+            new ItemWorldSystem(),              //物品在世界系统
             new TimeManagerSystem(),                   //时间系统
             new MouseManagerSystem(),          //鼠标系统
             new EffectsSystem(),                //特效系统
             new CommonManagerSystem(),          //常用物体管理系统
             new DialogueManagerSystem(),        //对话系统
-            new SceneTransitionSystem(),        //场景过渡系统
+            new SceneTransitionManagerSystem(),        //场景过渡系统
             new AnimatorManagerSystem(),        //动画系统
             new BuildManagerSystem(),           //建造系统
             new LightManagerSystem(),           //灯光系统
             new TimelineManagerSystem(),        //动画系统
-            new SaveLoadManagerSystem(),        //数据保存系统
         };
         foreach (var init in _initHs)
         {
@@ -141,7 +127,7 @@ public class InitGame
     {
         await UniTask.DelayFrame(40);
         await UniTask.Yield();
-        //await SceneTransitionSystem.Instance.CreatScene();
+        //await SceneTransitionManagerSystem.Instance.CreatScene();
 
         //显示图片
         //Sprite sprite = await ConfigSprites.Turnip_growPng.LoadSubAssetsAsyncUniTask($"{ConfigSprites.Turnip_growPng}_0");

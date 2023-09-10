@@ -1,4 +1,5 @@
 using UnityEngine;
+using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -12,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class ReapItem : MonoBehaviour
     {
@@ -20,7 +21,7 @@ namespace ACFrameworkCore
 
         public void InitCropData(int ID)
         {
-            cropDetails = CropManager.Instance.GetCropDetails(ID);
+            cropDetails = CropManagerSystem.Instance.GetCropDetails(ID);
         }
 
         /// <summary>

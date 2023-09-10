@@ -22,25 +22,6 @@ namespace ACFarm
 
         protected void Awake()
         {
-            InitNPCPositionList();
-            InitSceneRouteDict();
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
-        }
-
-        private void OnStartNewGameEvent(int obj)
-        {
-            foreach (var character in npcPositionList)
-            {
-                character.npc.position = character.position;
-                character.npc.GetComponent<NPCMovement>().currentScene = character.startScene;
-            }
-        }
-
-        /// <summary>
-        /// 初始化NPC列表
-        /// </summary>
-        private void InitNPCPositionList()
-        {
             //初始化NPC列表
             npcPositionList = new List<NPCPosition>();
             GameObject[] NPCS = GameObject.FindGameObjectsWithTag(ConfigTag.TagNPC);
@@ -48,17 +29,11 @@ namespace ACFarm
             {
                 NPCPosition nPCPosition = new NPCPosition();
                 nPCPosition.npc = NPC.transform;
-                nPCPosition.position =  new Vector3(-2f, -1.4f, 0);
+                nPCPosition.position = new Vector3(-2f, -1.4f, 0);
                 nPCPosition.startScene = NPC.GetComponent<NPCMovement>().currentScene; //ConfigScenes.Field;
                 npcPositionList.Add(nPCPosition);
             }
-        }
-
-        /// <summary>
-        /// 初始化路径字典
-        /// </summary>
-        private void InitSceneRouteDict()
-        {
+            //初始化路径字典
             List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
             if (sceneRouteDetailsDataList.Count == 0)
                 return;
@@ -80,6 +55,18 @@ namespace ACFarm
                     sceneRoute.scenePathList.Add(scenePath);
                 }
                 sceneRouteDict.Add(key, sceneRoute);
+            }
+
+            //事件监听
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+        }
+
+        private void OnStartNewGameEvent(int obj)
+        {
+            foreach (NPCPosition character in npcPositionList)
+            {
+                character.npc.position = character.position;
+                character.npc.GetComponent<NPCMovement>().currentScene = character.startScene;
             }
         }
 

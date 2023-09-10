@@ -1,12 +1,6 @@
 ﻿using ACFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 /*--------脚本描述-----------
 
@@ -21,13 +15,13 @@ using UnityEngine.UI;
 
 namespace ACFarm
 {
-    public class UISettingPanel:UIBase
+    public class UISettingPanel : UIBase
     {
 
         public override void UIAwake()
         {
             base.UIAwake();
-            InitUIBase(EUIType.Fixed, EUIMode.HideOther, EUILucenyType.ImPenetrable);
+            InitUIBase(EUIType.Fixed, EUIMode.HideOther, EUILucenyType.Pentrate);
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
 
@@ -39,8 +33,7 @@ namespace ACFarm
 
 
             ButtonOnClickAddListener(T_SettingBtn.name, p => { TogglePausePanel(); });
-
-
+            ButtonOnClickAddListener(T_RestBtn.name, p => { ReturnMenuCanvas(); });
             //T_MusicSlider.GetComponent<Slider>().onValueChanged.AddListener(AudioManagerSystem.Instance.SetMasterVolume);
         }
 
@@ -52,30 +45,28 @@ namespace ACFarm
             if (isOpen)
             {
                 CloseUIForm();
-                //pausePanel.SetActive(false);
                 Time.timeScale = 1;
             }
             else
             {
                 System.GC.Collect();
-                //OpenUIForm<UISettingPanel>()
+                OpenUIForm<UISettingPanel>(ConfigUIPanel.UISettingPanel);
                 Time.timeScale = 0;
             }
         }
 
-        
+
         public void ReturnMenuCanvas()
         {
-            //Time.timeScale = 1;
-            //StartCoroutine(BackToMenu());
+            Time.timeScale = 1;
+            MonoManager.Instance.StartCoroutine(BackToMenu());
         }
 
         private IEnumerator BackToMenu()
         {
-            //pausePanel.SetActive(false);
-
-            //EventHandler.CallEndGameEvent();
-           yield return new WaitForSeconds(1f);
+            CloseUIForm();
+            ConfigEvent.EndGameEvent.EventTrigger();
+            yield return new WaitForSeconds(1f);
         }
     }
 }

@@ -55,16 +55,17 @@ namespace ACFarm
 
         private void LoadGameData()
         {
-            ACDebug.Log($"需要打印的消息{Index}");
             if (currentData != null)
             {
+                ACDebug.Log($"加载进度{Index}");
                 SaveLoadManagerSystem.Instance.Load(Index);
             }
             else
             {
-                Debug.Log("新游戏");
+                ACDebug.Log($"新游戏开始");
                 ConfigEvent.StartNewGameEvent.EventTrigger(Index);
             }
+            ConfigUIPanel.UIMenu.CloseUIPanel();
         }
     }
 }

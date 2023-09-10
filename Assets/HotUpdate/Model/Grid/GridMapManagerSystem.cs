@@ -1,9 +1,6 @@
-﻿
-
-using dnlib;
+﻿using ACFrameworkCore;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 /*--------脚本描述-----------
@@ -17,11 +14,11 @@ using UnityEngine.Tilemaps;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
-    public class GridMapSystem : MonoBehaviour
+    public class GridMapManagerSystem : MonoBehaviour,ISaveable
     {
-        public static GridMapSystem Instance;
+        public static GridMapManagerSystem Instance;
         public RuleTile digTile;
         public RuleTile waterTile;
 
@@ -36,31 +33,24 @@ namespace ACFrameworkCore
         private Tilemap waterTilemap;
         private ESeason currentSeason;
 
+
         private void Awake()
         {
             Instance = this;
-        }
-        private void Start()
-        {
             foreach (MapData_SO mapData in mapDataList)
             {
                 firstLoadDict.Add(mapData.sceneName, true);
                 InitTileDetailsDict(mapData);
             }
-        }
-        private void OnEnable()
-        {
+
             ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
-        }
-        private void OnDisable()
-        {
-            ConfigEvent.ExecuteActionAfterAnimation.RemoveEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
-            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
-            ConfigEvent.RefreshCurrentMap.RemoveEventListener(RefreshMap);
+
+            //注册保存事件
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
 
@@ -397,6 +387,11 @@ namespace ACFrameworkCore
             return false;
         }
 
+
+
+        //保存数据
+        private string SaveKey = "地图管理系统";
+        public string GUID => SaveKey;
         public GameSaveData GenerateSaveData()
         {
             GameSaveData saveData = new GameSaveData();
@@ -404,7 +399,6 @@ namespace ACFrameworkCore
             saveData.firstLoadDict = this.firstLoadDict;
             return saveData;
         }
-
         public void RestoreData(GameSaveData saveData)
         {
             this.tileDetailsDict = saveData.tileDetailsDict;

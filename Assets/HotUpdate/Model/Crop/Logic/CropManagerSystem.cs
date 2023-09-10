@@ -1,4 +1,6 @@
 using UnityEngine;
+using ACFrameworkCore;
+using System.Collections.Generic;
 
 /*--------脚本描述-----------
 
@@ -11,32 +13,29 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
-    public class CropManager : MonoBehaviour
+    public class CropManagerSystem : ICore
     {
-        public static CropManager Instance;
-        public CropDataList_SO cropData;  //种子的数据库
+        public static CropManagerSystem Instance;
         private Transform cropParent;       //庄家的父物体，都放在这个下面不会看上去太乱
         private Grid currentGrid;
         private ESeason currentSeason;
-
-        private void Awake()
+        public List<CropDetails> cropDetailsList;
+        public void ICroeInit()
         {
             Instance = this;
-        }
-        private void OnEnable()
-        {
+
             ConfigEvent.PlantSeed.AddEventListener<int, TileDetails>(OnPlantSeedEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
+
+            //加载数据
+            CropDataList_SO cropDataList_S = YooAssetLoadExpsion.YooaddetLoadSync<CropDataList_SO>("CropDataList_SO");
+            cropDetailsList = cropDataList_S.cropDetailsList;
+            //ACDebug.Log($"需要打印的消息{1}");
         }
-        private void OnDisable()
-        {
-            ConfigEvent.PlantSeed.RemoveEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.GameDay.RemoveEventListener<int, ESeason>(OnGameDayEvent);
-        }
+
 
         private void OnGameDayEvent(int day, ESeason season)
         {
@@ -44,9 +43,8 @@ namespace ACFrameworkCore
         }
         private void OnAfterSceneLoadedEvent()
         {
-            currentGrid = FindObjectOfType<Grid>();
-            //cropParent = GameObject.FindWithTag(ConfigTag.TagCropParent).transform;
-            cropParent = SceneTransitionSystem.Instance.cropParent;// new GameObject(ConfigTag.TagCropParent).transform;
+            //currentGrid = GameObject.FindObjectOfType<Grid>();
+            cropParent = SceneTransitionManagerSystem.Instance.cropParent;
         }
         private void OnPlantSeedEvent(int ID, TileDetails tileDetails)
         {
@@ -95,7 +93,7 @@ namespace ACFrameworkCore
 
             Vector3 pos = new Vector3(tileDetails.girdX + 0.5f, tileDetails.gridY + 0.5f, 0);
 
-            GameObject cropInstance = Instantiate(cropPrefab, pos, Quaternion.identity, cropParent);
+            GameObject cropInstance = GameObject.Instantiate(cropPrefab, pos, Quaternion.identity, cropParent);
             cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = cropSprite;
             cropInstance.GetComponent<Crop>().cropDetails = cropDetails;//设置数据
             cropInstance.GetComponent<Crop>().tileDetails = tileDetails;
@@ -108,7 +106,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public CropDetails GetCropDetails(int ID)
         {
-            return cropData.cropDetailsList.Find(c => c.seedItemID == ID);
+            return cropDetailsList.Find(c => c.seedItemID == ID);
         }
 
         /// <summary>
@@ -125,5 +123,7 @@ namespace ACFrameworkCore
             }
             return false;
         }
+
+
     }
 }

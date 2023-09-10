@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using ACFrameworkCore;
+using System;
 
 /*--------脚本描述-----------
 
@@ -12,7 +14,7 @@
 -----------------------*/
 
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class CommonManagerSystem : ICore
     {
@@ -22,6 +24,12 @@ namespace ACFrameworkCore
         public void ICroeInit()
         {
             Instance = this;
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(StartNewGameEvent);
+        }
+
+        private void StartNewGameEvent(int obj)
+        {
+            playerMoney = ConfigSettings.playerStartMoney;
         }
 
         //玩家

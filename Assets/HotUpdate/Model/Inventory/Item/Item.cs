@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
+using ACFrameworkCore;
 
 /*--------脚本描述-----------
 				
@@ -12,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class Item : MonoBehaviour
     {

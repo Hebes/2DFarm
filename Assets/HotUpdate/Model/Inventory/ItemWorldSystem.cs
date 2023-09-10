@@ -17,9 +17,9 @@ using UnityEngine.SceneManagement;
 
 namespace ACFrameworkCore
 {
-    public class InventoryWorldItemSystem : ICore, ISaveable
+    public class ItemWorldSystem : ICore, ISaveable
     {
-        public static InventoryWorldItemSystem Instance;
+        public static ItemWorldSystem Instance;
         private Transform playerTransform;                          //玩家
         private Transform itemParent;                               //统一保存的父物体
         public Item bounceItemPrefab;                               //抛投的物品模板
@@ -89,7 +89,7 @@ namespace ACFrameworkCore
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = CommonManagerSystem.Instance.playerTransform;// GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
-            itemParent = SceneTransitionSystem.Instance.itemParent;
+            itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             RecreateAllItems();
             RebuildFurniture();
         }
@@ -109,9 +109,6 @@ namespace ACFrameworkCore
 
 
         //保存场景数据
-        /// <summary>
-        /// 获取当前场景里面的所有的物品
-        /// </summary>
         private void GetAllSceneItems()
         {
             List<SceneItem> currentSceneItems = new List<SceneItem>();
@@ -131,13 +128,9 @@ namespace ACFrameworkCore
                     sceneItemDict.Add(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, currentSceneItems);//如果是新场景
             }
         }
-        /// <summary>
-        /// 刷新重建当前场景物品 切换场景结束的时候
-        /// </summary>
         private void RecreateAllItems()
         {
-            //List<SceneItem> currentSceneItems = new List<SceneItem>();
-            if (sceneItemDict.TryGetValue(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, out List<SceneItem> currentSceneItems))
+            if (sceneItemDict.TryGetValue(SceneManager.GetActiveScene().name, out List<SceneItem> currentSceneItems))
             {
                 if (currentSceneItems == null) return;
                 //清场
@@ -151,20 +144,18 @@ namespace ACFrameworkCore
                 }
             }
         }
-        /// <summary>
-        /// 获得场景所有家具
-        /// </summary>
         private void GetAllSceneFurniture()
         {
             List<SceneFurniture> currentSceneFurniture = new List<SceneFurniture>();
-
-            foreach (var item in GameObject.FindObjectsOfType<Furniture>())
+            Furniture[] furnitures = GameObject.FindObjectsOfType<Furniture>();
+            foreach (Furniture item in furnitures)
             {
                 SceneFurniture sceneFurniture = new SceneFurniture
                 {
                     itemID = item.itemID,
                     position = new SerializableVector3(item.transform.position)
                 };
+
                 if (item.GetComponent<Box>())
                     sceneFurniture.boxIndex = item.GetComponent<Box>().index;
 
@@ -172,34 +163,25 @@ namespace ACFrameworkCore
             }
 
             if (sceneFurnitureDict.ContainsKey(SceneManager.GetActiveScene().name))
-            {
-                //找到数据就更新item数据列表
-                sceneFurnitureDict[SceneManager.GetActiveScene().name] = currentSceneFurniture;
-            }
-            else    //如果是新场景
-            {
-                sceneFurnitureDict.Add(SceneManager.GetActiveScene().name, currentSceneFurniture);
-            }
+                sceneFurnitureDict[SceneManager.GetActiveScene().name] = currentSceneFurniture;//找到数据就更新item数据列表
+            else    
+                sceneFurnitureDict.Add(SceneManager.GetActiveScene().name, currentSceneFurniture);//如果是新场景
         }
-
-        /// <summary>
-        /// 重建当前场景家具
-        /// </summary>
         private void RebuildFurniture()
         {
-            //List<SceneFurniture> currentSceneFurniture = new List<SceneFurniture>();
-
             if (sceneFurnitureDict.TryGetValue(SceneManager.GetActiveScene().name, out List<SceneFurniture> currentSceneFurniture))
             {
                 if (currentSceneFurniture == null) return;
+                //清场
+                foreach (var item in Object.FindObjectsOfType<Furniture>())
+                    GameObject.Destroy(item.gameObject);
+                //生成
                 foreach (SceneFurniture sceneFurniture in currentSceneFurniture)
                 {
                     BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(sceneFurniture.itemID);
                     var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, sceneFurniture.position.ToVector3(), Quaternion.identity, itemParent);
                     if (buildItem.GetComponent<Box>())
-                    {
                         buildItem.GetComponent<Box>().InitBox(sceneFurniture.boxIndex);
-                    }
                 }
             }
         }

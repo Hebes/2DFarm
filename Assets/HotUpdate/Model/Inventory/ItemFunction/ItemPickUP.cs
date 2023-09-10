@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using ACFrameworkCore;
 
 /*--------脚本描述-----------
 				
@@ -11,7 +12,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class ItemPickUP : MonoBehaviour
     {

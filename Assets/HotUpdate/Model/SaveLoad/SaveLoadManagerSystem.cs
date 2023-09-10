@@ -50,7 +50,7 @@ namespace ACFarm
                 Load(currentDataIndex);
         }
 
-
+        //事件监听
         private void OnEndGameEvent()
         {
             Save(currentDataIndex);
@@ -65,6 +65,7 @@ namespace ACFarm
                 saveableList.Add(saveable);
         }
 
+        //数据保存和读取
         private void ReadSaveData()
         {
             if (Directory.Exists(jsonFolder))
@@ -81,8 +82,6 @@ namespace ACFarm
                 }
             }
         }
-
-
         private void Save(int index)
         {
             DataSlot data = new DataSlot();
@@ -96,7 +95,6 @@ namespace ACFarm
             File.WriteAllText(resultPath, jsonData);
             ACDebug.Log($"数据{index}保存成功");
         }
-
         public void Load(int index)
         {
             ACDebug.Log($"数据{index}加载成功");

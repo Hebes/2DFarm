@@ -1,8 +1,19 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine.SceneManagement;
 using YooAsset;
+
+
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    场景加载管理
+
+-----------------------*/
 
 namespace ACFrameworkCore
 {
@@ -34,8 +45,8 @@ namespace ACFrameworkCore
         public void UnloadAsync(string scnenName)
         {
             Dictionary<string, SceneOperationHandle> ttt = sceneLoad.GetManagerDic() as Dictionary<string, SceneOperationHandle>;
-            ttt.TryGetValue(scnenName, out SceneOperationHandle result);
-            UnloadSceneOperation operation = result.UnloadAsync();
+            if (ttt.TryGetValue(scnenName, out SceneOperationHandle result))
+                result.UnloadAsync();
             ttt.Remove(scnenName);
         }
 

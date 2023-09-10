@@ -1,9 +1,7 @@
-﻿using System;
+﻿using ACFrameworkCore;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-
 
 /*--------脚本描述-----------
 
@@ -16,7 +14,7 @@ using UnityEngine.UIElements;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class BuildInWorld
     {
@@ -39,7 +37,7 @@ namespace ACFrameworkCore
         {
             //itemParent =new GameObject(ConfigTag.TagItemParent).transform;
             //itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
-            itemParent = SceneTransitionSystem.Instance.itemParent;
+            itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             RebuildFurniture();
         }
 

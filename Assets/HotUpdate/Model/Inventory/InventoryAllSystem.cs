@@ -35,10 +35,7 @@ namespace ACFrameworkCore
             ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
             ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string, int>(OnHarvestAtPlayerPosition);
             ConfigEvent.BuildFurniture.AddEventListener<int, Vector3>(OnBuildFurnitureEvent);
-
-
-            
-
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             //注册保存事件
             ISaveable saveable = this;
             saveable.RegisterSaveable();
@@ -64,7 +61,10 @@ namespace ACFrameworkCore
                 RemoveItemDicArray(ConfigEvent.PalayerBag, item.itemID, item.itemAmount);
             }
         }
-
+        private void OnStartNewGameEvent(int obj)
+        {
+            ItemDicArray.Clear();
+        }
 
 
         //ItemDicArray字典操作

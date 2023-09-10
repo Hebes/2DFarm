@@ -26,7 +26,7 @@ namespace ACFarm
         {
             get
             {
-                var key = string.Empty;// TimeManagerSystem.Instance.GUID;
+                var key = TimeManagerSystem.Instance.GUID;
 
                 if (dataDict.ContainsKey(key))
                 {
@@ -41,17 +41,16 @@ namespace ACFarm
         {
             get
             {
-                var key = string.Empty;// TimeManagerSystem.Instance.GUID;
-                //var key = SceneTransitionSystem.Instance.GUID;
+                var key = SceneTransitionManagerSystem.Instance.GUID;
                 if (dataDict.ContainsKey(key))
                 {
                     var transitionData = dataDict[key];
                     return transitionData.dataSceneName switch
                     {
-                        "00.Start" => "海边",
-                        "01.Field" => "农场",
-                        "02.Home" => "小木屋",
-                        "03.Stall" => "市场",
+                        "00Beach" => "海边",
+                        "01Field" => "农场",
+                        "02Home" => "小木屋",
+                        "03Market" => "市场",
                         "04.Path" => "小径",
                         "05.House01" => "Trace的家",
                         _ => string.Empty

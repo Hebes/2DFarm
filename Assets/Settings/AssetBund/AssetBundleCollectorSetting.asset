@@ -156,6 +156,22 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/AssetsPackage/ConfigData/Rule Tiles
+        CollectorGUID: 081f20c3f8ced9148a8d48211098bc40
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetsPackage/ConfigData/ScriptableObject
+        CollectorGUID: c010d5a59c8817342a027fed0039ebe1
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: Animations
       GroupDesc: "\u52A8\u753B"
       AssetTags: 

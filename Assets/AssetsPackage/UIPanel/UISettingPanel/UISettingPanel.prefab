@@ -772,7 +772,7 @@ GameObject:
   - component: {fileID: 3393734446487464706}
   - component: {fileID: 1222332062409172228}
   m_Layer: 5
-  m_Name: RestTab
+  m_Name: T_RestTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -935,7 +935,7 @@ GameObject:
   - component: {fileID: 3661238820590223746}
   - component: {fileID: 2190120427510383338}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: T_MusicSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1028,7 +1028,7 @@ GameObject:
   - component: {fileID: 1133359563437654804}
   - component: {fileID: 9157630396960246517}
   m_Layer: 5
-  m_Name: RestBtn
+  m_Name: T_RestBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1279,7 +1279,7 @@ GameObject:
   - component: {fileID: 4995923834598461377}
   - component: {fileID: 6382119454990079235}
   m_Layer: 5
-  m_Name: SettingTab
+  m_Name: T_SettingTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1405,7 +1405,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ab99500c8012ed4383d8db00b1ae1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: []
+  data:
+  - key: T_RestTab
+    gameObject: {fileID: 6463612731329473236}
+  - key: T_RestBtn
+    gameObject: {fileID: 7460047609185638439}
+  - key: T_SettingTab
+    gameObject: {fileID: 7800833365027076496}
+  - key: T_SettingBtn
+    gameObject: {fileID: 8737518596573865520}
+  - key: T_MusicSlider
+    gameObject: {fileID: 7015083917907945851}
 --- !u!1 &8126606669820336730
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,7 +1663,7 @@ GameObject:
   - component: {fileID: 4005930182826640364}
   - component: {fileID: 5384333543108895978}
   m_Layer: 5
-  m_Name: RestBtn
+  m_Name: T_SettingBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

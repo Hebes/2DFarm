@@ -12,8 +12,9 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIPlayerBagPanel : UIBase
     {

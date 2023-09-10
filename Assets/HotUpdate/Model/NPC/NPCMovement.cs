@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*--------脚本描述-----------
 
@@ -43,7 +44,6 @@ namespace ACFarm
 
         //Components
         private Rigidbody2D rb;
-        private SpriteRenderer spriteRenderer;
         private BoxCollider2D coll;
         private Animator anim;
         private Grid gird;
@@ -65,7 +65,7 @@ namespace ACFarm
 
         private TimeSpan GameTime => TimeManagerSystem.Instance.GameTime;
 
-        public string GUID => GetComponent<DataGUID>().guid;
+
 
 
         //生命周期
@@ -73,9 +73,9 @@ namespace ACFarm
         {
             //获取组件
             rb = GetComponent<Rigidbody2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
             coll = GetComponent<BoxCollider2D>();
             anim = GetComponent<Animator>();
+
             movementSteps = new Stack<MovementStep>();
             scheduleSet = new SortedSet<ScheduleDetails>();
             //运行时的动画控制器
@@ -101,6 +101,10 @@ namespace ACFarm
 
                 scheduleSet.Add(scheduleDetails);
             }
+
+            //注册保存事件
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
         private void OnEnable()
         {
@@ -160,10 +164,21 @@ namespace ACFarm
 
             sceneLoaded = true;
 
+            //加载记录时NPC可以继续移动
             if (!isFirstLoad)
             {
                 currentGridPosition = gird.WorldToCell(transform.position);
-                var schedule = new ScheduleDetails(0, 0, 0, 0, currentSeason, targetScene, (Vector2Int)tragetGridPosition, stopAnimationClip, interactable);
+                var schedule = new ScheduleDetails(
+                    0,
+                    0, 
+                    0, 
+                    0, 
+                    currentSeason, 
+                    targetScene, 
+                    (Vector2Int)tragetGridPosition, 
+                    stopAnimationClip, 
+                    interactable);
+
                 BuildPath(schedule);
                 isFirstLoad = true;
             }
@@ -204,7 +219,6 @@ namespace ACFarm
             isInitialised = false;
             isFirstLoad = true;
         }
-
         private void InitNPC()
         {
             targetScene = currentScene;
@@ -231,12 +245,11 @@ namespace ACFarm
         /// <param name="isActive">是否活动</param>
         private void SetActiveInScene(bool isActive)
         {
-            spriteRenderer.enabled = isActive;
+            transform.GetSpriteRenderer().enabled = isActive;
             coll.enabled = isActive;
 
             transform.GetChild(0).gameObject.SetActive(isActive);
         }
-
         /// <summary>
         /// 主要移动方法
         /// </summary>
@@ -262,12 +275,10 @@ namespace ACFarm
                 StartCoroutine(SetStopAnimation());
             }
         }
-
         private void MoveToGridPosition(Vector3Int gridPos, TimeSpan stepTime)
         {
             npcMoveRoutine = StartCoroutine(MoveRoutine(gridPos, stepTime));
         }
-
         private IEnumerator MoveRoutine(Vector3Int gridPos, TimeSpan stepTime)
         {
             npcMove = true;
@@ -343,7 +354,6 @@ namespace ACFarm
                 UpdateTimeOnPath();
             }
         }
-
 
         /// <summary>
         /// 更新路径上每一步的时间
@@ -441,46 +451,48 @@ namespace ACFarm
         }
 
 
+
+        //保存数据
+        public string GUID => NPCName;
         public GameSaveData GenerateSaveData()
         {
-            //GameSaveData saveData = new GameSaveData();
-            //saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
-            //saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(tragetGridPosition));
-            //saveData.characterPosDict.Add("currentPosition", new SerializableVector3(transform.position));
-            //saveData.dataSceneName = currentScene;
-            //saveData.targetScene = this.targetScene;
-            //if (stopAnimationClip != null)
-            //{
-            //    saveData.animationInstanceID = stopAnimationClip.GetInstanceID();
-            //}
-            //saveData.interactable = this.interactable;
-            //saveData.timeDict = new Dictionary<string, int>();
-            //saveData.timeDict.Add("currentSeason", (int)currentSeason);
-            return null;// saveData;
-        }
+            GameSaveData saveData = new GameSaveData();
+            saveData.characterPosDict = new Dictionary<string, SerializableVector3>();
+            saveData.characterPosDict.Add("targetGridPosition", new SerializableVector3(tragetGridPosition));
+            saveData.characterPosDict.Add("currentPosition", new SerializableVector3(transform.position));
+            saveData.dataSceneName = currentScene;
+            saveData.targetScene = this.targetScene;
+            if (stopAnimationClip != null)
+            {
+                saveData.animationInstanceID = stopAnimationClip.GetInstanceID();
+            }
+            saveData.interactable = this.interactable;
+            saveData.timeDict = new Dictionary<string, int>();
+            saveData.timeDict.Add("currentSeason", (int)currentSeason);
 
+            return saveData;
+        }
         public void RestoreData(GameSaveData saveData)
         {
-            //isInitialised = true;
-            //isFirstLoad = false;
+            isInitialised = true;
+            isFirstLoad = false;
 
-            //currentScene = saveData.dataSceneName;
-            //targetScene = saveData.targetScene;
+            currentScene = saveData.dataSceneName;
+            targetScene = saveData.targetScene;
 
-            //Vector3 pos = saveData.characterPosDict["currentPosition"].ToVector3();
-            //Vector3Int gridPos = (Vector3Int)saveData.characterPosDict["targetGridPosition"].ToVector2Int();
+            Vector3 pos = saveData.characterPosDict["currentPosition"].ToVector3();
+            Vector3Int gridPos = (Vector3Int)saveData.characterPosDict["targetGridPosition"].ToVector2Int();
 
-            //transform.position = pos;
-            //tragetGridPosition = gridPos;
+            transform.position = pos;
+            tragetGridPosition = gridPos;
 
-            //if (saveData.animationInstanceID != 0)
-            //{
-            //    this.stopAnimationClip = Resources.InstanceIDToObject(saveData.animationInstanceID) as AnimationClip;
-            //}
+            if (saveData.animationInstanceID != 0)
+            {
+                this.stopAnimationClip = Resources.InstanceIDToObject(saveData.animationInstanceID) as AnimationClip;
+            }
 
-            //this.interactable = saveData.interactable;
-            //this.currentSeason = (ESeason)saveData.timeDict["currentSeason"];
+            this.interactable = saveData.interactable;
+            this.currentSeason = (ESeason)saveData.timeDict["currentSeason"];
         }
-
     }
 }

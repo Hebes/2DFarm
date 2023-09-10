@@ -152,11 +152,11 @@ namespace ACFarm
             }
 
             //能否扔东西
-            TileDetails currentTile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
+            TileDetails currentTile = GridMapManagerSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
             if (currentTile != null)
             {
-                CropDetails currentCrop = CropManager.Instance.GetCropDetails(currentTile.seedItemID);
-                Crop crop = GridMapSystem.Instance.GetCropObject(mouseWorldPos);
+                CropDetails currentCrop = CropManagerSystem.Instance.GetCropDetails(currentTile.seedItemID);
+                Crop crop = GridMapManagerSystem.Instance.GetCropObject(mouseWorldPos);
                 switch ((EItemType)currentItem.itemType)
                 {
                     case EItemType.Seed:
@@ -189,7 +189,7 @@ namespace ACFarm
                         }
                         break;
                     case EItemType.ReapTool:
-                        if (GridMapSystem.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
+                        if (GridMapManagerSystem.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
                         break;
                     case EItemType.WaterTool:
                         if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();

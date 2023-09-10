@@ -1,7 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
+
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    A星算法
+
+-----------------------*/
+
+namespace ACFarm
 {
     public class AStar : SinglentMono<AStar>
     {
@@ -54,7 +67,7 @@ namespace ACFrameworkCore
         /// <returns></returns>
         private bool GenerateGridNodes(string sceneName, Vector2Int startPos, Vector2Int endPos)
         {
-            if (GridMapSystem.Instance.GetGridDimensions(sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin))
+            if (GridMapManagerSystem.Instance.GetGridDimensions(sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin))
             {
                 //根据瓦片地图范围构建网格移动节点范围数组
                 gridNodes = new GridNodes(gridDimensions.x, gridDimensions.y);
@@ -81,7 +94,7 @@ namespace ACFrameworkCore
                     Vector3Int tilePos = new Vector3Int(x + originX, y + originY, 0);
                     var key = tilePos.x + "x" + tilePos.y + "y" + sceneName;
 
-                    TileDetails tile = GridMapSystem.Instance.GetTileDetails(key);
+                    TileDetails tile = GridMapManagerSystem.Instance.GetTileDetails(key);
 
                     if (tile != null)
                     {

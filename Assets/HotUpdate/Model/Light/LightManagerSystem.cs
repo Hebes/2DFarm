@@ -50,29 +50,7 @@ namespace ACFrameworkCore
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
         }
 
-        //公共静态接口
-        /// <summary>
-        /// 获取灯光数据
-        /// </summary>
-        /// <param name="season">季节</param>
-        /// <param name="lightShift">灯管时间</param>
-        /// <returns></returns>
-        public static LightDetails GetLightDetails(ELightType lightType, ESeason season, LightShift lightShift)
-        {
-            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.season == season && l.lightShift == lightShift);
-            return lightDetails;
-        }
 
-        /// <summary>
-        /// 获取灯光数据
-        /// </summary>
-        /// <param name="id">根据ID获取</param>
-        /// <returns></returns>
-        public static LightDetails GetLightDetails(int id)
-        {
-            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.ID == id);
-            return lightDetails;
-        }
 
         //事件监听
         private void OnStartNewGameEvent(int obj)
@@ -95,7 +73,7 @@ namespace ACFrameworkCore
             {
                 currentLightShift = lightShift;
 
-                if (sceneLights!=null)
+                if (sceneLights != null)
                 {
                     //TODO 本来sceneLights!=null是没有的
                     //lightcontrol 改变灯光的方法
@@ -103,6 +81,20 @@ namespace ACFrameworkCore
                         light.ChangeLightShift(currentSeason, currentLightShift, timeDifference);
                 }
             }
+        }
+
+
+
+        //公共静态接口
+        public static LightDetails GetLightDetails(ELightType lightType, ESeason season, LightShift lightShift)
+        {
+            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.season == season && l.lightShift == lightShift);
+            return lightDetails;
+        }
+        public static LightDetails GetLightDetails(int id)
+        {
+            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.ID == id);
+            return lightDetails;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ACFrameworkCore;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /*--------脚本描述-----------
 
@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class BuildManagerSystem : ICore
     {
@@ -100,7 +100,7 @@ namespace ACFrameworkCore
         private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
         {
             if (itemParent == null)
-                itemParent = itemParent = SceneTransitionSystem.Instance.itemParent;
+                itemParent = itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             //获取建造蓝图数据
             BluePrintDetails bluePrint = GetDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);

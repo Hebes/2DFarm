@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ACFrameworkCore;
 
 /*--------脚本描述-----------
 				
@@ -13,7 +14,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIItemToolTipPanel : UIBase
     {

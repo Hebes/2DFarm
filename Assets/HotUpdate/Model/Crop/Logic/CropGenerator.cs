@@ -1,8 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    庄稼生成
+
+-----------------------*/
+
+
+namespace ACFarm
 {
     public class CropGenerator : MonoBehaviour
     {
@@ -30,7 +43,7 @@ namespace ACFrameworkCore
 
             if (seedItemID != 0)
             {
-                var tile = GridMapSystem.Instance.GetTileDetailsOnMousePosition(cropGridPos);
+                var tile = GridMapManagerSystem.Instance.GetTileDetailsOnMousePosition(cropGridPos);
 
                 if (tile == null)
                 {
@@ -43,7 +56,7 @@ namespace ACFrameworkCore
                 tile.seedItemID = seedItemID;
                 tile.growthDays = growthDays;
 
-                GridMapSystem.Instance.UpdateTileDetails(tile);
+                GridMapManagerSystem.Instance.UpdateTileDetails(tile);
             }
         }
     }

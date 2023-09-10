@@ -35,7 +35,15 @@ namespace ACFrameworkCore
             //}
             if (handle.Status == EOperationStatus.Succeed)
             {
-                sceneSceneOperationHandleDic.Add(SceneName, handle);
+                if (sceneSceneOperationHandleDic.ContainsKey(SceneName))
+                {
+                    //await sceneSceneOperationHandleDic[SceneName].UnloadAsync();
+                    sceneSceneOperationHandleDic[SceneName] = handle;
+                }
+                else
+                {
+                    sceneSceneOperationHandleDic.Add(SceneName, handle);
+                }
                 package.UnloadUnusedAssets();
                 ACDebug.Log($"加载场景成功:{handle.SceneObject.name}");
             }

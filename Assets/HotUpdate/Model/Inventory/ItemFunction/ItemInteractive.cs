@@ -39,6 +39,7 @@ namespace ACFrameworkCore
         private void OnTriggerExit2D(Collider2D other)
         {
             //TODO 玩家和NPC场景不同 NPC 触发时才会报错
+            if (gameObject.activeInHierarchy == false) return;
             if (!isAnimating)
             {
                 if (other.transform.position.x > transform.position.x)

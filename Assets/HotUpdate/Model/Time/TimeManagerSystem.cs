@@ -10,14 +10,14 @@ using UnityEngine;
 作者:
 	暗沉
 描述:
-    时间系统
+    时间管理系统
 
 -----------------------*/
 
 namespace ACFrameworkCore
 {
 
-    public class TimeManagerSystem   : ICore//, ISaveable
+    public class TimeManagerSystem   : ICore, ISaveable
     {
         public static TimeManagerSystem Instance;
         private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
@@ -33,6 +33,8 @@ namespace ACFrameworkCore
         {
             Instance = this;
 
+            gameClockPause = true;
+
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
@@ -40,6 +42,10 @@ namespace ACFrameworkCore
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
 
             MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
+
+            //注册保存事件
+            ISaveable saveable = this;
+            saveable.RegisterSaveable();
         }
 
 
@@ -159,7 +165,6 @@ namespace ACFrameworkCore
             }
             //Debug.Log("Second 秒：" + gameSecond + "Minute 分：" + gameMinute);
         }
-
         /// <summary>用于初始化时间</summary>
         private void NewGameTime()
         {
@@ -171,8 +176,6 @@ namespace ACFrameworkCore
             gameYear = 2022;
             gameSeason = ESeason.春天;
         }
-
-
         /// <summary>
         /// 返回lightshift同时计算时间差
         /// </summary>
@@ -196,8 +199,10 @@ namespace ACFrameworkCore
         }
 
 
+
         //保存数据
-        //public string GUID =>
+        private string SaveKey = "时间管理系统";
+        public string GUID => SaveKey;
         public GameSaveData GenerateSaveData()
         {
             GameSaveData saveData = new GameSaveData();

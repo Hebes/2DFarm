@@ -1,4 +1,8 @@
-﻿/*--------脚本描述-----------
+﻿using ACFrameworkCore;
+using System.Collections.Generic;
+using UnityEngine;
+
+/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -9,11 +13,7 @@
 
 -----------------------*/
 
-using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIActionBarPanel : UIBase
     {

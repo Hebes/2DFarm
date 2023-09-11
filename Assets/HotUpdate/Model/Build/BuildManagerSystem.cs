@@ -25,9 +25,10 @@ namespace ACFarm
         {
             Instance = this;
             bluePrintDataList = new List<BluePrintDetails>();
-            new BuildInWorld();
             ChangeData();
-            ConfigEvent.BuildFurniture.AddEventListener<int, Vector3>(OnBuildFurnitureEvent);
+
+            new BuildInWorld();
+            ConfigEvent.BuildFurniture.AddEventListener<string, int, Vector3>(OnBuildFurnitureEvent);
         }
 
         /// <summary>
@@ -78,14 +79,14 @@ namespace ACFarm
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
-                var itemStock = InventoryAllSystem.Instance.GetData(ConfigEvent.PalayerBag, resourceItem.itemID);
+                var itemStock = ItemManagerSystem.Instance.GetItem(ConfigEvent.PalayerBag, resourceItem.itemID);
                 if (itemStock.itemAmount >= resourceItem.itemAmount)
                 {
                     continue;
                 }
                 else
                 {
-                    ACDebug.Error($"库存数量资源数量不过无法建造");
+                    //ACDebug.Error($"库存数量资源数量不过无法建造");
                     return false;
                 }
             }
@@ -97,18 +98,18 @@ namespace ACFarm
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="mousePos"></param>
-        private void OnBuildFurnitureEvent(int ID, Vector3 mousePos)
+        private void OnBuildFurnitureEvent(string BuildKey, int ID, Vector3 mousePos)
         {
             if (itemParent == null)
                 itemParent = itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             //获取建造蓝图数据
             BluePrintDetails bluePrint = GetDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);
-            //if (buildItem.GetComponent<Box>())
-            //{
-            //    buildItem.GetComponent<Box>().index = InventoryAllSystem.Instance.BoxDataAmount;
-            //    buildItem.GetComponent<Box>().InitBox(buildItem.GetComponent<Box>().index);
-            //}
+            if (buildItem.GetComponent<Box>())
+            {
+                buildItem.GetComponent<Box>().boxName = ItemManagerSystem.Instance.ItemDic.Count.ToString();//设置箱子名称
+                buildItem.GetComponent<Box>().InitBox();//初始化箱子
+            }
         }
     }
 }

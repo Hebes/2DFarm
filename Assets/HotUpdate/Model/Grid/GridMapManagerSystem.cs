@@ -43,7 +43,7 @@ namespace ACFarm
                 InitTileDetailsDict(mapData);
             }
 
-            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
+            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<string,Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
@@ -116,7 +116,7 @@ namespace ACFarm
         /// </summary>
         /// <param name="mouseWorldPos">鼠标坐标</param>
         /// <param name="itemDetails">物品信息</param>
-        private void OnExecuteActionAfterAnimation(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
+        private void OnExecuteActionAfterAnimation(string itemKey,Vector3 mouseWorldPos, ItemDetailsData itemDetails)
         {
             Vector3Int mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//格子的坐标
             TileDetails currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
@@ -142,7 +142,7 @@ namespace ACFarm
                     //在地图上生成物品 ItemManager
                     //移除当前物品（图纸）InventoryManager
                     //移除资源物品 InventoryManger
-                    ConfigEvent.BuildFurniture.EventTrigger( itemDetails.itemID, mouseWorldPos);
+                    ConfigEvent.BuildFurniture.EventTrigger(itemKey, itemDetails.itemID, mouseWorldPos);
                     break;
                 case EItemType.HoeTool:
                     SetDigGround(currentTile);

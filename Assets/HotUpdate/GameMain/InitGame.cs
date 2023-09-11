@@ -80,14 +80,15 @@ public class InitGame
             new SaveLoadManagerSystem(),        //数据保存系统
             new AudioManagerSystem(),           //音效系统
             new CropManagerSystem(),           //庄稼系统
-            new InventoryAllSystem(),           //背包系统
-            new ItemWorldSystem(),              //物品在世界系统
-            new TimeManagerSystem(),                   //时间系统
+            new ItemManagerSystem(),           //背包系统
+            new ItemWorldSystem(),             //物品在世界系统
+            new ShopManagerSystem(),            //商店系统
+            new TimeManagerSystem(),           //时间系统
             new MouseManagerSystem(),          //鼠标系统
             new EffectsSystem(),                //特效系统
-            new CommonManagerSystem(),          //常用物体管理系统
+            new CommonManagerSystem(),          //物体管理系统
             new DialogueManagerSystem(),        //对话系统
-            new SceneTransitionManagerSystem(),        //场景过渡系统
+            new SceneTransitionManagerSystem(), //场景过渡系统
             new AnimatorManagerSystem(),        //动画系统
             new BuildManagerSystem(),           //建造系统
             new LightManagerSystem(),           //灯光系统

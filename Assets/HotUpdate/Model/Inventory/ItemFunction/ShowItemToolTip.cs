@@ -29,7 +29,7 @@ namespace ACFrameworkCore
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (slotUI.itemDatails != null)
-                ConfigEvent.ItemToolTipShow.EventTrigger(slotUI.itemDatails, slotUI.configInventoryKey, transform.position);
+                ConfigEvent.ItemToolTipShow.EventTrigger(slotUI.itemDatails, slotUI.ItemKey, transform.position);
             else
                 ConfigEvent.ItemToolTipClose.EventTrigger();
         }

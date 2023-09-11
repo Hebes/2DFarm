@@ -22,7 +22,7 @@ namespace ACFarm
             if (item == null) return;
             if (item.itemDetails.canPickedup)
             {
-                InventoryAllSystem.Instance.AddItemDicArray(ConfigEvent.ActionBar, item.itemID,item.itemAmount);//拾取物品到背包
+                ItemManagerSystem.Instance.AddItem(ConfigEvent.ActionBar, item.itemID,item.itemAmount);//拾取物品到背包
                 GameObject.Destroy(item.gameObject);
             }
         }

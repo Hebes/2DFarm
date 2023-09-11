@@ -1,8 +1,7 @@
 ﻿using System;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -16,7 +15,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UITradePanel : UIBase
     {
@@ -56,7 +55,7 @@ namespace ACFrameworkCore
             ButtonOnClickAddListener(T_OK.name, p => TradeItem());
             ButtonOnClickAddListener(T_Cancel.name, p => CancelTrade());
 
-            ConfigEvent.ShowTradeUI.AddEventListener<string, string, ItemDetailsData, bool>(SetupTradeUI);
+            ConfigEvent.ShowTradeUI.AddEventListener<string, string, int, bool>(SetupTradeUI);
         }
 
         /// <summary>
@@ -64,8 +63,9 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="item"></param>
         /// <param name="isSell"></param>
-        public void SetupTradeUI(string oldKey, string newKey, ItemDetailsData item, bool isSell)
+        public void SetupTradeUI(string oldKey, string newKey, int itemID, bool isSell)
         {
+            ItemDetailsData item = itemID.GetDataOne<ItemDetailsData>();
             OpenUIForm<UITradePanel>(ConfigUIPanel.UITrade);
             this.item = item;
             this.oldKey = oldKey;
@@ -83,7 +83,7 @@ namespace ACFrameworkCore
         private void TradeItem()
         {
             int amount = Convert.ToInt32(tradeAmount.text);
-            InventoryAllSystem.Instance.TradeItem(oldKey, newKey, item, amount, isSellTrade);
+            ItemManagerSystem.Instance.TradeItem(oldKey, newKey, item.itemID, amount, isSellTrade);
             CancelTrade();
         }
 

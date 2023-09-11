@@ -17,19 +17,19 @@ namespace ACFarm
 {
     public class UIActionBarPanel : UIBase
     {
-        public GameObject T_BagButton;              //背包按钮
-        public GameObject T_ActionBar;              //槽父物体
         private List<SlotUI> ActionBarSlotUIList;   //快捷键槽
         private bool bagOpened = false;             //背包是否被打开了
+        private string key;                         //管理的key
 
         public override void UIAwake()
         {
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+            key = ConfigEvent.ActionBar;
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
-            T_BagButton = UIComponent.Get<GameObject>("T_BagButton");
-            T_ActionBar = UIComponent.Get<GameObject>("T_ActionBar");
+            GameObject T_BagButton = UIComponent.Get<GameObject>("T_BagButton");//背包按钮
+            GameObject T_ActionBar = UIComponent.Get<GameObject>("T_ActionBar");//槽父物体
 
             ActionBarSlotUIList = new List<SlotUI>();
             for (int i = 0; i < T_ActionBar.transform.childCount; i++)
@@ -37,15 +37,19 @@ namespace ACFarm
                 if (i == 0) continue;//第0个是背包按钮
                 SlotUI slotUI = T_ActionBar.GetChildComponent<SlotUI>(i);
                 slotUI.slotIndex = i - 1;
-                slotUI.configInventoryKey = ConfigEvent.ActionBar;//所属于的管理的Key
+                slotUI.ItemKey = key;//所属于的管理的Key
                 ActionBarSlotUIList.Add(slotUI);
             }
 
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
             ButtonOnClickAddListener(T_BagButton.name, T_BagButtonListener);
 
-            InventoryAllSystem.Instance.AddSlotUIList(ConfigEvent.ActionBar, ActionBarSlotUIList);
-            InventoryAllSystem.Instance.ItemDicArray.Add(ConfigEvent.ActionBar, new InventoryItem[10]);
+            key.AddEventListener<List<InventoryItem>>(RefreshItem);
+
+            ItemManagerSystem.Instance.AddSlotUIList(key, ActionBarSlotUIList);
+            ItemManagerSystem.Instance.CreatItemData(key, 10);
+
+            //测试数据
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][1] = new InventoryItem() { itemID = 1015, itemAmount = 300 };
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][2] = new InventoryItem() { itemID = 1006, itemAmount = 1 };
@@ -55,26 +59,21 @@ namespace ACFarm
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][6] = new InventoryItem() { itemID = 1010, itemAmount = 10 };
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][7] = new InventoryItem() { itemID = 1005, itemAmount = 1 };
 
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 1 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][1] = new InventoryItem() { itemID = 1016, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][2] = new InventoryItem() { itemID = 1001, itemAmount = 1 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][3] = new InventoryItem() { itemID = 1018, itemAmount = 10 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][4] = new InventoryItem() { itemID = 1003, itemAmount = 1 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][5] = new InventoryItem() { itemID = 1032, itemAmount = 1 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.ActionBar][6] = new InventoryItem() { itemID = 1033, itemAmount = 1 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 1 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][1] = new InventoryItem() { itemID = 1016, itemAmount = 10 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][2] = new InventoryItem() { itemID = 1001, itemAmount = 1 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][3] = new InventoryItem() { itemID = 1018, itemAmount = 10 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][4] = new InventoryItem() { itemID = 1003, itemAmount = 1 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][5] = new InventoryItem() { itemID = 1032, itemAmount = 1 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.ActionBar][6] = new InventoryItem() { itemID = 1033, itemAmount = 1 };
         }
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            ConfigEvent.ActionBar.AddEventListener<InventoryItem[]>(RefreshItem);
-            InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigEvent.ActionBar);
-            ConfigEvent.ActionBar.EventTrigger(playerBagItems);
+            List<InventoryItem> playerBagItems = ItemManagerSystem.Instance.GetItemList(key);
+            RefreshItem(playerBagItems);
         }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-            ConfigEvent.ActionBar.RemoveEventListener<InventoryItem[]>(RefreshItem);
-        }
+
         public override void UIUpdate()
         {
             base.UIUpdate();
@@ -98,14 +97,14 @@ namespace ACFarm
             }
         }
         /// <summary> 刷新界面 </summary>
-        private void RefreshItem(InventoryItem[] obj)
+        private void RefreshItem(List<InventoryItem> obj)
         {
-            for (int i = 0; i < obj?.Length; i++)
+            for (int i = 0; i < obj?.Count; i++)
             {
                 if (obj[i].itemAmount > 0)//有物品
                 {
-                    ItemDetailsData item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
-                    ActionBarSlotUIList[i].UpdateSlot(item, obj[i].itemAmount);
+                    ItemDetailsData item = obj[i].itemID.GetDataOne<ItemDetailsData>();
+                    ActionBarSlotUIList[i].UpdateSlot(item.itemID, obj[i].itemAmount);
                 }
                 else
                 {

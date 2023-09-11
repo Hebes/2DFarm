@@ -1,8 +1,7 @@
-﻿using UnityEditor.Graphs;
+﻿using ACFrameworkCore;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				
@@ -15,7 +14,7 @@ using static UnityEditor.FilePathAttribute;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIDragPanel : UIBase
     {
@@ -55,51 +54,49 @@ namespace ACFrameworkCore
                 DragItemImage.color = new Color(DragItemImage.color.r, DragItemImage.color.g, DragItemImage.color.b, .5f);
                 DragItemImage.SetNativeSize();
                 slotUI.isSelected = true;
-                ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.ItemKey, slotUI.slotIndex);
             }
         }
         private void ItemOnEndDrag(PointerEventData eventData, SlotUI slotUI)
         {
-            key = slotUI.configInventoryKey;
+            key = slotUI.ItemKey;
             DragItemImage.enabled = false;
             if (eventData.pointerCurrentRaycast.gameObject != null)
             {
                 //物品交换
                 if (eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>() == null) return;
                 var targetSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>();//如果是存在SlotUI组件的话
-                if (key == ConfigEvent.PalayerBag && targetSlot.configInventoryKey == ConfigEvent.PalayerBag)//两个都是背包的话就是交换
+                if (key == ConfigEvent.PalayerBag && targetSlot.ItemKey == ConfigEvent.PalayerBag)//两个都是背包的话就是交换
                 {
                     ACDebug.Log($"背包数据交换");
                     //物品交换
-                    InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
+                    ItemManagerSystem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
                     slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
                 }
-                else if (key == ConfigEvent.Mira && targetSlot.configInventoryKey == ConfigEvent.PalayerBag)//买
+                else if (key == ConfigEvent.Mira && targetSlot.ItemKey == ConfigEvent.PalayerBag)//买
                 {
                     ACDebug.Log($"买东西");
-                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.configInventoryKey, slotUI.itemDatails, false);
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, false);
                 }
-                else if (key == ConfigEvent.PalayerBag && targetSlot.configInventoryKey == ConfigEvent.Mira)//卖
+                else if (key == ConfigEvent.PalayerBag && targetSlot.ItemKey == ConfigEvent.Mira)//卖
                 {
                     ACDebug.Log($"卖东西");
-                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.configInventoryKey, slotUI.itemDatails, true);
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, true);
                 }
-                else if (key == ConfigEvent.Shop && targetSlot.configInventoryKey == ConfigEvent.PalayerBag)//买
+                else if (key == ConfigEvent.Mira && targetSlot.ItemKey == ConfigEvent.ActionBar)//买
                 {
                     ACDebug.Log($"买东西");
-                    ConfigEvent.ShowTradeUI.EventTrigger(key,slotUI.itemDatails, false);
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, false);
                 }
-                else if (key == ConfigEvent.PalayerBag && targetSlot.configInventoryKey == ConfigEvent.Shop)//卖
+                else if (key == ConfigEvent.ActionBar && targetSlot.ItemKey == ConfigEvent.Mira)//卖
                 {
                     ACDebug.Log($"卖东西");
-                    ConfigEvent.ShowTradeUI.EventTrigger(key,slotUI.itemDatails, true);
+                    ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, true);
                 }
-                else if (key != ConfigEvent.Shop && targetSlot.configInventoryKey != ConfigEvent.Shop && key != targetSlot.configInventoryKey)
+                else if (key != ConfigEvent.Shop && targetSlot.ItemKey != ConfigEvent.Shop && key != targetSlot.ItemKey)
                 {
                     ACDebug.Log($"跨背包数据交换物品");
-                    //跨背包数据交换物品
-                    //InventoryAllSystem.Instance.SwapItem(Location, slotIndex, targetSlot.Location, targetSlot.slotIndex);
-                    InventoryAllSystem.Instance.ChangeItem(slotUI.configInventoryKey, targetSlot.configInventoryKey, slotUI.slotIndex, targetSlot.slotIndex);
+                    ItemManagerSystem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
                 }
             }
             //清空所有高亮
@@ -109,17 +106,17 @@ namespace ACFrameworkCore
         {
             if (slotUI.itemDatails == null) return;
             slotUI.isSelected = !slotUI.isSelected;
-            ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.configInventoryKey, slotUI.slotIndex);
+            ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.ItemKey, slotUI.slotIndex);
 
             itemAmount = slotUI.itemAmount;
-            key = slotUI.configInventoryKey;
+            key = slotUI.ItemKey;
 
-            switch (slotUI.configInventoryKey)
+            switch (slotUI.ItemKey)
             {
                 case ConfigEvent.PalayerBag:
                 case ConfigEvent.ActionBar:
                     ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
-                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//切换鼠标样式
+                    ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.ItemKey, slotUI.itemDatails.itemID, slotUI.isSelected);//切换鼠标样式
                     break;
             }
         }

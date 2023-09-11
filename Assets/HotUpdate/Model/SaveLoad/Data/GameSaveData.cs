@@ -29,8 +29,7 @@ namespace ACFrameworkCore
         //是否是第一次加载
         public Dictionary<string, bool> firstLoadDict;
         //物品数据
-        public Dictionary<string, List<InventoryItem>> inventoryDict;
-        public Dictionary<string, InventoryItem[]> ItemDicArray; //物品字典列表   两本字典的KEY请不要重复
+        public Dictionary<string, List<InventoryItem>> ItemDic; //物品字典列表   两本字典的KEY请不要重复
 
         //时间
         public Dictionary<string, int> timeDict;

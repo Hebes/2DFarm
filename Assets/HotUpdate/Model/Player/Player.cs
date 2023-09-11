@@ -40,7 +40,7 @@ namespace ACFarm
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
-            ConfigEvent.PlayerMouseClicked.AddEventListener<Vector3, ItemDetailsData>((pos, itemDetails) => { OnMouseClickedEvent(pos, itemDetails).Forget(); });
+            ConfigEvent.PlayerMouseClicked.AddEventListener<string, Vector3, int>(OnMouseClickedEvent);
             ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
@@ -78,15 +78,16 @@ namespace ACFarm
             if (targetPosition == Vector3.zero) return;
             transform.position = targetPosition;
         }
-        private async UniTaskVoid OnMouseClickedEvent(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
+        private void OnMouseClickedEvent(string itemKey, Vector3 mouseWorldPos, int itemID)
         {
+            ItemDetailsData itemDetails = itemID.GetDataOne<ItemDetailsData>();
             if (UseTool) return;
             switch ((EItemType)itemDetails.itemType)
             {
                 case EItemType.Seed:
                 case EItemType.Commdity:
                 case EItemType.Furniture:
-                    ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(mouseWorldPos, itemDetails);
+                    ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, mouseWorldPos, itemDetails);
                     break;
                 case EItemType.HoeTool:
                 case EItemType.ChopTool:
@@ -101,7 +102,7 @@ namespace ACFarm
                         mouseY = 0;
                     else
                         mouseX = 0;
-                    await UseToolRoutine(mouseWorldPos, itemDetails);
+                    UseToolRoutine(itemKey, mouseWorldPos, itemDetails).Forget();
                     break;
             }
         }
@@ -136,7 +137,7 @@ namespace ACFarm
         /// <param name="mouseWorldPos"></param>
         /// <param name="itemDetails"></param>
         /// <returns></returns>
-        private async UniTask UseToolRoutine(Vector3 mouseWorldPos, ItemDetailsData itemDetails)
+        private async UniTask UseToolRoutine(string itemKey, Vector3 mouseWorldPos, ItemDetailsData itemDetails)
         {
             UseTool = true;
             inputDisable = true;
@@ -149,7 +150,7 @@ namespace ACFarm
                 anim.SetFloat("InputY", mouseY);
             }
             await UniTask.Delay(TimeSpan.FromSeconds(0.45f), ignoreTimeScale: false);
-            ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(mouseWorldPos, itemDetails);
+            ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, mouseWorldPos, itemDetails);
             await UniTask.Delay(TimeSpan.FromSeconds(0.25f), ignoreTimeScale: false);
 
             //µÈ´ý¶¯»­½áÊø

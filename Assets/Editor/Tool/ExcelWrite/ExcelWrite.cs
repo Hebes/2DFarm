@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,18 +17,37 @@ namespace ACFrameworkCore
     public class ExcelWrite : EditorWindow
     {
 
-        public static string NewLoadExcelPath = string.Empty;
-        public static string OldLoadExcelPath = string.Empty;
-        private string[] paths;
-        private int mSelectedGridIndex;
+        public static string NewLoadExcelPath = string.Empty;   //新路径
+        public static string OldLoadExcelPath = string.Empty;   //老路径
+        private bool isSelectFile = true;                       //点击加载路径
+        private Vector2 scrollPosition = Vector2.zero;          //滑动
+        private Vector2 scrollExcel = Vector2.zero;             //滑动
+        string[][] data = null;                                 //数据
+        private string Message = string.Empty;                  //消息提示
+        private Dictionary<string, string> DesDic;              //Excel描述信息
 
-        /// <summary>点击加载路径</summary>
-        private bool isSelectFile = true;
-        private Vector2 scrollPosition = Vector2.zero;
-        private Vector2 scrollExcel = Vector2.zero;
-        string[][] data = null;
-        private string Message = string.Empty;
+        private void Awake()
+        {
+            //读取说明文档
+            DesDic = new Dictionary<string, string>();
+            string desDicPath = $"{Application.dataPath}/Editor/Excels/ExcelDes.txt";
 
+            FileStream fileStream = File.Open(desDicPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            //byte[] buffer = new byte[fileStream.Length];
+            //fileStream.Read(buffer, 0, buffer.Length);
+            //string fileContent = System.Text.Encoding.UTF8.GetString(buffer);
+            //fileContent.Split('\t');
+            //Debug.Log(fileContent);
+            StreamReader reader = new StreamReader(fileStream);
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] strings = line.Split(',');
+                DesDic.Add(strings[0], strings[1]);
+            }
+            reader.Close();
+            fileStream.Close();
+        }
 
         [MenuItem("Tool/编辑Excel#E #E")]
         public static void BuildPackageVersions()
@@ -50,17 +70,23 @@ namespace ACFrameworkCore
             EditorGUILayout.EndHorizontal();
 
 
-            scrollExcel = GUILayout.BeginScrollView(scrollExcel, GUILayout.Height(50));
-            GUILayout.Space(5f);
+            scrollExcel = GUILayout.BeginScrollView(scrollExcel, GUILayout.Height(60));
+            GUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
             string[] paths = Directory.GetFiles($"{Application.dataPath}/Editor/Excels");
             for (int i = 0; i < paths.Length; i++)
             {
+
                 string path = paths[i];
-                if (path.EndsWith("meta")) continue;
+                if (path.EndsWith("meta")||path.EndsWith("txt")) continue;
 
                 string[] strings = path.Split('\\');
-                if (GUILayout.Button(strings[strings.Length - 1]))
+                string btnName=string.Empty;
+                if (DesDic.TryGetValue(strings[strings.Length - 1],out string value))
+                    btnName = $"{strings[strings.Length - 1]}\t\n{value}";
+                else
+                    btnName= $"{strings[strings.Length - 1]}";
+                if (GUILayout.Button(btnName))
                 {
                     NewLoadExcelPath = path;
                     ReadData();

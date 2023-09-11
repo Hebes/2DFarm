@@ -3,12 +3,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using ACFrameworkCore;
 using Microsoft.SqlServer.Server;
+using static UnityEditor.Progress;
 
 namespace ACFarm
 {
     public class UICursorPanel : UIBase
     {
-        private ItemDetailsData currentItem;        //当前鼠标图标
+        private ItemDetailsData currentItem;        //当前鼠标指定的数据
         private Sprite currentSprite;           //存储当前鼠标图片
 
         private Image cursorImage;              //当前鼠标图片
@@ -18,6 +19,7 @@ namespace ACFarm
         private Vector3Int mouseGridPos;        //鼠标在地图位置
         private bool cursorEnable;              //场景加载之前鼠标不可用
         private bool cursorPositionValid;       //鼠标是否可点按
+        private string itemKey;                 //物品管理的Key
 
         private Camera mainCamera => CommonManagerSystem.Instance.mainCamera;              //主摄像机
 
@@ -39,7 +41,7 @@ namespace ACFarm
             SetCursorImage(ChangeMouseType(EMouseType.Normal));
             Cursor.visible = false;
 
-            ConfigEvent.ItemSelectedEvent.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
+            ConfigEvent.ItemSelectedEvent.AddEventListener<string, int, bool>(OnItemSelectEvent);
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
         }
@@ -82,9 +84,10 @@ namespace ACFarm
         /// </summary>
         /// <param name="itemDatails"></param>
         /// <param name="isSelected">是否是选中状态</param>
-        private void OnItemSelectEvent(ItemDetailsData itemDatails, bool isSelected)
+        private void OnItemSelectEvent(string itemKey, int itemID, bool isSelected)
         {
-
+            this.itemKey = itemKey;
+            ItemDetailsData itemDatails = itemID.GetDataOne<ItemDetailsData>();
             if (!isSelected)//不是选中状态
             {
                 currentItem = null;
@@ -228,7 +231,7 @@ namespace ACFarm
         {
             //执行方法
             if (Input.GetMouseButtonDown(0) && cursorPositionValid)
-                ConfigEvent.PlayerMouseClicked.EventTrigger(mouseWorldPos, currentItem);
+                ConfigEvent.PlayerMouseClicked.EventTrigger(itemKey,mouseWorldPos, currentItem.itemID);
         }
 
         /// <summary>

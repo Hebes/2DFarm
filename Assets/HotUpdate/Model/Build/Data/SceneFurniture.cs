@@ -16,6 +16,6 @@ namespace ACFrameworkCore
     {
         public int itemID;
         public SerializableVector3 position;
-        public int boxIndex;
+        public string name;
     }
 }

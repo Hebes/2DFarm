@@ -45,7 +45,7 @@ namespace ACFrameworkCore
                     ConfigEvent.UIDisplayHighlighting.EventTrigger(ConfigEvent.ActionBar, slotUI.slotIndex);//显示高亮
                 else
                     ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.itemDatails, slotUI.isSelected);
+                ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.ItemKey, slotUI.itemDatails.itemID, slotUI.isSelected);
             }
         }
     }

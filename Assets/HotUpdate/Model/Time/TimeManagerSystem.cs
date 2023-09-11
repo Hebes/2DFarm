@@ -17,7 +17,7 @@ using UnityEngine;
 namespace ACFrameworkCore
 {
 
-    public class TimeManagerSystem   : ICore, ISaveable
+    public class TimeManagerSystem : ICore, ISaveable
     {
         public static TimeManagerSystem Instance;
         private int gameSecond, gameMinute, gameHour, gameDay, gameMonth, gameYear;
@@ -69,7 +69,7 @@ namespace ACFrameworkCore
         private void OnStartNewGameEvent(int obj)
         {
             NewGameTime();
-            // gameClockPause = false;
+            gameClockPause = false;
         }
         private void OnEndGameEvent()
         {
@@ -170,10 +170,10 @@ namespace ACFrameworkCore
         {
             gameSecond = 0;
             gameMinute = 0;
-            gameHour = 7;
+            gameHour = 0;
             gameDay = 1;
             gameMonth = 1;
-            gameYear = 2022;
+            gameYear = 0;
             gameSeason = ESeason.春天;
         }
         /// <summary>

@@ -1,4 +1,8 @@
-﻿/*--------脚本描述-----------
+﻿using ACFrameworkCore;
+using System.Collections.Generic;
+using UnityEngine;
+
+/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -9,16 +13,10 @@
 
 -----------------------*/
 
-using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine;
-using ACFrameworkCore;
-
 namespace ACFarm
 {
     public class UIPlayerBagPanel : UIBase
     {
-        //public GameObject T_SlotHolder;
         public GameObject T_MoneyText;
         private List<SlotUI> playerBagSlotList;//背包的格子
 
@@ -26,41 +24,39 @@ namespace ACFarm
         {
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+            playerBagSlotList = new List<SlotUI>();
 
             ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
             GameObject T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
             T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
 
-            InventoryAllSystem.Instance.ItemDicArray.Add(ConfigEvent.PalayerBag, new InventoryItem[16]);
-            playerBagSlotList = new List<SlotUI>();
+            ItemManagerSystem.Instance.CreatItemData(ConfigEvent.PalayerBag, 16);
             for (int i = 0; i < T_SlotHolder.transform.childCount; i++)
             {
                 SlotUI slotUI = T_SlotHolder.GetChildComponent<SlotUI>(i);
                 slotUI.slotIndex = i;
-                slotUI.configInventoryKey = ConfigEvent.PalayerBag;
+                slotUI.ItemKey = ConfigEvent.PalayerBag;
                 playerBagSlotList.Add(slotUI);
             }
-            InventoryAllSystem.Instance.AddSlotUIList(ConfigEvent.PalayerBag, playerBagSlotList);
-            ConfigEvent.PalayerBag.AddEventListener<InventoryItem[]>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
+            ItemManagerSystem.Instance.AddSlotUIList(ConfigEvent.PalayerBag, playerBagSlotList);
+
+            ConfigEvent.PalayerBag.AddEventListener<List<InventoryItem>>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
             ConfigEvent.MoneyShow.AddEventListener<int>(ShowMoney);
 
             //添加测试数据
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.PalayerBag][0] = new InventoryItem() { itemID = 1015, itemAmount = 80 };
-            InventoryAllSystem.Instance.ItemDicArray[ConfigEvent.PalayerBag][1] = new InventoryItem() { itemID = 1014, itemAmount = 80 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.PalayerBag][0] = new InventoryItem() { itemID = 1015, itemAmount = 80 };
+            //ItemManagerSystem.Instance.ItemDic[ConfigEvent.PalayerBag][1] = new InventoryItem() { itemID = 1014, itemAmount = 80 };
+
+            
         }
+
+
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            InventoryItem[] playerBagItems = InventoryAllSystem.Instance.GetItemListArray(ConfigEvent.PalayerBag);
-            ConfigEvent.PalayerBag.EventTrigger(playerBagItems);
-
-            //刷新金币显示
-            ConfigEvent.MoneyShow.EventTrigger(CommonManagerSystem.Instance.playerMoney);
-        }
-
-        private void ShowMoney(int money)
-        {
-            T_MoneyText.GetTextMeshPro().text = money.ToString();
+            List<InventoryItem> playerBagItems = ItemManagerSystem.Instance.GetItemList(ConfigEvent.PalayerBag);
+            RefreshItem(playerBagItems);
+            ShowMoney(CommonManagerSystem.Instance.playerMoney);
         }
 
 
@@ -68,20 +64,29 @@ namespace ACFarm
         /// 刷新界面
         /// </summary>
         /// <param name="obj"></param>
-        private void RefreshItem(InventoryItem[] obj)
+        private void RefreshItem(List<InventoryItem> obj)
         {
-            for (int i = 0; i < obj?.Length; i++)
+            for (int i = 0; i < obj?.Count; i++)
             {
                 if (obj[i].itemAmount > 0)//有物品
                 {
-                    ItemDetailsData item = InventoryAllSystem.Instance.GetItem(obj[i].itemID);
-                    playerBagSlotList[i].UpdateSlot(item, obj[i].itemAmount);
+                    ItemDetailsData item = obj[i].itemID.GetDataOne<ItemDetailsData>();
+                    playerBagSlotList[i].UpdateSlot(item.itemID, obj[i].itemAmount);
                 }
                 else
                 {
                     playerBagSlotList[i].UpdateEmptySlot();
                 }
             }
+        }
+
+        /// <summary>
+        /// 刷新金币显示
+        /// </summary>
+        /// <param name="money"></param>
+        private void ShowMoney(int money)
+        {
+            T_MoneyText.GetTextMeshPro().text = money.ToString();
         }
     }
 }

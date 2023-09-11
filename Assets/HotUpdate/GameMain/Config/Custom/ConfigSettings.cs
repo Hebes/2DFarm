@@ -44,6 +44,6 @@ namespace ACFrameworkCore
         public static TimeSpan nightTime = new TimeSpan(19, 0, 0);          //晚上7点
 
         public static Vector3 playerStartPos = new Vector3(-1.7f, -5f, 0);              //玩家的初始位置
-        public const int playerStartMoney = 100;                                                //玩家初始金币
+        public const int playerStartMoney = 1000;                                                //玩家初始金币
     }
 }

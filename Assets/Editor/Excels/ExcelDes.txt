@@ -1,0 +1,10 @@
+BluePrintDetailsData.xlsx,建造数据
+DialogueDetailsData.xlsx,对话数据
+ItemDetailsData.xlsx,物品资源数据
+LightDetailsData.xlsx,灯光数据
+PlayerAnimatorsData.xlsx,玩家动画数据
+SceneRouteDetailsData.xlsx,场景路径数据
+SceneSoundItemDetailsData.xlsx,场景音乐数据
+ScheduleDetailsData.xlsx,NPC移动计划数据
+ShopDetailsData.xlsx,商店数据
+SoundDetailsData.xlsx,音乐资源数据

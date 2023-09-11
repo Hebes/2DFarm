@@ -48,17 +48,6 @@ namespace ACFrameworkCore
             ConfigEvent.BaseBagClose.AddEventListener<string, string>(OnBaseBagCloseEvent);
         }
 
-        public override void UIOnEnable()
-        {
-            base.UIOnEnable();
-
-        }
-        public override void UIOnDisable()
-        {
-            base.UIOnDisable();
-
-        }
-
         /// <summary>
         /// 打开通用包裹UI事件
         /// </summary>
@@ -66,7 +55,7 @@ namespace ACFrameworkCore
         /// <param name="slotType"></param>
         private void OnBaseBagOpenEvent(string Name, string slotType)
         {
-            Name.AddEventListener<InventoryItem[]>(OnUpdateInventoryUI);
+            Name.AddEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
             GameObject prefab = null;
             switch (slotType)
             {
@@ -80,7 +69,7 @@ namespace ACFrameworkCore
 
             baseBagSlots = new List<SlotUI>();
             //从仓管系统获取数据，请先提前吧仓管里面的数据初始化完毕!
-            InventoryItem[] shopDetailsDatasList = ShopManagerSystemExpansion.GetShopData(Name);
+            List<InventoryItem> shopDetailsDatasList = ItemManagerSystem.Instance.GetItemList(Name);
             if (shopDetailsDatasList != null)
             {
                 for (int i = 0; i < shopDetailsDatasList.ToList().Count; i++)
@@ -89,7 +78,7 @@ namespace ACFrameworkCore
                     SlotUI slot = GameObject.Instantiate(prefab, slotHolder).GetComponent<SlotUI>();
                     slot.gameObject.SetActive(true);
                     slot.slotIndex = i;
-                    slot.configInventoryKey = Name;
+                    slot.ItemKey = Name;
                     baseBagSlots.Add(slot);
                 }
                 LayoutRebuilder.ForceRebuildLayoutImmediate(slotHolder.GetComponent<RectTransform>());
@@ -111,15 +100,15 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="location">库存位置</param>
         /// <param name="list">数据列表</param>
-        private void OnUpdateInventoryUI(InventoryItem[] InventoryItemList)
+        private void OnUpdateInventoryUI(List<InventoryItem> InventoryItemList)
         {
             //更新打卡物体信息
             for (int i = 0; i < baseBagSlots.Count; i++)
             {
                 if (InventoryItemList[i].itemAmount > 0)
                 {
-                    ItemDetailsData item = InventoryAllSystem.Instance.GetItem(InventoryItemList[i].itemID);
-                    baseBagSlots[i].UpdateSlot(item, InventoryItemList[i].itemAmount);
+                    ItemDetailsData item = InventoryItemList[i].itemID.GetDataOne<ItemDetailsData>();
+                    baseBagSlots[i].UpdateSlot(item.itemID, InventoryItemList[i].itemAmount);
                 }
                 else
                 {
@@ -135,7 +124,7 @@ namespace ACFrameworkCore
         /// <param name="bagData"></param>
         private void OnBaseBagCloseEvent(string Name, string slotType)
         {
-            Name.RemoveEventListener<InventoryItem[]>(OnUpdateInventoryUI);
+            Name.RemoveEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
             CloseUIForm();
             CloseOtherUIForm(ConfigUIPanel.UIItemToolTip);
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮

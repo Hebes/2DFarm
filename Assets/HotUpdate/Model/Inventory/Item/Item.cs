@@ -43,7 +43,7 @@ namespace ACFarm
         public async UniTask Init(int ID,int itemAmount)
         {
             this.itemID = ID;
-            this.itemDetails = InventoryAllSystem.Instance.GetItem(ID);
+            this.itemDetails = ID.GetDataOne<ItemDetailsData>();
             this.itemAmount = itemAmount;
             if (itemDetails != null)
             {

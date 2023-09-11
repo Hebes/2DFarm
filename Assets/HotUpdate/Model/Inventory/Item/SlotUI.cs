@@ -29,7 +29,8 @@ namespace ACFrameworkCore
         public ItemDetailsData itemDatails;     //物品信息
         public int itemAmount;              //物品数量
         public int slotIndex;               //格子序列号
-        public string configInventoryKey;   //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray的Key
+
+        public string ItemKey;   //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray的Key
 
         private void Awake()
         {
@@ -51,8 +52,9 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="item"></param>
         /// <param name="Amount"></param>
-        public void UpdateSlot(ItemDetailsData item, int Amount)
+        public void UpdateSlot(int itemID, int Amount)
         {
+            ItemDetailsData item = itemID.GetDataOne<ItemDetailsData>();
             itemDatails = item;
             slotImage.sprite = ResourceExtension.LoadOrSub<Sprite>(item.itemIconPackage, item.itemIcon);
             itemAmount = Amount;
@@ -71,7 +73,7 @@ namespace ACFrameworkCore
                 //清空所有高亮
                 isSelected = false;
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                ConfigEvent.ItemSelectedEvent.EventTrigger(itemDatails, isSelected);
+                ConfigEvent.ItemSelectedEvent.EventTrigger(ItemKey,itemDatails.itemID, isSelected);
                 ConfigEvent.PlayerHoldUpAnimations.EventTrigger(itemDatails, isSelected);
             }
             itemDatails = null;

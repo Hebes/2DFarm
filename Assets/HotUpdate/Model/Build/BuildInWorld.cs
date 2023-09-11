@@ -35,8 +35,6 @@ namespace ACFarm
         }
         private void SceneAfterLoaded()
         {
-            //itemParent =new GameObject(ConfigTag.TagItemParent).transform;
-            //itemParent = GameObject.FindGameObjectWithTag(ConfigTag.TagItemParent).transform;
             itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             RebuildFurniture();
         }

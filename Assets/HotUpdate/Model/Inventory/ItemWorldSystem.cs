@@ -68,7 +68,7 @@ namespace ACFrameworkCore
             if (itemType == EItemType.Seed)
             {
                 UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
-                InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel1.key, itemID, removeAmount);
+                ItemManagerSystem.Instance.RemoveItem(uIDragPanel1.key, itemID, removeAmount);
                 return;
             }
 
@@ -84,7 +84,7 @@ namespace ACFrameworkCore
             if (removeAmount > item.itemAmount)
                 item.itemAmount = uIDragPanel.itemAmount;
             //移除物品
-            InventoryAllSystem.Instance.RemoveItemDicArray(uIDragPanel.key, itemID, item.itemAmount);
+            ItemManagerSystem.Instance.RemoveItem(uIDragPanel.key, itemID, item.itemAmount);
         }
         private void OnAfterSceneLoadedEvent()
         {
@@ -144,6 +144,7 @@ namespace ACFrameworkCore
                 }
             }
         }
+        //获取场景家具
         private void GetAllSceneFurniture()
         {
             List<SceneFurniture> currentSceneFurniture = new List<SceneFurniture>();
@@ -157,7 +158,7 @@ namespace ACFrameworkCore
                 };
 
                 if (item.GetComponent<Box>())
-                    sceneFurniture.boxIndex = item.GetComponent<Box>().index;
+                    sceneFurniture.name = item.GetComponent<Box>().boxName;
 
                 currentSceneFurniture.Add(sceneFurniture);
             }
@@ -167,6 +168,7 @@ namespace ACFrameworkCore
             else    
                 sceneFurnitureDict.Add(SceneManager.GetActiveScene().name, currentSceneFurniture);//如果是新场景
         }
+        //刷新家具
         private void RebuildFurniture()
         {
             if (sceneFurnitureDict.TryGetValue(SceneManager.GetActiveScene().name, out List<SceneFurniture> currentSceneFurniture))
@@ -181,7 +183,10 @@ namespace ACFrameworkCore
                     BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(sceneFurniture.itemID);
                     var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, sceneFurniture.position.ToVector3(), Quaternion.identity, itemParent);
                     if (buildItem.GetComponent<Box>())
-                        buildItem.GetComponent<Box>().InitBox(sceneFurniture.boxIndex);
+                    {
+                        buildItem.GetComponent<Box>().boxName = sceneFurniture.name;
+                        buildItem.GetComponent<Box>().InitBox();
+                    }
                 }
             }
         }

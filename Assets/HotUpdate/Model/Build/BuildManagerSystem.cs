@@ -50,9 +50,6 @@ namespace ACFarm
                     bluePrintDetailsTemp.resourceItem[i] = inventoryItemTemp;
                 }
                 bluePrintDetailsTemp.buildPrefab = ResourceExtension.Load<GameObject>(bluePrintDetailsData.buildPrefab);
-                //获取图片名称
-                //string imageName= DataExpansion.GetDataOne(bluePrintDetailsData.
-                //bluePrintDetailsTemp.icon = ResourceExtension.LoadOrSub<Sprite>(bluePrintDetailsData.);
                 bluePrintDataList.Add(bluePrintDetailsTemp);
             }
         }
@@ -79,16 +76,11 @@ namespace ACFarm
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
-                var itemStock = ItemManagerSystem.Instance.GetItem(ConfigEvent.PalayerBag, resourceItem.itemID);
+                var itemStock = ItemManagerSystem.Instance.GetItem(ConfigEvent.ActionBar, resourceItem.itemID);
                 if (itemStock.itemAmount >= resourceItem.itemAmount)
-                {
                     continue;
-                }
                 else
-                {
-                    //ACDebug.Error($"库存数量资源数量不过无法建造");
                     return false;
-                }
             }
             return true;
         }

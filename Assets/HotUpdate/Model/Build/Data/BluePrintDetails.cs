@@ -17,8 +17,11 @@ namespace ACFrameworkCore
     [System.Serializable]
     public class BluePrintDetails
     {
+        /// <summary> 建造物品的id </summary>
         public int ID;
+        /// <summary> 建造物品需要的材料 </summary>
         public InventoryItem[] resourceItem;
+        /// <summary> 建造的成功的预制体 </summary>
         public GameObject buildPrefab;
     }
 }

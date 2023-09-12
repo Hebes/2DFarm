@@ -33,23 +33,29 @@ namespace ACFarm
         private void Start()
         {
             if (itemID != 0)
-                Init(itemID, itemAmount).Forget();
+                Init(itemID, itemAmount);
         }
 
         /// <summary>
         /// 根据ID生成物品
         /// </summary>
-        /// <param name="ID"></param>
-        public async UniTask Init(int ID,int itemAmount)
+        /// <param name="itemID"></param>
+        public void Init(int itemID, int itemAmount)
         {
-            this.itemID = ID;
-            this.itemDetails = ID.GetDataOne<ItemDetailsData>();
+            this.itemID = itemID;
+            this.itemDetails = itemID.GetDataOne<ItemDetailsData>();
             this.itemAmount = itemAmount;
             if (itemDetails != null)
             {
                 //加载图片
+                string str1 = !string.IsNullOrEmpty(itemDetails.itemOnWorldSprite) ? itemDetails.itemOnWorldPackage : itemDetails.itemIconPackage;
                 string icon = !string.IsNullOrEmpty(itemDetails.itemOnWorldSprite) ? itemDetails.itemOnWorldSprite : itemDetails.itemIcon;
-                spriteRenderer.sprite = await ResourceExtension.LoadAsyncUniTask<Sprite>(icon);
+                if ((EItemType)itemDetails.itemType == EItemType.Furniture)
+                {
+                    str1 = !string.IsNullOrEmpty(itemDetails.itemIconPackage) ? itemDetails.itemIconPackage : itemDetails.itemOnWorldPackage;
+                    icon = !string.IsNullOrEmpty(itemDetails.itemIcon) ? itemDetails.itemIcon : itemDetails.itemOnWorldSprite;
+                }
+                spriteRenderer.sprite = ResourceExtension.LoadOrSub<Sprite>(str1, icon);
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);
                 coll.size = newSize;//设置尺寸

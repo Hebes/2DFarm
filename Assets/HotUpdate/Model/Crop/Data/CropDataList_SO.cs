@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
 
     [CreateAssetMenu(fileName = "CropDataList_SO", menuName = "Crop/CropDataList")]

@@ -69,13 +69,13 @@ namespace ACFarm
 
 
         //ItemDicArray字典操作
-        public void AddItem(string key, int itemID, int itemAmount)
+        public bool AddItem(string key, int itemID, int itemAmount)
         {
             ItemDic.TryGetValue(key, out List<InventoryItem> inventoryItemArray);
             if (inventoryItemArray == null)
             {
                 ACDebug.Error($"添加{key}失败,字典中没有包含{key}的索引,请调用CreatItemDicArrayRecord()方法创建");
-                return;
+                return false ;
             }
 
             int index1 = GetItemIndex(key, itemID);   //是否存在这个物品-1 没有 其他表示有
@@ -83,7 +83,7 @@ namespace ACFarm
 
             if (index1 == -1)//没有物品
             {
-                if (index2 == -1) return;//-1没有空位
+                if (index2 == -1) return false ;//-1没有空位
                 inventoryItemArray[index2] = new InventoryItem() { itemID = itemID, itemAmount = itemAmount };
             }
             else
@@ -94,6 +94,7 @@ namespace ACFarm
             }
             //更新物品UI 呼叫事件中心,执行委托的代码
             RefreshItem(key);//这里的在比如背包页面那边开启的时候监听
+            return true ;
         }
         public void CreatItemData(string key, int count = 1)
         {

@@ -21,6 +21,11 @@ namespace ACFrameworkCore
         /// <returns></returns>
         public async UniTask Fade(float targetAlpha)
         {
+            if (targetAlpha == 1)
+            {
+                fadeCanvasGroup.alpha = 1;
+                return;
+            }
             isFade = true;
             fadeCanvasGroup.blocksRaycasts = true;
             float speed = Mathf.Abs(fadeCanvasGroup.alpha - targetAlpha) / ConfigSettings.fadeDuretion;

@@ -58,25 +58,17 @@ namespace ACFarm
             //测试创建拾取的物体
             GameObject gameObject = ResourceExtension.Load<GameObject>(ConfigPrefab.ItemBasePreafab);
 
-            //GameObject go1 = GameObject.Instantiate(gameObject);
-            //Item item = go1.GetComponent<Item>();
-            //item.Init(1007, 3).Forget();
-
-            //GameObject go2 = GameObject.Instantiate(gameObject);
-            //Item item2 = go2.GetComponent<Item>();
-            //item2.Init(1008, 6).Forget();
-
-            GameObject go3 = GameObject.Instantiate(gameObject);
-            Item item3 = go3.GetComponent<Item>();
-            item3.Init(1015, 119).Forget();
-
-            //GameObject go4 = GameObject.Instantiate(gameObject);
-            //Item item4 = go4.GetComponent<Item>();
-            //item4.Init(1001, 1).Forget();
-
-            //GameObject go5 = GameObject.Instantiate(gameObject);
-            //Item item5 = go5.GetComponent<Item>();
-            //item5.Init(1004, 1).Forget();
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1001, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1002, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1003, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1004, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1005, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1006, 1);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1007, 10);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1018, 10);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1015, 119);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1032, 119);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1033, 119);
         }
         private async UniTask SceneTransition(string targetScene, Vector3 targetPosition)
         {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
 
     [System.Serializable]

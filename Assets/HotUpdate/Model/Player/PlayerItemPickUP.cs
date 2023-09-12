@@ -14,17 +14,16 @@ using ACFrameworkCore;
 
 namespace ACFarm
 {
-    public class ItemPickUP : MonoBehaviour
+    public class PlayerItemPickUP : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
             Item item = collision.GetComponent<Item>();
-            if (item == null) return;
-            if (item.itemDetails.canPickedup)
-            {
-                ItemManagerSystem.Instance.AddItem(ConfigEvent.ActionBar, item.itemID,item.itemAmount);//拾取物品到背包
+            if (item == null) return;                                       //是否为空
+            if (item.itemDetails.canPickedup == false) return;              //能否被拾取
+            bool isAddOK = ItemManagerSystem.Instance.AddItem(ConfigEvent.ActionBar, item.itemID, item.itemAmount);//拾取物品到背包
+            if (isAddOK)
                 GameObject.Destroy(item.gameObject);
-            }
         }
     }
 }

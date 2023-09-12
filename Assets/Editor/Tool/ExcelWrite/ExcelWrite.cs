@@ -47,6 +47,8 @@ namespace ACFrameworkCore
             }
             reader.Close();
             fileStream.Close();
+
+            //ReadData();
         }
 
         [MenuItem("Tool/编辑Excel#E #E")]
@@ -78,14 +80,14 @@ namespace ACFrameworkCore
             {
 
                 string path = paths[i];
-                if (path.EndsWith("meta")||path.EndsWith("txt")) continue;
+                if (path.EndsWith("meta") || path.EndsWith("txt")) continue;
 
                 string[] strings = path.Split('\\');
-                string btnName=string.Empty;
-                if (DesDic.TryGetValue(strings[strings.Length - 1],out string value))
+                string btnName = string.Empty;
+                if (DesDic.TryGetValue(strings[strings.Length - 1], out string value))
                     btnName = $"{strings[strings.Length - 1]}\t\n{value}";
                 else
-                    btnName= $"{strings[strings.Length - 1]}";
+                    btnName = $"{strings[strings.Length - 1]}";
                 if (GUILayout.Button(btnName))
                 {
                     NewLoadExcelPath = path;
@@ -185,9 +187,7 @@ namespace ACFrameworkCore
         private void RefreshData()
         {
             if (data == null) return;
-            //显示数据
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);//GUILayout.Width(400), GUILayout.Height(500)
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
                 string[] item1 = data[i];
                 EditorGUILayout.BeginHorizontal(GUILayout.Width(position.width));
@@ -218,7 +218,43 @@ namespace ACFrameworkCore
                 {
                     string item2 = item1[j];
                     data[i][j] = EditorGUILayout.TextField(item2);
-                    GUILayout.Space(5f);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+
+            //显示数据
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);//GUILayout.Width(400), GUILayout.Height(500)
+            for (int i = 3; i < data.Length; i++)
+            {
+                string[] item1 = data[i];
+                EditorGUILayout.BeginHorizontal(GUILayout.Width(position.width));
+                if (GUILayout.Button("删除", GUILayout.Width(80f)))
+                {
+                    //删除内存数据
+                    List<string[]> strings = data.ToList();
+                    strings.Remove(item1);
+                    data = strings.ToArray();
+                    //删除实际数据
+                    int deleteNumber = i;
+                    FileInfo _excelName = new FileInfo(NewLoadExcelPath);
+                    //通过ExcelPackage打开文件
+                    using (ExcelPackage package = new ExcelPackage(_excelName))
+                    {
+                        //1表示第一个表
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                        for (int j = 0; j < data[0].Length; j++)
+                            worksheet.SetValue(deleteNumber + 1, j + 1, null);
+                        package.Save(); //储存
+                    }
+                    Message = "数据删除成功";
+
+                    EditorGUILayout.EndHorizontal();
+                    continue;
+                }
+                for (global::System.Int32 j = 0; j < item1.Length; j++)
+                {
+                    string item2 = item1[j];
+                    data[i][j] = EditorGUILayout.TextField(item2);
                 }
                 EditorGUILayout.EndHorizontal();
             }

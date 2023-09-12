@@ -76,7 +76,7 @@ namespace ACFrameworkCore
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
-            item.Init(itemID, removeAmount).Forget();
+            item.Init(itemID, removeAmount);
             ////获取数据
             //UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
             //设置数据
@@ -141,7 +141,7 @@ namespace ACFrameworkCore
                 foreach (SceneItem sceneItem in currentSceneItems)
                 {
                     Item newItem = GameObject.Instantiate(itemPrefab, sceneItem.position.ToVector3(), Quaternion.identity, itemParent);
-                    newItem.Init(sceneItem.itemID, sceneItem.ItemAmount).Forget();
+                    newItem.Init(sceneItem.itemID, sceneItem.ItemAmount);
                 }
             }
         }

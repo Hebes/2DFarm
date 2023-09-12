@@ -22,8 +22,6 @@ namespace ACFarm
         public string key;                     //属于哪个物品管理类的,也就是InventoryAllManager的ItemDicList或者ItemDicArray的Key
         public int itemAmount;                  //物品数量
 
-
-
         public override void UIAwake()
         {
             base.UIAwake();

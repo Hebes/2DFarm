@@ -39,7 +39,7 @@ namespace ACFrameworkCore
             bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.BonnceItemBasePreafab).GetComponent<Item>();
             //初始化监听信息
             ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.UIItemDropItem.AddEventListener<int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
+            ConfigEvent.UIItemDropItem.AddEventListener<string, int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
@@ -63,28 +63,29 @@ namespace ACFrameworkCore
             sceneItemDict.Clear();
             sceneFurnitureDict.Clear();
         }
-        private void OnDropItemEvent(int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
+        private void OnDropItemEvent(string itemKey, int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
-            if (itemType == EItemType.Seed)
-            {
-                UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
-                ItemManagerSystem.Instance.RemoveItem(uIDragPanel1.key, itemID, removeAmount);
-                return;
-            }
+            //if (itemType == EItemType.Seed)
+            //{
+            //    UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
+            //    ItemManagerSystem.Instance.RemoveItem(uIDragPanel1.key, itemID, removeAmount);
+            //    return;
+            //}
 
             Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
-            //获取数据
-            UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
+            item.Init(itemID, removeAmount).Forget();
+            ////获取数据
+            //UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
             //设置数据
-            item.itemID = itemID;
-            item.itemAmount = removeAmount;
-            if (removeAmount > item.itemAmount)
-                item.itemAmount = uIDragPanel.itemAmount;
+            //item.itemID = itemID;
+            //item.itemAmount = removeAmount;
+            //if (removeAmount > item.itemAmount)
+            //    item.itemAmount = uIDragPanel.itemAmount;
             //移除物品
-            ItemManagerSystem.Instance.RemoveItem(uIDragPanel.key, itemID, item.itemAmount);
+            ItemManagerSystem.Instance.RemoveItem(itemKey, itemID, removeAmount);
         }
         private void OnAfterSceneLoadedEvent()
         {
@@ -165,7 +166,7 @@ namespace ACFrameworkCore
 
             if (sceneFurnitureDict.ContainsKey(SceneManager.GetActiveScene().name))
                 sceneFurnitureDict[SceneManager.GetActiveScene().name] = currentSceneFurniture;//找到数据就更新item数据列表
-            else    
+            else
                 sceneFurnitureDict.Add(SceneManager.GetActiveScene().name, currentSceneFurniture);//如果是新场景
         }
         //刷新家具

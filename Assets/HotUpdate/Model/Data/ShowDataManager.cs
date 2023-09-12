@@ -27,19 +27,5 @@ namespace ACFrameworkCore
         public List<LightDetailsData> LightDetailsDataList;
         public List<SceneSoundItemDetailsData> SceneSoundItemDetailsDataList;
         public List<SoundDetailsData> SoundDetailsDataList;
-
-        private void Awake()
-        {
-            ItemDetailsDataList = this.GetDataListThis<ItemDetailsData>();
-            PlayerAnimatorsDataList = this.GetDataListThis<PlayerAnimatorsData>();
-            ScheduleDetailsDataList = this.GetDataListThis<ScheduleDetailsData>();
-            SceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
-            DialogueDetailsDataList = this.GetDataListThis<DialogueDetailsData>();
-            ShopDetailsDataList = this.GetDataListThis<ShopDetailsData>();
-            BluePrintDetailsDataList = this.GetDataListThis<BluePrintDetailsData>();
-            LightDetailsDataList = this.GetDataListThis<LightDetailsData>();
-            SceneSoundItemDetailsDataList = this.GetDataListThis<SceneSoundItemDetailsData>();
-            SoundDetailsDataList = this.GetDataListThis<SoundDetailsData>();
-        }
     }
 }

@@ -39,10 +39,18 @@ namespace ACFarm
 
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
-            MonoManager.Instance.OnAddUpdateEvent(Update);
+            if (MonoManager.Instance == null)
+            {
+                ACDebug.Log($"MonoManager.Instance是空的");
+            }
+            else
+            {
+                ACDebug.Log($"MonoManager.Instance不是空的");
+            }
+            MonoManager.Instance.OnAddUpdateEvent(() =>{ OnUpdate(); });
         }
 
-        private void Update()
+        private void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.I))
                 Save(currentDataIndex);
@@ -102,10 +110,10 @@ namespace ACFarm
         {
             ACDebug.Log($"数据{index}加载成功");
             currentDataIndex = index;
-            var resultPath = jsonFolder + "data" + index + ".json";
-            var stringData = File.ReadAllText(resultPath);
-            var jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
-            foreach (var saveable in saveableList)
+            string resultPath = jsonFolder + "data" + index + ".json";
+            string stringData = File.ReadAllText(resultPath);
+            DataSlot jsonData = JsonConvert.DeserializeObject<DataSlot>(stringData);
+            foreach (ISaveable saveable in saveableList)
                 saveable.RestoreData(jsonData.dataDict[saveable.GUID]);
         }
     }

@@ -87,7 +87,7 @@ namespace ACFarm
                 case EItemType.Seed:
                 case EItemType.Commdity:
                 case EItemType.Furniture:
-                    ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, mouseWorldPos, itemDetails);
+                    ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, itemDetails.itemID, mouseWorldPos );
                     break;
                 case EItemType.HoeTool:
                 case EItemType.ChopTool:
@@ -150,7 +150,7 @@ namespace ACFarm
                 anim.SetFloat("InputY", mouseY);
             }
             await UniTask.Delay(TimeSpan.FromSeconds(0.45f), ignoreTimeScale: false);
-            ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, mouseWorldPos, itemDetails);
+            ConfigEvent.ExecuteActionAfterAnimation.EventTrigger(itemKey, itemDetails.itemID, mouseWorldPos);
             await UniTask.Delay(TimeSpan.FromSeconds(0.25f), ignoreTimeScale: false);
 
             //µÈ´ý¶¯»­½áÊø

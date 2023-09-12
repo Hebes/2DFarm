@@ -36,6 +36,10 @@ namespace ACFrameworkCore
         public static List<T> GetDataListThis<T>(this object obj) where T : class, IData
         {
             List<T> list = new List<T>();
+            if (DataManager.Instance == null)
+            {
+                ACDebug.Log($"是空的");
+            }
             List<IData> tempList = DataManager.Instance.GetDataList<T>();
             if (tempList == null || tempList.Count == 0)
                 ACDebug.Error($"请先初始化数据{typeof(T).FullName}");

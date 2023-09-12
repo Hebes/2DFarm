@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using ACFrameworkCore;
 
-namespace ACFrameworkCore
-{
+//namespace ACFarm
+//{
     public class MonoController : MonoBehaviour
     {
         private event UnityAction AwakeEvent;
@@ -11,6 +12,8 @@ namespace ACFrameworkCore
 
         private void Awake()
         {
+            //ACDebug.Log("脚本挂载了");
+            Debug.Log("脚本挂载了");
             AwakeEvent?.Invoke();
         }
         private void Update()
@@ -49,4 +52,4 @@ namespace ACFrameworkCore
             FixedUpdateEvent -= unityAction;
         }
     }
-}
+//}

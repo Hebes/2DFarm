@@ -1,9 +1,19 @@
-﻿using UnityEngine;
+﻿using ACFrameworkCore;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using ACFrameworkCore;
-using Microsoft.SqlServer.Server;
-using static UnityEditor.Progress;
+
+
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    鼠标界面
+
+-----------------------*/
 
 namespace ACFarm
 {

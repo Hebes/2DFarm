@@ -340,7 +340,28 @@ public class Init : MonoBehaviour
         }
         #endregion
 
+        LoadMetadataForAOTAssemblies();
+        if (PlayMode == EPlayMode.OfflinePlayMode)
+        {
+            Debug.Log($"当前进入的是******************{PlayMode}******************");
+            var package1 = YooAssets.GetPackage(packageName);
+            //补充元数据
+            foreach (var asset in AOTMetaAssemblyNames)
+            {
+                RawFileOperationHandle handle = package1.LoadRawFileAsync(asset);
+                yield return handle;
+                byte[] fileData = handle.GetRawFileData();
+                s_assetDatas[asset] = fileData;
+                Debug.Log($"dll名称是:{asset}  size大小为:{fileData.Length}");
+            }
+            //_hotUpdateAss = Assembly.Load(ReadBytesFromStreamingAssets("HotUpdate.dll.bytes"));
+            _hotUpdateAss = Assembly.Load(File.ReadAllBytes($"{Application.dataPath}/AssetsPackage/HotDll/HotUpdate.dll.bytes"));
+            _hotUpdateAss.GetType("InitGame").GetMethod("Init").Invoke(null, null);
+            yield break;
+        }
+
         #region 其他加载模式
+        Debug.Log("进入了其他加载模式");
         //进入的其他模式
         var package = YooAssets.GetPackage(packageName);
 #if !UNITY_EDITOR
@@ -356,7 +377,7 @@ public class Init : MonoBehaviour
             Debug.Log($"dll名称是:{asset}  size大小为:{fileData.Length}");
         }
 
-        LoadMetadataForAOTAssemblies();
+        
         //执行热更新代码
         yield return null;
         RawFileOperationHandle handleHotUpdate = package.LoadRawFileAsync("HotUpdate.dll");

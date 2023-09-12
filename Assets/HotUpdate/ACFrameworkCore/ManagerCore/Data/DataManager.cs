@@ -23,7 +23,7 @@ namespace ACFrameworkCore
         public void ICroeInit()
         {
             Instance = this;
-            bytesDataDic= new Dictionary<string, List<IData>>();
+            bytesDataDic = new Dictionary<string, List<IData>>();
 
             //加载数据
             InitData<ItemDetailsData>();                //物品数据
@@ -35,12 +35,30 @@ namespace ACFrameworkCore
             InitData<BluePrintDetailsData>();           //建造数据
             InitData<LightDetailsData>();               //灯光数据
             InitData<SceneSoundItemDetailsData>();      //场景音乐数据
-            InitData<SoundDetailsData>();               //音乐数据               
+            InitData<SoundDetailsData>();               //音乐数据
 
+
+            //ACDebug.Log($"一共{bytesDataDic.Count}条数据");
             Debug.Log("数据初始化完毕");
             GameObject gameObject = new GameObject("DataManager");
-            gameObject.AddComponent<ShowDataManager>();
+            ShowDataManager showDataManager = gameObject.AddComponent<ShowDataManager>();
             GameObject.DontDestroyOnLoad(gameObject);
+
+
+            ItemDetailsData itemDetailsData = GetDataOne<ItemDetailsData>(1001);
+            ACDebug.Log($"获取的数据是{itemDetailsData.name}数据");
+
+            //TODO 这里需要
+            //showDataManager.ItemDetailsDataList = GetDataListAsT<ItemDetailsData>();
+            //showDataManager.PlayerAnimatorsDataList = this.GetDataListThis<PlayerAnimatorsData>();
+            //showDataManager.ScheduleDetailsDataList = this.GetDataListThis<ScheduleDetailsData>();
+            //showDataManager.SceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
+            //showDataManager.DialogueDetailsDataList = this.GetDataListThis<DialogueDetailsData>();
+            //showDataManager.ShopDetailsDataList = this.GetDataListThis<ShopDetailsData>();
+            //showDataManager.BluePrintDetailsDataList = this.GetDataListThis<BluePrintDetailsData>();
+            //showDataManager.LightDetailsDataList = this.GetDataListThis<LightDetailsData>();
+            //showDataManager.SceneSoundItemDetailsDataList = this.GetDataListThis<SceneSoundItemDetailsData>();
+            //showDataManager.SoundDetailsDataList = this.GetDataListThis<SoundDetailsData>();
         }
 
         //初始化数据
@@ -85,6 +103,19 @@ namespace ACFrameworkCore
             }
 
             List<IData> dataListTemp = bytesDataDic[typeof(T).FullName];
+            return dataListTemp;
+        }
+
+        public List<T> GetDataListAsT<T>() where T : class, IData
+        {
+            List<T> dataListTemp = new List<T>();
+            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
+            {
+                ACDebug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
+                return null;
+            }
+            foreach (IData item in bytesDataDic[typeof(T).FullName])
+                dataListTemp.Add(item as T);
             return dataListTemp;
         }
     }

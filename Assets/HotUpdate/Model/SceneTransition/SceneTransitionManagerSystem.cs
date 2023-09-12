@@ -31,7 +31,7 @@ namespace ACFarm
             Instance = this;
 
             ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(StartNewGameEvent);
+            ConfigEvent.StartNewGameEvent.AddEventListener<int>(P => { StartNewGameEvent(P).Forget(); });
             ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single).Forget();
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
             //注册保存事件
@@ -50,10 +50,33 @@ namespace ACFarm
 
 
         //事件监听
-        private void StartNewGameEvent(int obj)
+        private async UniTask StartNewGameEvent(int obj)
         {
             currentceneName = ConfigScenes.Field;
-            SceneTransition(currentceneName, Vector3.zero).Forget();
+            await SceneTransition(currentceneName, Vector3.zero);
+
+            //测试创建拾取的物体
+            GameObject gameObject = ResourceExtension.Load<GameObject>(ConfigPrefab.ItemBasePreafab);
+
+            //GameObject go1 = GameObject.Instantiate(gameObject);
+            //Item item = go1.GetComponent<Item>();
+            //item.Init(1007, 3).Forget();
+
+            //GameObject go2 = GameObject.Instantiate(gameObject);
+            //Item item2 = go2.GetComponent<Item>();
+            //item2.Init(1008, 6).Forget();
+
+            GameObject go3 = GameObject.Instantiate(gameObject);
+            Item item3 = go3.GetComponent<Item>();
+            item3.Init(1015, 119).Forget();
+
+            //GameObject go4 = GameObject.Instantiate(gameObject);
+            //Item item4 = go4.GetComponent<Item>();
+            //item4.Init(1001, 1).Forget();
+
+            //GameObject go5 = GameObject.Instantiate(gameObject);
+            //Item item5 = go5.GetComponent<Item>();
+            //item5.Init(1004, 1).Forget();
         }
         private async UniTask SceneTransition(string targetScene, Vector3 targetPosition)
         {

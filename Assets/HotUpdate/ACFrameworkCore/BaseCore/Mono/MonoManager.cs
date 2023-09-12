@@ -1,25 +1,36 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 using Time = UnityEngine.Time;
+using ACFrameworkCore;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class MonoManager : ICore
     {
         public static MonoManager Instance;
+        private MonoController monoController;
+        private GameObject monoTemp;
         public void ICroeInit()
         {
             Instance = this;
-            GameObject monoTemp = new GameObject("Mono");
+            monoTemp = new GameObject("Mono");
+            if (monoTemp == null)
+                Debug.Log("monoTemp空");
+            else
+                Debug.Log("monoTemp不空");
             monoController = monoTemp.AddComponent<MonoController>();
+            
+            if (monoTemp.GetComponent(typeof(MonoController)) == null)
+                Debug.Log("monoController空");
+            else
+                Debug.Log("monoController不空");
             GameObject.DontDestroyOnLoad(monoTemp);
             ACDebug.Log("初始化Mono完毕!");
         }
 
-        private MonoController monoController;
 
         private float m_Time = 0f;
 
@@ -34,6 +45,14 @@ namespace ACFrameworkCore
 
         public void OnAddUpdateEvent(UnityAction unityAction)
         {
+            //if (monoController == null)
+            //{
+            //    Debug.Log("monoController空");
+            //}
+            //else
+            //{
+            //    Debug.Log("monoController不空");
+            //}
             monoController.OnAddUpdateEvent(unityAction);
         }
         public void OnRemoveUpdateEvent(UnityAction unityAction)

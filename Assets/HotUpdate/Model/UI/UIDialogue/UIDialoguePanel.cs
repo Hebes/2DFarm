@@ -1,13 +1,8 @@
-﻿using System;
+﻿using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using Cysharp.Threading.Tasks;
+using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -21,7 +16,7 @@ using Cysharp.Threading.Tasks;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class UIDialoguePanel : UIBase
     {

@@ -2,6 +2,7 @@
 using ACFrameworkCore;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 游戏流程
@@ -21,42 +22,57 @@ public enum EInitGameProcess
 }
 public class InitGame
 {
+    private static MonoController monoController;
+    private static GameObject monoTemp;
+
     public static void Init()
     {
-        SwitchInitGameProcess(EInitGameProcess.FSMInitBaseCore).Forget();
+        //monoTemp = new GameObject("Mono");
+        //if (monoTemp == null)
+        //    Debug.Log("monoTemp空");
+        //else
+        //    Debug.Log("monoTemp不空");
+        //monoController = monoTemp.AddComponent<MonoController>();
+
+        //if (monoTemp.GetComponent<MonoController>() == null)
+        //    Debug.Log("monoController空");
+        //else
+        //    Debug.Log("monoController不空");
+
+        SwitchInitGameProcess(EInitGameProcess.FSMInitBaseCore);
     }
 
-    private static async UniTaskVoid SwitchInitGameProcess(EInitGameProcess initGameProcess)
+    private static void SwitchInitGameProcess(EInitGameProcess initGameProcess)
     {
         switch (initGameProcess)
         {
-            case EInitGameProcess.FSMInitBaseCore: await FSMInitBaseCore(); break;
-            case EInitGameProcess.FSMInitManagerCore: await FSMInitManagerCore(); break;
-            case EInitGameProcess.FSMInitModel: await FSMInitModel(); break;
+            case EInitGameProcess.FSMInitBaseCore: FSMInitBaseCore(); break;
+            case EInitGameProcess.FSMInitManagerCore: FSMInitManagerCore(); break;
+            case EInitGameProcess.FSMInitModel: FSMInitModel(); break;
             case EInitGameProcess.FSMInitUI: FSMInitUI(); break;
-            case EInitGameProcess.FSMEnterGame: await FSMEnterGame(); break;
+            case EInitGameProcess.FSMEnterGame: FSMEnterGame().Forget(); break;
         }
     }
 
-    private static async UniTask FSMInitBaseCore()
+    private static void FSMInitBaseCore()
     {
         List<ICore> _initHs = new List<ICore>()
         {
             new DebugManager(), //日志管理
-            new MonoManager(),  //mono管理
             new EventManager(),     //事件管理
         };
         foreach (var init in _initHs)
         {
             init.ICroeInit();
-            await UniTask.Yield();
+            //await UniTask.Yield();
         }
-        SwitchInitGameProcess(EInitGameProcess.FSMInitManagerCore).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitManagerCore);
     }
-    private static async UniTask FSMInitManagerCore()
+    private static void FSMInitManagerCore()
     {
         List<ICore> _initHs = new List<ICore>()
         {
+            new MonoManager(),  //mono管理
             new AduioManager(),     //音频管理
             new DataManager(),      //数据管理
             new PoolManager(),      //对象池管理
@@ -67,12 +83,12 @@ public class InitGame
         foreach (var init in _initHs)
         {
             init.ICroeInit();
-            await UniTask.Yield();
+            //await UniTask.Yield();
         }
-        SwitchInitGameProcess(EInitGameProcess.FSMInitModel).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitModel);
     }
-    
-    private static async UniTask FSMInitModel()
+
+    private static void  FSMInitModel()
     {
         List<ICore> _initHs = new List<ICore>()
         {
@@ -97,9 +113,9 @@ public class InitGame
         foreach (var init in _initHs)
         {
             init.ICroeInit();
-            await UniTask.Yield();
+            //await UniTask.Yield();
         }
-        SwitchInitGameProcess(EInitGameProcess.FSMInitUI).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMInitUI);
     }
     private static void FSMInitUI()
     {
@@ -122,7 +138,7 @@ public class InitGame
         ConfigUIPanel.UIBagBase.CloseUIPanel();                          //关闭商店箱子面板
         ConfigUIPanel.UITrade.CloseUIPanel();                            //关闭购买数量面板
 
-        SwitchInitGameProcess(EInitGameProcess.FSMEnterGame).Forget();
+        SwitchInitGameProcess(EInitGameProcess.FSMEnterGame);
     }
     private static async UniTask FSMEnterGame()
     {

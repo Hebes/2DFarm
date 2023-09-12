@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -13,7 +14,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace ACFarm
 {
     public class NPCFunction : MonoBehaviour
     {

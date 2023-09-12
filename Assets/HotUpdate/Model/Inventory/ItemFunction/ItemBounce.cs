@@ -35,6 +35,11 @@ namespace ACFrameworkCore
             Bounce();
         }
 
+        /// <summary>
+        /// 初始物品数据
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="dir"></param>
         public void InitBounceItem(Vector3 target, Vector2 dir)
         {
             coll.enabled = false;

@@ -16,7 +16,7 @@ using UnityEngine.Tilemaps;
 
 namespace ACFarm
 {
-    public class GridMapManagerSystem : MonoBehaviour,ISaveable
+    public class GridMapManagerSystem : MonoBehaviour, ISaveable
     {
         public static GridMapManagerSystem Instance;
         public RuleTile digTile;
@@ -43,7 +43,7 @@ namespace ACFarm
                 InitTileDetailsDict(mapData);
             }
 
-            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<string,Vector3, ItemDetailsData>(OnExecuteActionAfterAnimation);
+            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<string, int, Vector3>(OnExecuteActionAfterAnimation);
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
             ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
@@ -116,8 +116,11 @@ namespace ACFarm
         /// </summary>
         /// <param name="mouseWorldPos">鼠标坐标</param>
         /// <param name="itemDetails">物品信息</param>
-        private void OnExecuteActionAfterAnimation(string itemKey,Vector3 mouseWorldPos, ItemDetailsData itemDetails)
+        private void OnExecuteActionAfterAnimation(string itemKey, int itemID, Vector3 mouseWorldPos)
         {
+            //获取数据
+            ItemDetailsData itemDetails = itemID.GetDataOne<ItemDetailsData>();
+            InventoryItem inventoryItem = ItemManagerSystem.Instance.GetItem(itemKey, itemID);
             Vector3Int mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//格子的坐标
             TileDetails currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
 
@@ -131,18 +134,18 @@ namespace ACFarm
             switch ((EItemType)itemDetails.itemType)
             {
                 case EItemType.Seed:
-                    ConfigEvent.PlantSeed.EventTrigger(itemDetails.itemID, currentTile);
-                    ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Seed,1);
+                    ConfigEvent.PlantSeed.EventTrigger(itemID, currentTile);
+                    ConfigEvent.UIItemDropItem.EventTrigger(itemKey, itemID, mouseWorldPos, EItemType.Seed, 1);
                     ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Plant);
                     break;
                 case EItemType.Commdity:
-                    ConfigEvent.UIItemDropItem.EventTrigger(itemDetails.itemID, mouseWorldPos, EItemType.Commdity, 10000);
+                    ConfigEvent.UIItemDropItem.EventTrigger(itemKey, itemID, mouseWorldPos, EItemType.Commdity, inventoryItem.itemAmount);
                     break;
                 case EItemType.Furniture:
                     //在地图上生成物品 ItemManager
                     //移除当前物品（图纸）InventoryManager
                     //移除资源物品 InventoryManger
-                    ConfigEvent.BuildFurniture.EventTrigger(itemKey, itemDetails.itemID, mouseWorldPos);
+                    ConfigEvent.BuildFurniture.EventTrigger(itemKey, itemID, mouseWorldPos);
                     break;
                 case EItemType.HoeTool:
                     SetDigGround(currentTile);

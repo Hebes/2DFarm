@@ -2,7 +2,6 @@
 using System;
 using UnityEngine;
 using YooAsset;
-using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				

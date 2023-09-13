@@ -74,7 +74,7 @@ namespace ACFrameworkCore
                 isSelected = false;
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
                 ConfigEvent.ItemSelectedEvent.EventTrigger(ItemKey,itemDatails.itemID, isSelected);
-                ConfigEvent.PlayerHoldUpAnimations.EventTrigger(itemDatails, isSelected);
+                ConfigEvent.PlayerAnimationsEvent.EventTrigger(itemDatails.itemID, isSelected);
             }
             itemDatails = null;
             slotImage.enabled = false;

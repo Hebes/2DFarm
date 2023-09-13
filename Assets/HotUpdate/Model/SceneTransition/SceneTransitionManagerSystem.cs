@@ -67,8 +67,8 @@ namespace ACFarm
             GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1007, 10);
             GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1018, 10);
             GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1015, 119);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1032, 119);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1033, 119);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1032, 10);
+            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1033, 10);
         }
         private async UniTask SceneTransition(string targetScene, Vector3 targetPosition)
         {

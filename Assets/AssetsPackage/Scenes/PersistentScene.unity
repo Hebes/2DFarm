@@ -190,7 +190,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   dialogueList: []
-  dialogueStartNumber: 2
+  dialogueStartNumber: 3
 --- !u!114 &111278172
 MonoBehaviour:
   m_ObjectHideFlags: 0

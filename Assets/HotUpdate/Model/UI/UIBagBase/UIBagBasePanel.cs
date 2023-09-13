@@ -50,6 +50,7 @@ namespace ACFrameworkCore
         /// <param name="slotType"></param>
         private void OnBaseBagOpenEvent(string Name, string slotType)
         {
+            InventoryKey = Name;
             Name.AddEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
             GameObject prefab = null;
             switch (slotType)
@@ -65,29 +66,27 @@ namespace ACFrameworkCore
             baseBagSlots = new List<SlotUI>();
             //从仓管系统获取数据，请先提前吧仓管里面的数据初始化完毕!
             List<InventoryItem> shopDetailsDatasList = ItemManagerSystem.Instance.GetItemList(Name);
-            if (shopDetailsDatasList != null)
+            if (shopDetailsDatasList == null) return;
+            for (int i = 0; i < shopDetailsDatasList.ToList().Count; i++)
             {
-                for (int i = 0; i < shopDetailsDatasList.ToList().Count; i++)
-                {
-
-                    SlotUI slot = GameObject.Instantiate(prefab, slotHolder).GetComponent<SlotUI>();
-                    slot.gameObject.SetActive(true);
-                    slot.slotIndex = i;
-                    slot.ItemKey = Name;
-                    baseBagSlots.Add(slot);
-                }
-                LayoutRebuilder.ForceRebuildLayoutImmediate(slotHolder.GetComponent<RectTransform>());
-
-                if (slotType.Equals(ConfigEvent.Shop))
-                {
-                    OpenUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
-                    UIPlayerBagPanel uIPlayerBagPanel = GetUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
-                    uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f, 0.0f);
-                    uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(130f, 0.0f);
-                }
-                //刷新UI数据
-                OnUpdateInventoryUI(shopDetailsDatasList);
+                SlotUI slot = GameObject.Instantiate(prefab, slotHolder).GetComponent<SlotUI>();
+                slot.gameObject.SetActive(true);
+                slot.slotIndex = i;
+                slot.ItemKey = Name;
+                baseBagSlots.Add(slot);
             }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(slotHolder.GetComponent<RectTransform>());
+            ItemManagerSystem.Instance.AddSlotUIList(Name, baseBagSlots);//添加到管理系统中
+
+            if (slotType.Equals(ConfigEvent.Shop))
+            {
+                OpenUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
+                UIPlayerBagPanel uIPlayerBagPanel = GetUIForm<UIPlayerBagPanel>(ConfigUIPanel.UIPlayerBag);
+                uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMin = new Vector2(130f, 0.0f);
+                uIPlayerBagPanel.panelGameObject.GetComponent<RectTransform>().offsetMax = new Vector2(130f, 0.0f);
+            }
+            //刷新UI数据
+            OnUpdateInventoryUI(shopDetailsDatasList);
         }
 
         /// <summary>
@@ -119,14 +118,13 @@ namespace ACFrameworkCore
         /// <param name="bagData"></param>
         private void OnBaseBagCloseEvent(string Name, string slotType)
         {
+            ItemManagerSystem.Instance.RemoveSlotUIDic(InventoryKey);
             Name.RemoveEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
             CloseUIForm();
             CloseOtherUIForm(ConfigUIPanel.UIItemToolTip);
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-
-            foreach (var slot in baseBagSlots)
-                GameObject.Destroy(slot.gameObject);
-            baseBagSlots.Clear();
+            baseBagSlots?.Clear();
+            baseBagSlots = null;
 
             if (slotType == ConfigEvent.Mira)
             {

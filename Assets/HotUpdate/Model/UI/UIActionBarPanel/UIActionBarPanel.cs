@@ -1,5 +1,6 @@
 ﻿using ACFrameworkCore;
 using System.Collections.Generic;
+using UnityEditor.Graphs;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -9,7 +10,7 @@ using UnityEngine;
 作者:
 	暗沉
 描述:
-    工具栏
+    快捷工具栏
 
 -----------------------*/
 
@@ -46,8 +47,8 @@ namespace ACFarm
 
             key.AddEventListener<List<InventoryItem>>(RefreshItem);
 
-            ItemManagerSystem.Instance.AddSlotUIList(key, ActionBarSlotUIList);
-            ItemManagerSystem.Instance.CreatItemData(key, 10);
+            ItemManagerSystem.Instance.AddSlotUIList(key, ActionBarSlotUIList);//添加物品栏数据
+            ItemManagerSystem.Instance.CreatItemData(key, 10);//添加背包数据
 
             //测试数据
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
@@ -82,7 +83,10 @@ namespace ACFarm
         }
 
 
-        /// <summary> 背包按钮监听 </summary>
+        /// <summary>
+        /// 背包按钮监听
+        /// </summary>
+        /// <param name="go"></param>
         private void T_BagButtonListener(GameObject go)
         {
             if (bagOpened)
@@ -94,9 +98,16 @@ namespace ACFarm
             {
                 bagOpened = true;
                 CloseOtherUIForm(ConfigUIPanel.UIPlayerBag);
+                ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
+                ConfigEvent.PlayerAnimationsEvent.EventTrigger(1001, false);//通知物品被选中的状态,可以随便填写个数字书要是取消动画
+                ConfigEvent.ItemSelectedEvent.EventTrigger(string.Empty, 0, false);//切换鼠标样式
             }
         }
-        /// <summary> 刷新界面 </summary>
+
+        /// <summary>
+        /// 刷新界面
+        /// </summary>
+        /// <param name="obj"></param>
         private void RefreshItem(List<InventoryItem> obj)
         {
             for (int i = 0; i < obj?.Count; i++)

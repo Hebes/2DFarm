@@ -1,8 +1,20 @@
 ﻿
+
+/*--------脚本描述-----------
+
+电子邮箱：
+    1607388033@qq.com
+作者:
+    暗沉
+描述:
+    物体类型动画
+
+-----------------------*/
+
 namespace ACFrameworkCore
 {
     /// <summary>
-    /// 物体类型类型
+    /// 物体类型动画
     /// </summary>
     public enum EPartType
     {

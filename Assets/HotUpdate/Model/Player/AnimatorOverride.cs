@@ -25,6 +25,7 @@ namespace ACFrameworkCore
         {
             animatorTypes = new List<AnimatorType>();
             animatorNameDic = new Dictionary<string, Animator>();
+            //获取玩家动画组件
             animators = GetComponentsInChildren<Animator>();
             foreach (var anim in animators)
                 animatorNameDic.Add(anim.name, anim);
@@ -41,7 +42,7 @@ namespace ACFrameworkCore
 
             holdItem = transform.GetChildComponent<SpriteRenderer>(childName: "HoldItem");
 
-            ConfigEvent.PlayerHoldUpAnimations.AddEventListener<ItemDetailsData, bool>(OnItemSelectEvent);
+            ConfigEvent.PlayerAnimationsEvent.AddEventListener<int, bool>(OnItemSelectEvent);
             ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
         }
 
@@ -56,8 +57,9 @@ namespace ACFrameworkCore
         /// </summary>
         /// <param name="itemDatails"></param>
         /// <param name="idSelect">是否被选中</param>
-        private void OnItemSelectEvent(ItemDetailsData itemDatails, bool idSelect)
+        private void OnItemSelectEvent(int itemID, bool idSelect)
         {
+            ItemDetailsData itemDatails = itemID.GetDataOne<ItemDetailsData>();
             //WORKFLOW:不同的工具返回不同的动画，在这里补全
             EPartType currentType;
             EItemType itemType = (EItemType)itemDatails.itemType;
@@ -83,29 +85,34 @@ namespace ACFrameworkCore
             }
             else
             {
+                holdItem.enabled = currentType == EPartType.Carry ? true : false;
                 if (currentType == EPartType.Carry)
-                {
-                    holdItem.enabled = true;
                     holdItem.sprite = ResourceExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
-                }
-                else
-                {
-                    holdItem.enabled = false;
-                }
             }
 
             SwitchAnimator(currentType);
         }
 
-        /// <summary>根据物体类型播放对应动画</summary>
+        /// <summary>
+        /// 根据物体类型播放对应动画
+        /// </summary>
+        /// <param name="ePartType">物体类型动画</param>
         private void SwitchAnimator(EPartType ePartType)
         {
-            foreach (var item in animatorTypes)
+            foreach (KeyValuePair<string, Animator> item in animatorNameDic)//身体部位动画组件
             {
-                if (item.ePartType == ePartType)
-                    animatorNameDic[item.ePartName.ToString()].runtimeAnimatorController = item.overrideController;
-                else if (item.ePartType == EPartType.None)
-                    animatorNameDic[item.ePartName.ToString()].runtimeAnimatorController = item.overrideController;
+                AnimatorType overrideControllerTemp = animatorTypes.Find(p =>
+                {
+                    return p.ePartType == ePartType && p.ePartName.ToString().Equals(item.Key);
+                });
+                if (overrideControllerTemp == null)
+                {
+                    overrideControllerTemp = animatorTypes.Find(p =>
+                    {
+                        return p.ePartType == EPartType.None && p.ePartName.ToString().Equals(item.Key);
+                    });
+                }
+                item.Value.runtimeAnimatorController = overrideControllerTemp.overrideController;
             }
         }
     }

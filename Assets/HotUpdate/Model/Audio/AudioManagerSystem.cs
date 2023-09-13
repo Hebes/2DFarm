@@ -1,11 +1,7 @@
-﻿using System.Collections;
+﻿using ACFrameworkCore;
 using System.Collections.Generic;
-using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine;
-using ACFrameworkCore;
-using Cysharp.Threading.Tasks;
-using System;
+using UnityEngine.SceneManagement;
 
 
 /*--------脚本描述-----------
@@ -28,6 +24,7 @@ namespace ACFarm
         private GameObject soundObj;                 //音效依附对象
         private float soundValue = 1;                       //音效大小
 
+        private Dictionary<string, AudioSource> soundDic;
         private List<AudioSource> soundList;                //音效列表
         public List<SceneSoundItem> sceneSoundDataList;   //场景音乐数据
         public List<SoundDetails> soundDetailsDataList;       //音乐数据
@@ -39,6 +36,7 @@ namespace ACFarm
             sceneSoundDataList = new List<SceneSoundItem>();
             soundDetailsDataList = new List<SoundDetails>();
             soundList = new List<AudioSource>();
+            soundDic = new Dictionary<string, AudioSource>();
 
             soundObj = new GameObject("AudioManagerSystem");
             GameObject.DontDestroyOnLoad(soundObj);
@@ -76,20 +74,20 @@ namespace ACFarm
         //事件监听
         private void OnAfterSceneLoadedEvent()
         {
-            //string currentScene = SceneManager.GetActiveScene().name;
+            string currentScene = SceneManager.GetActiveScene().name;
 
-            //SceneSoundItem sceneSound = GetSceneSoundData(currentScene);
-            //if (sceneSound == null)
-            //{
-            //    ACDebug.Error($"音乐{currentScene}没有找到");
-            //    return;
-            //}
+            SceneSoundItem sceneSound = GetSceneSoundData(currentScene);
+            if (sceneSound == null)
+            {
+                ACDebug.Error($"音乐{currentScene}没有找到");
+                return;
+            }
 
-            //SoundDetails ambient = GetSoundDetailsData(sceneSound.ambient);
-            //SoundDetails music = GetSoundDetailsData(sceneSound.music);
+            SoundDetails ambient = GetSoundDetailsData(sceneSound.ambient);
+            SoundDetails music = GetSoundDetailsData(sceneSound.music);
 
-            //PlaySound(ambient.soundClip, true);
-            //PlaySound(music.soundClip, true);
+            PlaySound(ambient.soundClip, true);
+            PlaySound(music.soundClip, true);
         }
         private void BeforeSceneUnloadEvent()
         {
@@ -212,13 +210,21 @@ namespace ACFarm
         /// <param name="clip"></param>
         public void PlaySound(AudioClip clip, bool isLoop = false)
         {
-            AudioSource source = soundObj.AddComponent<AudioSource>();
+            AudioSource source = null;
+            if (soundDic.ContainsKey(clip.name))
+            {
+                source = soundDic[clip.name];
+            }
+            else
+            {
+                source = soundObj.AddComponent<AudioSource>();
+                soundDic.Add(clip.name, source);
+            }
             source.clip = clip;
             source.loop = isLoop;
             source.volume = soundValue;
+            //source.pitch = Random.Range(0.8f, 1f);
             source.Play();
-            soundList.Add(source);
-            GameObject.Destroy(source, clip.length);
         }
 
         /// <summary>

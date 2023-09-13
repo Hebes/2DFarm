@@ -7,7 +7,7 @@
         public const string ItemToolTipClose = "关闭物品提示信息物品被选中的状态和信息";
 
         //玩家相关
-        public const string PlayerHoldUpAnimations = "玩家的举起动画";
+        public const string PlayerAnimationsEvent = "玩家动画";
         public const string PlayerMouseClicked = "鼠标点击事件";
         public const string HarvestAtPlayerPosition = "在玩家位置收获";
 

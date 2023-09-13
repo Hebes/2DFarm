@@ -45,7 +45,8 @@ namespace ACFrameworkCore
                     ConfigEvent.UIDisplayHighlighting.EventTrigger(ConfigEvent.ActionBar, slotUI.slotIndex);//显示高亮
                 else
                     ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.ItemKey, slotUI.itemDatails.itemID, slotUI.isSelected);
+                ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.ItemKey, slotUI.itemDatails.itemID, slotUI.isSelected);//更换鼠标图片
+                ConfigEvent.PlayerAnimationsEvent.EventTrigger(slotUI.itemDatails.itemID, slotUI.isSelected);//切换玩家动画
             }
         }
     }

@@ -17,7 +17,7 @@ namespace ACFrameworkCore
         Seed = 1,
         /// <summary> 商品 </summary>
         Commdity = 2,
-        /// <summary> 家具 </summary>
+        /// <summary> 建造家具 </summary>
         Furniture = 3,
         /// <summary> 锄头 </summary>
         HoeTool = 4,

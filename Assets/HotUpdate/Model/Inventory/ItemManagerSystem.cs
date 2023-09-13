@@ -58,8 +58,8 @@ namespace ACFarm
             BluePrintDetails bluePrint = BuildManagerSystem.Instance.GetDataOne(ID);
             foreach (InventoryItem item in bluePrint.resourceItem)
             {
-                // TODO 现在从背包删除，后续判断所有资源是否合格
-                RemoveItem(ConfigEvent.PalayerBag, item.itemID, item.itemAmount);//删除资源
+                // TODO 删除，后续判断所有资源是否合格
+                RemoveItem(ConfigEvent.ActionBar, item.itemID, item.itemAmount);//删除资源
             }
         }
         private void OnStartNewGameEvent(int obj)
@@ -124,15 +124,15 @@ namespace ACFarm
             }
             return default;
         }
-        public void RemoveItem(string key, int itemID, int itemAmount)
+        public bool RemoveItem(string key, int itemID, int itemAmount)
         {
-            if (ItemDic.ContainsKey(key) == false) return;
+            if (ItemDic.ContainsKey(key) == false) return false ;
             ItemDic.TryGetValue(key, out List<InventoryItem> inventoryItemArray);
             int index1 = GetItemIndex(key, itemID);
             if (index1 == -1)
             {
                 ACDebug.Error($"没有这个物品");
-                return;
+                return false ;
             }
             else
             {
@@ -140,7 +140,7 @@ namespace ACFarm
                 if (itemAmount > inventoryItem.itemAmount)
                 {
                     ACDebug.Log($"请检查需要移除的物品数量{itemID}");
-                    return;
+                    return false;
                 }
                 inventoryItem.itemAmount -= itemAmount;
                 inventoryItemArray[index1] = inventoryItem;
@@ -148,6 +148,7 @@ namespace ACFarm
                     inventoryItemArray[index1] = new InventoryItem();
             }
             RefreshItem(key);
+            return true;
         }
         public void ChangeItem(string oldKey, string newKey, int oldIndex, int newIndex)
         {
@@ -235,6 +236,12 @@ namespace ACFarm
             else
                 slotUIDic.Add(key, slotUIs);
         }
+        public void RemoveSlotUIDic(string key)
+        {
+            foreach (SlotUI item in slotUIDic[key])
+                GameObject.Destroy(item.gameObject);
+            slotUIDic.Remove(key);
+        }
         //显示高亮（-1全都不显示）
         private void UpdateSlotHightLight(string key = "", int index = -1)
         {
@@ -247,18 +254,18 @@ namespace ACFarm
                     {
                         if (slot.isSelected && slot.slotIndex == index)
                         {
-                            slot.slotHightLight.gameObject.SetActive(true);
+                            slot.slotHightLight.SetActive(true);
                         }
                         else
                         {
                             slot.isSelected = false;
-                            slot.slotHightLight.gameObject.SetActive(false);
+                            slot.slotHightLight.SetActive(false);
                         }
                     });
                 }
                 else
                 {
-                    slotUI.Value.ForEach(slot => { slot.isSelected = false; slot.slotHightLight.gameObject.SetActive(false); });
+                    slotUI.Value.ForEach(slot => { slot.isSelected = false; slot.slotHightLight.SetActive(false); });
                 }
             }
         }

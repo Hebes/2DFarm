@@ -152,7 +152,6 @@ namespace ACFarm
                     currentTile.daysSinceDug = 0;
                     currentTile.canDig = false;
                     currentTile.canDropItem = false;
-                    //音效
                     ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Hoe);
                     break;
                 case EItemType.ChopTool:
@@ -176,7 +175,6 @@ namespace ACFarm
                 case EItemType.WaterTool:
                     SetWaterGround(currentTile);
                     currentTile.daysSinceWatered = 0;
-                    //音效
                     ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Water);
                     break;
                 case EItemType.CollectTool:
@@ -186,8 +184,6 @@ namespace ACFarm
                     ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Basket);
                     break;
                 case EItemType.ReapableSceney:
-                    break;
-                default:
                     break;
             }
             UpdateTileDetails(currentTile);

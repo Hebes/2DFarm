@@ -76,8 +76,8 @@ namespace ACFarm
 
             foreach (var resourceItem in bluePrintDetails.resourceItem)
             {
-                var itemStock = ItemManagerSystem.Instance.GetItem(ConfigEvent.ActionBar, resourceItem.itemID);
-                if (itemStock.itemAmount >= resourceItem.itemAmount)
+                var itemStock = ItemManagerSystem.Instance.GetItem(ConfigEvent.ActionBar, resourceItem.itemID);//从物品获取资源
+                if (itemStock.itemAmount >= resourceItem.itemAmount)//需要的资源
                     continue;
                 else
                     return false;
@@ -93,13 +93,13 @@ namespace ACFarm
         private void OnBuildFurnitureEvent(string BuildKey, int ID, Vector3 mousePos)
         {
             if (itemParent == null)
-                itemParent = itemParent = SceneTransitionManagerSystem.Instance.itemParent;
+                itemParent = SceneTransitionManagerSystem.Instance.itemParent;
             //获取建造蓝图数据
             BluePrintDetails bluePrint = GetDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);
             if (buildItem.GetComponent<Box>())
             {
-                buildItem.GetComponent<Box>().boxName = ItemManagerSystem.Instance.ItemDic.Count.ToString();//设置箱子名称
+                buildItem.GetComponent<Box>().boxName = "Box" + ItemManagerSystem.Instance.ItemDic.Count.ToString();//设置箱子名称
                 buildItem.GetComponent<Box>().InitBox();//初始化箱子
             }
         }

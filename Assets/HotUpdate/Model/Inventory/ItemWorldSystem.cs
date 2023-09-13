@@ -65,21 +65,20 @@ namespace ACFrameworkCore
         }
         private void OnDropItemEvent(string itemKey, int itemID, Vector3 mousePos, EItemType itemType, int removeAmount)
         {
-            //if (itemType == EItemType.Seed)
-            //{
-            //    UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
-            //    ItemManagerSystem.Instance.RemoveItem(uIDragPanel1.key, itemID, removeAmount);
-            //    return;
-            //}
+            if (itemType == EItemType.Seed)
+            {
+                //UIDragPanel uIDragPanel1 = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
+                ItemManagerSystem.Instance.RemoveItem(itemKey, itemID, removeAmount);
+                return;
+            }
 
             Item item = GameObject.Instantiate(bounceItemPrefab, playerTransform.position, Quaternion.identity, itemParent);
             //抛出方向
             var dir = (mousePos - playerTransform.position).normalized;
             item.GetComponent<ItemBounce>().InitBounceItem(mousePos, dir);
             item.Init(itemID, removeAmount);
-            ////获取数据
+            //获取数据
             //UIDragPanel uIDragPanel = UIManagerExpansion.GetUIPanl<UIDragPanel>(ConfigUIPanel.UIDragPanel);
-            //设置数据
             //item.itemID = itemID;
             //item.itemAmount = removeAmount;
             //if (removeAmount > item.itemAmount)

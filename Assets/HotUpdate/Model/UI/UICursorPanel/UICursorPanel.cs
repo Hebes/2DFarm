@@ -178,9 +178,9 @@ namespace ACFarm
                     case EItemType.Commdity:
                         if (currentTile.canDropItem && currentItem.canDropped) SetCursorValid(); else SetCursorInValid();
                         break;
-                    case EItemType.Furniture:
+                    case EItemType.Furniture://建造家具
                         buildImage.gameObject.SetActive(true);
-                        var bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
+                        BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
 
                         if (currentTile.canPlaceFurniture && BuildManagerSystem.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
                             SetCursorValid();

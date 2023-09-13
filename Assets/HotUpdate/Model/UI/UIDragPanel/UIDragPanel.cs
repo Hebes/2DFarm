@@ -113,7 +113,7 @@ namespace ACFarm
             {
                 case ConfigEvent.PalayerBag:
                 case ConfigEvent.ActionBar:
-                    ConfigEvent.PlayerHoldUpAnimations.EventTrigger(slotUI.itemDatails, slotUI.isSelected);//通知物品被选中的状态
+                    ConfigEvent.PlayerAnimationsEvent.EventTrigger(slotUI.itemDatails.itemID, slotUI.isSelected);//通知物品被选中的状态
                     ConfigEvent.ItemSelectedEvent.EventTrigger(slotUI.ItemKey, slotUI.itemDatails.itemID, slotUI.isSelected);//切换鼠标样式
                     break;
             }

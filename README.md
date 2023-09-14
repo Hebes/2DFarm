@@ -14,7 +14,9 @@ HybridCLR 热更现在暂时直接采用加载程序集方式实现
 4. 2D 一整套 feature里面的2D包含的所有的2D开发需要
 5. Input System
 6. Cinemachine
-7.Universal RP
+7. Universal RP
+
+请导入以上的模块
 
 ## 效果图
 

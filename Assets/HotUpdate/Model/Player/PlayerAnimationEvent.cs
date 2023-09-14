@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace ACFarm
 {
-    public class AnimationEvent : MonoBehaviour
+    public class PlayerAnimationEvent : MonoBehaviour
     {
         public void FootstepSound()
         {

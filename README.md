@@ -20,13 +20,13 @@ HybridCLR 热更现在暂时直接采用加载程序集方式实现
 
 ## 效果图
 
-![Alt text](1.png)
+![Alt text](FarmImage/1.png)
 
-![Alt text](2.png)
+![Alt text](FarmImage/2.png)
 
-![Alt text](3.png)
+![Alt text](FarmImage/3.png)
 
-![Alt text](4.png)
+![Alt text](FarmImage/4.png)
 
 ## 接入简单的框架
 
@@ -61,6 +61,6 @@ HybridCLR 热更现在暂时直接采用加载程序集方式实现
 
 ## 编辑器拓展
 
-![Alt text](5.png)
+![Alt text](FarmImage/5.png)
 
-![Alt text](6.png)
+![Alt text](FarmImage/6.png)

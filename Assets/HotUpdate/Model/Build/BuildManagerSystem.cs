@@ -27,7 +27,7 @@ namespace ACFarm
             bluePrintDataList = new List<BluePrintDetails>();
             ChangeData();
 
-            new BuildInWorld();
+            //new BuildInWorld();
             ConfigEvent.BuildFurniture.AddEventListener<string, int, Vector3>(OnBuildFurnitureEvent);
         }
 

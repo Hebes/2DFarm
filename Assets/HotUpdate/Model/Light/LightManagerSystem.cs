@@ -42,6 +42,7 @@ namespace ACFrameworkCore
                     lightDetailsData.lightColorB / 255f,
                     lightDetailsData.lightColorA / 255f);
                 lightDetails.lightAmount = lightDetailsData.lightAmount;
+                lightDetails.lightType = (ELightType)lightDetailsData.LightType;
                 lightPattenList.Add(lightDetails);
             }
 
@@ -88,7 +89,7 @@ namespace ACFrameworkCore
         //公共静态接口
         public static LightDetails GetLightDetails(ELightType lightType, ESeason season, LightShift lightShift)
         {
-            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.season == season && l.lightShift == lightShift);
+            LightDetails lightDetails = Instance.lightPattenList.Find(l => l.season == season && l.lightShift == lightShift && l.lightType == lightType);
             return lightDetails;
         }
         public static LightDetails GetLightDetails(int id)

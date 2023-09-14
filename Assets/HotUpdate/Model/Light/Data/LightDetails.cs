@@ -22,5 +22,6 @@ namespace ACFrameworkCore
         public LightShift lightShift;
         public Color lightColor;
         public float lightAmount;
+        public ELightType lightType;
     }
 }

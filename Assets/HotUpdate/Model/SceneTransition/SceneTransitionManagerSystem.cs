@@ -21,18 +21,19 @@ namespace ACFarm
     {
         public static SceneTransitionManagerSystem Instance;
         public string currentceneName = string.Empty;//当前的场景,如果从记录中加载的场景可以在这里设置
-        private bool isFade;//是否切换场景
 
         public Transform cropParent;       //庄家的父物体，都放在这个下面不会看上去太乱
-        public Transform itemParent;
+        public Transform itemParent;       //世界物体的父物体
+
+        private bool isFade;                                        //是否切换场景
 
         public void ICroeInit()
         {
             Instance = this;
-
+            ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single).Forget();//加载第一场景
+            //事件监听
             ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(P => { StartNewGameEvent(P).Forget(); });
-            ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single).Forget();
             ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
             //注册保存事件
             ISaveable saveable = this;
@@ -52,23 +53,23 @@ namespace ACFarm
         //事件监听
         private async UniTask StartNewGameEvent(int obj)
         {
-            currentceneName = ConfigScenes.Field;
+            currentceneName = ConfigScenes.Beach;
             await SceneTransition(currentceneName, Vector3.zero);
 
-            //测试创建拾取的物体
-            GameObject gameObject = ResourceExtension.Load<GameObject>(ConfigPrefab.ItemBasePreafab);
+            ////测试创建拾取的物体
+            //GameObject gameObject = ResourceExtension.Load<GameObject>(ConfigPrefab.ItemBasePreafab);
 
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1001, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1002, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1003, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1004, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1005, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1006, 1);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1007, 10);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1018, 10);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1015, 119);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1032, 10);
-            GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1033, 10);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1001, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1002, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1003, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1004, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1005, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1006, 1);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1007, 10);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1018, 10);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1015, 119);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1032, 10);
+            //GameObject.Instantiate(gameObject).GetComponent<Item>().Init(1033, 10);
         }
         private async UniTask SceneTransition(string targetScene, Vector3 targetPosition)
         {
@@ -106,6 +107,7 @@ namespace ACFarm
             SceneManager.GetActiveScene().name.UnloadAsync();// SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
             await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
         }
+
 
 
         //保存数据

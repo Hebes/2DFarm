@@ -25,7 +25,7 @@ namespace ACFarm
         private float soundValue = 1;                       //音效大小
 
         private Dictionary<string, AudioSource> soundDic;
-        private List<AudioSource> soundList;                //音效列表
+        private List<AudioSource> soundList;                //音效列表//暂时没用的
         public List<SceneSoundItem> sceneSoundDataList;   //场景音乐数据
         public List<SoundDetails> soundDetailsDataList;       //音乐数据
 
@@ -72,7 +72,7 @@ namespace ACFarm
         }
 
         //事件监听
-        private void OnAfterSceneLoadedEvent()
+        public  void OnAfterSceneLoadedEvent()
         {
             string currentScene = SceneManager.GetActiveScene().name;
 
@@ -95,8 +95,7 @@ namespace ACFarm
         }
         private void OnEndGameEvent()
         {
-            //foreach (AudioSource item in soundList)
-            //    StopSound(item);
+            StopAllSound();
         }
         private void OnPlaySoundEvent(ESoundName soundName)
         {
@@ -220,6 +219,7 @@ namespace ACFarm
                 source = soundObj.AddComponent<AudioSource>();
                 soundDic.Add(clip.name, source);
             }
+            source.enabled = true;
             source.clip = clip;
             source.loop = isLoop;
             source.volume = soundValue;
@@ -230,14 +230,10 @@ namespace ACFarm
         /// <summary>
         /// 停止音效
         /// </summary>
-        public void StopSound(AudioSource source)
+        public void StopAllSound()
         {
-            if (soundList.Contains(source))
-            {
-                source.Stop();
-                soundList.Remove(source);
-                GameObject.Destroy(source);
-            }
+            foreach (KeyValuePair<string, AudioSource> item in soundDic)
+                item.Value.enabled = false;
         }
     }
 }

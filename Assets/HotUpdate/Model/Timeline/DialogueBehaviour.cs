@@ -64,6 +64,7 @@ namespace ACFarm
         {
             ACDebug.Log($"游戏运行了");
             ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
+            AudioManagerSystem.Instance.OnAfterSceneLoadedEvent();
         }
     }
 }

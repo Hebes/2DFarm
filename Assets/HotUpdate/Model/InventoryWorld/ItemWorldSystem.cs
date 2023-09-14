@@ -161,6 +161,7 @@ namespace ACFrameworkCore
                     sceneFurniture.name = item.GetComponent<Box>().boxName;
 
                 currentSceneFurniture.Add(sceneFurniture);
+                GameObject.Destroy(item.gameObject);//删除物体
             }
 
             if (sceneFurnitureDict.ContainsKey(SceneManager.GetActiveScene().name))
@@ -174,9 +175,9 @@ namespace ACFrameworkCore
             if (sceneFurnitureDict.TryGetValue(SceneManager.GetActiveScene().name, out List<SceneFurniture> currentSceneFurniture))
             {
                 if (currentSceneFurniture == null) return;
-                //清场
-                foreach (var item in Object.FindObjectsOfType<Furniture>())
-                    GameObject.Destroy(item.gameObject);
+                Furniture[] furnitures = GameObject.FindObjectsOfType<Furniture>();
+                foreach (Furniture item in furnitures)
+                    GameObject.Destroy(item.gameObject);//删除物体
                 //生成
                 foreach (SceneFurniture sceneFurniture in currentSceneFurniture)
                 {

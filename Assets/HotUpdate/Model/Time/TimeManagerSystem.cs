@@ -170,7 +170,7 @@ namespace ACFrameworkCore
         {
             gameSecond = 0;
             gameMinute = 0;
-            gameHour = 0;
+            gameHour = 7;
             gameDay = 1;
             gameMonth = 1;
             gameYear = 0;

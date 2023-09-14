@@ -1,6 +1,7 @@
 ﻿using ACFrameworkCore;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 /*--------脚本描述-----------
 
@@ -24,6 +25,9 @@ namespace ACFarm
         public bool isDone;                         //是否播放完毕
         private bool isPause;                       //是否暂停
 
+
+
+        //生命周期
         public void ICroeInit()
         {
             Instance = this;
@@ -35,23 +39,9 @@ namespace ACFarm
             //startDirector.played += OnPlayed;
             //startDirector.stopped += OnStopped;                                     //恢复运行
             ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            //ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
-            //MonoManager.Instance.OnAddUpdateEvent(Update);
-        }
-
-        public void Test()
-        {
-
-            currentDirector = startDirector;
-
-            //startDirector.played += OnPlayed;//如果动画正在执行的话
-            //startDirector.stopped += OnStopped;                                     //恢复运行
-            //ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
             ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
             MonoManager.Instance.OnAddUpdateEvent(Update);
         }
-
-
         private void Update()
         {
             if (isPause && Input.GetKeyDown(KeyCode.Space) && isDone)
@@ -61,37 +51,63 @@ namespace ACFarm
             }
         }
 
+        public void Test()
+        {
+            //startDirector.played += OnPlayed;//如果动画正在执行的话
+            //startDirector.stopped += OnStopped;                                     //恢复运行
+            //ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            //ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            //MonoManager.Instance.OnAddUpdateEvent(Update);
+        }
 
         //事件监听
-        //新游戏
+        /// <summary>
+        /// 新游戏
+        /// </summary>
+        /// <param name="obj"></param>
         private void OnStartNewGameEvent(int obj)
         {
-            if (startDirector != null)
-                startDirector.Play();
+            startDirector?.Play();
         }
-        //场景加载完毕
+        /// <summary>
+        /// 场景加载完毕
+        /// </summary>
         private void OnAfterSceneLoadedEvent()
         {
-            startDirector = GameObject.FindObjectOfType<PlayableDirector>();
-            currentDirector = GameObject.FindObjectOfType<PlayableDirector>();
-
-            Test();
+            //这个场景是否是第一次启动
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            bool isScenFirst = GridMapManagerSystem.Instance.GetSceneFirstLoad(currentSceneName);
+            if (isScenFirst == false) return;
+            startDirector = PersistentSceneManagerSystem.StaticGetCutscene(currentSceneName)?.GetComponent<PlayableDirector>();//获取当前场景的过场动画组件
+            currentDirector = startDirector;
             if (currentDirector != null)
+            {
+                AudioManagerSystem.Instance.StopAllSound();
                 currentDirector.Play();
+            }
             if (startDirector != null && !startDirector.isActiveAndEnabled)
                 ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
         }
-        //在停止中
+        /// <summary>
+        /// 在停止中
+        /// </summary>
+        /// <param name="obj"></param>
         private void OnStopped(PlayableDirector obj)
         {
             ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
         }
-        //再播放中
+        /// <summary>
+        /// 再播放中
+        /// </summary>
+        /// <param name="obj"></param>
         private void OnPlayed(PlayableDirector obj)
         {
             ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Pause);
         }
-        //暂停时间线
+        /// <summary>
+        /// 暂停时间线
+        /// </summary>
+        /// <param name="director"></param>
         public void PauseTimeline(PlayableDirector director)
         {
             currentDirector = director;

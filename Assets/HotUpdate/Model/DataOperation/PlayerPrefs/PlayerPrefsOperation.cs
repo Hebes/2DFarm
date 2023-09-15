@@ -22,41 +22,6 @@ namespace ACFrameworkCore
 {
     public class PlayerPrefsOperation : IDataHandle
     {
-
-        #region 知识点一 PlayerPrefs存储的数据存在哪里？
-        //不同平台存储位置不一样
-
-        #region Windows
-        //PlayerPrefs 存储在 
-        //HKCU\Software\[公司名称]\[产品名称] 项下的注册表中
-        //其中公司和产品名称是 在“Project Settings”中设置的名称。
-
-        //运行 regedit
-        //HKEY_CURRENT_USER
-        //SOFTWARE
-        //Unity
-        //UnityEditor
-        //公司名称
-        //产品名称
-        #endregion
-
-        #region Android
-        // /data/data/包名/shared_prefs/pkg-name.xml 
-        #endregion
-
-        #region IOS
-        // /Library/Preferences/[应用ID].plist
-        #endregion
-
-        #endregion
-
-        #region 知识点二 PlayerPrefs数据唯一性
-        //PlayerPrefs中不同数据的唯一性
-        //是由key决定的，不同的key决定了不同的数据
-        //同一项目中 如果不同数据key相同 会造成数据丢失
-        //要保证数据不丢失就要建立一个保证key唯一的规则
-        #endregion
-
         public T Load<T>(string fileName) where T : class
         {
             throw new NotImplementedException();
@@ -64,10 +29,7 @@ namespace ACFrameworkCore
 
         public void Save(object value, string keyName)
         {
-            //直接通过PlayerPrefs来进行存储了
-            //就是根据数据类型的不同 来决定使用哪一个API来进行存储
-            //PlayerPrefs只支持3种类型存储 
-            //判断 数据类型 是什么类型 然后调用具体的方法来存储
+            //直接通过PlayerPrefs来进行存储
             Type fieldType = value.GetType();
 
             //类型判断
@@ -120,48 +82,21 @@ namespace ACFrameworkCore
         /// <param name="keyName">数据对象的唯一key 自己控制</param>
         public void SaveData(object data, string keyName)
         {
-            //就是要通过 Type 得到传入数据对象的所有的 字段
-            //然后结合 PlayerPrefs来进行存储
-
-            #region 第一步 获取传入数据对象的所有字段
+            
+            //获取传入数据对象的所有字段
             Type dataType = data.GetType();
             //得到所有的字段
             FieldInfo[] infos = dataType.GetFields();
-            #endregion
 
-            #region 第二步 自己定义一个key的规则 进行数据存储
-            //我们存储都是通过PlayerPrefs来进行存储的
-            //保证key的唯一性 我们就需要自己定一个key的规则
-
-            //我们自己定一个规则
-            // keyName_数据类型_字段类型_字段名
-            #endregion
-
-            #region 第三步 遍历这些字段 进行数据存储
             string saveKeyName = "";
             FieldInfo info;
             for (int i = 0; i < infos.Length; i++)
             {
-                //对每一个字段 进行数据存储
-                //得到具体的字段信息
                 info = infos[i];
-                //通过FieldInfo可以直接获取到 字段的类型 和字段的名字
-                //字段的类型 info.FieldType.Name
-                //字段的名字 info.Name;
-
-                //要根据我们定的key的拼接规则 来进行key的生成
-                //Player1_PlayerInfo_Int32_age
                 saveKeyName = keyName + "_" + dataType.Name +
                     "_" + info.FieldType.Name + "_" + info.Name;
-
-                //现在得到了Key 按照我们的规则
-                //接下来就要来通过PlayerPrefs来进行存储
-                //如何获取值
-                //info.GetValue(data)
-                //封装了一个方法 专门来存储值 
                 SaveValue(info.GetValue(data), saveKeyName);
             }
-            #endregion
         }
 
         /// <summary>
@@ -171,58 +106,24 @@ namespace ACFrameworkCore
         /// <param name="keyName">数据对象的唯一key 自己控制</param>
         public void SaveData1(object data, string keyName)
         {
-            //就是要通过 Type 得到传入数据对象的所有的 字段
-            //然后结合 PlayerPrefs来进行存储
-
-            #region 第一步 获取传入数据对象的所有字段
             Type dataType = data.GetType();
             //得到所有的字段
             FieldInfo[] infos = dataType.GetFields();
-            #endregion
-
-            #region 第二步 自己定义一个key的规则 进行数据存储
-            //我们存储都是通过PlayerPrefs来进行存储的
-            //保证key的唯一性 我们就需要自己定一个key的规则
-
-            //我们自己定一个规则
-            // keyName_数据类型_字段类型_字段名
-            #endregion
-
-            #region 第三步 遍历这些字段 进行数据存储
             string saveKeyName = "";
             FieldInfo info;
             for (int i = 0; i < infos.Length; i++)
             {
-                //对每一个字段 进行数据存储
-                //得到具体的字段信息
                 info = infos[i];
-                //通过FieldInfo可以直接获取到 字段的类型 和字段的名字
-                //字段的类型 info.FieldType.Name
-                //字段的名字 info.Name;
-
-                //要根据我们定的key的拼接规则 来进行key的生成
-                //Player1_PlayerInfo_Int32_age
                 saveKeyName = keyName + "_" + dataType.Name +
                     "_" + info.FieldType.Name + "_" + info.Name;
-
-                //现在得到了Key 按照我们的规则
-                //接下来就要来通过PlayerPrefs来进行存储
-                //如何获取值
-                //info.GetValue(data)
-                //封装了一个方法 专门来存储值 
                 SaveValue(info.GetValue(data), saveKeyName);
             }
 
             PlayerPrefs.Save();
-            #endregion
         }
 
         private void SaveValue(object value, string keyName)
         {
-            //直接通过PlayerPrefs来进行存储了
-            //就是根据数据类型的不同 来决定使用哪一个API来进行存储
-            //PlayerPrefs只支持3种类型存储 
-            //判断 数据类型 是什么类型 然后调用具体的方法来存储
             Type fieldType = value.GetType();
 
             //类型判断
@@ -304,14 +205,6 @@ namespace ACFrameworkCore
         {
             //不用object对象传入 而使用 Type传入
             //主要目的是节约一行代码（在外部）
-            //假设现在你要 读取一个Player类型的数据 如果是object 你就必须在外部new一个对象传入
-            //现在有Type的 你只用传入 一个Type typeof(Player) 然后我在内部动态创建一个对象给你返回出来
-            //达到了 让你在外部 少写一行代码的作用
-
-            //根据你传入的类型 和 keyName
-            //依据你存储数据时  key的拼接规则 来进行数据的获取赋值 返回出去
-
-            //根据传入的Type 创建一个对象 用于存储数据
             object data = Activator.CreateInstance(type);
             //要往这个new出来的对象中存储数据 填充数据
             //得到所有字段

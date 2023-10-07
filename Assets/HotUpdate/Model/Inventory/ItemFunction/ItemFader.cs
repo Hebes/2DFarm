@@ -12,7 +12,7 @@ using DG.Tweening;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [RequireComponent(typeof(SpriteRenderer))]//必须挂载SpriteRenderer组件
     public class ItemFader : MonoBehaviour

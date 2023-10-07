@@ -12,13 +12,13 @@
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public static class MouseExpansion
     {
         public static Sprite GetMouseSprite(this string mouseName)
         {
-            return MouseManagerSystem.Instance.GetMouseSprite(mouseName);
+            return ModelMouse.Instance.GetMouseSprite(mouseName);
         }
     }
 }

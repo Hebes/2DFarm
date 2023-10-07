@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -12,12 +13,17 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class Transition : MonoBehaviour
     {
         [SceneName] public string sceneToGo;        //去往的场景
         public Vector3 positionTpGo;                //去的场景的坐标
+
+        /// <summary>
+        /// 进入触发
+        /// </summary>
+        /// <param name="other"></param>
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag(ConfigTag.TagPlayer)) return;

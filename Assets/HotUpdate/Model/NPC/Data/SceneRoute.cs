@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     //场景路径
     [System.Serializable]

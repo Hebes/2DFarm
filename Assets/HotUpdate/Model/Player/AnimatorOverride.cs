@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -12,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class AnimatorOverride : MonoBehaviour
     {
@@ -30,13 +31,13 @@ namespace ACFrameworkCore
             foreach (var anim in animators)
                 animatorNameDic.Add(anim.name, anim);
             //添加动画
-            List<PlayerAnimatorsData> playerAnimatorsList = this.GetDataListThis<PlayerAnimatorsData>();
+            List<PlayerAnimatorsData> playerAnimatorsList = this.GetDataList<PlayerAnimatorsData>();
             for (int i = 0; i < playerAnimatorsList.Count; i++)
             {
                 AnimatorType animatorType = new AnimatorType();
                 animatorType.ePartType = (EPartType)playerAnimatorsList[i].PartType;
                 animatorType.ePartName = (EPartName)playerAnimatorsList[i].PartName;
-                animatorType.overrideController = await ResourceExtension.LoadAsyncUniTask<AnimatorOverrideController>(playerAnimatorsList[i].AnimatorName);
+                animatorType.overrideController = await LoadResExtension.LoadAsync<AnimatorOverrideController>(playerAnimatorsList[i].AnimatorName);
                 animatorTypes.Add(animatorType);
             }
 
@@ -87,7 +88,7 @@ namespace ACFrameworkCore
             {
                 holdItem.enabled = currentType == EPartType.Carry ? true : false;
                 if (currentType == EPartType.Carry)
-                    holdItem.sprite = ResourceExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
+                    holdItem.sprite = LoadResExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
             }
 
             SwitchAnimator(currentType);

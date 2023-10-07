@@ -12,7 +12,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public struct RangeString : IEquatable<RangeString>
     {

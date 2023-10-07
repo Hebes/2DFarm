@@ -11,7 +11,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class ItemBounce : MonoBehaviour
     {

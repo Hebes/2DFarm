@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 
 
 /*--------脚本描述-----------
@@ -12,7 +13,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [RequireComponent(typeof(SlotUI))]
     public class ActionBarButton : MonoBehaviour

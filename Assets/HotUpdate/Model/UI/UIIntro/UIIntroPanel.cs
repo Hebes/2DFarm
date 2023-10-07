@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 
 
 /*--------脚本描述-----------
@@ -12,7 +12,7 @@
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public  class UIIntroPanel :UIBase
     {

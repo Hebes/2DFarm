@@ -1,7 +1,8 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = Core.Debug;
 
 /*--------脚本描述-----------
 
@@ -14,7 +15,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class SaveSlotUI : MonoBehaviour
     {
@@ -43,7 +44,7 @@ namespace ACFarm
         private void RemoveData()
         {
             File.Delete(DataPath);
-            SaveLoadManagerSystem.Instance.ReadSaveData();
+            ModelSaveLoad.Instance.ReadSaveData();
             SetupSlotUI();
         }
 
@@ -55,7 +56,7 @@ namespace ACFarm
             {
 
             }
-            currentData = SaveLoadManagerSystem.Instance.dataSlots[Index];
+            currentData = ModelSaveLoad.Instance.dataSlots[Index];
 
             if (currentData != null)
             {
@@ -74,12 +75,12 @@ namespace ACFarm
 
             if (currentData != null)
             {
-                ACDebug.Log($"加载进度{Index}");
-                SaveLoadManagerSystem.Instance.Load(Index);
+                Debug.Log($"加载进度{Index}");
+                ModelSaveLoad.Instance.Load(Index);
             }
             else
             {
-                ACDebug.Log($"新游戏开始");
+                Debug.Log($"新游戏开始");
                 ConfigEvent.StartNewGameEvent.EventTrigger(Index);
             }
             ConfigUIPanel.UIMenu.CloseUIPanel();

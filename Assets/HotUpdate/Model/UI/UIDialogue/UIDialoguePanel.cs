@@ -1,8 +1,8 @@
-﻿using DG.Tweening;
+﻿using Core;
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -16,7 +16,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIDialoguePanel : UIBase
     {
@@ -31,7 +31,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Normal, EUIMode.Normal, EUILucenyType.Pentrate);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
 
             GameObject T_ContinueBox = UIComponent.Get<GameObject>("T_ContinueBox");
             GameObject T_DialoguePanel = UIComponent.Get<GameObject>("T_DialoguePanel");
@@ -52,9 +52,13 @@ namespace ACFarm
             ConfigEvent.ShowDialogueEvent.AddEventListener<DialoguePiece>(OnShowDailogueEvent);
         }
 
+        /// <summary>
+        /// 在展示对话事件
+        /// </summary>
+        /// <param name="piece"></param>
         private void OnShowDailogueEvent(DialoguePiece piece)
         {
-            MonoManager.Instance.StartCoroutine(ShowDialogue(piece));
+            MonoController.Instance.AddCoroutine("显示对话框",ShowDialogue(piece));
         }
 
         private IEnumerator ShowDialogue(DialoguePiece piece)

@@ -1,9 +1,8 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /*--------脚本描述-----------
 
@@ -16,7 +15,7 @@ using UnityEngine.InputSystem;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Animator))]
@@ -63,7 +62,7 @@ namespace ACFarm
         public AnimationClip blankAnimationClip;
         private AnimatorOverrideController animOverride;
 
-        private TimeSpan GameTime => TimeManagerSystem.Instance.GameTime;
+        private TimeSpan GameTime => ModelTime.Instance.GameTime;
 
 
 
@@ -82,7 +81,7 @@ namespace ACFarm
             animOverride = new AnimatorOverrideController(anim.runtimeAnimatorController);
             anim.runtimeAnimatorController = animOverride;
 
-            List<ScheduleDetailsData> scheduleDetailsDatas = DataExpansion.GetDataList<ScheduleDetailsData>();
+            List<ScheduleDetailsData> scheduleDetailsDatas = this.GetDataList<ScheduleDetailsData>();
             foreach (ScheduleDetailsData item in scheduleDetailsDatas)
             {
                 if (!item.NPCName.Equals(NPCName)) continue;

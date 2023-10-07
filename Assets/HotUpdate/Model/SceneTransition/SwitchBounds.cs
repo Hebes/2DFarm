@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Core;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -12,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class SwitchBounds : MonoBehaviour
     {

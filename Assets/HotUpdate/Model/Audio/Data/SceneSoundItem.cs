@@ -10,7 +10,7 @@
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     [System.Serializable]
     public class SceneSoundItem

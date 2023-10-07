@@ -1,10 +1,6 @@
-﻿using ACFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core;
 using UnityEngine;
+using Debug = Core.Debug;
 
 
 /*--------脚本描述-----------
@@ -18,7 +14,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIMenuPanel : UIBase
     {
@@ -29,7 +25,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Mobile, EUIMode.Normal, EUILucenyType.Pentrate);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_StartPanel = UIComponent.Get<GameObject>("T_StartPanel");
             GameObject T_SavePanel = UIComponent.Get<GameObject>("T_InfoPanel");
             GameObject T_TitlePanel = UIComponent.Get<GameObject>("T_TitlePanel");
@@ -58,7 +54,7 @@ namespace ACFarm
         public void ExitGame()
         {
             Application.Quit();
-            Debug.Log("EXIT GAME");
+            Debug.Log("退出游戏");
         }
     }
 }

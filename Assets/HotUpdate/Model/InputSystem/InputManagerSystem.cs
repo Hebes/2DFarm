@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
@@ -15,7 +16,7 @@ using UnityEngine.InputSystem.Utilities;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     //按键类型
     public enum BTN_TYPE
@@ -29,7 +30,7 @@ namespace ACFrameworkCore
         JUMP,//跳
     }
 
-    public class InputManagerSystem : ICore
+    public class InputManagerSystem : IModelInit
     {
         public static InputManagerSystem Instance;
         public ConfigInputInfo inputInfo;//按键信息
@@ -39,13 +40,16 @@ namespace ACFrameworkCore
         private BTN_TYPE nowType;                                       //记录当前改哪一个键
         private string INPUT_FILE_CONFIG_NAME = "InputSystemConfig";    //配置文件名称
         private InputActionAsset inputActions;
-        //核心初始化
-        public void ICroeInit()
+
+        public async UniTask ModelInit()
         {
             Instance = this;
             jsonStr = Resources.Load<TextAsset>("Lesson17").text;//加载配置按键模板
             LoadInputConfig();
+
+            await UniTask.Yield();
         }
+
 
         //保存输入配置
         public void SaveInputConfig()
@@ -143,5 +147,7 @@ namespace ACFrameworkCore
             }
             SaveInputConfig();//测试 可以放在改键页面的保存按钮
         }
+
+       
     }
 }

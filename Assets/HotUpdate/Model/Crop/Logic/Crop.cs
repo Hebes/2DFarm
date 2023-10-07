@@ -1,6 +1,8 @@
-using ACFrameworkCore;
+using Core;
+using Farm2D;
 using System.Collections;
 using UnityEngine;
+using Debug = Core.Debug;
 
 /*--------脚本描述-----------
 
@@ -13,7 +15,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class Crop : MonoBehaviour
     {
@@ -25,7 +27,7 @@ namespace ACFarm
 
 
         public bool CanHarvest => tileDetails.growthDays >= cropDetails.TotalGrowthDays;
-        private Transform PlayerTransform => CommonManagerSystem.Instance.playerTransform;
+        private Transform PlayerTransform => ModelCommon.Instance.playerTransform;
 
 
 
@@ -65,7 +67,7 @@ namespace ACFarm
                 if (cropDetails.generateAtPlayerPosition || !cropDetails.hasAnimation)
                 {
                     //生成农作物
-                    ACDebug.Log($"生成农作物");
+                    Debug.Log($"生成农作物");
                     SpawnHarvestItems();
                 }
                 else if (cropDetails.hasAnimation)

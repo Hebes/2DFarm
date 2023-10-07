@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Farm2D;
 using System.Collections.Generic;
 
 /*--------脚本描述-----------
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class DataSlot
     {
@@ -26,7 +26,7 @@ namespace ACFarm
         {
             get
             {
-                var key = TimeManagerSystem.Instance.GUID;
+                var key = ModelTime.Instance.GUID;
 
                 if (dataDict.ContainsKey(key))
                 {
@@ -41,7 +41,7 @@ namespace ACFarm
         {
             get
             {
-                var key = SceneTransitionManagerSystem.Instance.GUID;
+                var key = ModelSceneTransition.Instance.GUID;
                 if (dataDict.ContainsKey(key))
                 {
                     var transitionData = dataDict[key];

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using Core;
 using UnityEngine;
-using ACFrameworkCore;
 
 /*--------Ω≈±æ√Ë ˆ-----------
 
@@ -15,7 +13,7 @@ using ACFrameworkCore;
 -----------------------*/
 
 
-namespace ACFarm
+namespace Farm2D
 {
     public class CropGenerator : MonoBehaviour
     {

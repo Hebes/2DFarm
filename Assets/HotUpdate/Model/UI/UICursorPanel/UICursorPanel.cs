@@ -1,7 +1,8 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Debug = Core.Debug;
 
 
 /*--------脚本描述-----------
@@ -15,7 +16,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UICursorPanel : UIBase
     {
@@ -31,7 +32,7 @@ namespace ACFarm
         private bool cursorPositionValid;       //鼠标是否可点按
         private string itemKey;                 //物品管理的Key
 
-        private Camera mainCamera => CommonManagerSystem.Instance.mainCamera;              //主摄像机
+        private Camera mainCamera => ModelCommon.Instance.mainCamera;              //主摄像机
 
 
         //生命周期
@@ -40,7 +41,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");
             GameObject T_BuildImage = UIComponent.Get<GameObject>("T_BuildImage");
 
@@ -123,7 +124,7 @@ namespace ACFarm
                 case EItemType.ReapableSceney: currentSprite = ChangeMouseType(EMouseType.Tool); break;
                 case EItemType.Furniture://家具建造
                     buildImage.SetActive(true);
-                    buildImage.sprite = ResourceExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
+                    buildImage.sprite = LoadResExtension.LoadOrSub<Sprite>(itemDatails.itemOnWorldPackage, itemDatails.itemOnWorldSprite);
                     buildImage.SetNativeSize();
                     break;
             }
@@ -154,7 +155,7 @@ namespace ACFarm
             mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//WorldToCell 将世界位置转换为单元格位置。
             //ACDebug.Log("WorldPos:" + mouseWorldPos + "GridPos:" + mouseGridPos);
             //判断在使用范围内
-            Vector3Int playerGridPos = currentGrid.WorldToCell(CommonManagerSystem.Instance.playerTransform.position);
+            Vector3Int playerGridPos = currentGrid.WorldToCell(ModelCommon.Instance.playerTransform.position);
             //建造图片跟随移动
             buildImage.rectTransform.position = Input.mousePosition;
             if (Mathf.Abs(mouseGridPos.x - playerGridPos.x) > currentItem.itemUseRadiue
@@ -168,7 +169,7 @@ namespace ACFarm
             TileDetails currentTile = GridMapManagerSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
             if (currentTile != null)
             {
-                CropDetails currentCrop = CropManagerSystem.Instance.GetCropDetails(currentTile.seedItemID);
+                CropDetails currentCrop = ModelCrop.Instance.GetCropDetails(currentTile.seedItemID);
                 Crop crop = GridMapManagerSystem.Instance.GetCropObject(mouseWorldPos);
                 switch ((EItemType)currentItem.itemType)
                 {
@@ -180,9 +181,9 @@ namespace ACFarm
                         break;
                     case EItemType.Furniture://建造家具
                         buildImage.gameObject.SetActive(true);
-                        BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(currentItem.itemID);
+                        BluePrintDetails bluePrintDetails = ModelBuild.Instance.GetDataOne(currentItem.itemID);
 
-                        if (currentTile.canPlaceFurniture && BuildManagerSystem.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
+                        if (currentTile.canPlaceFurniture && ModelBuild.Instance.CheckStock(currentItem.itemID) && !HaveFurnitureInRadius(bluePrintDetails))
                             SetCursorValid();
                         else
                             SetCursorInValid();
@@ -221,7 +222,7 @@ namespace ACFarm
                     case EItemType.ReapableSceney:
                         break;
                     default:
-                        ACDebug.Error("没有这个工具的使用方法,工具使用失败");
+                        Debug.Error("没有这个工具的使用方法,工具使用失败");
                         break;
                 }
             }

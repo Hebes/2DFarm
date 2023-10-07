@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,7 +16,7 @@ using System.Text;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class RedDotSystem : SingletonBase<RedDotSystem>
     {

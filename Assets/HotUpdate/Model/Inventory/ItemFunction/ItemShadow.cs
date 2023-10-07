@@ -11,7 +11,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class ItemShadow : MonoBehaviour

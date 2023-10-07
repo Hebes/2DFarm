@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Debug = Core.Debug;
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     /// <summary>
     /// 语言类型
@@ -43,7 +45,7 @@ namespace ACFrameworkCore
         {
             if (LanguageTextKeyDic.ContainsKey(key))
                 return LanguageTextKeyDic[key];
-            ACDebug.Error("多语言未配置：" + key);
+            Debug.Error("多语言未配置：" + key);
             return key;
         }
     }

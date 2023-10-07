@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using System.Collections.Generic;
 using UnityEngine;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -14,7 +14,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class AStar : SinglentMono<AStar>
     {
@@ -54,7 +54,7 @@ namespace ACFarm
             }
             else
             {
-                ACDebug.Error($"构建网格信息失败");
+                Core.Debug.Error($"构建网格信息失败");
             }
         }
 

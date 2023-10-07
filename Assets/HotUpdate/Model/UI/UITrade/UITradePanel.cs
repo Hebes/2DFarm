@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Core;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -15,7 +15,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UITradePanel : UIBase
     {
@@ -37,7 +37,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Lucency);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_ItemName = UIComponent.Get<GameObject>("T_ItemName");
             GameObject T_Icon = UIComponent.Get<GameObject>("T_Icon");
             GameObject T_Cancel = UIComponent.Get<GameObject>("T_Cancel");
@@ -70,7 +70,7 @@ namespace ACFarm
             this.item = item;
             this.oldKey = oldKey;
             this.newKey = newKey;
-            itemIcon.sprite = ResourceExtension.Load<Sprite>(item.itemIcon);
+            itemIcon.sprite = LoadResExtension.Load<Sprite>(item.itemIcon);
             itemName.text = item.name;
             isSellTrade = isSell;
             tradeAmount.text = string.Empty;
@@ -83,7 +83,7 @@ namespace ACFarm
         private void TradeItem()
         {
             int amount = Convert.ToInt32(tradeAmount.text);
-            ItemManagerSystem.Instance.TradeItem(oldKey, newKey, item.itemID, amount, isSellTrade);
+            ModelItem.Instance.TradeItem(oldKey, newKey, item.itemID, amount, isSellTrade);
             CancelTrade();
         }
 

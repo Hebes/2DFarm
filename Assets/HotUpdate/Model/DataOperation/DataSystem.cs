@@ -1,4 +1,6 @@
-﻿/*--------脚本描述-----------
+﻿using Core;
+
+/*--------脚本描述-----------
 				
 电子邮箱：
 	1607388033@qq.com
@@ -9,11 +11,9 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
-    /// <summary>
-    /// 数据操作类型
-    /// </summary>
+    /// <summary> 数据操作类型 </summary>
     public enum EDataType
     {
         /// <summary> 二进制 </summary>
@@ -27,15 +27,6 @@ namespace ACFrameworkCore
     }
     public class DataSystem : SingletonBase<DataSystem>
     {
-
-        #region  Type type参数
-        //不用object对象传入 而使用 Type传入
-        //主要目的是节约一行代码（在外部）
-        //假设现在你要 读取一个Player类型的数据 如果是object 你就必须在外部new一个对象传入
-        //现在有Type的 你只用传入 一个Type typeof(Player) 然后我在内部动态创建一个对象给你返回出来
-        //达到了 让你在外部 少写一行代码的作用
-        #endregion
-
         public void Save(object obj, string fileName, EDataType dataType)
         {
             switch (dataType)

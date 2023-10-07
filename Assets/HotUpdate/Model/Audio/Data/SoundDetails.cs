@@ -13,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     [System.Serializable]
     public class SoundDetails

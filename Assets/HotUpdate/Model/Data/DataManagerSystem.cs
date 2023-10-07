@@ -1,5 +1,5 @@
-﻿using ACFrameworkCore;
-using UnityEngine;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 
 /*--------脚本描述-----------
 
@@ -12,17 +12,18 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
-    public class DataManagerSystem : ICore
+    public class DataManagerSystem : IModelInit
     {
         public static DataManagerSystem Instance;
-        private DataManager dataManager;
+        private CoreData dataManager;
 
-        public void ICroeInit()
+        public async UniTask ModelInit()
         {
             Instance = this;
-            dataManager = DataManager.Instance;
+            dataManager = CoreData.Instance;
+            await UniTask.Yield();
         }
     }
 }

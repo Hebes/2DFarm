@@ -13,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     /// <summary>
     /// 序列化物品的坐标存储类

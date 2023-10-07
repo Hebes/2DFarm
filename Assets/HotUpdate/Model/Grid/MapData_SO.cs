@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [CreateAssetMenu(fileName = "MapData_SO", menuName = "Map/MapData")]
     public class MapData_SO : ScriptableObject

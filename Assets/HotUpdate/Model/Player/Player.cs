@@ -1,4 +1,4 @@
-using ACFrameworkCore;
+using Core;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class Player : MonoBehaviour, ISaveable
     {

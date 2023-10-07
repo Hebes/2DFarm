@@ -1,4 +1,4 @@
-using ACFrameworkCore;
+using Farm2D;
 using HybridCLR;
 using System;
 using System.Collections;
@@ -101,13 +101,23 @@ public class Init : MonoBehaviour
         this.CurrentProcess = HotUpdateProcess;
     }//状态机流程切换
 
-    //YooAsset流程
+
+
+    /// <summary>
+    /// 流程错误跳出
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmErrorPrepare()
     {
         Debug.Log($"结束中断,中断点:{CurrentProcess}");
         Debug.Log($"流程错误跳出");
         yield break;
-    }             //流程错误跳出
+    }
+
+    /// <summary>
+    /// 流程准备工作
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmPatchPrepare()
     {
         Debug.Log("流程准备工作");
@@ -117,7 +127,7 @@ public class Init : MonoBehaviour
         GameObject.DontDestroyOnLoad(debugGo);
 
         //TODO 暂时试用Resources
-        GameObject go = Resources.Load<GameObject>("UILoading");
+        GameObject go = Resources.Load<GameObject>("ResUILoading");
         goTemp = GameObject.Instantiate(go);
         LoadingText = goTemp.transform.Find("Canvas/UILoading/Image/Image (1)/T_Text").GetComponent<Text>();
 
@@ -129,7 +139,12 @@ public class Init : MonoBehaviour
         YooAssets.SetOperationSystemMaxTimeSlice(30);//设置异步系统参数，每帧执行消耗的最大时间切片
         //TODO 加载更新面板
         FsmProcessChange(EProcess.FsmVersionXMLPrepare);
-    }             //流程准备工作
+    }
+
+    /// <summary>
+    /// 检查版本XML配置文件
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmVersionXMLPrepare()
     {
         if (PlayMode == EPlayMode.HostPlayMode)
@@ -141,7 +156,12 @@ public class Init : MonoBehaviour
         }
         //进入初始资源流程
         FsmProcessChange(EProcess.FsmInitialize);
-    }        //检查版本XML配置文件
+    }
+
+    /// <summary>
+    /// 初始化资源包
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmInitialize()
     {
         Debug.Log("初始化资源包");
@@ -191,7 +211,12 @@ public class Init : MonoBehaviour
         }
         Debug.Log("资源包初始化成功！");
         FsmProcessChange(EProcess.FsmUpdateVersion);
-    }               //初始化资源包
+    }
+
+    /// <summary>
+    /// 更新资源版本号
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmUpdateVersion()
     {
         Debug.Log("更新资源版本号");
@@ -211,7 +236,12 @@ public class Init : MonoBehaviour
         packageVersion = operation.PackageVersion;
         Debug.Log($"更新补丁清单成功,远端或本地最新版本为: {operation.PackageVersion}");
         FsmProcessChange(EProcess.FsmUpdateManifest);
-    }            //更新资源版本号
+    }
+
+    /// <summary>
+    /// 更新资源清单
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmUpdateManifest()
     {
         yield return null;
@@ -233,7 +263,12 @@ public class Init : MonoBehaviour
         }
         Debug.Log($"更新资源清单成功: {operationResource.Status}!");
         FsmProcessChange(EProcess.FsmCreateDownloader);
-    }           //更新资源清单
+    }
+
+    /// <summary>
+    /// 创建文件下载器
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmCreateDownloader()
     {
         yield return null;
@@ -262,7 +297,12 @@ public class Init : MonoBehaviour
         long totalDownloadBytes = downloader.TotalDownloadBytes;
         //TODO 开发者需要在下载前检测磁盘空间不足
         FsmProcessChange(EProcess.FsmDownloadFiles);
-    }         //创建文件下载器
+    }
+
+    /// <summary>
+    /// 下载更新文件
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmDownloadFiles()
     {
         yield return null;
@@ -286,12 +326,22 @@ public class Init : MonoBehaviour
         }
         Debug.Log("更新完成!");
         FsmProcessChange(EProcess.FsmPatchDone);
-    }            //下载更新文件
+    }
+
+    /// <summary>
+    /// 下载完毕
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmDownloadOver()
     {
         yield return null;
         FsmProcessChange(EProcess.FsmClearCache);
-    }             //下载完毕
+    }
+
+    /// <summary>
+    /// 清理未使用的缓存文件
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmClearCache()
     {
         yield return null;
@@ -299,12 +349,22 @@ public class Init : MonoBehaviour
         var operation = package.ClearUnusedCacheFilesAsync();
         operation.Completed += OnClearCacheFunction;
         FsmProcessChange(EProcess.FsmPatchDone);
-    }               //清理未使用的缓存文件
+    }
+
+    /// <summary>
+    /// 流程更新完毕
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmPatchDone()
     {
         yield return null;
         FsmProcessChange(EProcess.FsmLoadHotDll);
-    }               //流程更新完毕
+    }
+
+    /// <summary>
+    /// HybridCLR热更代码
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FsmLoadHotDll()
     {
         yield return null;
@@ -390,7 +450,7 @@ public class Init : MonoBehaviour
         GameObject.Destroy(goTemp.gameObject);
         #endregion
 
-    }              //HybridCLR热更代码
+    }              
 
     //回调
     private void OnDownloadProgressUpdateFunction(int totalDownloadCount, int currentDownloadCount, long totalDownloadBytes, long currentDownloadBytes)

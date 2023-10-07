@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 -----------------------*/
 
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class CameraSystem
     {

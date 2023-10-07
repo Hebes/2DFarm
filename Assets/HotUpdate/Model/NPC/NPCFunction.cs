@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using System.Collections.Generic;
 using UnityEngine;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -14,7 +14,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class NPCFunction : MonoBehaviour
     {
@@ -24,7 +24,7 @@ namespace ACFarm
 
         private void Awake()
         {
-            MonoManager.Instance.OnAddUpdateEvent(OnUpdate);
+            MonoController.Instance.AddMonEvent(EMonoType.Updata, OnUpdate);
         }
 
         private void OnUpdate()

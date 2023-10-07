@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using UnityEngine;
 
 
@@ -13,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class PlayerAnimationEvent : MonoBehaviour
     {

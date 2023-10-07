@@ -1,5 +1,6 @@
-﻿using ACFrameworkCore;
-using System.Collections;
+﻿using Core;
+using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -13,7 +14,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UISettingPanel : UIBase
     {
@@ -23,7 +24,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Fixed, EUIMode.HideOther, EUILucenyType.Pentrate);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
 
             GameObject T_MusicSlider = UIComponent.Get<GameObject>("T_MusicSlider");
             GameObject T_SettingBtn = UIComponent.Get<GameObject>("T_SettingBtn");
@@ -33,7 +34,7 @@ namespace ACFarm
 
 
             ButtonOnClickAddListener(T_SettingBtn.name, p => { TogglePausePanel(); });
-            ButtonOnClickAddListener(T_RestBtn.name, p => { ReturnMenuCanvas(); });
+            ButtonOnClickAddListener(T_RestBtn.name, p => { ReturnMenuCanvas().Forget(); });
             //T_MusicSlider.GetComponent<Slider>().onValueChanged.AddListener(AudioManagerSystem.Instance.SetMasterVolume);
         }
 
@@ -45,28 +46,26 @@ namespace ACFarm
             if (isOpen)
             {
                 CloseUIForm();
-                Time.timeScale = 1;
+                CoreMono.Instance.Pause(1);
             }
             else
             {
+                CoreMono.Instance.Pause(0);
                 System.GC.Collect();
                 OpenUIForm<UISettingPanel>(ConfigUIPanel.UISettingPanel);
-                Time.timeScale = 0;
             }
         }
 
-
-        public void ReturnMenuCanvas()
+        /// <summary>
+        /// 返回到主菜单
+        /// </summary>
+        /// <returns></returns>
+        public async UniTask ReturnMenuCanvas()
         {
-            Time.timeScale = 1;
-            MonoManager.Instance.StartCoroutine(BackToMenu());
-        }
-
-        private IEnumerator BackToMenu()
-        {
+            CoreMono.Instance.Pause(1);
             CloseUIForm();
             ConfigEvent.EndGameEvent.EventTrigger();
-            yield return new WaitForSeconds(1f);
+            await UniTask.Delay(TimeSpan.FromSeconds(1f), false);
         }
     }
 }

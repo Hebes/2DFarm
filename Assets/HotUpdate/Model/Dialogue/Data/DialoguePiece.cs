@@ -13,7 +13,7 @@ using UnityEngine.Events;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [System.Serializable]
     public class DialoguePiece

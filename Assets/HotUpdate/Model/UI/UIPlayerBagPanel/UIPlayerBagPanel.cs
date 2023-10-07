@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIPlayerBagPanel : UIBase
     {
@@ -26,11 +26,11 @@ namespace ACFarm
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             playerBagSlotList = new List<SlotUI>();
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
             T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
 
-            ItemManagerSystem.Instance.CreatItemData(ConfigEvent.PalayerBag, 16);
+            ModelItem.Instance.CreatItemData(ConfigEvent.PalayerBag, 16);
             for (int i = 0; i < T_SlotHolder.transform.childCount; i++)
             {
                 SlotUI slotUI = T_SlotHolder.GetChildComponent<SlotUI>(i);
@@ -38,7 +38,7 @@ namespace ACFarm
                 slotUI.ItemKey = ConfigEvent.PalayerBag;
                 playerBagSlotList.Add(slotUI);
             }
-            ItemManagerSystem.Instance.AddSlotUIList(ConfigEvent.PalayerBag, playerBagSlotList);
+            ModelItem.Instance.AddSlotUIList(ConfigEvent.PalayerBag, playerBagSlotList);
 
             ConfigEvent.PalayerBag.AddEventListener<List<InventoryItem>>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
             ConfigEvent.MoneyShow.AddEventListener<int>(ShowMoney);
@@ -54,9 +54,9 @@ namespace ACFarm
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            List<InventoryItem> playerBagItems = ItemManagerSystem.Instance.GetItemList(ConfigEvent.PalayerBag);
+            List<InventoryItem> playerBagItems = ModelItem.Instance.GetItemList(ConfigEvent.PalayerBag);
             RefreshItem(playerBagItems);
-            ShowMoney(CommonManagerSystem.Instance.playerMoney);
+            ShowMoney(ModelCommon.Instance.playerMoney);
         }
 
 

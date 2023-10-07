@@ -16,7 +16,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public static class BinaryData
     {

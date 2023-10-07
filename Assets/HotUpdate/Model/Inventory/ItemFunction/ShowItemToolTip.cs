@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 /*--------脚本描述-----------
@@ -13,7 +14,7 @@ using UnityEngine.EventSystems;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [RequireComponent(typeof(SlotUI))]
     public class ShowItemToolTip: MonoBehaviour, IPointerEnterHandler, IPointerExitHandler

@@ -1,6 +1,8 @@
-﻿using ACFrameworkCore;
+﻿using Core;
+using Farm2D;
 using UnityEngine;
 using UnityEngine.Playables;
+using Debug = Core.Debug;
 
 
 /*--------脚本描述-----------
@@ -14,7 +16,7 @@ using UnityEngine.Playables;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     [System.Serializable]
     public class DialogueBehaviour : PlayableBehaviour
@@ -34,7 +36,7 @@ namespace ACFarm
             if (Application.isPlaying)//如果动画正在播放的时候
             {
                 if (dialoguePiece.hasToPause)//如果可以暂停的话
-                    TimelineManagerSystem.Instance.PauseTimeline(director);//暂停timeline
+                    ModelTimeline.Instance.PauseTimeline(director);//暂停timeline
                 else
                     ConfigEvent.ShowDialogueEvent.EventTrigger<DialoguePiece>(null);
             }
@@ -45,7 +47,7 @@ namespace ACFarm
         {
             if (Application.isPlaying)
             {
-                TimelineManagerSystem.Instance.isDone = dialoguePiece.isDone;//每帧检测是否播放完成
+                ModelTimeline.Instance.isDone = dialoguePiece.isDone;//每帧检测是否播放完成
                 ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Pause);
             }
         }
@@ -56,15 +58,15 @@ namespace ACFarm
         }
         public override void OnGraphStart(Playable playable)
         {
-            ACDebug.Log($"游戏暂停了");
+            Debug.Log($"游戏暂停了");
             ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Pause);
         }
         //整条时间线播放完成后才会关闭
         public override void OnGraphStop(Playable playable)
         {
-            ACDebug.Log($"游戏运行了");
+            Debug.Log($"游戏运行了");
             ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
-            AudioManagerSystem.Instance.OnAfterSceneLoadedEvent();
+            ModelAudio.Instance.OnAfterSceneLoadedEvent();
         }
     }
 }

@@ -13,7 +13,7 @@ using UnityEngine.Tilemaps;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [ExecuteInEditMode]//在编辑的模式下运行
     public class GridMap : MonoBehaviour

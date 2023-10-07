@@ -14,7 +14,7 @@ using UnityEngine.Rendering.Universal;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class LightControl: MonoBehaviour
     {
@@ -35,7 +35,7 @@ namespace ACFrameworkCore
         /// <param name="timeDifference"></param>
         public void ChangeLightShift(ESeason season, LightShift lightShift, float timeDifference)
         {
-            currentLightDetails = LightManagerSystem.GetLightDetails(lightType,season, lightShift);
+            currentLightDetails = ModelLight.GetLightDetails(lightType,season, lightShift);
 
             if (timeDifference < ConfigSettings.lightChangeDuration)
             {

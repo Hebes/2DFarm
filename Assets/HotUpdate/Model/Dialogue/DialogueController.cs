@@ -1,9 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -17,7 +17,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     [RequireComponent(typeof(NPCMovement))]
     [RequireComponent(typeof(BoxCollider2D))]
@@ -39,7 +39,7 @@ namespace ACFarm
             npc = GetComponent<NPCMovement>();
             uiSign = transform.GetChildComponent<Transform>("uiSign").gameObject;
             ConfigEvent.OnFinishEvent.AddEventListener<UnityEvent>(AddOnFinishEvent);
-            DialogueManagerSystem.Instance.GetDialogueData(dialogueStartNumber, ref dialogueList);
+            ModelDialogue.Instance.GetDialogueData(dialogueStartNumber, ref dialogueList);
             FillDialogueStack();
         }
         private void OnTriggerEnter2D(Collider2D other)

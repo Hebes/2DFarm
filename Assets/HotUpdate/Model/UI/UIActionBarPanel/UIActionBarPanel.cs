@@ -1,6 +1,5 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System.Collections.Generic;
-using UnityEditor.Graphs;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -14,7 +13,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIActionBarPanel : UIBase
     {
@@ -28,7 +27,7 @@ namespace ACFarm
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             key = ConfigEvent.ActionBar;
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_BagButton = UIComponent.Get<GameObject>("T_BagButton");//背包按钮
             GameObject T_ActionBar = UIComponent.Get<GameObject>("T_ActionBar");//槽父物体
 
@@ -47,8 +46,8 @@ namespace ACFarm
 
             key.AddEventListener<List<InventoryItem>>(RefreshItem);
 
-            ItemManagerSystem.Instance.AddSlotUIList(key, ActionBarSlotUIList);//添加物品栏数据
-            ItemManagerSystem.Instance.CreatItemData(key, 10);//添加背包数据
+            ModelItem.Instance.AddSlotUIList(key, ActionBarSlotUIList);//添加物品栏数据
+            ModelItem.Instance.CreatItemData(key, 10);//添加背包数据
 
             //测试数据
             //InventoryAllSystem.Instance.ItemDicArray[ConfigInventory.ActionBar][0] = new InventoryItem() { itemID = 1002, itemAmount = 2 };
@@ -71,7 +70,7 @@ namespace ACFarm
         public override void UIOnEnable()
         {
             base.UIOnEnable();
-            List<InventoryItem> playerBagItems = ItemManagerSystem.Instance.GetItemList(key);
+            List<InventoryItem> playerBagItems = ModelItem.Instance.GetItemList(key);
             RefreshItem(playerBagItems);
         }
 

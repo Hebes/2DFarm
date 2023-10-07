@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,7 +15,7 @@ using UnityEngine;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class Box : MonoBehaviour
     {
@@ -84,13 +84,13 @@ namespace ACFarm
         /// <param name="boxIndex"></param>
         public void InitBox()
         {
-            if (ItemManagerSystem.Instance.ChackKey(boxName))  //刷新地图读取数据
+            if (ModelItem.Instance.ChackKey(boxName))  //刷新地图读取数据
             {
-                boxBagData = ItemManagerSystem.Instance.GetItemList(boxName).ToList();
+                boxBagData = ModelItem.Instance.GetItemList(boxName).ToList();
             }
             else     //新建箱子
             {
-                ItemManagerSystem.Instance.CreatItemData(boxName, 16);
+                ModelItem.Instance.CreatItemData(boxName, 16);
 
                 //ItemManagerSystem.Instance.ItemDic[boxName][0] = new InventoryItem() { itemID = 1007, itemAmount = 10 };
                 //ItemManagerSystem.Instance.ItemDic[boxName][1] = new InventoryItem() { itemID = 1008, itemAmount = 10 };

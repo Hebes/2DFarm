@@ -12,7 +12,7 @@
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     [System.Serializable]
     public class BluePrintDetails

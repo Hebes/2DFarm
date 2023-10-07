@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class LanguageText : MonoBehaviour
     {

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class TreeNode
     {

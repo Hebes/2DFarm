@@ -1,4 +1,4 @@
-﻿using ACFarm;
+﻿using Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class UIBagBasePanel : UIBase
     {
@@ -30,7 +30,7 @@ namespace ACFrameworkCore
             base.UIAwake();
             InitUIBase(EUIType.Normal, EUIMode.Normal, EUILucenyType.Lucency);
             //获取组件
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_ESCImage = UIComponent.Get<GameObject>("T_ESCImage");
             GameObject T_Solt_ShopPreafab = UIComponent.Get<GameObject>("T_Solt_ShopPreafab");
             GameObject T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
@@ -65,7 +65,7 @@ namespace ACFrameworkCore
 
             baseBagSlots = new List<SlotUI>();
             //从仓管系统获取数据，请先提前吧仓管里面的数据初始化完毕!
-            List<InventoryItem> shopDetailsDatasList = ItemManagerSystem.Instance.GetItemList(Name);
+            List<InventoryItem> shopDetailsDatasList = ModelItem.Instance.GetItemList(Name);
             if (shopDetailsDatasList == null) return;
             for (int i = 0; i < shopDetailsDatasList.ToList().Count; i++)
             {
@@ -76,7 +76,7 @@ namespace ACFrameworkCore
                 baseBagSlots.Add(slot);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(slotHolder.GetComponent<RectTransform>());
-            ItemManagerSystem.Instance.AddSlotUIList(Name, baseBagSlots);//添加到管理系统中
+            ModelItem.Instance.AddSlotUIList(Name, baseBagSlots);//添加到管理系统中
 
             if (slotType.Equals(ConfigEvent.Shop))
             {
@@ -118,7 +118,7 @@ namespace ACFrameworkCore
         /// <param name="bagData"></param>
         private void OnBaseBagCloseEvent(string Name, string slotType)
         {
-            ItemManagerSystem.Instance.RemoveSlotUIDic(InventoryKey);
+            ModelItem.Instance.RemoveSlotUIDic(InventoryKey);
             Name.RemoveEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
             CloseUIForm();
             CloseOtherUIForm(ConfigUIPanel.UIItemToolTip);

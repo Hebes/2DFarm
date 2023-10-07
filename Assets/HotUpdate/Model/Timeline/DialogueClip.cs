@@ -14,7 +14,7 @@ using UnityEngine.Timeline;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class DialogueClip : PlayableAsset, ITimelineClipAsset
     {

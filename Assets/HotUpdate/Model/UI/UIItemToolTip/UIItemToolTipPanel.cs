@@ -1,7 +1,7 @@
-﻿using TMPro;
+﻿using Core;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using ACFrameworkCore;
 
 /*--------脚本描述-----------
 				
@@ -14,7 +14,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIItemToolTipPanel : UIBase
     {
@@ -31,7 +31,7 @@ namespace ACFarm
             base.UIAwake();
             InitUIBase(EUIType.Mobile, EUIMode.Normal, EUILucenyType.Pentrate);
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
 
             GameObject T_ItemToolTip = UIComponent.Get<GameObject>("T_ItemToolTip");
             GameObject T_ResourcesPanel = UIComponent.Get<GameObject>("T_ResourcesPanel");
@@ -104,7 +104,7 @@ namespace ACFarm
         private void ShowResourcesPanel(int id)
         {
             //获取数据
-            BluePrintDetails bluePrintDetails = BuildManagerSystem.Instance.GetDataOne(id);
+            BluePrintDetails bluePrintDetails = ModelBuild.Instance.GetDataOne(id);
             resourcesPanel.SetActive(bluePrintDetails != null);
             for (int i = 0; i < resourcesPanel.transform.childCount; i++)
             {
@@ -117,7 +117,7 @@ namespace ACFarm
                     //设置resourcesPanel子物体的数据
                     InventoryItem item = bluePrintDetails.resourceItem[i];
                     ItemDetailsData itemDetailsData = DataExpansion.GetDataOne<ItemDetailsData>(item.itemID);
-                    childGo.GetImage().sprite = ResourceExtension.LoadOrSub<Sprite>(itemDetailsData.itemIconPackage, itemDetailsData.itemIcon);
+                    childGo.GetImage().sprite = LoadResExtension.LoadOrSub<Sprite>(itemDetailsData.itemIconPackage, itemDetailsData.itemIcon);
                     childGo.GetChildComponent<TextMeshProUGUI>("ResourcesItemCount").text= item.itemAmount.ToString();
                 }
             }

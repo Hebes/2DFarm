@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class Debugger : MonoBehaviour
     {

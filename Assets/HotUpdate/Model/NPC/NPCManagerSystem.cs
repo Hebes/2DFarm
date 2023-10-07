@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Core;
+using System.Collections.Generic;
 using UnityEngine;
-using ACFrameworkCore;
+using Debug = Core.Debug;
 
 /*--------脚本描述-----------
 
@@ -13,7 +14,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class NPCManagerSystem : SingletonNewMono<NPCManagerSystem>
     {
@@ -34,7 +35,7 @@ namespace ACFarm
                 npcPositionList.Add(nPCPosition);
             }
             //初始化路径字典
-            List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
+            List<SceneRouteDetailsData> sceneRouteDetailsDataList = this.GetDataList<SceneRouteDetailsData>();
             if (sceneRouteDetailsDataList.Count == 0)
                 return;
             foreach (SceneRouteDetailsData route in sceneRouteDetailsDataList)
@@ -79,7 +80,7 @@ namespace ACFarm
         public SceneRoute GetSceneRoute(string fromSceneName, string gotoSceneName)
         {
             if (!sceneRouteDict.ContainsKey(fromSceneName + gotoSceneName))
-                ACDebug.Error($"配置文件SceneRouteDetailsData未配置{fromSceneName}{gotoSceneName}");
+                Debug.Error($"配置文件SceneRouteDetailsData未配置{fromSceneName}{gotoSceneName}");
             return sceneRouteDict[fromSceneName + gotoSceneName];
         }
     }

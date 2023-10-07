@@ -1,7 +1,9 @@
-﻿using ACFrameworkCore;
+﻿using Core;
+using Farm2D;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Debug = Core.Debug;
 
 /*--------脚本描述-----------
 				
@@ -14,7 +16,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIDragPanel : UIBase
     {
@@ -37,12 +39,20 @@ namespace ACFarm
         }
 
 
-
-        //事件监听
+        /// <summary>
+        /// 物品拖拽
+        /// </summary>
+        /// <param name="obj"></param>
         private void ItemDrag(Vector3 obj)
         {
             DragItemImage.transform.position = obj;
         }
+
+        /// <summary>
+        /// 物品拖拽开始
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <param name="slotUI"></param>
         private void ItemOnBeginDrag(PointerEventData eventData, SlotUI slotUI)
         {
             if (slotUI.itemAmount != 0)
@@ -55,6 +65,12 @@ namespace ACFarm
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(slotUI.ItemKey, slotUI.slotIndex);
             }
         }
+
+        /// <summary>
+        /// 拖拽结束
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <param name="slotUI"></param>
         private void ItemOnEndDrag(PointerEventData eventData, SlotUI slotUI)
         {
             key = slotUI.ItemKey;
@@ -66,40 +82,46 @@ namespace ACFarm
                 var targetSlot = eventData.pointerCurrentRaycast.gameObject.GetComponent<SlotUI>();//如果是存在SlotUI组件的话
                 if (key == ConfigEvent.PalayerBag && targetSlot.ItemKey == ConfigEvent.PalayerBag)//两个都是背包的话就是交换
                 {
-                    ACDebug.Log($"背包数据交换");
+                    Debug.Log($"背包数据交换");
                     //物品交换
-                    ItemManagerSystem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
+                    ModelItem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
                     slotUI.slotImage.color = new Color(slotUI.slotImage.color.r, slotUI.slotImage.color.g, slotUI.slotImage.color.b, 1);
                 }
                 else if (key == ConfigEvent.Mira && targetSlot.ItemKey == ConfigEvent.PalayerBag)//买
                 {
-                    ACDebug.Log($"买东西");
+                    Debug.Log($"买东西");
                     ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, false);
                 }
                 else if (key == ConfigEvent.PalayerBag && targetSlot.ItemKey == ConfigEvent.Mira)//卖
                 {
-                    ACDebug.Log($"卖东西");
+                    Debug.Log($"卖东西");
                     ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, true);
                 }
                 else if (key == ConfigEvent.Mira && targetSlot.ItemKey == ConfigEvent.ActionBar)//买
                 {
-                    ACDebug.Log($"买东西");
+                    Debug.Log($"买东西");
                     ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, false);
                 }
                 else if (key == ConfigEvent.ActionBar && targetSlot.ItemKey == ConfigEvent.Mira)//卖
                 {
-                    ACDebug.Log($"卖东西");
+                    Debug.Log($"卖东西");
                     ConfigEvent.ShowTradeUI.EventTrigger(key, targetSlot.ItemKey, slotUI.itemDatails.itemID, true);
                 }
                 else if (key != ConfigEvent.Shop && targetSlot.ItemKey != ConfigEvent.Shop && key != targetSlot.ItemKey)
                 {
-                    ACDebug.Log($"跨背包数据交换物品");
-                    ItemManagerSystem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
+                    Debug.Log($"跨背包数据交换物品");
+                    ModelItem.Instance.ChangeItem(slotUI.ItemKey, targetSlot.ItemKey, slotUI.slotIndex, targetSlot.slotIndex);
                 }
             }
             //清空所有高亮
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
         }
+
+        /// <summary>
+        /// 点击物品
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <param name="slotUI"></param>
         private void ItemOnPointerClick(PointerEventData eventData, SlotUI slotUI)
         {
             if (slotUI.itemDatails == null) return;

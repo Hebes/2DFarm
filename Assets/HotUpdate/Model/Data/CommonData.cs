@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ACFarm
+namespace Farm2D
 {
     public class CommonData : MonoBehaviour
     {

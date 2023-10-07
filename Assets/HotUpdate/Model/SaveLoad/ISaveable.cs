@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Farm2D;
 
 /*--------脚本描述-----------
 
@@ -11,7 +11,7 @@
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public interface ISaveable
     {
@@ -21,7 +21,7 @@ namespace ACFarm
         /// </summary>
         public void RegisterSaveable()
         {
-            SaveLoadManagerSystem.Instance.RegisterSaveable(this);
+            ModelSaveLoad.Instance.RegisterSaveable(this);
         }
         /// <summary>
         /// 生成数据

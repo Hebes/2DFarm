@@ -1,7 +1,7 @@
-﻿using ACFrameworkCore;
+﻿using Farm2D;
 using UnityEngine;
 
-namespace ACFarm
+namespace Farm2D
 {
     [RequireComponent(typeof(AudioSource))]
     public class Sound : MonoBehaviour

@@ -1,9 +1,8 @@
-﻿using ACFarm;
+﻿using Core;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ACFrameworkCore;
 
 /*--------脚本描述-----------
 
@@ -16,7 +15,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class UIGameTimePanel : UIBase
     {
@@ -34,7 +33,7 @@ namespace ACFarm
             InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
             clockBlocks = new List<GameObject>();
 
-            ACUIComponent UIComponent = panelGameObject.GetComponent<ACUIComponent>();
+            UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_TimeText = UIComponent.Get<GameObject>("T_TimeText");
             GameObject T_StopTime = UIComponent.Get<GameObject>("T_StopTime");
             GameObject T_SeasonImage = UIComponent.Get<GameObject>("T_SeasonImage");
@@ -49,10 +48,10 @@ namespace ACFarm
             seasonImage = T_SeasonImage.GetImage();
 
             seasonSprites = new Sprite[4];
-            seasonSprites[0] = await ConfigSprites.ui_time_12Png.LoadAsyncUniTask<Sprite>();
-            seasonSprites[1] = await ConfigSprites.ui_time_13Png.LoadAsyncUniTask<Sprite>();
-            seasonSprites[2] = await ConfigSprites.ui_time_14Png.LoadAsyncUniTask<Sprite>();
-            seasonSprites[3] = await ConfigSprites.ui_time_15Png.LoadAsyncUniTask<Sprite>();
+            seasonSprites[0] = await ConfigSprites.ui_time_12Png.LoadAsync<Sprite>();
+            seasonSprites[1] = await ConfigSprites.ui_time_13Png.LoadAsync<Sprite>();
+            seasonSprites[2] = await ConfigSprites.ui_time_14Png.LoadAsync<Sprite>();
+            seasonSprites[3] = await ConfigSprites.ui_time_15Png.LoadAsync<Sprite>();
 
             for (int i = 0; i < clockParent.childCount; i++)
             {

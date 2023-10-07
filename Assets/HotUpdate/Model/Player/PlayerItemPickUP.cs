@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using ACFrameworkCore;
+using Farm2D;
 
 /*--------脚本描述-----------
 				
@@ -12,7 +12,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class PlayerItemPickUP : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace ACFarm
             Item item = collision.GetComponent<Item>();
             if (item == null) return;                                       //是否为空
             if (item.itemDetails.canPickedup == false) return;              //能否被拾取
-            bool isAddOK = ItemManagerSystem.Instance.AddItem(ConfigEvent.ActionBar, item.itemID, item.itemAmount);//拾取物品到背包
+            bool isAddOK = ModelItem.Instance.AddItem(ConfigEvent.ActionBar, item.itemID, item.itemAmount);//拾取物品到背包
             if (isAddOK)
                 GameObject.Destroy(item.gameObject);
         }

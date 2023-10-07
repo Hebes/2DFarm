@@ -1,6 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
 using UnityEngine;
-using ACFrameworkCore;
 
 /*--------脚本描述-----------
 				
@@ -13,7 +12,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class Item : MonoBehaviour
     {
@@ -55,7 +54,7 @@ namespace ACFarm
                     str1 = !string.IsNullOrEmpty(itemDetails.itemIconPackage) ? itemDetails.itemIconPackage : itemDetails.itemOnWorldPackage;
                     icon = !string.IsNullOrEmpty(itemDetails.itemIcon) ? itemDetails.itemIcon : itemDetails.itemOnWorldSprite;
                 }
-                spriteRenderer.sprite = ResourceExtension.LoadOrSub<Sprite>(str1, icon);
+                spriteRenderer.sprite = LoadResExtension.LoadOrSub<Sprite>(str1, icon);
                 //修改碰撞体尺寸，因为SpriteRenderer的SpriteSortPoInt修改的原因
                 Vector2 newSize = new Vector2(spriteRenderer.sprite.bounds.size.x, spriteRenderer.sprite.bounds.size.y);
                 coll.size = newSize;//设置尺寸

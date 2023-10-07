@@ -1,5 +1,5 @@
+using Core;
 using UnityEngine;
-using ACFrameworkCore;
 
 
 /*--------脚本描述-----------
@@ -13,7 +13,7 @@ using ACFrameworkCore;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class ReapItem : MonoBehaviour
     {
@@ -21,7 +21,7 @@ namespace ACFarm
 
         public void InitCropData(int ID)
         {
-            cropDetails = CropManagerSystem.Instance.GetCropDetails(ID);
+            cropDetails = ModelCrop.Instance.GetCropDetails(ID);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ACFarm
                     else    //世界地图上生成物品
                     {
                         //判断应该生成的物品方向
-                        var dirX = transform.position.x > CommonManagerSystem.Instance.playerTransform.position.x ? 1 : -1;
+                        var dirX = transform.position.x > ModelCommon.Instance.playerTransform.position.x ? 1 : -1;
                         //一定范围内的随机
                         var spawnPos = new Vector3(transform.position.x + Random.Range(dirX, cropDetails.spawnRadius.x * dirX),
                         transform.position.y + Random.Range(-cropDetails.spawnRadius.y, cropDetails.spawnRadius.y), 0);

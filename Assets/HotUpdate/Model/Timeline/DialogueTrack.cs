@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Timeline;
 
-namespace ACFarm
+namespace Farm2D
 {
     [TrackClipType(typeof(DialogueClip))]
     public class DialogueTrack : TrackAsset

@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using ACFrameworkCore;
+using Farm2D;
 
-namespace ACFarm
+namespace Farm2D
 {
     public class AStarTest : MonoBehaviour
     {

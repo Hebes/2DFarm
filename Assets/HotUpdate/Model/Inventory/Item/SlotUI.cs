@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 -----------------------*/
 
-namespace ACFrameworkCore
+namespace Farm2D
 {
     public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
@@ -56,7 +56,7 @@ namespace ACFrameworkCore
         {
             ItemDetailsData item = itemID.GetDataOne<ItemDetailsData>();
             itemDatails = item;
-            slotImage.sprite = ResourceExtension.LoadOrSub<Sprite>(item.itemIconPackage, item.itemIcon);
+            slotImage.sprite = LoadResExtension.LoadOrSub<Sprite>(item.itemIconPackage, item.itemIcon);
             itemAmount = Amount;
             amountText.text = Amount.ToString();
             slotImage.enabled = true;

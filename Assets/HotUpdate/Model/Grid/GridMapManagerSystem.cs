@@ -1,4 +1,4 @@
-﻿using ACFrameworkCore;
+﻿using Core;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -14,7 +14,7 @@ using UnityEngine.Tilemaps;
 
 -----------------------*/
 
-namespace ACFarm
+namespace Farm2D
 {
     public class GridMapManagerSystem : MonoBehaviour, ISaveable
     {
@@ -123,13 +123,13 @@ namespace ACFarm
         {
             //获取数据
             ItemDetailsData itemDetails = itemID.GetDataOne<ItemDetailsData>();
-            InventoryItem inventoryItem = ItemManagerSystem.Instance.GetItem(itemKey, itemID);
+            InventoryItem inventoryItem = ModelItem.Instance.GetItem(itemKey, itemID);
             Vector3Int mouseGridPos = currentGrid.WorldToCell(mouseWorldPos);//格子的坐标
             TileDetails currentTile = GetTileDetailsOnMousePosition(mouseGridPos);
 
             if (currentTile == null)
             {
-                ACDebug.Error("当前的地图信息是空的");
+                Core.Debug.Error("当前的地图信息是空的");
                 return;
             }
             Crop currentCrop = GetCropObject(mouseWorldPos);
@@ -182,7 +182,7 @@ namespace ACFarm
                     break;
                 case EItemType.CollectTool:
                     //执行收割方法
-                    ACDebug.Log($"收获物品的信息是{currentCrop.cropDetails.producedItemID[0]}");
+                    Core.Debug.Log($"收获物品的信息是{currentCrop.cropDetails.producedItemID[0]}");
                     currentCrop?.ProcessToolAction(itemDetails, currentTile);
                     ConfigEvent.PlaySoundEvent.EventTrigger(ESoundName.Basket);
                     break;

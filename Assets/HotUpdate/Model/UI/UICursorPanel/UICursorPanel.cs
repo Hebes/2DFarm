@@ -55,6 +55,7 @@ namespace Farm2D
             ConfigEvent.ItemSelectedEvent.EventAdd<string, int, bool>(OnItemSelectEvent);
             ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
             ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            Debug.Log("鼠标界面");
         }
         public override void UIUpdate()
         {
@@ -81,10 +82,10 @@ namespace Farm2D
             switch (mouseType)
             {
                 default:
-                case EMouseType.Normal: return ConfigSprites.cursor11Png.GetMouseSprite();
-                case EMouseType.Tool: return ConfigSprites.cursor8Png.GetMouseSprite();
-                case EMouseType.Seed: return ConfigSprites.cursor7Png.GetMouseSprite();
-                case EMouseType.Item: return ConfigSprites.cursor3Png.GetMouseSprite();
+                case EMouseType.Normal: return ConfigEvent.mouoseSelectedEvent.EventTriggerReturn<Sprite, string>(ConfigSprites.cursor11Png);
+                case EMouseType.Tool: return ConfigEvent.mouoseSelectedEvent.EventTriggerReturn<Sprite, string>(ConfigSprites.cursor8Png);
+                case EMouseType.Seed: return ConfigEvent.mouoseSelectedEvent.EventTriggerReturn<Sprite, string>(ConfigSprites.cursor7Png);
+                case EMouseType.Item: return ConfigEvent.mouoseSelectedEvent.EventTriggerReturn<Sprite, string>(ConfigSprites.cursor3Png);
             }
         }
 
@@ -242,7 +243,7 @@ namespace Farm2D
         {
             //执行方法
             if (Input.GetMouseButtonDown(0) && cursorPositionValid)
-                ConfigEvent.PlayerMouseClicked.EventTrigger(itemKey,mouseWorldPos, currentItem.itemID);
+                ConfigEvent.PlayerMouseClicked.EventTrigger(itemKey, mouseWorldPos, currentItem.itemID);
         }
 
         /// <summary>

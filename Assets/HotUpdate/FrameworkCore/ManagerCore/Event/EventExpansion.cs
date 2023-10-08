@@ -101,7 +101,7 @@ namespace Core
 
 
         #region 返回
-        public static void EventAdd(this string eventName, EventInfoReturn.EventReturn action)
+        public static void EventAddReturn(this string eventName, EventInfoReturn.EventReturn action)
         {
             CoreEvent.Instance.EventAddReturn(eventName, action);
         }
@@ -110,7 +110,7 @@ namespace Core
             return CoreEvent.Instance.EventTriggerReturn<R>(eventName);
         }
 
-        public static void EventAdd<T>(this string eventName, EventInfoReturn<T>.EventReturn action)
+        public static void EventAddReturn<T>(this string eventName, EventInfoReturn<T>.EventReturn action)
         {
             CoreEvent.Instance.EventAddReturn<T>(eventName, action);
         }

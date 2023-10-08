@@ -26,7 +26,7 @@ namespace Farm2D
         {
             Instance = this;
             MouseSpriteList = new List<Sprite>();
-            List<string> MouseSpriteTempList = new List<string>()
+            List<string> MouseSpriteTempList = new List<string>();
             MouseSpriteTempList.Add(ConfigSprites.cursor11Png);
             MouseSpriteTempList.Add(ConfigSprites.cursor8Png);
             MouseSpriteTempList.Add(ConfigSprites.cursor7Png);
@@ -40,7 +40,7 @@ namespace Farm2D
             }
             await UniTask.Yield();
 
-            ConfigEvent.mouoseSelectedEvent.AddEventListener<string>(GetMouseSprite);
+            ConfigEvent.mouoseSelectedEvent.EventAddReturn<string>(GetMouseSprite);
         }
 
 

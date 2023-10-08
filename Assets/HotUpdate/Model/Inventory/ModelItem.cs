@@ -31,10 +31,10 @@ namespace Farm2D
             ItemDic = new Dictionary<string, List<InventoryItem>>();
             slotUIDic = new Dictionary<string, List<SlotUI>>();
 
-            ConfigEvent.UIDisplayHighlighting.AddEventListener<string, int>(UpdateSlotHightLight);//监听高亮事件
-            ConfigEvent.HarvestAtPlayerPosition.AddEventListener<string, int>(OnHarvestAtPlayerPosition);
-            ConfigEvent.BuildFurniture.AddEventListener<string, int, Vector3>(OnBuildFurnitureEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.UIDisplayHighlighting.EventAdd<string, int>(UpdateSlotHightLight);//监听高亮事件
+            ConfigEvent.HarvestAtPlayerPosition.EventAdd<string, int>(OnHarvestAtPlayerPosition);
+            ConfigEvent.BuildFurniture.EventAdd<string, int, Vector3>(OnBuildFurnitureEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
             //注册保存事件
             ISaveable saveable = this;
             saveable.RegisterSaveable();

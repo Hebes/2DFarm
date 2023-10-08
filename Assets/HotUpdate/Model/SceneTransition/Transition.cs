@@ -27,7 +27,7 @@ namespace Farm2D
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag(ConfigTag.TagPlayer)) return;
-            ConfigEvent.SceneTransition.EventTriggerUniTask(sceneToGo, positionTpGo).Forget();
+            ConfigEvent.SceneTransition.EventTriggerAsync(sceneToGo, positionTpGo).Forget();
         }
     }
 }

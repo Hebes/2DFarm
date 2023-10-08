@@ -14,7 +14,7 @@ namespace Farm2D
             base.UIAwake();
             InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
             fadeCanvasGroup = panelGameObject.GetComponent<CanvasGroup>();
-            ConfigEvent.UIFade.AddEventListenerUniTask<float>(Fade);
+            ConfigEvent.UIFade.EventAddAsync<float>(Fade);
         }
 
         /// <summary>loading画面淡入淡出场景</summary>

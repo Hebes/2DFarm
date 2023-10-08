@@ -30,7 +30,7 @@ namespace Farm2D
             ChangeData();
 
             //new BuildInWorld();
-            ConfigEvent.BuildFurniture.AddEventListener<string, int, Vector3>(OnBuildFurnitureEvent);
+            ConfigEvent.BuildFurniture.EventAdd<string, int, Vector3>(OnBuildFurnitureEvent);
 
             await UniTask.Yield();
         }

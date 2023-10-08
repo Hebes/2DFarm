@@ -65,10 +65,10 @@ namespace Farm2D
                 soundDetailsDataList.Add(soundDetails);
             }
 
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(BeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.PlaySoundEvent.AddEventListener<ESoundName>(OnPlaySoundEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(BeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.PlaySoundEvent.EventAdd<ESoundName>(OnPlaySoundEvent);
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
 
             await UniTask.Yield();
         }

@@ -61,8 +61,8 @@ namespace Farm2D
 
             ButtonOnClickAddListener(T_StopTime.name, p => { ConfigUIPanel.UISettingPanel.ShwoUIPanel<UISettingPanel>(); });
 
-            ConfigEvent.GameDate.AddEventListener<int, int, int, int, ESeason>(OnGameDateEvent);
-            ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
+            ConfigEvent.GameDate.EventAdd<int, int, int, int, ESeason>(OnGameDateEvent);
+            ConfigEvent.GameMinute.EventAdd<int, int, int, ESeason>(OnGameMinuteEvent);
         }
 
         /// <summary>

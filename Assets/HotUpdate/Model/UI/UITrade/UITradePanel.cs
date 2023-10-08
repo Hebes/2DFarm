@@ -55,7 +55,7 @@ namespace Farm2D
             ButtonOnClickAddListener(T_OK.name, p => TradeItem());
             ButtonOnClickAddListener(T_Cancel.name, p => CancelTrade());
 
-            ConfigEvent.ShowTradeUI.AddEventListener<string, string, int, bool>(SetupTradeUI);
+            ConfigEvent.ShowTradeUI.EventAdd<string, string, int, bool>(SetupTradeUI);
         }
 
         /// <summary>

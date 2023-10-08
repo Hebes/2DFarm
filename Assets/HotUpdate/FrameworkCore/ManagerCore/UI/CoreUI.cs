@@ -44,7 +44,7 @@ namespace Core
 
         private async UniTask InitRoot()
         {
-            GameObject handle = await LoadResExtension.LoadAsync<GameObject>(ConfigUIPanel.Global);
+            GameObject handle = await LoadResExtension.LoadAsync<GameObject>(ConfigUIPanel.UI);
             GameObject gameObject = GameObject.Instantiate(handle);
             //实例化
             CanvasTransfrom = gameObject.transform;
@@ -131,11 +131,8 @@ namespace Core
             //“所有UI窗体”集合中，如果没有记录，则直接返回
             if (_DicALLUIForms.TryGetValue(uiFormName, out UIBase baseUIForm) == false)
                 return;
-
             MonoController.Instance.RemoveMonoEvent(EMonoType.Updata, baseUIForm.UIUpdate);
-
             baseUIForm.UIOnDestroy();
-
         }
 
         /// <summary>
@@ -208,7 +205,7 @@ namespace Core
             }
             else
             {
-                Debug.Log("baseUIForm==null,Please Check, 参数 uiFormName=" + uiFormName);
+                Debug.Error($"{uiFormName}是空的");
             }
         }
 

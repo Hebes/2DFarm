@@ -20,10 +20,12 @@ namespace Core
         {
             return CoreResource.Instance.Load<T>(assetName);
         }
+
         public static UniTask<T> LoadAsync<T>(this string assetName) where T : UnityEngine.Object
         {
-            return CoreResource.Instance.LoadAsyncUniTack<T>(assetName);
+            return CoreResource.Instance.LoadAsync<T>(assetName);
         }
+
         public static T LoadSub<T>(string location, string ResName) where T : UnityEngine.Object
         {
             return CoreResource.Instance.LoadSub<T>(location, ResName);

@@ -37,13 +37,13 @@ namespace Farm2D
         {
             rb = GetComponent<Rigidbody2D>();
             animators = GetComponentsInChildren<Animator>();
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.PlayerMoveToPosition.AddEventListener<Vector3>(OnMoveToPosition);
-            ConfigEvent.PlayerMouseClicked.AddEventListener<string, Vector3, int>(OnMouseClickedEvent);
-            ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.PlayerMoveToPosition.EventAdd<Vector3>(OnMoveToPosition);
+            ConfigEvent.PlayerMouseClicked.EventAdd<string, Vector3, int>(OnMouseClickedEvent);
+            ConfigEvent.UpdateGameStateEvent.EventAdd<EGameState>(OnUpdateGameStateEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
             //×¢²á±£´æÊÂ¼þ
             ISaveable saveable = this;
             saveable.RegisterSaveable();

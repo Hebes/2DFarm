@@ -28,9 +28,9 @@ namespace Farm2D
         {
             Instance = this;
 
-            ConfigEvent.PlantSeed.AddEventListener<int, TileDetails>(OnPlantSeedEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
+            ConfigEvent.PlantSeed.EventAdd<int, TileDetails>(OnPlantSeedEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.GameDay.EventAdd<int, ESeason>(OnGameDayEvent);
 
             //加载数据
             CropDataList_SO cropDataList_S = YooAssetLoadExpsion.YooaddetLoadSync<CropDataList_SO>("CropDataList_SO");

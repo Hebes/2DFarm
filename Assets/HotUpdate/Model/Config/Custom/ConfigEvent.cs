@@ -41,6 +41,7 @@
         //鼠标相关
         public const string ItemSelectedEvent = "鼠标选择样式";
         public const string ExecuteActionAfterAnimation = "执行操作后的动画播放";
+        public const string mouoseSelectedEvent = "鼠标样式";
 
         //地图数据刷新相关
         public const string GameDay = "游戏一天需要做的(保存代码等)";

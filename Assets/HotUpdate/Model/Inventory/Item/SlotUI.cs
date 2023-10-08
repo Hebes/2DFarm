@@ -20,10 +20,10 @@ namespace Farm2D
     public class SlotUI : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
 
-        public Image slotImage;             //图片
+        [HideInInspector] public Image slotImage;             //图片
         private TextMeshProUGUI amountText; //数量
         private Button button;              //按钮
-        public Image slotHightLight;        //高亮
+        [HideInInspector] public Image slotHightLight;        //高亮
 
         public bool isSelected;             //是否启用高亮
         public ItemDetailsData itemDatails;     //物品信息
@@ -73,7 +73,7 @@ namespace Farm2D
                 //清空所有高亮
                 isSelected = false;
                 ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮
-                ConfigEvent.ItemSelectedEvent.EventTrigger(ItemKey,itemDatails.itemID, isSelected);
+                ConfigEvent.ItemSelectedEvent.EventTrigger(ItemKey, itemDatails.itemID, isSelected);
                 ConfigEvent.PlayerAnimationsEvent.EventTrigger(itemDatails.itemID, isSelected);
             }
             itemDatails = null;

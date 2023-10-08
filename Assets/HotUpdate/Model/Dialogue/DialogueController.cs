@@ -38,7 +38,7 @@ namespace Farm2D
         {
             npc = GetComponent<NPCMovement>();
             uiSign = transform.GetChildComponent<Transform>("uiSign").gameObject;
-            ConfigEvent.OnFinishEvent.AddEventListener<UnityEvent>(AddOnFinishEvent);
+            ConfigEvent.OnFinishEvent.EventAdd<UnityEvent>(AddOnFinishEvent);
             ModelDialogue.Instance.GetDialogueData(dialogueStartNumber, ref dialogueList);
             FillDialogueStack();
         }

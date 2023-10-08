@@ -44,7 +44,7 @@ namespace Farm2D
             bagOpened = panelGameObject.activeSelf;//UI面板当前的显示状态
             ButtonOnClickAddListener(T_BagButton.name, T_BagButtonListener);
 
-            key.AddEventListener<List<InventoryItem>>(RefreshItem);
+            key.EventAdd<List<InventoryItem>>(RefreshItem);
 
             ModelItem.Instance.AddSlotUIList(key, ActionBarSlotUIList);//添加物品栏数据
             ModelItem.Instance.CreatItemData(key, 10);//添加背包数据

@@ -86,9 +86,9 @@ public class InitGame
         ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
         ConfigUIPanel.UIBagBase.ShwoUIPanel<UIBagBasePanel>();           //显示商店箱子面板
         ConfigUIPanel.UITrade.ShwoUIPanel<UITradePanel>();               //显示购买数量面板
-        ConfigUIPanel.UIMenu.ShwoUIPanel<UIMenuPanel>();                //显示菜单界面
+        ConfigUIPanel.UIMenu.ShwoUIPanel<UIMenu>();                //显示菜单界面
 
-        ConfigEvent.UIFade.EventTriggerUniTask(0f).Forget();        //显隐界面
+        ConfigEvent.UIFade.EventTriggerAsync(0f).Forget();        //显隐界面
         ConfigUIPanel.UIItemToolTip.CloseUIPanel();                      //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBag.CloseUIPanel();                        //关闭玩家背包面板
         ConfigUIPanel.UIDialogue.CloseUIPanel();                         //关闭对话面板

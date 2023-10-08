@@ -32,10 +32,10 @@ namespace Farm2D
             GameObject DragItem = panelGameObject.GetChild("DragItemImage");
             DragItemImage = DragItem.GetComponent<Image>();
 
-            ConfigEvent.UIItemOnDrag.AddEventListener<Vector3>(ItemDrag);
-            ConfigEvent.UIItemOnBeginDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnBeginDrag);
-            ConfigEvent.UIItemOnEndDrag.AddEventListener<PointerEventData, SlotUI>(ItemOnEndDrag);
-            ConfigEvent.UIItemOnPointerClick.AddEventListener<PointerEventData, SlotUI>(ItemOnPointerClick);
+            ConfigEvent.UIItemOnDrag.EventAdd<Vector3>(ItemDrag);
+            ConfigEvent.UIItemOnBeginDrag.EventAdd<PointerEventData, SlotUI>(ItemOnBeginDrag);
+            ConfigEvent.UIItemOnEndDrag.EventAdd<PointerEventData, SlotUI>(ItemOnEndDrag);
+            ConfigEvent.UIItemOnPointerClick.EventAdd<PointerEventData, SlotUI>(ItemOnPointerClick);
         }
 
 

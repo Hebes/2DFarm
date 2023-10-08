@@ -107,21 +107,21 @@ namespace Farm2D
         }
         private void OnEnable()
         {
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
 
-            ConfigEvent.GameMinute.AddEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.GameMinute.EventAdd<int, int, int, ESeason>(OnGameMinuteEvent);
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
         }
         private void OnDisable()
         {
-            ConfigEvent.AfterSceneLoadedEvent.RemoveEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.BeforeSceneUnloadEvent.RemoveEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventRemove(OnAfterSceneLoadedEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventRemove(OnBeforeSceneUnloadEvent);
 
             ConfigEvent.GameMinute.RemoveEventListener<int, int, int, ESeason>(OnGameMinuteEvent);
-            ConfigEvent.EndGameEvent.RemoveEventListener(OnEndGameEvent);
-            ConfigEvent.StartNewGameEvent.RemoveEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.EventRemove(OnEndGameEvent);
+            ConfigEvent.StartNewGameEvent.EventRemove<int>(OnStartNewGameEvent);
         }
         private void Start()
         {

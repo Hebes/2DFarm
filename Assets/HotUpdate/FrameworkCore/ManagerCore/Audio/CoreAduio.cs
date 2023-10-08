@@ -40,7 +40,6 @@ namespace Core
             GameObject.DontDestroyOnLoad(AudioManagerGo);
             this.sfx = AudioManagerGo.AddComponent<AudioSource>();
             this.bgm = AudioManagerGo.AddComponent<AudioSource>();
-
             Debug.Log("音频模块初始化成功!");
         }
 
@@ -51,7 +50,7 @@ namespace Core
         /// <param name="audioSourceType">音效的类型</param>
         /// <param name="isLoop">是否循环</param>
         /// <returns></returns>
-        private async UniTask PlayAudioSource(string audioClipName, EAudioSourceType audioSourceType, bool isLoop = false)
+        public async UniTask PlayAudioSource(string audioClipName, EAudioSourceType audioSourceType, bool isLoop = false)
         {
             AudioClip audioClip = null;
             if (audioClipDic.TryGetValue(audioClipName, out audioClip))
@@ -63,28 +62,6 @@ namespace Core
             Play(audioClip, audioSourceType, isLoop);
             audioClipDic.Add(audioClipName, audioClip);
         }
-
-        /// <summary>
-        /// 播放音效
-        /// </summary>
-        /// <param name="audioClip"></param>
-        /// <param name="audioSourceType"></param>
-        /// <param name="isLoop"></param>
-        private void Play(AudioClip audioClip, EAudioSourceType audioSourceType, bool isLoop = false)
-        {
-            AudioSource audioSource = null;
-            switch (audioSourceType)
-            {
-                case EAudioSourceType.BGM: audioSource = bgm; break;
-                case EAudioSourceType.SFX: audioSource = sfx; break;
-            }
-
-            audioSource.clip = audioClip;
-            audioSource.loop = isLoop;
-            audioSource.volume = Random.Range(.85f, 1.1f);
-            audioSource.Play();
-        }
-
 
         /// <summary>
         /// 暂停播放
@@ -110,6 +87,27 @@ namespace Core
                 case EAudioSourceType.BGM: bgm.volume = v; break;
                 case EAudioSourceType.SFX: sfx.volume = v; break;
             }
+        }
+
+        /// <summary>
+        /// 播放音效
+        /// </summary>
+        /// <param name="audioClip"></param>
+        /// <param name="audioSourceType"></param>
+        /// <param name="isLoop"></param>
+        private void Play(AudioClip audioClip, EAudioSourceType audioSourceType, bool isLoop = false)
+        {
+            AudioSource audioSource = null;
+            switch (audioSourceType)
+            {
+                case EAudioSourceType.BGM: audioSource = bgm; break;
+                case EAudioSourceType.SFX: audioSource = sfx; break;
+            }
+
+            audioSource.clip = audioClip;
+            audioSource.loop = isLoop;
+            audioSource.volume = Random.Range(.85f, 1.1f);
+            audioSource.Play();
         }
     }
 }

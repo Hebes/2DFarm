@@ -38,11 +38,11 @@ namespace Farm2D
             //加载预制体
             bounceItemPrefab = YooAssetLoadExpsion.YooaddetLoadSync<GameObject>(ConfigPrefab.prefabBonnceItemBasePreafab).GetComponent<Item>();
             //初始化监听信息
-            ConfigEvent.InstantiateItemInScene.AddEventListener<int, int, Vector3>(OnInstantiateItemScen);
-            ConfigEvent.UIItemDropItem.AddEventListener<string, int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.InstantiateItemInScene.EventAdd<int, int, Vector3>(OnInstantiateItemScen);
+            ConfigEvent.UIItemDropItem.EventAdd<string, int, Vector3, EItemType, int>(OnDropItemEvent);//扔东西
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
             LoadInit().Forget();
 
             //注册保存事件

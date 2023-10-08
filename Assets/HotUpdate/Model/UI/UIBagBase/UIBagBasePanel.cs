@@ -39,8 +39,8 @@ namespace Farm2D
 
             //事件
             //ButtonOnClickAddListener(T_ESCImage.name, p => { CloseUIForm(); });
-            ConfigEvent.BaseBagOpen.AddEventListener<string, string>(OnBaseBagOpenEvent);
-            ConfigEvent.BaseBagClose.AddEventListener<string, string>(OnBaseBagCloseEvent);
+            ConfigEvent.BaseBagOpen.EventAdd<string, string>(OnBaseBagOpenEvent);
+            ConfigEvent.BaseBagClose.EventAdd<string, string>(OnBaseBagCloseEvent);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Farm2D
         private void OnBaseBagOpenEvent(string Name, string slotType)
         {
             InventoryKey = Name;
-            Name.AddEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
+            Name.EventAdd<List<InventoryItem>>(OnUpdateInventoryUI);
             GameObject prefab = null;
             switch (slotType)
             {
@@ -119,7 +119,7 @@ namespace Farm2D
         private void OnBaseBagCloseEvent(string Name, string slotType)
         {
             ModelItem.Instance.RemoveSlotUIDic(InventoryKey);
-            Name.RemoveEventListener<List<InventoryItem>>(OnUpdateInventoryUI);
+            Name.EventRemove<List<InventoryItem>>(OnUpdateInventoryUI);
             CloseUIForm();
             CloseOtherUIForm(ConfigUIPanel.UIItemToolTip);
             ConfigEvent.UIDisplayHighlighting.EventTrigger(string.Empty, -1);//清空所有高亮

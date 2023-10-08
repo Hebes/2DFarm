@@ -28,11 +28,11 @@ namespace Farm2D
         }
         private void OnEnable()
         {
-            ConfigEvent.GenerateCrop.AddEventListener(GenerateCrop);
+            ConfigEvent.GenerateCrop.EventAdd(GenerateCrop);
         }
         private void OnDisable()
         {
-            ConfigEvent.GenerateCrop.RemoveEventListener(GenerateCrop);
+            ConfigEvent.GenerateCrop.EventRemove(GenerateCrop);
         }
 
         private void GenerateCrop()

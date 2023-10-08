@@ -25,7 +25,7 @@ namespace Farm2D
         private void Awake()
         {
             slotUI = GetComponent<SlotUI>();
-            ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
+            ConfigEvent.UpdateGameStateEvent.EventAdd<EGameState>(OnUpdateGameStateEvent);
         }
 
         private void OnUpdateGameStateEvent(EGameState gameState)

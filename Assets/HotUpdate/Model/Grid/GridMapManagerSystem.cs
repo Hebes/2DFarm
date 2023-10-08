@@ -43,10 +43,10 @@ namespace Farm2D
                 InitTileDetailsDict(mapData);
             }
 
-            ConfigEvent.ExecuteActionAfterAnimation.AddEventListener<string, int, Vector3>(OnExecuteActionAfterAnimation);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.GameDay.AddEventListener<int, ESeason>(OnGameDayEvent);
-            ConfigEvent.RefreshCurrentMap.AddEventListener(RefreshMap);
+            ConfigEvent.ExecuteActionAfterAnimation.EventAdd<string, int, Vector3>(OnExecuteActionAfterAnimation);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.GameDay.EventAdd<int, ESeason>(OnGameDayEvent);
+            ConfigEvent.RefreshCurrentMap.EventAdd(RefreshMap);
 
             //注册保存事件
             ISaveable saveable = this;

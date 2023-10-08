@@ -52,9 +52,9 @@ namespace Farm2D
             SetCursorImage(ChangeMouseType(EMouseType.Normal));
             Cursor.visible = false;
 
-            ConfigEvent.ItemSelectedEvent.AddEventListener<string, int, bool>(OnItemSelectEvent);
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
+            ConfigEvent.ItemSelectedEvent.EventAdd<string, int, bool>(OnItemSelectEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
         }
         public override void UIUpdate()
         {

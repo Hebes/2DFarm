@@ -44,7 +44,7 @@ namespace Farm2D
         public async UniTask ModelInit()
         {
             Instance = this;
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(StartNewGameEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(StartNewGameEvent);
             await UniTask.Yield();
         }
 

@@ -49,7 +49,7 @@ namespace Farm2D
             continueBox = T_ContinueBox;
 
             continueBox.SetActive(false);
-            ConfigEvent.ShowDialogueEvent.AddEventListener<DialoguePiece>(OnShowDailogueEvent);
+            ConfigEvent.ShowDialogueEvent.EventAdd<DialoguePiece>(OnShowDailogueEvent);
         }
 
         /// <summary>

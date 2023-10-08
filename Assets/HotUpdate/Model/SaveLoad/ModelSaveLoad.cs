@@ -35,8 +35,8 @@ namespace Farm2D
             jsonFolder = Application.persistentDataPath + "/SAVE DATA/";
             ReadSaveData();
 
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
             MonoController.Instance.AddMonEvent(EMonoType.Updata, OnUpdate);
             await UniTask.Yield();
         }

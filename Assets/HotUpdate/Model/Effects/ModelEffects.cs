@@ -25,7 +25,7 @@ namespace Farm2D
         public async UniTask ModelInit()
         {
             Instanck = this;
-            ConfigEvent.ParticleEffect.AddEventListener<EParticleEffectType, Vector3>(OnParticleEffectEvent);
+            ConfigEvent.ParticleEffect.EventAdd<EParticleEffectType, Vector3>(OnParticleEffectEvent);
             await UniTask.Yield();
         }
 

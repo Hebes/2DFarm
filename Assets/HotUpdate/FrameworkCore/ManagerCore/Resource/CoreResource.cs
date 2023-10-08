@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Events;
 using YooAsset;
 using Cysharp.Threading.Tasks;
+using static UnityEditor.FilePathAttribute;
 
 /*--------脚本描述-----------
 				
@@ -15,9 +16,6 @@ using Cysharp.Threading.Tasks;
 
 namespace Core
 {
-    /// <summary>
-    /// 加载资源的方式
-    /// </summary>
     public enum ELoadType
     {
         ReResources,
@@ -27,7 +25,8 @@ namespace Core
     public class CoreResource : ICore
     {
         public static CoreResource Instance;
-        private IResload iload;
+        private IResLoad iload;
+
         public void ICroeInit()
         {
             Instance = this;
@@ -38,39 +37,19 @@ namespace Core
         {
             return iload.Load<T>(ResName);
         }
-        public UniTask<T> LoadAsyncUniTack<T>(string assetName) where T : UnityEngine.Object
+        public UniTask<T> LoadAsync<T>(string assetName) where T : UnityEngine.Object
         {
-            return iload.LoadAsyncUniTack<T>(assetName);
+            return iload.LoadAsync<T>(assetName);
         }
 
-        //加载子资源对象
         public T LoadSub<T>(string location, string ResName) where T : UnityEngine.Object
         {
             return iload.LoadSub<T>(location, ResName);
         }
-        public void LoadSubAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
 
-        }
-
-        //加载所有资源
-        public void LoadAll<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
+        public void LoadAll<T>(string ResName) where T : UnityEngine.Object
         {
-
-        }
-        public void LoadAllAsync<T>(string ResName, UnityAction<T> callback) where T : UnityEngine.Object
-        {
-
-        }
-
-        //加载原生文件
-        public RawFileOperationHandle LoadRawFile<T>(string ResName) where T : class
-        {
-            return iload.LoadRawFile<T>(ResName);
-        }
-        public UniTask<RawFileOperationHandle> LoadRawFileAsync<T>(string ResName) where T : UnityEngine.Object
-        {
-            return iload.LoadRawFileAsync<T>(ResName);
+            iload.LoadAll<T>(ResName);
         }
 
         public void UnloadAssets()

@@ -48,9 +48,9 @@ namespace Farm2D
                 lightPattenList.Add(lightDetails);
             }
 
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.LightShiftChangeEvent.AddEventListener<ESeason, LightShift, float>(OnLightShiftChangeEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.LightShiftChangeEvent.EventAdd<ESeason, LightShift, float>(OnLightShiftChangeEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
             
             await UniTask.Yield();
         }

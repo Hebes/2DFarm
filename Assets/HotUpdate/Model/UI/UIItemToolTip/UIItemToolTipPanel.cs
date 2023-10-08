@@ -49,8 +49,8 @@ namespace Farm2D
             valueText = T_Value.GetText();
             resourcesPanel = T_ResourcesPanel;
 
-            ConfigEvent.ItemToolTipShow.AddEventListener<ItemDetailsData, string, Vector3>(SetupTooltip);
-            ConfigEvent.ItemToolTipClose.AddEventListener(CloseUIForm);
+            ConfigEvent.ItemToolTipShow.EventAdd<ItemDetailsData, string, Vector3>(SetupTooltip);
+            ConfigEvent.ItemToolTipClose.EventAdd(CloseUIForm);
         }
 
 

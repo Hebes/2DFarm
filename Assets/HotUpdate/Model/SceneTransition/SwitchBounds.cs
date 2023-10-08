@@ -20,7 +20,7 @@ namespace Farm2D
 
         private void Awake()
         {
-            ConfigEvent.SwichConfinerShape.AddEventListener(SwichConfinerShape);
+            ConfigEvent.SwichConfinerShape.EventAdd(SwichConfinerShape);
         }
 
         /// <summary>

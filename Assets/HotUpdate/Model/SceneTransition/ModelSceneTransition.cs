@@ -34,9 +34,9 @@ namespace Farm2D
             Instance = this;
             ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single).Forget();//加载第一场景
             //事件监听
-            ConfigEvent.SceneTransition.AddEventListenerUniTask<string, Vector3>(SceneTransition);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(P => { StartNewGameEvent(P).Forget(); });
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.SceneTransition.EventAddAsync<string, Vector3>(SceneTransition);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(P => { StartNewGameEvent(P).Forget(); });
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
             //注册保存事件
             ISaveable saveable = this;
             saveable.RegisterSaveable();
@@ -82,7 +82,7 @@ namespace Farm2D
             {
                 isFade = true;
                 ConfigEvent.BeforeSceneUnloadEvent.EventTrigger();
-                await ConfigEvent.UIFade.EventTriggerUniTask((float)1);
+                await ConfigEvent.UIFade.EventTriggerAsync((float)1);
                 if (!string.IsNullOrEmpty(currentceneName))
                     currentceneName.UnloadAsync();                                  //卸载原来的场景
                 SceneOperationHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
@@ -97,7 +97,7 @@ namespace Farm2D
 
                 ConfigEvent.SwichConfinerShape.EventTrigger();                  //切换场景边界
                 ConfigEvent.AfterSceneLoadedEvent.EventTrigger();                    //加载场景之后需要做的事情
-                await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
+                await ConfigEvent.UIFade.EventTriggerAsync((float)0);
                 isFade = false;
             }
         }
@@ -108,9 +108,9 @@ namespace Farm2D
         private async UniTask UnloadScene()
         {
             ConfigEvent.BeforeSceneUnloadEvent.EventTrigger();
-            await ConfigEvent.UIFade.EventTriggerUniTask((float)1);
+            await ConfigEvent.UIFade.EventTriggerAsync((float)1);
             SceneManager.GetActiveScene().name.UnloadAsync();// SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-            await ConfigEvent.UIFade.EventTriggerUniTask((float)0);
+            await ConfigEvent.UIFade.EventTriggerAsync((float)0);
         }
 
 

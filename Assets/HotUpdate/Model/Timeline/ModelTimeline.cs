@@ -29,8 +29,8 @@ namespace Farm2D
         public async UniTask ModelInit()
         {
             Instance = this;
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
             MonoController.Instance.AddMonEvent(EMonoType.Updata, Update);
             await UniTask.Yield();
         }

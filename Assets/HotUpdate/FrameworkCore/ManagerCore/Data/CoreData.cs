@@ -1,4 +1,5 @@
 ﻿using Farm2D;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
@@ -39,41 +40,27 @@ namespace Core
             InitData<SoundDetailsData>();               //音乐数据
 
 
-            //ACDebug.Log($"一共{bytesDataDic.Count}条数据");
             Debug.Log("数据初始化完毕");
             GameObject gameObject = new GameObject("DataManager");
             ShowDataManager showDataManager = gameObject.AddComponent<ShowDataManager>();
             GameObject.DontDestroyOnLoad(gameObject);
 
-
-            ItemDetailsData itemDetailsData = GetDataOne<ItemDetailsData>(1001);
-            Debug.Log($"获取的数据是{itemDetailsData.name}数据");
-
-            //TODO 这里需要
-            //showDataManager.ItemDetailsDataList = GetDataListAsT<ItemDetailsData>();
-            //showDataManager.PlayerAnimatorsDataList = this.GetDataListThis<PlayerAnimatorsData>();
-            //showDataManager.ScheduleDetailsDataList = this.GetDataListThis<ScheduleDetailsData>();
-            //showDataManager.SceneRouteDetailsDataList = this.GetDataListThis<SceneRouteDetailsData>();
-            //showDataManager.DialogueDetailsDataList = this.GetDataListThis<DialogueDetailsData>();
-            //showDataManager.ShopDetailsDataList = this.GetDataListThis<ShopDetailsData>();
-            //showDataManager.BluePrintDetailsDataList = this.GetDataListThis<BluePrintDetailsData>();
-            //showDataManager.LightDetailsDataList = this.GetDataListThis<LightDetailsData>();
-            //showDataManager.SceneSoundItemDetailsDataList = this.GetDataListThis<SceneSoundItemDetailsData>();
-            //showDataManager.SoundDetailsDataList = this.GetDataListThis<SoundDetailsData>();
+            //临时查看的
+            showDataManager.ItemDetailsDataList = GetDataList<ItemDetailsData>();
+            showDataManager.PlayerAnimatorsDataList = GetDataList<PlayerAnimatorsData>();
+            showDataManager.ScheduleDetailsDataList = GetDataList<ScheduleDetailsData>();
+            showDataManager.SceneRouteDetailsDataList = GetDataList<SceneRouteDetailsData>();
+            showDataManager.DialogueDetailsDataList = GetDataList<DialogueDetailsData>();
+            showDataManager.ShopDetailsDataList = GetDataList<ShopDetailsData>();
+            showDataManager.BluePrintDetailsDataList = GetDataList<BluePrintDetailsData>();
+            showDataManager.LightDetailsDataList = GetDataList<LightDetailsData>();
+            showDataManager.SceneSoundItemDetailsDataList = GetDataList<SceneSoundItemDetailsData>();
+            showDataManager.SoundDetailsDataList = GetDataList<SoundDetailsData>();
         }
 
-        //初始化数据
-        public void InitData<T>(string fileName) where T : IData
-        {
-            RawFileOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadRawFileAsync(fileName);
-            byte[] fileData = handle.GetRawFileData();
-            List<IData> itemDetailsList = BinaryAnalysis.GetData<T>(fileData);
-            if (bytesDataDic.ContainsKey(typeof(T).FullName))
-                bytesDataDic[typeof(T).FullName] = itemDetailsList;
-            bytesDataDic.Add(typeof(T).FullName, itemDetailsList);
-        }
         public void InitData<T>() where T : IData
         {
+
             RawFileOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadRawFileAsync(typeof(T).FullName);
             byte[] fileData = handle.GetRawFileData();
             List<IData> itemDetailsList = BinaryAnalysis.GetData<T>(fileData);
@@ -86,37 +73,21 @@ namespace Core
         //获取数据
         public T GetDataOne<T>(int id) where T : class, IData
         {
-            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
-            {
-                Debug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
-                return null;
-            }
-
-            IData data = bytesDataDic[typeof(T).FullName].Find(data => { return data.GetId() == id; });
-            return data == null ? null : data as T;
-        }
-        public List<IData> GetDataList<T>() where T : class, IData
-        {
-            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
-            {
-                Debug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
-                return null;
-            }
-
-            List<IData> dataListTemp = bytesDataDic[typeof(T).FullName];
-            return dataListTemp;
+            IData data = null;
+            if (bytesDataDic.TryGetValue(typeof(T).FullName, out List<IData> value))
+                data = value.Find(data => { return data.GetId() == id; });
+            return data as T;
         }
 
-        public List<T> GetDataListAsT<T>() where T : class, IData
+
+        public List<T> GetDataList<T>() where T : class, IData
         {
             List<T> dataListTemp = new List<T>();
-            if (!bytesDataDic.ContainsKey(typeof(T).FullName))
+            if (bytesDataDic.TryGetValue(typeof(T).FullName, out List<IData> value))
             {
-                Debug.Log($"未能找到数据请先初始化{typeof(T).FullName}");
-                return null;
+                foreach (IData item in value)
+                    dataListTemp.Add(item as T);
             }
-            foreach (IData item in bytesDataDic[typeof(T).FullName])
-                dataListTemp.Add(item as T);
             return dataListTemp;
         }
     }

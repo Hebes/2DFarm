@@ -23,7 +23,10 @@ namespace Core
         /// <returns></returns>
         public static T GetDataOne<T>(this int id) where T : class, IData
         {
-            return CoreData.Instance.GetDataOne<T>(id);
+            T t = CoreData.Instance.GetDataOne<T>(id);
+            if (t == null)
+                Debug.Error($"请先初始化数据{typeof(T).FullName}");
+            return t;
         }
 
         /// <summary>
@@ -34,13 +37,10 @@ namespace Core
         /// <returns></returns>
         public static List<T> GetDataList<T>(this object obj) where T : class, IData
         {
-            List<T> list = new List<T>();
-            List<IData> tempList = CoreData.Instance.GetDataList<T>();
+            List<T> tempList = CoreData.Instance.GetDataList<T>();
             if (tempList == null || tempList.Count == 0)
                 Debug.Error($"请先初始化数据{typeof(T).FullName}");
-            for (int i = 0; i < tempList.Count; i++)
-                list.Add(tempList[i] as T);
-            return list;
+            return tempList;
         }
     }
 }

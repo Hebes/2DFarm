@@ -1,5 +1,6 @@
 ﻿using Core;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /*--------脚本描述-----------
@@ -17,7 +18,7 @@ namespace Farm2D
 {
     public class UIPlayerBagPanel : UIBase
     {
-        public GameObject T_MoneyText;
+        public TextMeshProUGUI moneyText;
         private List<SlotUI> playerBagSlotList;//背包的格子
 
         public override void UIAwake()
@@ -27,27 +28,32 @@ namespace Farm2D
             playerBagSlotList = new List<SlotUI>();
 
             UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
+
+            GameObject T_Solt_Bag = UIComponent.Get<GameObject>("T_Solt_Bag");
             GameObject T_SlotHolder = UIComponent.Get<GameObject>("T_SlotHolder");
-            T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
+            GameObject T_MoneyText = UIComponent.Get<GameObject>("T_MoneyText");
+
+            moneyText = T_MoneyText.GetTextMeshPro();
+            T_Solt_Bag.SetActive(false);
 
             ModelItem.Instance.CreatItemData(ConfigEvent.PalayerBag, 16);
-            for (int i = 0; i < T_SlotHolder.transform.childCount; i++)
+            for (int i = 0; i < 16; i++)
             {
-                SlotUI slotUI = T_SlotHolder.GetChildComponent<SlotUI>(i);
+                GameObject T_Solt_BagItem = GameObject.Instantiate(T_Solt_Bag, T_SlotHolder.transform);
+                T_Solt_BagItem.SetActive(true);
+                SlotUI slotUI = T_Solt_BagItem.GetComponent<SlotUI>();
                 slotUI.slotIndex = i;
                 slotUI.ItemKey = ConfigEvent.PalayerBag;
                 playerBagSlotList.Add(slotUI);
             }
             ModelItem.Instance.AddSlotUIList(ConfigEvent.PalayerBag, playerBagSlotList);
 
-            ConfigEvent.PalayerBag.AddEventListener<List<InventoryItem>>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
-            ConfigEvent.MoneyShow.AddEventListener<int>(ShowMoney);
+            ConfigEvent.PalayerBag.EventAdd<List<InventoryItem>>(RefreshItem);//这里触发的是从InventoryAllSystem的AddItemDicArray
+            ConfigEvent.MoneyShow.EventAdd<int>(ShowMoney);
 
             //添加测试数据
             //ItemManagerSystem.Instance.ItemDic[ConfigEvent.PalayerBag][0] = new InventoryItem() { itemID = 1015, itemAmount = 80 };
             //ItemManagerSystem.Instance.ItemDic[ConfigEvent.PalayerBag][1] = new InventoryItem() { itemID = 1014, itemAmount = 80 };
-
-            
         }
 
 
@@ -86,7 +92,7 @@ namespace Farm2D
         /// <param name="money"></param>
         private void ShowMoney(int money)
         {
-            T_MoneyText.GetTextMeshPro().text = money.ToString();
+            moneyText.text = money.ToString();
         }
     }
 }

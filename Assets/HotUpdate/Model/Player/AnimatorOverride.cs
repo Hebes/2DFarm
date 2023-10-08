@@ -43,8 +43,8 @@ namespace Farm2D
 
             holdItem = transform.GetChildComponent<SpriteRenderer>(childName: "HoldItem");
 
-            ConfigEvent.PlayerAnimationsEvent.AddEventListener<int, bool>(OnItemSelectEvent);
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
+            ConfigEvent.PlayerAnimationsEvent.EventAdd<int, bool>(OnItemSelectEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
         }
 
         private void OnBeforeSceneUnloadEvent()

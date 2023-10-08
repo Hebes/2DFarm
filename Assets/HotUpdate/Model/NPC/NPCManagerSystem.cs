@@ -59,7 +59,7 @@ namespace Farm2D
             }
 
             //事件监听
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
         }
 
         private void OnStartNewGameEvent(int obj)

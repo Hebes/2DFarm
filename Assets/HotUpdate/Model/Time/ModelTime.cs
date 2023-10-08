@@ -38,11 +38,11 @@ namespace Farm2D
 
             gameClockPause = true;
 
-            ConfigEvent.BeforeSceneUnloadEvent.AddEventListener(OnBeforeSceneUnloadEvent);
-            ConfigEvent.AfterSceneLoadedEvent.AddEventListener(OnAfterSceneLoadedEvent);
-            ConfigEvent.UpdateGameStateEvent.AddEventListener<EGameState>(OnUpdateGameStateEvent);
-            ConfigEvent.StartNewGameEvent.AddEventListener<int>(OnStartNewGameEvent);
-            ConfigEvent.EndGameEvent.AddEventListener(OnEndGameEvent);
+            ConfigEvent.BeforeSceneUnloadEvent.EventAdd(OnBeforeSceneUnloadEvent);
+            ConfigEvent.AfterSceneLoadedEvent.EventAdd(OnAfterSceneLoadedEvent);
+            ConfigEvent.UpdateGameStateEvent.EventAdd<EGameState>(OnUpdateGameStateEvent);
+            ConfigEvent.StartNewGameEvent.EventAdd<int>(OnStartNewGameEvent);
+            ConfigEvent.EndGameEvent.EventAdd(OnEndGameEvent);
 
             MonoController.Instance.AddMonEvent(EMonoType.Updata, OnUpdate);
 

@@ -78,10 +78,14 @@
         public const string LightShiftChangeEvent = "光移变化";
 
         //物品库存相关
-        public const string PalayerBag = "玩家背包";//玩家背包
-        public const string ActionBar = "快捷键";//快捷键
-        public const string Shop = "商店";//快捷键
-        public const string Box = "箱子";//快捷键
-        public const string Mira = "Mira";//快捷键
+        public const string PalayerBag = "玩家背包";
+        public const string ActionBar = "快捷键";
+        public const string Shop = "商店";
+        public const string Box = "箱子";
+        public const string Mira = "Mira";
+
+        //剧情动画
+        public const string BeachStoryLineEvent = "沙滩剧情";
+
     }
 }

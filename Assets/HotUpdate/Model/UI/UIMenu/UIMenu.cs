@@ -25,7 +25,7 @@ namespace Farm2D
         public override void UIAwake()
         {
             base.UIAwake();
-            InitUIBase(EUIType.Fixed, EUIMode.Normal, EUILucenyType.Pentrate);
+            InitUIBase(EUIType.Main, EUIMode.Normal, EUILucenyType.Pentrate);
 
             UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_TitleBtn = UIComponent.Get<GameObject>("T_TitleBtn");

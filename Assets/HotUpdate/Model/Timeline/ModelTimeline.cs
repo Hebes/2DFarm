@@ -73,6 +73,7 @@ namespace Farm2D
                 ConfigEvent.UpdateGameStateEvent.EventTrigger(EGameState.Gameplay);
         }
 
+
         /// <summary>
         /// 在停止中
         /// </summary>

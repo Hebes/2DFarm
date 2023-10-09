@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using Farm2D;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Core
         private Transform PopUp = null;                         //弹出节点
         private Transform Mobile = null;                         //独立的窗口可移动的
         private Transform Fade = null;                         //渐变过度窗体
+        private Transform Main = null;                         //主要的,存放主菜单UI
 
         public void ICroeInit()
         {
@@ -55,6 +57,7 @@ namespace Core
             PopUp = CanvasTransfrom.GetChild(EUIType.PopUp.ToString());
             Mobile = CanvasTransfrom.GetChild(EUIType.Mobile.ToString());
             Fade = CanvasTransfrom.GetChild(EUIType.Fade.ToString());
+            Main = CanvasTransfrom.GetChild(EUIType.Main.ToString());
             UICamera = CanvasTransfrom.GetChildComponent<Camera>("UICamera");
             MainCamera = CanvasTransfrom.GetChildComponent<Camera>("MainCamera");
         }
@@ -161,6 +164,7 @@ namespace Core
                 case EUIType.Mobile: goCloneUIPrefabs.transform.SetParent(Mobile, false); break;//独立的窗口可移动的
                 case EUIType.PopUp: goCloneUIPrefabs.transform.SetParent(PopUp, false); break;//弹出窗体节点
                 case EUIType.Fade: goCloneUIPrefabs.transform.SetParent(Fade, false); break;//渐变过度窗体
+                case EUIType.Main: goCloneUIPrefabs.transform.SetParent(Main, false); break;//渐变过度窗体
             }
 
             //把克隆体，加入到“所有UI窗体”（缓存）集合中。

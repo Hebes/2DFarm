@@ -32,6 +32,8 @@ namespace Farm2D
         public async UniTask ModelInit()
         {
             Instance = this;
+            ConfigUIPanel.UIMenu.ShwoUIPanel<UIMenu>();                      //显示菜单界面
+
             ConfigScenes.PersistentScene.LoadSceneAsyncUnitask(LoadSceneMode.Single).Forget();//加载第一场景
             //事件监听
             ConfigEvent.SceneTransition.EventAddAsync<string, Vector3>(SceneTransition);
@@ -40,7 +42,6 @@ namespace Farm2D
             //注册保存事件
             ISaveable saveable = this;
             saveable.RegisterSaveable();
-
             await UniTask.Yield();
         }
 

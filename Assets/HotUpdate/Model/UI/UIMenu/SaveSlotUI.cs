@@ -2,6 +2,7 @@
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Debug = Core.Debug;
 
@@ -33,6 +34,7 @@ namespace Farm2D
             DataPath = Application.persistentDataPath + "/SAVE DATA/" + "data" + Index + ".json";
             dataTime = transform.GetChildComponent<TextMeshProUGUI>("Time");
             dataScene = transform.GetChildComponent<TextMeshProUGUI>("Scene");
+
 
             currentButton = GetComponent<Button>();
             currentButton.onClick.AddListener(LoadGameData);
@@ -84,6 +86,7 @@ namespace Farm2D
             {
                 Debug.Log($"新游戏开始");
                 ConfigEvent.StartNewGameEvent.EventTrigger(Index);
+
             }
             ConfigUIPanel.UIMenu.CloseUIPanel();
         }

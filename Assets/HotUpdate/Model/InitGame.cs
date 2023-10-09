@@ -59,17 +59,17 @@ public class InitGame
         _initHs.Add(new ModelAudio());      //音效系统
         _initHs.Add(new ModelCrop());       //庄稼系统
         _initHs.Add(new ModelItem());        //背包系统
-        _initHs.Add(new ModelItemWorld());         //物品在世界系统
+        _initHs.Add(new ModelItemWorld());  //物品在世界系统
         _initHs.Add(new ModelShop());       //商店系统
         _initHs.Add(new ModelTime());       //时间系统
         _initHs.Add(new ModelMouse());      //鼠标系统
         _initHs.Add(new ModelEffects());     //特效系统
         _initHs.Add(new ModelCommon());     //物体管理系统
         _initHs.Add(new ModelDialogue());   //对话系统
+        _initHs.Add(new ModelTimeline());   //动画系统
         _initHs.Add(new ModelSceneTransition());   //场景过渡系统
         _initHs.Add(new ModelBuild());      //建造系统
         _initHs.Add(new ModelLight());       //灯光系统
-        _initHs.Add(new ModelTimeline());   //动画系统
         foreach (var init in _initHs)
             await init.ModelInit();
         SwitchInitGameProcess(EInitGameProcess.FSMInitUI);
@@ -83,12 +83,12 @@ public class InitGame
         ConfigUIPanel.UIGameTime.ShwoUIPanel<UIGameTimePanel>();         //显示时间面板
         ConfigUIPanel.UIFade.ShwoUIPanel<UIFadePanel>();                 //显示时间面板
         ConfigUIPanel.UIDialogue.ShwoUIPanel<UIDialoguePanel>();         //显示对话面板
-        ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
         ConfigUIPanel.UIBagBase.ShwoUIPanel<UIBagBasePanel>();           //显示商店箱子面板
         ConfigUIPanel.UITrade.ShwoUIPanel<UITradePanel>();               //显示购买数量面板
-        ConfigUIPanel.UIMenu.ShwoUIPanel<UIMenu>();                //显示菜单界面
+        ConfigUIPanel.UICursor.ShwoUIPanel<UICursorPanel>();             //显示鼠标面板
 
-        ConfigEvent.UIFade.EventTriggerAsync(0f).Forget();        //显隐界面
+
+        ConfigEvent.UIFade.EventTriggerAsync(0f).Forget();          //过度界面
         ConfigUIPanel.UIItemToolTip.CloseUIPanel();                      //关闭物体信息描述面板
         ConfigUIPanel.UIPlayerBag.CloseUIPanel();                        //关闭玩家背包面板
         ConfigUIPanel.UIDialogue.CloseUIPanel();                         //关闭对话面板

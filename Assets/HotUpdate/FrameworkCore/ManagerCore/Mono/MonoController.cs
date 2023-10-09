@@ -56,5 +56,10 @@ namespace Core
             if (CoroutineDic.TryGetValue(coroutineKey, out Coroutine coroutine))
                 StopCoroutine(coroutine);
         }
+
+        public Coroutine StartNewCoroutine(IEnumerator coroutine)
+        {
+            return StartCoroutine(coroutine);
+        }
     }
 }

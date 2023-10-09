@@ -2,7 +2,7 @@ namespace Farm2D
 {
     public class ConfigUIPanel
     {
-        public const string UI = "UI";
+        public const string UI = "Global";
         public const string UILoading = "UILoading";
         public const string About = "About";
         public const string Canvas = "Canvas";

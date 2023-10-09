@@ -39,7 +39,7 @@ namespace Farm2D
         public override void UIAwake()
         {
             base.UIAwake();
-            InitUIBase(EUIType.Fade, EUIMode.Normal, EUILucenyType.Pentrate);
+            InitUIBase(EUIType.Main, EUIMode.Normal, EUILucenyType.Pentrate);
 
             UIComponent UIComponent = panelGameObject.GetComponent<UIComponent>();
             GameObject T_CursorImage = UIComponent.Get<GameObject>("T_CursorImage");

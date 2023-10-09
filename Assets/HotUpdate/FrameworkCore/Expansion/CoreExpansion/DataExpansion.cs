@@ -24,8 +24,6 @@ namespace Core
         public static T GetDataOne<T>(this int id) where T : class, IData
         {
             T t = CoreData.Instance.GetDataOne<T>(id);
-            if (t == null)
-                Debug.Error($"请先初始化数据{typeof(T).FullName}");
             return t;
         }
 

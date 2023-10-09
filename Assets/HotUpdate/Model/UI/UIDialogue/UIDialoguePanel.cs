@@ -58,7 +58,7 @@ namespace Farm2D
         /// <param name="piece"></param>
         private void OnShowDailogueEvent(DialoguePiece piece)
         {
-            MonoController.Instance.AddCoroutine("显示对话框",ShowDialogue(piece));
+            MonoController.Instance.StartNewCoroutine(ShowDialogue(piece));
         }
 
         private IEnumerator ShowDialogue(DialoguePiece piece)

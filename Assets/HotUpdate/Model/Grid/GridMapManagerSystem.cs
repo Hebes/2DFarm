@@ -96,6 +96,7 @@ namespace Farm2D
             }
             RefreshMap();
         }
+
         /// <summary>
         /// 场景加载之后需要执行的方法
         /// </summary>

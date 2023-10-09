@@ -13,6 +13,8 @@
         Mobile,
         /// <summary> 渐变过度窗体 </summary>
         Fade,
+        /// <summary> 主要的,存放主菜单UI </summary>
+        Main,
     }
 
     /// <summary> UI窗体的显示类型 </summary>

@@ -333,7 +333,7 @@ namespace Farm2D
             }
             else if (schedule.targetScene != currentScene)//跨场景移动
             {
-                SceneRoute sceneRoute = NPCManagerSystem.Instance.GetSceneRoute(currentScene, schedule.targetScene);//获得两个场景间的路径
+                SceneRoute sceneRoute = ModelNPC.Instance.GetSceneRoute(currentScene, schedule.targetScene);//获得两个场景间的路径
 
                 for (int i = 0; i < sceneRoute?.scenePathList.Count; i++)
                 {

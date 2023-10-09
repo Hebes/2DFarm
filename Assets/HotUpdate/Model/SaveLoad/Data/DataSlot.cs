@@ -41,7 +41,7 @@ namespace Farm2D
         {
             get
             {
-                var key = ModelSceneTransition.Instance.GUID;
+                var key = ModelSwitchScene.Instance.GUID;
                 if (dataDict.ContainsKey(key))
                 {
                     var transitionData = dataDict[key];

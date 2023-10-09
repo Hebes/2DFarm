@@ -46,7 +46,7 @@ namespace Farm2D
         private void OnAfterSceneLoadedEvent()
         {
             //currentGrid = GameObject.FindObjectOfType<Grid>();
-            cropParent = ModelSceneTransition.Instance.cropParent;
+            cropParent = ModelSwitchScene.Instance.cropParent;
         }
         private void OnPlantSeedEvent(int ID, TileDetails tileDetails)
         {

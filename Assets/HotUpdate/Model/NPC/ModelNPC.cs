@@ -16,7 +16,7 @@ using Debug = Core.Debug;
 
 namespace Farm2D
 {
-    public class NPCManagerSystem : SingletonNewMono<NPCManagerSystem>
+    public class ModelNPC : SingletonNewMono<ModelNPC>
     {
         public List<NPCPosition> npcPositionList;       //NPC列表
         private Dictionary<string, SceneRoute> sceneRouteDict = new Dictionary<string, SceneRoute>();

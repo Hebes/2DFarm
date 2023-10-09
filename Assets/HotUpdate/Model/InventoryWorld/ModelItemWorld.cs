@@ -95,7 +95,7 @@ namespace Farm2D
         private void OnAfterSceneLoadedEvent()
         {
             playerTransform = ModelCommon.Instance.playerTransform;// GameObject.FindGameObjectWithTag(ConfigTag.TagPlayer).transform;
-            itemParent = ModelSceneTransition.Instance.itemParent;
+            itemParent = ModelSwitchScene.Instance.itemParent;
             RecreateAllItems();
             RebuildFurniture();
         }

@@ -16,9 +16,9 @@ using UnityEngine.Tilemaps;
 
 namespace Farm2D
 {
-    public class GridMapManagerSystem : MonoBehaviour, ISaveable
+    public class ModelGridMap : MonoBehaviour, ISaveable
     {
-        public static GridMapManagerSystem Instance;
+        public static ModelGridMap Instance;
         public RuleTile digTile;
         public RuleTile waterTile;
         public List<MapData_SO> mapDataList;

@@ -60,7 +60,7 @@ namespace Farm2D
         {
             //这个场景是否是第一次启动
             string currentSceneName = SceneManager.GetActiveScene().name;
-            bool isScenFirst = GridMapManagerSystem.Instance.GetSceneFirstLoad(currentSceneName);
+            bool isScenFirst = ModelGridMap.Instance.GetSceneFirstLoad(currentSceneName);
             if (isScenFirst == false) return;
             startDirector = PersistentSceneManagerSystem.StaticGetCutscene(currentSceneName)?.GetComponent<PlayableDirector>();//获取当前场景的过场动画组件
             currentDirector = startDirector;

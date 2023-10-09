@@ -97,7 +97,7 @@ namespace Farm2D
         private void OnBuildFurnitureEvent(string BuildKey, int ID, Vector3 mousePos)
         {
             if (itemParent == null)
-                itemParent = ModelSceneTransition.Instance.itemParent;
+                itemParent = ModelSwitchScene.Instance.itemParent;
             //获取建造蓝图数据
             BluePrintDetails bluePrint = GetDataOne(ID);
             var buildItem = GameObject.Instantiate(bluePrint.buildPrefab, mousePos, Quaternion.identity, itemParent);

@@ -167,11 +167,11 @@ namespace Farm2D
             }
 
             //能否扔东西
-            TileDetails currentTile = GridMapManagerSystem.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
+            TileDetails currentTile = ModelGridMap.Instance.GetTileDetailsOnMousePosition(mouseGridPos);
             if (currentTile != null)
             {
                 CropDetails currentCrop = ModelCrop.Instance.GetCropDetails(currentTile.seedItemID);
-                Crop crop = GridMapManagerSystem.Instance.GetCropObject(mouseWorldPos);
+                Crop crop = ModelGridMap.Instance.GetCropObject(mouseWorldPos);
                 switch ((EItemType)currentItem.itemType)
                 {
                     case EItemType.Seed:
@@ -204,7 +204,7 @@ namespace Farm2D
                         }
                         break;
                     case EItemType.ReapTool:
-                        if (GridMapManagerSystem.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
+                        if (ModelGridMap.Instance.HaveReapableItemsInRadius(mouseWorldPos, currentItem)) SetCursorValid(); else SetCursorInValid();
                         break;
                     case EItemType.WaterTool:
                         if (currentTile.daysSinceDug > -1 && currentTile.daysSinceWatered == -1) SetCursorValid(); else SetCursorInValid();

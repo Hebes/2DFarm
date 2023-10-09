@@ -45,7 +45,7 @@ public class InitGame
         _initHs.Add(new CoreData());             //数据管理
         _initHs.Add(new CorePool());             //对象池管理
         _initHs.Add(new CoreResource());         //加载管理
-        _initHs.Add(new CoreScene());        //场景管理
+        _initHs.Add(new CoreScene());           //场景管理
         _initHs.Add(new CoreUI());               //UI管理
         foreach (var init in _initHs)
             init.ICroeInit();
@@ -67,7 +67,7 @@ public class InitGame
         _initHs.Add(new ModelCommon());     //物体管理系统
         _initHs.Add(new ModelDialogue());   //对话系统
         _initHs.Add(new ModelTimeline());   //动画系统
-        _initHs.Add(new ModelSceneTransition());   //场景过渡系统
+        _initHs.Add(new ModelSwitchScene());   //场景过渡系统
         _initHs.Add(new ModelBuild());      //建造系统
         _initHs.Add(new ModelLight());       //灯光系统
         foreach (var init in _initHs)

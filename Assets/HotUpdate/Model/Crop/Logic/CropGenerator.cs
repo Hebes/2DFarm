@@ -41,7 +41,7 @@ namespace Farm2D
 
             if (seedItemID != 0)
             {
-                var tile = GridMapManagerSystem.Instance.GetTileDetailsOnMousePosition(cropGridPos);
+                var tile = ModelGridMap.Instance.GetTileDetailsOnMousePosition(cropGridPos);
 
                 if (tile == null)
                 {
@@ -54,7 +54,7 @@ namespace Farm2D
                 tile.seedItemID = seedItemID;
                 tile.growthDays = growthDays;
 
-                GridMapManagerSystem.Instance.UpdateTileDetails(tile);
+                ModelGridMap.Instance.UpdateTileDetails(tile);
             }
         }
     }

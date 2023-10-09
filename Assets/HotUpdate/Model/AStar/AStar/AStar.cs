@@ -67,7 +67,7 @@ namespace Farm2D
         /// <returns></returns>
         private bool GenerateGridNodes(string sceneName, Vector2Int startPos, Vector2Int endPos)
         {
-            if (GridMapManagerSystem.Instance.GetGridDimensions(sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin))
+            if (ModelGridMap.Instance.GetGridDimensions(sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin))
             {
                 //根据瓦片地图范围构建网格移动节点范围数组
                 gridNodes = new GridNodes(gridDimensions.x, gridDimensions.y);
@@ -94,7 +94,7 @@ namespace Farm2D
                     Vector3Int tilePos = new Vector3Int(x + originX, y + originY, 0);
                     var key = tilePos.x + "x" + tilePos.y + "y" + sceneName;
 
-                    TileDetails tile = GridMapManagerSystem.Instance.GetTileDetails(key);
+                    TileDetails tile = ModelGridMap.Instance.GetTileDetails(key);
 
                     if (tile != null)
                     {

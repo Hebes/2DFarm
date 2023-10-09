@@ -18,9 +18,9 @@ using Core;
 
 namespace Farm2D
 {
-    public class ModelSceneTransition : IModelInit, ISaveable
+    public class ModelSwitchScene : IModelInit, ISaveable
     {
-        public static ModelSceneTransition Instance;
+        public static ModelSwitchScene Instance;
         public string currentceneName = string.Empty;//当前的场景,如果从记录中加载的场景可以在这里设置
 
         public Transform cropParent;       //庄家的父物体，都放在这个下面不会看上去太乱

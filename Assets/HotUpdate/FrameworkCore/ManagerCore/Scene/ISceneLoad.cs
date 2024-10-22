@@ -26,7 +26,7 @@ namespace Core
         /// <param name="suspendLoad">场景加载到90%自动挂起</param>
         /// <param name="priority">优先级</param>
         /// <returns></returns>
-        public UniTask<SceneOperationHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
+        public UniTask<SceneHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
             bool suspendLoad = false, int priority = 100);
 
         public object GetManagerDic();

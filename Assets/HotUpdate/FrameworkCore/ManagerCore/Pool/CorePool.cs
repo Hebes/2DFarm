@@ -46,7 +46,7 @@ namespace Core
             }
             else
             {
-                AssetOperationHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(name);
+                AssetHandle handle = YooAssetLoadExpsion.YooaddetLoadSyncAOH(name);
                 handle.Completed += handleTemp =>
                 {
                     GameObject go = handleTemp.InstantiateSync();

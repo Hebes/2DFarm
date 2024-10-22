@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -53,7 +54,7 @@ public class Init : MonoBehaviour
     public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;                                   //资源系统运行模式
     private EProcess CurrentProcess;                                                            //当前所在的流程
     private ResourceDownloaderOperation downloader;                                             //下载器
-    public UpdatePackageVersionOperation operation;                                             //更新包192.168.2.4
+    public  RequestPackageVersionOperation operation;                                             //更新包192.168.2.4
     private static Assembly _hotUpdateAss;
     private string packageVersion;                                              // 更新成功后自动保存版本号，作为下次初始化的版本。也可以通过operation.SavePackageVersion()方法保存。
     //private string XMLVersionUrl = "http://127.0.0.1:8000/ACPackageVersion.xml";                //资源版本下载
@@ -71,6 +72,8 @@ public class Init : MonoBehaviour
 
     //UILoading界面
     private Text LoadingText;
+
+    private ResourcePackage GetPackage => YooAssets.GetPackage(packageName);
 
     //开始加载
     private void Awake()
@@ -170,39 +173,43 @@ public class Init : MonoBehaviour
         LoadingText.text = "初始化资源包";
         var package = YooAssets.TryGetPackage(packageName);
         if (package == null)
-        {
-            // 创建默认的资源包
             package = YooAssets.CreatePackage(packageName);
-        }
         // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
         YooAssets.SetDefaultPackage(package);
 
-        //进入模式
+        // 编辑器下的模拟模式，不需要构建资源包，来模拟运行游戏。
         InitializationOperation initializationOperation = null;
-        switch (PlayMode)
+        if (PlayMode == EPlayMode.EditorSimulateMode)
         {
-            case EPlayMode.EditorSimulateMode://编辑器下的模拟模式,在编辑器下，不需要构建资源包，来模拟运行游戏。
-                var initParametersEditorSimulateMode = new EditorSimulateModeParameters();
-                initParametersEditorSimulateMode.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(packageName);
-                initializationOperation = package.InitializeAsync(initParametersEditorSimulateMode);
-                break;
-            case EPlayMode.OfflinePlayMode://单机模式,离线运行模式,对于不需要热更新资源的游戏，可以使用单机运行模式。
-                var initParametersOfflinePlayMode = new OfflinePlayModeParameters();
-                initParametersOfflinePlayMode.DecryptionServices = new GameDecryptionServices();
-                initializationOperation = package.InitializeAsync(initParametersOfflinePlayMode);
-                break;
-            case EPlayMode.HostPlayMode://联机运行模式,对于需要热更新资源的游戏，可以使用联机运行模式，该模式下初始化参数会很多。
-                string defaultHostServer = GetHostServerURL();
-                string fallbackHostServer = GetHostServerURL();
-                var createParameters = new HostPlayModeParameters();
-                createParameters.DecryptionServices = new GameDecryptionServices();
-                createParameters.QueryServices = new GameQueryServices();
-                createParameters.RemoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
-                initializationOperation = package.InitializeAsync(createParameters);
-                break;
+            var simulateBuildResult = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline.ToString(), packageName);
+            var createParameters = new EditorSimulateModeParameters();
+            createParameters.EditorFileSystemParameters = FileSystemParameters.CreateDefaultEditorFileSystemParameters(simulateBuildResult);
+            initializationOperation = package.InitializeAsync(createParameters);
         }
 
+        // 单机运行模式,离线运行模式,对于不需要热更新资源的游戏，可以使用单机运行模式。
+        if (PlayMode == EPlayMode.OfflinePlayMode)
+        {
+            var createParameters = new OfflinePlayModeParameters();
+            createParameters.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+            initializationOperation = package.InitializeAsync(createParameters);
+        }
+
+        // 联机运行模式,对于需要热更新资源的游戏，可以使用联机运行模式，该模式下初始化参数会很多。
+        if (PlayMode == EPlayMode.HostPlayMode)
+        {
+            string defaultHostServer = GetHostServerURL();
+            string fallbackHostServer = GetHostServerURL();
+            IRemoteServices remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+            var createParameters = new HostPlayModeParameters();
+            createParameters.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+            createParameters.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
+            initializationOperation = package.InitializeAsync(createParameters);
+        }
+
+
         yield return initializationOperation;
+
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogError($"资源包初始化失败：{initializationOperation.Error}");
@@ -223,7 +230,7 @@ public class Init : MonoBehaviour
         yield return null;
         LoadingText.text = "更新资源版本号";
         var package = YooAssets.GetPackage(packageName);//获取包
-        operation = package.UpdatePackageVersionAsync();
+        operation = package.RequestPackageVersionAsync();
         yield return operation;
         if (operation.Status != EOperationStatus.Succeed)
         {
@@ -246,13 +253,8 @@ public class Init : MonoBehaviour
     {
         yield return null;
         LoadingText.text = "更新资源清单";
-        var package = YooAssets.GetPackage(packageName);//获取包
-        // 更新成功后自动保存版本号，作为下次初始化的版本。
-        // 也可以通过operation.SavePackageVersion()方法保存。
-        bool savePackageVersion = true;
-
         Debug.Log("当前的版本号是:" + packageVersion);
-        var operationResource = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);//operation.PackageVersion //
+        var operationResource = GetPackage.UpdatePackageManifestAsync(packageVersion);//operation.PackageVersion //
         yield return operationResource;
 
         if (operationResource.Status != EOperationStatus.Succeed)
@@ -273,13 +275,10 @@ public class Init : MonoBehaviour
     {
         yield return null;
         LoadingText.text = "创建文件下载器";
-        var package = YooAssets.GetPackage(packageName);//获取包
-        yield return null;
-
         int downloadingMaxNum = 10;//下载最大值
         int failedTryAgain = 3;//重试失败次数
         int timeout = 60;//超时时间
-        downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain, timeout);
+        downloader = GetPackage.CreateResourceDownloader(downloadingMaxNum, failedTryAgain, timeout);
 
         //没有需要下载的资源
         if (downloader.TotalDownloadCount == 0)
@@ -345,8 +344,7 @@ public class Init : MonoBehaviour
     IEnumerator FsmClearCache()
     {
         yield return null;
-        var package = YooAssets.GetPackage(packageName);
-        var operation = package.ClearUnusedCacheFilesAsync();
+        var operation = GetPackage.ClearUnusedBundleFilesAsync();
         operation.Completed += OnClearCacheFunction;
         FsmProcessChange(EProcess.FsmPatchDone);
     }
@@ -404,11 +402,10 @@ public class Init : MonoBehaviour
         if (PlayMode == EPlayMode.OfflinePlayMode)
         {
             Debug.Log($"当前进入的是******************{PlayMode}******************");
-            var package1 = YooAssets.GetPackage(packageName);
             //补充元数据
             foreach (var asset in AOTMetaAssemblyNames)
             {
-                RawFileOperationHandle handle = package1.LoadRawFileAsync(asset);
+                RawFileHandle handle = GetPackage.LoadRawFileAsync(asset);
                 yield return handle;
                 byte[] fileData = handle.GetRawFileData();
                 s_assetDatas[asset] = fileData;
@@ -423,14 +420,13 @@ public class Init : MonoBehaviour
         #region 其他加载模式
         Debug.Log("进入了其他加载模式");
         //进入的其他模式
-        var package = YooAssets.GetPackage(packageName);
 #if !UNITY_EDITOR
         //System.Reflection.Assembly.Load(GetAssetData("HotUpdate.dll"));
 #endif
         //补充元数据
         foreach (var asset in AOTMetaAssemblyNames)
         {
-            RawFileOperationHandle handle = package.LoadRawFileAsync(asset);
+            RawFileHandle handle = GetPackage.LoadRawFileAsync(asset);
             yield return handle;
             byte[] fileData = handle.GetRawFileData();
             s_assetDatas[asset] = fileData;
@@ -440,7 +436,7 @@ public class Init : MonoBehaviour
         
         //执行热更新代码
         yield return null;
-        RawFileOperationHandle handleHotUpdate = package.LoadRawFileAsync("HotUpdate.dll");
+        RawFileHandle handleHotUpdate = GetPackage.LoadRawFileAsync("HotUpdate.dll");
         yield return handleHotUpdate;
         byte[] fileDataHotUpdate = handleHotUpdate.GetRawFileData();
         Debug.Log($"dll名称是:{"HotUpdate.dll"}  size大小为:{fileDataHotUpdate.Length}");

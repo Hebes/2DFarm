@@ -13,21 +13,23 @@ MonoBehaviour:
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
   ShowPackageView: 1
-  EnableAddressable: 1
-  LocationToLower: 0
-  IncludeAssetGUID: 0
-  UniqueBundleName: 0
   ShowEditorAlias: 0
+  UniqueBundleName: 0
   Packages:
   - PackageName: PC
     PackageDesc: "\u7535\u8111\u5305"
+    EnableAddressable: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: RawFileIgnoreRule
     Groups:
     - GroupName: HotUpdataDll
       GroupDesc: "\u70ED\u66F4\u65B0\u4EE3\u7801"
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/HotDll
+      - CollectPath: Assets/AssetsPackage/HotDLl
         CollectorGUID: 614029d323809184cb2ad4b555180d07
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -218,13 +220,18 @@ MonoBehaviour:
         UserData: 
   - PackageName: Android
     PackageDesc: "\u5B89\u5353\u5305"
+    EnableAddressable: 0
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: HotUpdataDll
       GroupDesc: "\u70ED\u66F4\u65B0\u4EE3\u7801"
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/AssetsPackage/HotDll
+      - CollectPath: Assets/AssetsPackage/HotDLl
         CollectorGUID: 614029d323809184cb2ad4b555180d07
         CollectorType: 0
         AddressRuleName: AddressByFileName

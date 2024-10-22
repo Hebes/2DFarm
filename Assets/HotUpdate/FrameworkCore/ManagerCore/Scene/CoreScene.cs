@@ -31,26 +31,26 @@ namespace Core
             //});
         }
 
-        public async UniTask<SceneOperationHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
+        public async UniTask<SceneHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
         {
             return await sceneLoad.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
         }
         public void SetActivateScene(string scnenName)
         {
-            Dictionary<string, SceneOperationHandle> ttt = sceneLoad.GetManagerDic() as Dictionary<string, SceneOperationHandle>;
-            ttt.TryGetValue(scnenName, out SceneOperationHandle result);
+            Dictionary<string, SceneHandle> ttt = sceneLoad.GetManagerDic() as Dictionary<string, SceneHandle>;
+            ttt.TryGetValue(scnenName, out SceneHandle result);
             result.ActivateScene();
         }
 
         public void UnloadAsync(string scnenName)
         {
-            Dictionary<string, SceneOperationHandle> ttt = sceneLoad.GetManagerDic() as Dictionary<string, SceneOperationHandle>;
-            if (ttt.TryGetValue(scnenName, out SceneOperationHandle result))
+            Dictionary<string, SceneHandle> ttt = sceneLoad.GetManagerDic() as Dictionary<string, SceneHandle>;
+            if (ttt.TryGetValue(scnenName, out SceneHandle result))
                 result.UnloadAsync();
             ttt.Remove(scnenName);
         }
 
-        public async UniTask<SceneOperationHandle> ChangeScene(string oldScene, string newScene, LoadSceneMode loadSceneMode)
+        public async UniTask<SceneHandle> ChangeScene(string oldScene, string newScene, LoadSceneMode loadSceneMode)
         {
             UnloadAsync(oldScene);
             return await LoadSceneAsync(newScene, loadSceneMode, false, 100);

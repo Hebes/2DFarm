@@ -12,12 +12,12 @@ namespace Cysharp.Threading.Tasks
 {
     public static class OperationHandleBaseExtensions
     {
-        public static UniTask.Awaiter GetAwaiter(this OperationHandleBase handle)
+        public static UniTask.Awaiter GetAwaiter(this HandleBase handle)
         {
             return ToUniTask(handle).GetAwaiter();
         }
 
-        public static UniTask ToUniTask(this OperationHandleBase handle,
+        public static UniTask ToUniTask(this HandleBase handle,
                                         IProgress<float> progress = null,
                                         PlayerLoopTiming timing = PlayerLoopTiming.Update)
         {
@@ -54,15 +54,15 @@ namespace Cysharp.Threading.Tasks
                 TaskPool.RegisterSizeGetter(typeof(OperationHandleBaserConfiguredSource), () => pool.Size);
             }
 
-            private readonly Action<OperationHandleBase>            continuationAction;
-            private          OperationHandleBase                    handle;
+            private readonly Action<HandleBase>            continuationAction;
+            private          HandleBase                    handle;
             private          IProgress<float>                       progress;
             private          bool                                   completed;
             private          UniTaskCompletionSourceCore<AsyncUnit> core;
 
             OperationHandleBaserConfiguredSource() { continuationAction = Continuation; }
 
-            public static IUniTaskSource Create(OperationHandleBase handle,
+            public static IUniTaskSource Create(HandleBase handle,
                                                 PlayerLoopTiming    timing,
                                                 IProgress<float>    progress,
                                                 out short           token)
@@ -89,18 +89,24 @@ namespace Cysharp.Threading.Tasks
 #if UNITY_2020_BUG
                 switch(handle)
                 {
-                    case AssetOperationHandle asset_handle:
+                    case AssetHandle asset_handle:
                         asset_handle.Completed += result.AssetContinuation;
                         break;
-                    case SceneOperationHandle scene_handle:
+                    case SceneHandle scene_handle:
                         scene_handle.Completed += result.SceneContinuation;
                         break;
-                    case SubAssetsOperationHandle sub_asset_handle:
-                        sub_asset_handle.Completed += result.SubContinuation;
-                        break;
-                    case RawFileOperationHandle raw_file_handle:
-                        raw_file_handle.Completed += result.RawFileContinuation;
-                        break;
+                    //case AssetHandle asset_handle:
+                    //    asset_handle.Completed += result.AssetContinuation;
+                    //    break;
+                    //case SceneHandle scene_handle:
+                    //    scene_handle.Completed += result.SceneContinuation;
+                    //    break;
+                    //case AssetHandle sub_asset_handle:
+                    //    sub_asset_handle.Completed += result.SubContinuation;
+                    //    break;
+                    //case AssetHandle raw_file_handle:
+                    //    raw_file_handle.Completed += result.RawFileContinuation;
+                    //    break;
                 }
 #else
                 switch (handle)
@@ -124,25 +130,25 @@ namespace Cysharp.Threading.Tasks
                 return result;
             }
 #if UNITY_2020_BUG
-            private void AssetContinuation(AssetOperationHandle handle)
+            private void AssetContinuation(AssetHandle handle)
             {
                 handle.Completed -= AssetContinuation;
                 BaseContinuation();
             }
 
-            private void SceneContinuation(SceneOperationHandle handle)
+            private void SceneContinuation(SceneHandle handle)
             {
                 handle.Completed -= SceneContinuation;
                 BaseContinuation();
             }
 
-            private void SubContinuation(SubAssetsOperationHandle handle)
+            private void SubContinuation(AssetHandle handle)
             {
                 handle.Completed -= SubContinuation;
                 BaseContinuation();
             }
 
-            private void RawFileContinuation(RawFileOperationHandle handle)
+            private void RawFileContinuation(AssetHandle handle)
             {
                 handle.Completed -= RawFileContinuation;
                 BaseContinuation();
@@ -169,22 +175,28 @@ namespace Cysharp.Threading.Tasks
                 }
             }
 
-            private void Continuation(OperationHandleBase _)
+            private void Continuation(HandleBase  _)
             {
                 switch(handle)
                 {
-                    case AssetOperationHandle asset_handle:
+                    case AssetHandle asset_handle:
                         asset_handle.Completed -= continuationAction;
                         break;
-                    case SceneOperationHandle scene_handle:
-                        scene_handle.Completed -= continuationAction;
+                    case SceneHandle scene_handle:
+                        scene_handle.Completed += continuationAction;
                         break;
-                    case SubAssetsOperationHandle sub_asset_handle:
-                        sub_asset_handle.Completed -= continuationAction;
-                        break;
-                    case RawFileOperationHandle raw_file_handle:
-                        raw_file_handle.Completed -= continuationAction;
-                        break;
+                    //case AssetOperationHandle asset_handle:
+                    //    asset_handle.Completed -= continuationAction;
+                    //    break;
+                    //case SceneOperationHandle scene_handle:
+                    //    scene_handle.Completed -= continuationAction;
+                    //    break;
+                    //case SubAssetsOperationHandle sub_asset_handle:
+                    //    sub_asset_handle.Completed -= continuationAction;
+                    //    break;
+                    //case RawFileOperationHandle raw_file_handle:
+                    //    raw_file_handle.Completed -= continuationAction;
+                    //    break;
                 }
 
                 BaseContinuation();

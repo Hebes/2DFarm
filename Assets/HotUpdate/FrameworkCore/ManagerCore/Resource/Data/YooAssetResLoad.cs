@@ -18,12 +18,12 @@ namespace Core
 {
     public class YooAssetResLoad : IResLoad
     {
-        public HashSet<AssetOperationHandle> assetHashSet = new HashSet<AssetOperationHandle>();
+        public HashSet<AssetHandle> assetHashSet = new HashSet<AssetHandle>();
 
         public T Load<T>(string AssetName) where T : UnityEngine.Object
         {
             ResourcePackage package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AssetOperationHandle handle = package.LoadAssetSync<T>(AssetName);
+            AssetHandle handle = package.LoadAssetSync<T>(AssetName);
             if (handle.Status == EOperationStatus.Succeed)
                 return handle.AssetObject as T;
             Debug.Error($"资源加载失败,请检查资源名称:{AssetName}");
@@ -32,7 +32,7 @@ namespace Core
         public async UniTask<T> LoadAsync<T>(string AssetName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AssetOperationHandle handle = package.LoadAssetAsync<T>(AssetName);
+            AssetHandle handle = package.LoadAssetAsync<T>(AssetName);
             assetHashSet.Add(handle);
             await handle.ToUniTask();
             if (handle.Status == EOperationStatus.Succeed)
@@ -44,7 +44,7 @@ namespace Core
         public T[] LoadAll<T>(string AssetName) where T : UnityEngine.Object
         {
             ResourcePackage package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AllAssetsOperationHandle handle = package.LoadAllAssetsAsync<T>(AssetName);
+            AllAssetsHandle handle = package.LoadAllAssetsAsync<T>(AssetName);
             return handle.AllAssetObjects as T[];
         }
 
@@ -52,7 +52,7 @@ namespace Core
         public async UniTask<T[]> LoadAllAsync<T>(string location) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AllAssetsOperationHandle handle = package.LoadAllAssetsAsync<T>(location);
+            AllAssetsHandle handle = package.LoadAllAssetsAsync<T>(location);
             await handle.ToUniTask();
             return handle.AllAssetObjects as T[];
         }
@@ -60,7 +60,7 @@ namespace Core
         public T LoadSub<T>(string location, string ResName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            SubAssetsOperationHandle handle = package.LoadSubAssetsSync<T>(location);
+            SubAssetsHandle handle = package.LoadSubAssetsSync<T>(location);
             var sprite = handle.GetSubAssetObject<T>(ResName);
             return sprite;
         }
@@ -78,7 +78,7 @@ namespace Core
         public T LoadAssetAsyncAsT<T>(string assetName) where T : UnityEngine.Object
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            AssetOperationHandle handle = package.LoadAssetAsync<T>(assetName);
+            AssetHandle handle = package.LoadAssetAsync<T>(assetName);
             handle.WaitForAsyncComplete();
             if (handle.Status == EOperationStatus.Succeed)
             {
@@ -92,10 +92,10 @@ namespace Core
         }
 
         //原生文件加载
-        public RawFileOperationHandle LoadRawFile<T>(string location) where T : class
+        public RawFileHandle LoadRawFile<T>(string location) where T : class
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            RawFileOperationHandle handle = package.LoadRawFileSync(location);
+            RawFileHandle handle = package.LoadRawFileSync(location);
             if (handle.Status == EOperationStatus.Succeed)
                 return handle;
             else
@@ -139,7 +139,7 @@ namespace Core
         {
             ReleaseAsset();
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            package.UnloadUnusedAssets();
+            package.UnloadUnusedAssetsAsync();
         }
     }
 }

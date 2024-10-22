@@ -9,7 +9,7 @@ namespace Core
     {
         public const string LoadingEvenName = "进度条更新";
 
-        public Dictionary<string, SceneOperationHandle> sceneSceneOperationHandleDic = new Dictionary<string, SceneOperationHandle>();
+        public Dictionary<string, SceneHandle> sceneSceneOperationHandleDic = new Dictionary<string, SceneHandle>();
 
         /// <summary>
         /// 异步加载场景
@@ -19,11 +19,11 @@ namespace Core
         /// <param name="suspendLoad">场景加载到90%自动挂起</param>
         /// <param name="priority">优先级</param>
         /// <returns></returns>
-        public async UniTask<SceneOperationHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
+        public async UniTask<SceneHandle> LoadSceneAsync(string SceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single,
             bool suspendLoad = false, int priority = 100)
         {
             var package = YooAssets.GetPackage(ConfigCore.YooAseetPackage);
-            SceneOperationHandle handle = package.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad);
+            SceneHandle handle = package.LoadSceneAsync(SceneName, loadSceneMode, LocalPhysicsMode.None, suspendLoad);
             await handle.ToUniTask(Progress.Create<float>((progress) =>
             {
                 LoadingEvenName.EventTrigger(handle.SceneObject.name, handle.Progress);//触发事件
@@ -44,7 +44,7 @@ namespace Core
                 {
                     sceneSceneOperationHandleDic.Add(SceneName, handle);
                 }
-                package.UnloadUnusedAssets();
+                await package.UnloadUnusedAssetsAsync() ;
                 Debug.Log($"加载场景成功:{handle.SceneObject.name}");
             }
             return handle;

@@ -1,20 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
-using YooAsset;
-
-/// <summary>
-/// 内置文件查询服务类
-/// </summary>
-public class GameQueryServices : IQueryServices
-{
-    
-    public bool QueryStreamingAssets(string packageName, string fileName)
-    {
-        // 注意：fileName包含文件格式
-        return StreamingAssetsHelper.FileExists(packageName, fileName);
-    }
-}
 
 #if UNITY_EDITOR
 /// <summary>

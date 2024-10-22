@@ -86,7 +86,7 @@ namespace Farm2D
                 await ConfigEvent.UIFade.EventTriggerAsync((float)1);
                 if (!string.IsNullOrEmpty(currentceneName))
                     currentceneName.UnloadAsync();                                  //卸载原来的场景
-                SceneOperationHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
+                SceneHandle sceneOperationHandle = await targetScene.LoadSceneAsyncUnitask(LoadSceneMode.Additive);//加载新的场景
                 sceneOperationHandle.ActivateScene();                           //设置场景激活
                 currentceneName = targetScene;                                  //变换当前场景的名称
                 ConfigEvent.PlayerMoveToPosition.EventTrigger(targetPosition);  //移动人物坐标

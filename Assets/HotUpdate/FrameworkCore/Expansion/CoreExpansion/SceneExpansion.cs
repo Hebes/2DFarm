@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
@@ -19,7 +18,7 @@ namespace Core
     public static class SceneExpansion
     {
         
-        public static async UniTask<SceneOperationHandle> LoadSceneAsyncUnitask(this string SceneName, 
+        public static async UniTask<SceneHandle> LoadSceneAsyncUnitask(this string SceneName, 
             LoadSceneMode loadSceneMode = LoadSceneMode.Single, bool suspendLoad = false, int priority = 100)
         {
             return await CoreScene.Instance.LoadSceneAsync(SceneName, loadSceneMode, suspendLoad, priority);
